@@ -5,6 +5,8 @@ import { useProject } from '../../context/ProjectContext'
 export default function FloorPlanMap() {
   const { spaces, floorPlan } = useProject()
 
+  if (!floorPlan?.src) return null
+
   return (
     <div className="relative w-full" style={{ maxHeight: '55vh' }}>
       <TransformWrapper

@@ -16,5 +16,6 @@
   "model_hint": "Drag to rotate · Scroll to zoom",
   "materials_title": "Materials",
   "rooms_title": "Spaces",
-  "scroll_hint": "Discover the project"
+  "scroll_hint": "Discover the project",
+  "space_not_found": "Space not found"
 }

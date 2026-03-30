@@ -6,7 +6,7 @@ export default function SpaceCard({ space, index }) {
   const navigate = useNavigate()
   const { lang, t } = useLang()
 
-  const label     = lang === 'es' ? space.label : space.labelEN
+  const label     = (lang === 'es' ? space.label : space.labelEN) ?? space.label
   const typeLabel = t(`space_type_${space.type}`)
 
   return (
@@ -59,7 +59,7 @@ export default function SpaceCard({ space, index }) {
           className="font-sans font-light text-text group-hover:text-accent transition-colors duration-500"
           style={{ fontSize: '0.85rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}
         >
-          {label}
+          {label ?? ''}
         </p>
       </div>
     </motion.div>

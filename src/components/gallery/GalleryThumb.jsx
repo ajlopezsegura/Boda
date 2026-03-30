@@ -9,13 +9,14 @@ export default function GalleryThumb({ image, index, onClick }) {
       onClick={onClick}
       data-cursor="hover"
       className="relative overflow-hidden group"
-      style={{ aspectRatio: '4/3', backgroundColor: '#E8DFD0' }}
+      style={{ aspectRatio: '4/3', backgroundColor: 'var(--color-bg-card)' }}
     >
       <img
         src={image.src}
         alt={image.caption}
         className="w-full h-full object-cover transition-transform duration-[1200ms] ease-luxury group-hover:scale-105"
         loading="lazy"
+        onError={e => { e.target.style.display = 'none' }}
       />
       {/* Caption overlay */}
       <div

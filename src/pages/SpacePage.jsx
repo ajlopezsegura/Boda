@@ -23,28 +23,19 @@ const tabFade = {
 export default function SpacePage() {
   const { id } = useParams()
   const space = useSpace(id)
-  const { t } = useLang()
+  const { lang, t } = useLang()
 
-  // Build available tabs dynamically
-  const tabs = []
-  if (space?.psStreamUrl || space?.model) {
-    tabs.push({ id: '3d', label: t('tab_3d') })
-  }
-  if (space?.images?.length) {
-    tabs.push({ id: 'gallery', label: t('tab_gallery') })
-  }
-  if (space?.video) {
-    tabs.push({ id: 'video', label: t('tab_video') })
-  }
-  tabs.push({ id: 'info', label: t('tab_info') })
-
-  const [activeTab, setActiveTab] = useState(tabs[0]?.id ?? 'info')
+  // Hooks must be called unconditionally — compute tabs safely
+  const tabs = space ? buildTabs(space, t) : [{ id: 'info', label: t('tab_info') }]
+  const [activeTab, setActiveTab] = useState(() => tabs[0]?.id ?? 'info')
 
   if (!space) {
     return (
       <PageTransition>
-        <div className="min-h-screen bg-cream flex items-center justify-center pt-24">
-          <p className="label-luxury text-gold/50">Espacio no encontrado</p>
+        <div className="min-h-screen flex items-center justify-center pt-24" style={{ backgroundColor: 'var(--color-bg)' }}>
+          <p className="label-luxury" style={{ color: 'var(--color-accent)', opacity: 0.5 }}>
+            {t('space_not_found')}
+          </p>
         </div>
       </PageTransition>
     )
@@ -52,7 +43,7 @@ export default function SpacePage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-cream">
+      <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
         {/* Back button */}
         <div className="pt-28 pb-0 px-10">
           <BackButton />
@@ -99,15 +90,12 @@ export default function SpacePage() {
 
               {/* Video tab */}
               {activeTab === 'video' && (
-                <VideoPlayer
-                  src={space.video}
-                  poster={space.thumbnail}
-                />
+                <VideoPlayer src={space.video} poster={space.thumbnail} />
               )}
 
               {/* Info tab */}
               {activeTab === 'info' && (
-                <InfoTab space={space} />
+                <InfoTab space={space} lang={lang} t={t} />
               )}
 
             </motion.div>
@@ -118,45 +106,49 @@ export default function SpacePage() {
   )
 }
 
-function InfoTab({ space }) {
-  const { lang, t } = useLang()
-  const label = lang === 'es' ? space.label : space.labelEN
-  const description = lang === 'es' ? space.description : space.descriptionEN
-  const typeLabel = t(`space_type_${space.type}`)
+function buildTabs(space, t) {
+  const tabs = []
+  if (space.psStreamUrl || space.model) tabs.push({ id: '3d',      label: t('tab_3d') })
+  if (space.images?.length)             tabs.push({ id: 'gallery', label: t('tab_gallery') })
+  if (space.video)                      tabs.push({ id: 'video',   label: t('tab_video') })
+  tabs.push({ id: 'info', label: t('tab_info') })
+  return tabs
+}
+
+function InfoTab({ space, lang, t }) {
+  const label       = (lang === 'es' ? space.label       : space.labelEN)       ?? space.label
+  const description = (lang === 'es' ? space.description : space.descriptionEN) ?? space.description
+  const typeLabel   = t(`space_type_${space.type}`)
 
   return (
     <div className="max-w-xl mx-auto py-8">
-      <p className="label-luxury text-gold mb-6">{typeLabel}</p>
+      <p className="label-luxury mb-6" style={{ color: 'var(--color-accent)' }}>{typeLabel}</p>
       <h2
-        className="font-serif italic font-light text-ink mb-8"
-        style={{ fontSize: '2.2rem', lineHeight: 1.2 }}
+        className="display-heading text-text mb-8"
+        style={{ fontSize: '2rem', letterSpacing: '0.08em' }}
       >
-        {label}
+        {label?.toUpperCase()}
       </h2>
-      <div className="gold-rule mb-8" />
-      <p
-        className="font-serif font-light text-ink/75"
-        style={{ fontSize: '1.1rem', lineHeight: 2.0 }}
-      >
+      <div className="accent-rule mb-8" />
+      <p className="font-sans font-light" style={{ fontSize: '1.05rem', lineHeight: 2.0, color: 'var(--color-text-muted)' }}>
         {description}
       </p>
 
-      {/* Materials list */}
       {space.materials?.length > 0 && (
         <div className="mt-12">
-          <p className="label-luxury text-gold/70 mb-4" style={{ fontSize: '0.6rem' }}>
+          <p className="label-luxury mb-4" style={{ color: 'var(--color-accent)', opacity: 0.6, fontSize: '0.6rem' }}>
             {t('materials_title')}
           </p>
           <div className="flex flex-col gap-3">
             {space.materials.map(mat => {
-              const matLabel = lang === 'es' ? mat.label : mat.labelEN
+              const matLabel = (lang === 'es' ? mat.label : mat.labelEN) ?? mat.label
               return (
                 <div key={mat.id} className="flex items-center gap-4">
                   <div
                     className="rounded-full flex-shrink-0"
-                    style={{ width: 16, height: 16, backgroundColor: mat.swatch, border: '1px solid rgba(200,160,122,0.3)' }}
+                    style={{ width: 16, height: 16, backgroundColor: mat.swatch, border: '1px solid rgba(184,152,72,0.3)' }}
                   />
-                  <span className="font-serif font-light text-ink/70" style={{ fontSize: '0.9rem' }}>
+                  <span className="font-sans font-light text-text/70" style={{ fontSize: '0.9rem' }}>
                     {matLabel}
                   </span>
                 </div>

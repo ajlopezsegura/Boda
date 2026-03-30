@@ -3,8 +3,8 @@ import { useLang } from '../../context/LangContext'
 export default function SpaceHeader({ space }) {
   const { lang, t } = useLang()
 
-  const label       = lang === 'es' ? space.label       : space.labelEN
-  const description = lang === 'es' ? space.description : space.descriptionEN
+  const label       = (lang === 'es' ? space.label       : space.labelEN)       ?? space.label
+  const description = (lang === 'es' ? space.description : space.descriptionEN) ?? space.description
   const typeLabel   = t(`space_type_${space.type}`)
 
   return (
@@ -14,7 +14,7 @@ export default function SpaceHeader({ space }) {
         className="display-heading text-text mb-6"
         style={{ fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '0.08em' }}
       >
-        {label.toUpperCase()}
+        {label?.toUpperCase()}
       </h1>
       <div className="h-px mb-8" style={{ width: 48, backgroundColor: 'var(--color-accent)' }} />
       <p
