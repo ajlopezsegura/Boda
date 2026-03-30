@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-cream:      #F5F0E8;
+  --color-sand:       #E8DFD0;
+  --color-gold:       #C8A07A;
+  --color-gold-light: #DDB98A;
+  --color-ink:        #1A1714;
+}
+
+/* Hide default cursor site-wide — LuxuryCursor takes over on non-touch devices */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+html {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+  background-color: var(--color-cream);
+}
+
+/* Gold rule utility */
+.gold-rule {
+  width: 48px;
+  height: 1px;
+  background-color: var(--color-gold);
+}
+
+/* Serif display utility */
+.display-serif {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* Label utility — Montserrat uppercase with luxury tracking */
+.label-luxury {
+  font-family: Montserrat, sans-serif;
+  font-weight: 300;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Pixel Streaming container — video fills the area */
+.ps-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Lightbox customisation */
+.yarl__root {
+  --yarl__color_backdrop: rgba(26, 23, 20, 0.96);
+}
+
+/* Scrollbar — thin and themed */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 2px; }

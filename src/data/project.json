@@ -1,0 +1,114 @@
+{
+  "project": {
+    "name": "Casa Mediterránea",
+    "nameEN": "Mediterranean House",
+    "subtitle": "Barcelona — 2025",
+    "architect": "Estudio Nombre",
+    "description": "Una residencia que dialoga con el paisaje mediterráneo a través de la luz, los materiales nobles y la continuidad entre interior y exterior. Cada espacio es concebido como un episodio de una narrativa más amplia.",
+    "descriptionEN": "A residence that engages in dialogue with the Mediterranean landscape through light, noble materials and the continuity between interior and exterior. Each space is conceived as an episode in a broader narrative.",
+    "heroImage": "/assets/project-hero.jpg",
+    "accentColor": "#C8A07A"
+  },
+  "spaces": [
+    {
+      "id": "salon",
+      "label": "Salón",
+      "labelEN": "Living Room",
+      "type": "interior",
+      "description": "El corazón de la casa. Un espacio de doble altura donde la piedra caliza, la madera de roble y la luz cenital crean una atmósfera serena y atemporal.",
+      "descriptionEN": "The heart of the house. A double-height space where limestone, oak wood and zenithal light create a serene and timeless atmosphere.",
+      "thumbnail": "/assets/images/salon/thumb.jpg",
+      "psStreamUrl": null,
+      "model": "/assets/models/salon.glb",
+      "modelConfig": {
+        "cameraPosition": [3, 2, 5],
+        "environment": "apartment"
+      },
+      "materials": [
+        { "id": "limestone", "label": "Caliza Natural", "labelEN": "Natural Limestone", "swatch": "#E8E0D0" },
+        { "id": "marble_white", "label": "Mármol Blanco", "labelEN": "White Marble", "swatch": "#F2EEE8" },
+        { "id": "wood_oak", "label": "Roble Natural", "labelEN": "Natural Oak", "swatch": "#C8A07A" }
+      ],
+      "images": [
+        { "src": "/assets/images/salon/render-01.jpg", "caption": "Luz de mañana", "captionEN": "Morning light" },
+        { "src": "/assets/images/salon/render-02.jpg", "caption": "Vista nocturna", "captionEN": "Evening view" }
+      ],
+      "video": "/assets/videos/salon.mp4",
+      "hotspot": { "x": 15, "y": 30, "w": 28, "h": 22 },
+      "order": 1
+    },
+    {
+      "id": "cocina",
+      "label": "Cocina",
+      "labelEN": "Kitchen",
+      "type": "interior",
+      "description": "Un espacio funcional concebido como una pieza de artesanía. Los volúmenes blancos contrastan con las encimeras de mármol negro marquina y los tiradores de latón.",
+      "descriptionEN": "A functional space conceived as a piece of craftsmanship. White volumes contrast with Marquina black marble countertops and brass handles.",
+      "thumbnail": "/assets/images/cocina/thumb.jpg",
+      "psStreamUrl": null,
+      "model": null,
+      "modelConfig": null,
+      "materials": [
+        { "id": "marquina", "label": "Mármol Marquina", "labelEN": "Marquina Marble", "swatch": "#2A2520" },
+        { "id": "oak_island", "label": "Isla de Roble", "labelEN": "Oak Island", "swatch": "#C8A07A" }
+      ],
+      "images": [
+        { "src": "/assets/images/cocina/render-01.jpg", "caption": "Encimera y volúmenes", "captionEN": "Countertop and volumes" }
+      ],
+      "video": null,
+      "hotspot": { "x": 55, "y": 20, "w": 22, "h": 20 },
+      "order": 2
+    },
+    {
+      "id": "dormitorio",
+      "label": "Dormitorio Principal",
+      "labelEN": "Master Bedroom",
+      "type": "interior",
+      "description": "Un santuario de calma. Lino natural, madera oscura y una terraza privada con vistas al jardín mediterráneo. La luz tamizada al amanecer transforma el espacio.",
+      "descriptionEN": "A sanctuary of calm. Natural linen, dark wood and a private terrace overlooking the Mediterranean garden. The filtered light at dawn transforms the space.",
+      "thumbnail": "/assets/images/dormitorio/thumb.jpg",
+      "psStreamUrl": null,
+      "model": "/assets/models/dormitorio.glb",
+      "modelConfig": {
+        "cameraPosition": [2, 1.5, 4],
+        "environment": "dawn"
+      },
+      "materials": [
+        { "id": "linen", "label": "Lino Natural", "labelEN": "Natural Linen", "swatch": "#D8CFC0" },
+        { "id": "walnut", "label": "Nogal Oscuro", "labelEN": "Dark Walnut", "swatch": "#5C4035" }
+      ],
+      "images": [
+        { "src": "/assets/images/dormitorio/render-01.jpg", "caption": "Amanecer", "captionEN": "Dawn" },
+        { "src": "/assets/images/dormitorio/render-02.jpg", "caption": "Terraza privada", "captionEN": "Private terrace" },
+        { "src": "/assets/images/dormitorio/render-03.jpg", "caption": "Detalle de cabecero", "captionEN": "Headboard detail" }
+      ],
+      "video": "/assets/videos/dormitorio.mp4",
+      "hotspot": { "x": 62, "y": 50, "w": 25, "h": 22 },
+      "order": 3
+    },
+    {
+      "id": "exterior",
+      "label": "Exterior",
+      "labelEN": "Exterior",
+      "type": "exterior",
+      "description": "La fachada de piedra y las terrazas escalonadas dialogan con el paisaje. La piscina de borde infinito prolonga visualmente el horizonte mediterráneo.",
+      "descriptionEN": "The stone facade and terraced decks engage in dialogue with the landscape. The infinity pool visually extends the Mediterranean horizon.",
+      "thumbnail": "/assets/images/exterior/thumb.jpg",
+      "psStreamUrl": null,
+      "model": null,
+      "modelConfig": null,
+      "materials": null,
+      "images": [
+        { "src": "/assets/images/exterior/render-01.jpg", "caption": "Fachada principal", "captionEN": "Main facade" },
+        { "src": "/assets/images/exterior/render-02.jpg", "caption": "Piscina al atardecer", "captionEN": "Pool at sunset" },
+        { "src": "/assets/images/exterior/render-03.jpg", "caption": "Vista aérea", "captionEN": "Aerial view" }
+      ],
+      "video": "/assets/videos/exterior.mp4",
+      "hotspot": { "x": 30, "y": 65, "w": 35, "h": 25 },
+      "order": 4
+    }
+  ],
+  "floorPlan": {
+    "src": "/assets/floorplan.svg"
+  }
+}
