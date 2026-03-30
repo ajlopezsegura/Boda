@@ -15,7 +15,7 @@ export default function App() {
     <>
       <LuxuryCursor />
       {!isSplash && <AppShell />}
-      <AnimatePresence initial={false}>
+      <AnimatePresence mode="wait" initial={false}>
         <Routes location={location} key={location.pathname}>
           <Route path="/"          element={<SplashPage />} />
           <Route path="/home"      element={<LandingPage />} />
