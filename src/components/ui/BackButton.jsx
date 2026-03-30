@@ -10,16 +10,12 @@ export default function BackButton() {
     <button
       onClick={() => navigate('/map')}
       data-cursor="hover"
-      className="flex items-center gap-3 label-luxury transition-colors duration-500 group"
+      className="flex items-center gap-2 sm:gap-3 label-luxury transition-colors duration-500 min-h-[44px]"
       style={{ color: 'var(--color-text-muted)' }}
       onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
       onMouseLeave={e => e.currentTarget.style.color = 'var(--color-text-muted)'}
     >
-      <ArrowLeft
-        size={12}
-        strokeWidth={1.5}
-        className="transition-transform duration-500 group-hover:-translate-x-1"
-      />
+      <ArrowLeft size={14} strokeWidth={1.5} className="transition-transform duration-500 group-hover:-translate-x-1" />
       {t('cta_back_map')}
     </button>
   )

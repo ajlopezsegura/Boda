@@ -3,15 +3,15 @@ import { motion } from 'framer-motion'
 export default function TabBar({ tabs, active, onChange }) {
   return (
     <div
-      className="flex items-center gap-8"
-      style={{ borderBottom: '1px solid rgba(184,152,72,0.15)' }}
+      className="flex items-center gap-4 sm:gap-8 overflow-x-auto"
+      style={{ borderBottom: '1px solid rgba(184,152,72,0.15)', WebkitOverflowScrolling: 'touch' }}
     >
       {tabs.map(({ id, label }) => (
         <button
           key={id}
           onClick={() => onChange(id)}
           data-cursor="hover"
-          className="relative pb-4 label-luxury text-text transition-colors duration-300"
+          className="relative flex-shrink-0 min-h-[44px] flex items-end pb-3 sm:pb-4 label-luxury text-text transition-colors duration-300"
           style={{ opacity: active === id ? 1 : 0.35 }}
         >
           {label}

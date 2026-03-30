@@ -25,14 +25,14 @@ export default function SpacePage() {
   const space = useSpace(id)
   const { lang, t } = useLang()
 
-  // Hooks must be called unconditionally — compute tabs safely
+  // Hooks before any conditional return
   const tabs = space ? buildTabs(space, t) : [{ id: 'info', label: t('tab_info') }]
   const [activeTab, setActiveTab] = useState(() => tabs[0]?.id ?? 'info')
 
   if (!space) {
     return (
       <PageTransition>
-        <div className="min-h-screen flex items-center justify-center pt-24" style={{ backgroundColor: 'var(--color-bg)' }}>
+        <div className="min-h-screen flex items-center justify-center pt-20" style={{ backgroundColor: 'var(--color-bg)' }}>
           <p className="label-luxury" style={{ color: 'var(--color-accent)', opacity: 0.5 }}>
             {t('space_not_found')}
           </p>
@@ -45,27 +45,24 @@ export default function SpacePage() {
     <PageTransition>
       <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
         {/* Back button */}
-        <div className="pt-28 pb-0 px-10">
+        <div className="pt-20 sm:pt-24 pb-0 px-4 sm:px-10">
           <BackButton />
         </div>
 
         {/* Space header */}
         <SpaceHeader space={space} />
 
-        {/* Content area */}
-        <div className="max-w-5xl mx-auto px-6 pb-24">
-          {/* Tab bar */}
+        {/* Content */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-16 sm:pb-24">
           {tabs.length > 1 && (
-            <div className="mb-10">
+            <div className="mb-8 sm:mb-10">
               <TabBar tabs={tabs} active={activeTab} onChange={setActiveTab} />
             </div>
           )}
 
-          {/* Tab content */}
           <AnimatePresence mode="wait">
             <motion.div key={activeTab} {...tabFade}>
 
-              {/* 3D tab */}
               {activeTab === '3d' && (
                 <div>
                   {space.psStreamUrl ? (
@@ -83,20 +80,11 @@ export default function SpacePage() {
                 </div>
               )}
 
-              {/* Gallery tab */}
-              {activeTab === 'gallery' && (
-                <ImageGallery images={space.images} />
-              )}
+              {activeTab === 'gallery' && <ImageGallery images={space.images} />}
 
-              {/* Video tab */}
-              {activeTab === 'video' && (
-                <VideoPlayer src={space.video} poster={space.thumbnail} />
-              )}
+              {activeTab === 'video' && <VideoPlayer src={space.video} poster={space.thumbnail} />}
 
-              {/* Info tab */}
-              {activeTab === 'info' && (
-                <InfoTab space={space} lang={lang} t={t} />
-              )}
+              {activeTab === 'info' && <InfoTab space={space} lang={lang} t={t} />}
 
             </motion.div>
           </AnimatePresence>
@@ -121,34 +109,34 @@ function InfoTab({ space, lang, t }) {
   const typeLabel   = t(`space_type_${space.type}`)
 
   return (
-    <div className="max-w-xl mx-auto py-8">
-      <p className="label-luxury mb-6" style={{ color: 'var(--color-accent)' }}>{typeLabel}</p>
+    <div className="max-w-xl mx-auto py-6 sm:py-8">
+      <p className="label-luxury mb-4 sm:mb-6" style={{ color: 'var(--color-accent)' }}>{typeLabel}</p>
       <h2
-        className="display-heading text-text mb-8"
-        style={{ fontSize: '2rem', letterSpacing: '0.08em' }}
+        className="display-heading text-text mb-6 sm:mb-8"
+        style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', letterSpacing: '0.08em' }}
       >
         {label?.toUpperCase()}
       </h2>
-      <div className="accent-rule mb-8" />
-      <p className="font-sans font-light" style={{ fontSize: '1.05rem', lineHeight: 2.0, color: 'var(--color-text-muted)' }}>
+      <div className="accent-rule mb-6 sm:mb-8" />
+      <p className="font-sans font-light" style={{ fontSize: 'clamp(0.9rem, 2.5vw, 1.05rem)', lineHeight: 2.0, color: 'var(--color-text-muted)' }}>
         {description}
       </p>
 
       {space.materials?.length > 0 && (
-        <div className="mt-12">
-          <p className="label-luxury mb-4" style={{ color: 'var(--color-accent)', opacity: 0.6, fontSize: '0.6rem' }}>
+        <div className="mt-10 sm:mt-12">
+          <p className="label-luxury mb-3 sm:mb-4" style={{ color: 'var(--color-accent)', opacity: 0.6 }}>
             {t('materials_title')}
           </p>
           <div className="flex flex-col gap-3">
             {space.materials.map(mat => {
               const matLabel = (lang === 'es' ? mat.label : mat.labelEN) ?? mat.label
               return (
-                <div key={mat.id} className="flex items-center gap-4">
+                <div key={mat.id} className="flex items-center gap-3 sm:gap-4">
                   <div
                     className="rounded-full flex-shrink-0"
-                    style={{ width: 16, height: 16, backgroundColor: mat.swatch, border: '1px solid rgba(184,152,72,0.3)' }}
+                    style={{ width: 14, height: 14, backgroundColor: mat.swatch, border: '1px solid rgba(184,152,72,0.3)' }}
                   />
-                  <span className="font-sans font-light text-text/70" style={{ fontSize: '0.9rem' }}>
+                  <span className="font-sans font-light text-text/70" style={{ fontSize: 'clamp(0.85rem, 2.5vw, 0.9rem)' }}>
                     {matLabel}
                   </span>
                 </div>

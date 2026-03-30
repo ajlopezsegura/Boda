@@ -11,26 +11,21 @@ export default function ImageGallery({ images }) {
 
   const slides = images.map(img => ({
     src: img.src,
-    alt: lang === 'es' ? img.caption : img.captionEN ?? img.caption,
+    alt: lang === 'es' ? img.caption : (img.captionEN ?? img.caption),
   }))
 
-  function openAt(i) {
-    setIndex(i)
-    setOpen(true)
-  }
+  function openAt(i) { setIndex(i); setOpen(true) }
 
   return (
     <>
       <div
-        className="grid gap-3"
-        style={{
-          gridTemplateColumns: `repeat(auto-fill, minmax(min(260px, 100%), 1fr))`,
-        }}
+        className="grid gap-2 sm:gap-3"
+        style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(180px, 100%), 1fr))' }}
       >
         {images.map((img, i) => (
           <GalleryThumb
             key={img.src}
-            image={{ ...img, caption: lang === 'es' ? img.caption : img.captionEN ?? img.caption }}
+            image={{ ...img, caption: lang === 'es' ? img.caption : (img.captionEN ?? img.caption) }}
             index={i}
             onClick={() => openAt(i)}
           />
@@ -42,9 +37,7 @@ export default function ImageGallery({ images }) {
         close={() => setOpen(false)}
         index={index}
         slides={slides}
-        styles={{
-          container: { backgroundColor: 'rgba(26,23,20,0.96)' },
-        }}
+        styles={{ container: { backgroundColor: 'rgba(26,33,48,0.97)' } }}
       />
     </>
   )
