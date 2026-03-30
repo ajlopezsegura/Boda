@@ -15,12 +15,12 @@ export default function App() {
     <>
       <LuxuryCursor />
       {!isSplash && <AppShell />}
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence initial={false}>
         <Routes location={location} key={location.pathname}>
-          <Route path="/"           element={<SplashPage />} />
-          <Route path="/home"       element={<LandingPage />} />
-          <Route path="/map"        element={<MapPage />} />
-          <Route path="/space/:id"  element={<SpacePage />} />
+          <Route path="/"          element={<SplashPage />} />
+          <Route path="/home"      element={<LandingPage />} />
+          <Route path="/map"       element={<MapPage />} />
+          <Route path="/space/:id" element={<SpacePage />} />
         </Routes>
       </AnimatePresence>
     </>
