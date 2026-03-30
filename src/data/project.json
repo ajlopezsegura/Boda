@@ -19,7 +19,7 @@
       "descriptionEN": "The heart of the house. A double-height space where limestone, oak wood and zenithal light create a serene and timeless atmosphere.",
       "thumbnail": "/assets/images/salon/thumb.jpg",
       "psStreamUrl": null,
-      "model": "/assets/models/salon.glb",
+      "model": null,
       "modelConfig": {
         "cameraPosition": [3, 2, 5],
         "environment": "apartment"
@@ -68,7 +68,7 @@
       "descriptionEN": "A sanctuary of calm. Natural linen, dark wood and a private terrace overlooking the Mediterranean garden. The filtered light at dawn transforms the space.",
       "thumbnail": "/assets/images/dormitorio/thumb.jpg",
       "psStreamUrl": null,
-      "model": "/assets/models/dormitorio.glb",
+      "model": null,
       "modelConfig": {
         "cameraPosition": [2, 1.5, 4],
         "environment": "dawn"
