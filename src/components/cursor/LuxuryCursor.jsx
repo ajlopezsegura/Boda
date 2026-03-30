@@ -8,7 +8,6 @@ export default function LuxuryCursor() {
   const pos     = useRef({ x: -100, y: -100 })
   const ring    = useRef({ x: -100, y: -100 })
   const rafId   = useRef(null)
-  const hovered = useRef(false)
 
   useEffect(() => {
     if (isTouch) return
@@ -23,7 +22,6 @@ export default function LuxuryCursor() {
 
     function onEnter(e) {
       if (e.target.closest('[data-cursor="hover"]')) {
-        hovered.current = true
         ringRef.current?.classList.add('cursor-hover')
         dotRef.current?.classList.add('cursor-hover')
       }
@@ -31,16 +29,14 @@ export default function LuxuryCursor() {
 
     function onLeave(e) {
       if (e.target.closest('[data-cursor="hover"]')) {
-        hovered.current = false
         ringRef.current?.classList.remove('cursor-hover')
         dotRef.current?.classList.remove('cursor-hover')
       }
     }
 
     function animate() {
-      const LERP = 0.10
-      ring.current.x += (pos.current.x - ring.current.x) * LERP
-      ring.current.y += (pos.current.y - ring.current.y) * LERP
+      ring.current.x += (pos.current.x - ring.current.x) * 0.10
+      ring.current.y += (pos.current.y - ring.current.y) * 0.10
       if (ringRef.current) {
         ringRef.current.style.transform =
           `translate(${ring.current.x}px, ${ring.current.y}px) translate(-50%, -50%)`
@@ -65,38 +61,35 @@ export default function LuxuryCursor() {
 
   return (
     <>
-      {/* Dot */}
       <div
         ref={dotRef}
-        className="cursor-dot"
         style={{
           position: 'fixed', top: 0, left: 0,
-          width: 8, height: 8,
+          width: 7, height: 7,
           borderRadius: '50%',
-          backgroundColor: 'var(--color-gold)',
+          backgroundColor: 'var(--color-accent)',
           pointerEvents: 'none',
           zIndex: 9999,
-          transition: 'width 0.2s, height 0.2s, opacity 0.2s',
           willChange: 'transform',
+          transition: 'width 0.2s, height 0.2s, opacity 0.2s',
         }}
       />
-      {/* Ring */}
       <div
         ref={ringRef}
-        className="cursor-ring"
         style={{
           position: 'fixed', top: 0, left: 0,
-          width: 36, height: 36,
+          width: 34, height: 34,
           borderRadius: '50%',
-          border: '1px solid var(--color-gold)',
+          border: '1px solid rgba(184,152,72,0.6)',
           pointerEvents: 'none',
           zIndex: 9998,
           willChange: 'transform',
         }}
       />
       <style>{`
-        .cursor-dot.cursor-hover   { width: 4px !important; height: 4px !important; opacity: 0.4; }
-        .cursor-ring.cursor-hover  { width: 56px !important; height: 56px !important; border-color: var(--color-gold-light); transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease; }
+        .cursor-hover + div { /* ring */ }
+        div.cursor-hover[style*="width: 7px"] { width: 3px !important; height: 3px !important; opacity: 0.3; }
+        div.cursor-hover[style*="width: 34px"] { width: 54px !important; height: 54px !important; border-color: rgba(184,152,72,0.8) !important; transition: width 0.3s ease, height 0.3s ease !important; }
       `}</style>
     </>
   )

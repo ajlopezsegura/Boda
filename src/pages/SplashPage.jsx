@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 
@@ -11,7 +11,7 @@ export default function SplashPage() {
   const name = lang === 'es' ? project.name : project.nameEN
 
   useEffect(() => {
-    const timer = setTimeout(() => navigate('/home'), 3600)
+    const timer = setTimeout(() => navigate('/home'), 3800)
     return () => clearTimeout(timer)
   }, [navigate])
 
@@ -22,40 +22,55 @@ export default function SplashPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 1.0, ease: [0.43, 0.13, 0.23, 0.96] }}
       className="fixed inset-0 flex flex-col items-center justify-center"
-      style={{ backgroundColor: '#0E0C0A' }}
+      style={{ backgroundColor: 'var(--color-bg-deep)' }}
       onClick={() => navigate('/home')}
     >
+      {/* Studio mark */}
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.0, ease: [0.43, 0.13, 0.23, 0.96], delay: 0.3 }}
+        className="text-center mb-12"
+      >
+        <p className="label-luxury" style={{ color: 'rgba(184,152,72,0.5)', fontSize: '0.55rem', letterSpacing: '0.25em' }}>
+          THE VISUALS BOUTIQUE·STUDIO
+        </p>
+      </motion.div>
+
+      {/* Project name — display heading */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, ease: [0.43, 0.13, 0.23, 0.96], delay: 0.4 }}
+        transition={{ duration: 1.2, ease: [0.43, 0.13, 0.23, 0.96], delay: 0.6 }}
         className="text-center"
       >
-        <p
-          className="font-serif italic font-light"
+        <h1
+          className="display-heading text-text"
           style={{
-            fontSize: 'clamp(2rem, 5vw, 4.5rem)',
-            color: '#F5F0E8',
-            letterSpacing: '0.06em',
-            lineHeight: 1.2,
+            fontSize: 'clamp(2rem, 6vw, 5rem)',
+            letterSpacing: '0.10em',
+            lineHeight: 1.0,
           }}
         >
-          {name}
-        </p>
+          {name.toUpperCase()}
+        </h1>
 
+        {/* Animated gold rule */}
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: 48 }}
-          transition={{ duration: 1.0, ease: [0.43, 0.13, 0.23, 0.96], delay: 1.2 }}
-          className="h-px bg-gold mx-auto mt-8"
+          transition={{ duration: 0.9, ease: [0.43, 0.13, 0.23, 0.96], delay: 1.4 }}
+          className="h-px mx-auto mt-8"
+          style={{ backgroundColor: 'var(--color-accent)' }}
         />
 
+        {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 0.5 }}
-          transition={{ duration: 0.8, delay: 1.8 }}
-          className="label-luxury mt-8"
-          style={{ color: '#C8A07A', fontSize: '0.6rem' }}
+          transition={{ duration: 0.8, delay: 2.0 }}
+          className="label-luxury mt-6 text-text"
+          style={{ fontSize: '0.6rem' }}
         >
           {project.subtitle}
         </motion.p>

@@ -13,43 +13,40 @@ export default function LandingPage() {
   const containerRef = useRef(null)
 
   const { scrollYProgress } = useScroll({ target: containerRef })
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%'])
 
   const name = lang === 'es' ? project.name : project.nameEN
   const description = lang === 'es' ? project.description : project.descriptionEN
 
   return (
     <PageTransition>
-      <div ref={containerRef} className="relative min-h-screen">
+      <div ref={containerRef} className="relative min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
+
         {/* Hero */}
-        <div className="relative h-screen overflow-hidden flex items-center justify-center">
-          {/* Background image with parallax */}
-          <motion.div
-            className="absolute inset-0"
-            style={{ y: bgY }}
-          >
+        <div className="relative h-screen overflow-hidden flex items-end pb-20">
+          {/* Background */}
+          <motion.div className="absolute inset-0" style={{ y: bgY }}>
             <div
               className="w-full h-full bg-center bg-cover"
               style={{
                 backgroundImage: `url(${project.heroImage})`,
-                backgroundColor: '#2A2318',
+                backgroundColor: 'var(--color-bg-deep)',
               }}
             />
-            {/* Overlay */}
             <div
               className="absolute inset-0"
-              style={{ background: 'linear-gradient(to bottom, rgba(26,23,20,0.3) 0%, rgba(26,23,20,0.15) 40%, rgba(26,23,20,0.5) 100%)' }}
+              style={{ background: 'linear-gradient(to top, rgba(26,33,48,0.85) 0%, rgba(26,33,48,0.2) 50%, rgba(26,33,48,0.4) 100%)' }}
             />
           </motion.div>
 
-          {/* Hero content */}
-          <div className="relative z-10 text-center px-6">
+          {/* Hero content — bottom left, like editorial */}
+          <div className="relative z-10 px-10 md:px-16 max-w-3xl">
             <motion.p
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.0, delay: 0.2, ease: [0.43, 0.13, 0.23, 0.96] }}
-              className="label-luxury mb-6"
-              style={{ color: 'rgba(200,160,122,0.9)' }}
+              className="label-luxury mb-5"
+              style={{ color: 'var(--color-accent)', fontSize: '0.6rem' }}
             >
               {project.architect} — {project.subtitle}
             </motion.p>
@@ -58,32 +55,40 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.4, ease: [0.43, 0.13, 0.23, 0.96] }}
-              className="font-serif italic font-light"
-              style={{
-                fontSize: 'clamp(3rem, 8vw, 7rem)',
-                color: '#F5F0E8',
-                lineHeight: 1.05,
-                letterSpacing: '0.02em',
-              }}
+              className="display-heading text-text mb-8"
+              style={{ fontSize: 'clamp(2.5rem, 7vw, 6.5rem)', letterSpacing: '0.06em' }}
             >
-              {name}
+              {name.toUpperCase()}
             </motion.h1>
 
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: 48 }}
-              transition={{ duration: 0.8, delay: 0.9, ease: [0.43, 0.13, 0.23, 0.96] }}
-              className="h-px bg-gold mx-auto my-8"
+              transition={{ duration: 0.8, delay: 1.0, ease: [0.43, 0.13, 0.23, 0.96] }}
+              className="h-px mb-8"
+              style={{ backgroundColor: 'var(--color-accent)' }}
             />
 
             <motion.button
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 1.2 }}
+              transition={{ duration: 0.8, delay: 1.3 }}
               onClick={() => navigate('/map')}
               data-cursor="hover"
-              className="label-luxury px-10 py-4 border border-gold/60 hover:border-gold text-cream hover:bg-gold/10 transition-all duration-700"
-              style={{ letterSpacing: '0.18em' }}
+              className="label-luxury px-8 py-3.5 border transition-all duration-700"
+              style={{
+                borderColor: 'rgba(184,152,72,0.5)',
+                color: 'var(--color-text)',
+                letterSpacing: '0.20em',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = 'var(--color-accent)'
+                e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.08)'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = 'rgba(184,152,72,0.5)'
+                e.currentTarget.style.backgroundColor = 'transparent'
+              }}
             >
               {t('cta_explore')}
             </motion.button>
@@ -93,36 +98,38 @@ export default function LandingPage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 2.0 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+            transition={{ duration: 0.8, delay: 2.2 }}
+            className="absolute bottom-10 right-10 flex flex-col items-center gap-3"
           >
-            <span className="label-luxury" style={{ color: 'rgba(200,160,122,0.6)', fontSize: '0.55rem' }}>
+            <span className="label-luxury" style={{ color: 'rgba(184,152,72,0.45)', fontSize: '0.5rem', writingMode: 'vertical-rl' }}>
               {t('scroll_hint')}
             </span>
             <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              animate={{ y: [0, 5, 0] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <ArrowDown size={14} color="rgba(200,160,122,0.6)" strokeWidth={1} />
+              <ArrowDown size={12} color="rgba(184,152,72,0.45)" strokeWidth={1.5} />
             </motion.div>
           </motion.div>
         </div>
 
-        {/* Project description section */}
-        <section className="bg-cream py-32 px-6">
-          <div className="max-w-2xl mx-auto text-center">
-            <p className="label-luxury text-gold mb-8">{project.subtitle}</p>
+        {/* Description section */}
+        <section className="py-32 px-10 md:px-20" style={{ backgroundColor: 'var(--color-bg)' }}>
+          <div className="max-w-xl">
+            <p className="label-luxury mb-8" style={{ color: 'var(--color-accent)' }}>
+              {project.subtitle}
+            </p>
             <p
-              className="font-serif font-light text-ink/75"
-              style={{ fontSize: '1.25rem', lineHeight: 1.9 }}
+              className="font-sans font-light text-text/70"
+              style={{ fontSize: '1.05rem', lineHeight: 1.9 }}
             >
               {description}
             </p>
-            <div className="gold-rule mx-auto mt-12 mb-12" />
+            <div className="h-px mt-12 mb-12" style={{ width: 48, backgroundColor: 'var(--color-accent)', opacity: 0.5 }} />
             <button
               onClick={() => navigate('/map')}
               data-cursor="hover"
-              className="label-luxury text-ink hover:text-gold transition-colors duration-500"
+              className="label-luxury transition-colors duration-500 text-text/60 hover:text-accent"
             >
               {t('cta_explore')} →
             </button>

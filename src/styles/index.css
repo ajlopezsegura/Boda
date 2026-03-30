@@ -3,23 +3,28 @@
 @tailwind utilities;
 
 :root {
-  --color-cream:      #F5F0E8;
-  --color-sand:       #E8DFD0;
-  --color-gold:       #C8A07A;
-  --color-gold-light: #DDB98A;
-  --color-ink:        #1A1714;
+  /* THE VISUALS BOUTIQUE STUDIO — Brand Palette */
+  --color-bg:           #252D3A;  /* Azul Carbón TVBS       */
+  --color-bg-card:      #364556;  /* Azul Medianoche TVBS   */
+  --color-bg-deep:      #1A2130;  /* Deeper background      */
+  --color-text:         #F4F1EA;  /* Blanco Marfil          */
+  --color-text-muted:   rgba(244,241,234,0.50);
+  --color-bone:         #E5E2DA;  /* Hueso Neutro TVBS      */
+  --color-accent:       #B89848;  /* Oro Absoluto TVBS      */
+  --color-accent-light: #CEB060;
+  --color-accent-dim:   rgba(184,152,72,0.20);
+  --color-signature:    #7A2318;  /* Rojo Signature TVBS    */
+  --color-border:       rgba(184,152,72,0.18);
 }
 
-/* Hide default cursor site-wide — LuxuryCursor takes over on non-touch devices */
+/* Hide default cursor — LuxuryCursor takes over on non-touch */
 @media (pointer: fine) {
-  *, *::before, *::after {
-    cursor: none !important;
-  }
+  *, *::before, *::after { cursor: none !important; }
 }
 
 html {
-  background-color: var(--color-cream);
-  color: var(--color-ink);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -28,24 +33,21 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100dvh;
-  background-color: var(--color-cream);
+  background-color: var(--color-bg);
+  font-family: Montserrat, sans-serif;
 }
 
-/* Gold rule utility */
-.gold-rule {
+/* Accent rule — thin gold line, like TVBS separators */
+.accent-rule {
   width: 48px;
   height: 1px;
-  background-color: var(--color-gold);
+  background-color: var(--color-accent);
 }
 
-/* Serif display utility */
-.display-serif {
-  font-family: "Cormorant Garamond", serif;
-  font-weight: 300;
-  font-style: italic;
-}
+/* Backward compat alias used in old components */
+.gold-rule { width: 48px; height: 1px; background-color: var(--color-accent); }
 
-/* Label utility — Montserrat uppercase with luxury tracking */
+/* Label utility — Montserrat uppercase wide tracking */
 .label-luxury {
   font-family: Montserrat, sans-serif;
   font-weight: 300;
@@ -54,20 +56,25 @@ body {
   text-transform: uppercase;
 }
 
-/* Pixel Streaming container — video fills the area */
+/* Display heading — Montserrat ExtraBold uppercase (like THE VISUALS) */
+.display-heading {
+  font-family: Montserrat, sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.0;
+}
+
+/* Pixel Streaming */
 .ps-container video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
 }
 
-/* Lightbox customisation */
-.yarl__root {
-  --yarl__color_backdrop: rgba(26, 23, 20, 0.96);
-}
+/* Lightbox */
+.yarl__root { --yarl__color_backdrop: rgba(26, 33, 48, 0.97); }
 
-/* Scrollbar — thin and themed */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--color-gold); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 2px; }

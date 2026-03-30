@@ -6,18 +6,14 @@ export default function SpaceCard({ space, index }) {
   const navigate = useNavigate()
   const { lang, t } = useLang()
 
-  const label = lang === 'es' ? space.label : space.labelEN
+  const label     = lang === 'es' ? space.label : space.labelEN
   const typeLabel = t(`space_type_${space.type}`)
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.7,
-        delay: index * 0.12,
-        ease: [0.43, 0.13, 0.23, 0.96],
-      }}
+      transition={{ duration: 0.7, delay: index * 0.12, ease: [0.43, 0.13, 0.23, 0.96] }}
       onClick={() => navigate(`/space/${space.id}`)}
       data-cursor="hover"
       className="flex-shrink-0 group"
@@ -26,7 +22,7 @@ export default function SpaceCard({ space, index }) {
       {/* Photo */}
       <div
         className="relative overflow-hidden"
-        style={{ aspectRatio: '3/4', backgroundColor: '#E8DFD0' }}
+        style={{ aspectRatio: '3/4', backgroundColor: 'var(--color-bg-card)' }}
       >
         <img
           src={space.thumbnail}
@@ -36,38 +32,32 @@ export default function SpaceCard({ space, index }) {
         />
         {/* Hover overlay */}
         <div
-          className="absolute inset-0 transition-opacity duration-700"
-          style={{
-            background: 'linear-gradient(to top, rgba(26,23,20,0.5) 0%, transparent 60%)',
-            opacity: 0,
-          }}
-          ref={el => {
-            if (el) {
-              const parent = el.closest('[data-cursor="hover"]')
-              parent?.addEventListener('mouseenter', () => { el.style.opacity = 1 })
-              parent?.addEventListener('mouseleave', () => { el.style.opacity = 0 })
-            }
-          }}
-        />
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-end p-4"
+          style={{ background: 'linear-gradient(to top, rgba(26,33,48,0.7) 0%, transparent 60%)' }}
+        >
+          <span className="label-luxury text-text/70" style={{ fontSize: '0.55rem' }}>
+            {t('nav_explore')} →
+          </span>
+        </div>
       </div>
 
-      {/* Gold separator */}
+      {/* Gold bottom border — animated on hover */}
       <div
-        className="h-px mt-0 transition-all duration-700"
+        className="h-px transition-all duration-700"
         style={{
-          background: 'linear-gradient(to right, var(--color-gold), transparent)',
-          opacity: 0.6,
+          background: 'linear-gradient(to right, var(--color-accent), transparent)',
+          opacity: 0.5,
         }}
       />
 
       {/* Text */}
-      <div className="pt-4 pb-2">
-        <p className="label-luxury text-gold/70 mb-2" style={{ fontSize: '0.55rem' }}>
+      <div className="pt-4 pb-2" style={{ backgroundColor: 'transparent' }}>
+        <p className="label-luxury mb-2" style={{ color: 'var(--color-accent)', opacity: 0.6, fontSize: '0.55rem' }}>
           {typeLabel}
         </p>
         <p
-          className="font-serif font-light text-ink transition-colors duration-500 group-hover:text-gold"
-          style={{ fontSize: '1rem', letterSpacing: '0.03em' }}
+          className="font-sans font-light text-text group-hover:text-accent transition-colors duration-500"
+          style={{ fontSize: '0.85rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}
         >
           {label}
         </p>
