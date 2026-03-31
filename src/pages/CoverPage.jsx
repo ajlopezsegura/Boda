@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PageTransition from '../components/layout/PageTransition'
@@ -8,19 +9,22 @@ export default function CoverPage() {
   const navigate = useNavigate()
   const { project } = useProject()
   const { lang } = useLang()
+  const [videoFailed, setVideoFailed] = useState(false)
 
   const name = lang === 'es' ? project.name : project.nameEN
+  const showVideo = project.heroVideo && !videoFailed
 
   return (
     <PageTransition>
       <div className="absolute inset-0 overflow-hidden">
 
         {/* Background — video or image */}
-        {project.heroVideo ? (
+        {showVideo ? (
           <video
             src={project.heroVideo}
             autoPlay muted loop playsInline
             className="absolute inset-0 w-full h-full object-cover"
+            onError={() => setVideoFailed(true)}
           />
         ) : (
           <div

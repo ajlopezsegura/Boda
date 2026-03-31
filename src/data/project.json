@@ -6,7 +6,7 @@
     "architect": "The Visuals Boutique",
     "description": "Una residencia frente al mar donde la luz mediterránea, los materiales nobles y el sonido del océano definen cada momento del día.",
     "descriptionEN": "A seafront residence where Mediterranean light, noble materials and the sound of the ocean define every moment of the day.",
-    "heroVideo": "https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-ocean-1164-large.mp4",
+    "heroVideo": "/assets/videos/hero.mp4",
     "heroImage": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1920&q=90",
     "aerialImage": "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1920&q=90",
     "accentColor": "#B89848"
