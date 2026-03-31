@@ -11,55 +11,282 @@
     "aerialImage": "./assets/images/las-conchas-aerea.jpg",
     "accentColor": "#B89848"
   },
-
   "building": {
     "totalUnits": 24,
-    "typologies": ["1D", "2D", "3D", "4D", "Ático"],
+    "typologies": [
+      "1D",
+      "2D",
+      "3D",
+      "4D",
+      "Ático"
+    ],
     "surfaceRange": "65 – 320 m²",
     "priceRange": "350.000 – 1.200.000 €",
     "location": "Barcelona, España",
     "completion": "Q4 2026"
   },
-
   "amenities": [
-    { "id": "pool",     "icon": "Waves",       "label": "Piscina",       "labelEN": "Pool",         "description": "Piscina infinity con vistas al mar Mediterráneo. Zona de hamacas y servicio de pool bar en temporada.", "descriptionEN": "Infinity pool with views of the Mediterranean Sea. Sun lounger area and pool bar service in season.", "image": "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&q=80" },
-    { "id": "gym",      "icon": "Dumbbell",    "label": "Gimnasio",      "labelEN": "Gym",          "description": "Gimnasio completamente equipado con máquinas de última generación, zona de pesas libres y sala de estiramiento.", "descriptionEN": "Fully equipped gym with state-of-the-art machines, free weights area and stretching room.", "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80" },
-    { "id": "garden",   "icon": "TreePine",    "label": "Jardines",      "labelEN": "Gardens",      "description": "Jardines mediterráneos diseñados por el estudio de paisajismo Amate con especies autóctonas y zonas de descanso privadas.", "descriptionEN": "Mediterranean gardens designed by landscape studio Amate with native species and private rest areas.", "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" },
-    { "id": "parking",  "icon": "Car",         "label": "Parking",       "labelEN": "Parking",      "description": "Plaza de garaje incluida con cada vivienda. Puntos de recarga para vehículo eléctrico disponibles en todas las plazas.", "descriptionEN": "Garage space included with each home. Electric vehicle charging points available in all spaces.", "image": "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?w=800&q=80" },
-    { "id": "security", "icon": "ShieldCheck", "label": "Seguridad 24h", "labelEN": "24h Security", "description": "Seguridad perimetral con vigilancia 24 horas, acceso por videoportero y control de accesos con tecnología biométrica.", "descriptionEN": "Perimeter security with 24-hour surveillance, video intercom access and biometric access control.", "image": "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&q=80" },
-    { "id": "spa",      "icon": "Sparkles",    "label": "Spa & Wellness","labelEN": "Spa & Wellness","description": "Circuito de aguas termal, sauna finlandesa, hammam y sala de tratamientos. Un espacio de bienestar exclusivo para residentes.", "descriptionEN": "Thermal water circuit, Finnish sauna, hammam and treatment rooms. An exclusive wellness space for residents.", "image": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80" }
+    {
+      "id": "pool",
+      "icon": "Waves",
+      "label": "Piscina",
+      "labelEN": "Pool",
+      "description": "Piscina infinity con vistas al mar Mediterráneo. Zona de hamacas y servicio de pool bar en temporada.",
+      "descriptionEN": "Infinity pool with views of the Mediterranean Sea. Sun lounger area and pool bar service in season.",
+      "image": "./assets/images/Piscina (1).jpg"
+    },
+    {
+      "id": "gym",
+      "icon": "Dumbbell",
+      "label": "Gimnasio",
+      "labelEN": "Gym",
+      "description": "Gimnasio completamente equipado con máquinas de última generación, zona de pesas libres y sala de estiramiento.",
+      "descriptionEN": "Fully equipped gym with state-of-the-art machines, free weights area and stretching room.",
+      "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80"
+    },
+    {
+      "id": "garden",
+      "icon": "TreePine",
+      "label": "Jardines",
+      "labelEN": "Gardens",
+      "description": "Jardines mediterráneos diseñados por el estudio de paisajismo Amate con especies autóctonas y zonas de descanso privadas.",
+      "descriptionEN": "Mediterranean gardens designed by landscape studio Amate with native species and private rest areas.",
+      "image": "./assets/images/Terraza (1).jpg"
+    },
+    {
+      "id": "parking",
+      "icon": "Car",
+      "label": "Parking",
+      "labelEN": "Parking",
+      "description": "Plaza de garaje incluida con cada vivienda. Puntos de recarga para vehículo eléctrico disponibles en todas las plazas.",
+      "descriptionEN": "Garage space included with each home. Electric vehicle charging points available in all spaces.",
+      "image": "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?w=800&q=80"
+    },
+    {
+      "id": "security",
+      "icon": "ShieldCheck",
+      "label": "Seguridad 24h",
+      "labelEN": "24h Security",
+      "description": "Seguridad perimetral con vigilancia 24 horas, acceso por videoportero y control de accesos con tecnología biométrica.",
+      "descriptionEN": "Perimeter security with 24-hour surveillance, video intercom access and biometric access control.",
+      "image": "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&q=80"
+    },
+    {
+      "id": "spa",
+      "icon": "Sparkles",
+      "label": "Spa & Wellness",
+      "labelEN": "Spa & Wellness",
+      "description": "Circuito de aguas termal, sauna finlandesa, hammam y sala de tratamientos. Un espacio de bienestar exclusivo para residentes.",
+      "descriptionEN": "Thermal water circuit, Finnish sauna, hammam and treatment rooms. An exclusive wellness space for residents.",
+      "image": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80"
+    }
   ],
-
   "units": [
-    { "id": "1A", "floor": 1, "bedrooms": 2, "bathrooms": 2, "surface": 98,  "orientation": "Sur",   "price": 420000, "status": "sold",      "thumbnail": "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=600&q=80", "floorPlan": null },
-    { "id": "1B", "floor": 1, "bedrooms": 3, "bathrooms": 2, "surface": 120, "orientation": "Norte", "price": 495000, "status": "reserved",  "thumbnail": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80", "floorPlan": null },
-    { "id": "1C", "floor": 1, "bedrooms": 2, "bathrooms": 1, "surface": 85,  "orientation": "Este",  "price": 365000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80", "floorPlan": null },
-    { "id": "2A", "floor": 2, "bedrooms": 2, "bathrooms": 2, "surface": 100, "orientation": "Sur",   "price": 440000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80", "floorPlan": null },
-    { "id": "2B", "floor": 2, "bedrooms": 3, "bathrooms": 2, "surface": 125, "orientation": "Norte", "price": 510000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80", "floorPlan": null },
-    { "id": "2C", "floor": 2, "bedrooms": 1, "bathrooms": 1, "surface": 68,  "orientation": "Oeste", "price": 295000, "status": "sold",      "thumbnail": "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=600&q=80", "floorPlan": null },
-    { "id": "3A", "floor": 3, "bedrooms": 3, "bathrooms": 2, "surface": 130, "orientation": "Sur",   "price": 560000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=600&q=80", "floorPlan": null },
-    { "id": "3B", "floor": 3, "bedrooms": 2, "bathrooms": 2, "surface": 105, "orientation": "Sur",   "price": 475000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?w=600&q=80", "floorPlan": null },
-    { "id": "3C", "floor": 3, "bedrooms": 4, "bathrooms": 3, "surface": 165, "orientation": "Sur",   "price": 720000, "status": "reserved",  "thumbnail": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80", "floorPlan": null },
-    { "id": "4A", "floor": 4, "bedrooms": 4, "bathrooms": 3, "surface": 180, "orientation": "Sur",   "price": 810000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80", "floorPlan": null },
-    { "id": "4B", "floor": 4, "bedrooms": 3, "bathrooms": 2, "surface": 135, "orientation": "Este",  "price": 590000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80", "floorPlan": null },
-    { "id": "AT1","floor": 5, "bedrooms": 4, "bathrooms": 4, "surface": 280, "orientation": "Sur",   "price": 1150000,"status": "available", "thumbnail": "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=600&q=80", "floorPlan": null }
+    {
+      "id": "1A",
+      "floor": 1,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "surface": 98,
+      "orientation": "Sur",
+      "price": 420000,
+      "status": "sold",
+      "thumbnail": "./assets/images/Salon 01.webp",
+      "floorPlan": null
+    },
+    {
+      "id": "1B",
+      "floor": 1,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "surface": 120,
+      "orientation": "Norte",
+      "price": 495000,
+      "status": "reserved",
+      "thumbnail": "./assets/images/Dormitorio (1).jpg",
+      "floorPlan": null
+    },
+    {
+      "id": "1C",
+      "floor": 1,
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "surface": 85,
+      "orientation": "Este",
+      "price": 365000,
+      "status": "available",
+      "thumbnail": "./assets/images/Salon 03.jpg",
+      "floorPlan": null
+    },
+    {
+      "id": "2A",
+      "floor": 2,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "surface": 100,
+      "orientation": "Sur",
+      "price": 440000,
+      "status": "available",
+      "thumbnail": "./assets/images/Cocina (1).jpg",
+      "floorPlan": null
+    },
+    {
+      "id": "2B",
+      "floor": 2,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "surface": 125,
+      "orientation": "Norte",
+      "price": 510000,
+      "status": "available",
+      "thumbnail": "./assets/images/Salon 04.jpg",
+      "floorPlan": null
+    },
+    {
+      "id": "2C",
+      "floor": 2,
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "surface": 68,
+      "orientation": "Oeste",
+      "price": 295000,
+      "status": "sold",
+      "thumbnail": "./assets/images/Dormitorio (2).jpg",
+      "floorPlan": null
+    },
+    {
+      "id": "3A",
+      "floor": 3,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "surface": 130,
+      "orientation": "Sur",
+      "price": 560000,
+      "status": "available",
+      "thumbnail": "./assets/images/Salon 05.jpg",
+      "floorPlan": null
+    },
+    {
+      "id": "3B",
+      "floor": 3,
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "surface": 105,
+      "orientation": "Sur",
+      "price": 475000,
+      "status": "available",
+      "thumbnail": "./assets/images/Terraza (1).jpg",
+      "floorPlan": null
+    },
+    {
+      "id": "3C",
+      "floor": 3,
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "surface": 165,
+      "orientation": "Sur",
+      "price": 720000,
+      "status": "reserved",
+      "thumbnail": "./assets/images/Dormitorio (3).jpg",
+      "floorPlan": null
+    },
+    {
+      "id": "4A",
+      "floor": 4,
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "surface": 180,
+      "orientation": "Sur",
+      "price": 810000,
+      "status": "available",
+      "thumbnail": "./assets/images/Terraza (2).jpg",
+      "floorPlan": null
+    },
+    {
+      "id": "4B",
+      "floor": 4,
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "surface": 135,
+      "orientation": "Este",
+      "price": 590000,
+      "status": "available",
+      "thumbnail": "./assets/images/Cocina (2).jpg",
+      "floorPlan": null
+    },
+    {
+      "id": "AT1",
+      "floor": 5,
+      "bedrooms": 4,
+      "bathrooms": 4,
+      "surface": 280,
+      "orientation": "Sur",
+      "price": 1150000,
+      "status": "available",
+      "thumbnail": "./assets/images/Salon 05.jpg",
+      "floorPlan": null
+    }
   ],
-
   "materials": {
     "floor": [
-      { "id": "roble",   "label": "Roble Natural",  "labelEN": "Natural Oak",     "swatch": "#C8A07A" },
-      { "id": "caliza",  "label": "Caliza Natural",  "labelEN": "Natural Limestone","swatch": "#E8E0D0" },
-      { "id": "microcemento", "label": "Microcemento", "labelEN": "Microcement",  "swatch": "#9A9690" }
+      {
+        "id": "roble",
+        "label": "Roble Natural",
+        "labelEN": "Natural Oak",
+        "swatch": "#C8A07A"
+      },
+      {
+        "id": "caliza",
+        "label": "Caliza Natural",
+        "labelEN": "Natural Limestone",
+        "swatch": "#E8E0D0"
+      },
+      {
+        "id": "microcemento",
+        "label": "Microcemento",
+        "labelEN": "Microcement",
+        "swatch": "#9A9690"
+      }
     ],
     "walls": [
-      { "id": "blanco",  "label": "Blanco Roto",    "labelEN": "Off White",       "swatch": "#F2EEE8" },
-      { "id": "caliza_p","label": "Caliza Pintada", "labelEN": "Painted Limestone","swatch": "#D8CFC0" },
-      { "id": "grafito", "label": "Grafito",         "labelEN": "Graphite",        "swatch": "#4A4A4A" }
+      {
+        "id": "blanco",
+        "label": "Blanco Roto",
+        "labelEN": "Off White",
+        "swatch": "#F2EEE8"
+      },
+      {
+        "id": "caliza_p",
+        "label": "Caliza Pintada",
+        "labelEN": "Painted Limestone",
+        "swatch": "#D8CFC0"
+      },
+      {
+        "id": "grafito",
+        "label": "Grafito",
+        "labelEN": "Graphite",
+        "swatch": "#4A4A4A"
+      }
     ],
     "kitchen": [
-      { "id": "marquina","label": "Mármol Marquina","labelEN": "Marquina Marble",  "swatch": "#2A2520" },
-      { "id": "bianco",  "label": "Mármol Bianco",  "labelEN": "Bianco Marble",   "swatch": "#F0EDE8" },
-      { "id": "laton",   "label": "Latón Mate",      "labelEN": "Matte Brass",     "swatch": "#B89848" }
+      {
+        "id": "marquina",
+        "label": "Mármol Marquina",
+        "labelEN": "Marquina Marble",
+        "swatch": "#2A2520"
+      },
+      {
+        "id": "bianco",
+        "label": "Mármol Bianco",
+        "labelEN": "Bianco Marble",
+        "swatch": "#F0EDE8"
+      },
+      {
+        "id": "laton",
+        "label": "Latón Mate",
+        "labelEN": "Matte Brass",
+        "swatch": "#B89848"
+      }
     ]
   }
 }

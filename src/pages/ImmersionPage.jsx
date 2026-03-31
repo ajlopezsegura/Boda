@@ -31,14 +31,26 @@ const MAT_LABELS = {
   kitchen: { es: 'Cocina',  en: 'Kitchen' },
 }
 
+// ─── Room → image mapping ─────────────────────────────────────────────────────
+const ROOM_IMAGES = {
+  salon:      './assets/images/Salon 04.jpg',
+  cocina:     './assets/images/Cocina (1).jpg',
+  dormitorio: './assets/images/Dormitorio (1).jpg',
+  bano:       './assets/images/Baño (1).jpg',
+  terraza:    './assets/images/Terraza (1).jpg',
+}
+
 // ─── Pixel Streaming placeholder ─────────────────────────────────────────────
-function PixelStreamingPlaceholder({ unit, timeOverlay }) {
+function PixelStreamingPlaceholder({ unit, activeRoom, timeOverlay }) {
+  const img = ROOM_IMAGES[activeRoom] ?? unit.thumbnail
   return (
     <div className="absolute inset-0">
-      {unit.thumbnail && (
-        <img src={unit.thumbnail} alt="" className="absolute inset-0 w-full h-full object-cover" />
-      )}
-      {/* Time of day tint */}
+      <AnimatePresence mode="crossfade">
+        <motion.img key={img} src={img} alt=""
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="absolute inset-0 w-full h-full object-cover" />
+      </AnimatePresence>
       <div className="absolute inset-0 transition-all duration-700" style={{ backgroundColor: timeOverlay }} />
     </div>
   )
@@ -120,7 +132,7 @@ export default function ImmersionPage() {
         </AnimatePresence>
 
         {/* ── Pixel Streaming area ── */}
-        <PixelStreamingPlaceholder unit={unit} timeOverlay={timeData.overlay} />
+        <PixelStreamingPlaceholder unit={unit} activeRoom={activeRoom} timeOverlay={timeData.overlay} />
 
         {/* Dark vignette */}
         <div className="absolute inset-0 pointer-events-none"
@@ -147,7 +159,7 @@ export default function ImmersionPage() {
             </span>
           </div>
 
-          <button onClick={() => navigate('/decision')} data-cursor="hover"
+          <button onClick={() => { localStorage.setItem('tvbs_selection', JSON.stringify({ unitId: unit.id, materials: selected })); navigate('/decision') }} data-cursor="hover"
             className="label-luxury px-5 py-2 transition-all duration-300 min-h-[36px]"
             style={{ border: '1px solid var(--color-accent)', color: 'var(--color-accent)', fontSize: '0.58rem',
               backgroundColor: 'rgba(26,33,48,0.5)', backdropFilter: 'blur(8px)' }}
@@ -337,7 +349,7 @@ export default function ImmersionPage() {
                       ? 'La selección de materiales se enviará junto con tu reserva.'
                       : 'Your material selection will be sent with your reservation.'}
                   </p>
-                  <button onClick={() => navigate('/decision')} data-cursor="hover"
+                  <button onClick={() => { localStorage.setItem('tvbs_selection', JSON.stringify({ unitId: unit.id, materials: selected })); navigate('/decision') }} data-cursor="hover"
                     className="w-full label-luxury py-3 transition-opacity duration-200"
                     style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.6rem', letterSpacing: '0.15em' }}
                     onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
