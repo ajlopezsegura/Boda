@@ -95,7 +95,7 @@ export default function ImmersionPage() {
   const navigate    = useNavigate()
   const unit        = useUnit(unitId)
   const { project, materials } = useProject()
-  const { lang }    = useLang()
+  const { lang, toggle } = useLang()
 
   const [loading, setLoading]       = useState(true)
   const [panelOpen, setPanelOpen]   = useState(false)

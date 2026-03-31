@@ -9,7 +9,7 @@ import { useLang } from '../context/LangContext'
 export default function DecisionPage() {
   const navigate = useNavigate()
   const { project, units, materials } = useProject()
-  const { lang } = useLang()
+  const { lang, toggle } = useLang()
 
   const saved   = JSON.parse(localStorage.getItem('tvbs_selection') ?? '{}')
   const unit    = units?.find(u => u.id === saved.unitId) ?? null
@@ -54,9 +54,13 @@ export default function DecisionPage() {
             {lang === 'es' ? 'Volver' : 'Back'}
           </button>
           <span className="label-luxury text-text/40 hidden sm:block" style={{ fontSize: '0.55rem' }}>{name?.toUpperCase()}</span>
-          <div className="flex items-center gap-2 label-luxury" style={{ fontSize: '0.6rem' }}>
-            <span className="text-text">ES</span><span style={{ color: 'var(--color-accent)' }}>|</span><span style={{ opacity: 0.4 }}>EN</span>
-          </div>
+          <button onClick={toggle} data-cursor="hover"
+            className="flex items-center gap-2 label-luxury"
+            style={{ fontSize: '0.6rem' }}>
+            <span style={{ color: lang === 'es' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>ES</span>
+            <span style={{ color: 'var(--color-accent)' }}>|</span>
+            <span style={{ color: lang === 'en' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>EN</span>
+          </button>
         </div>
 
         {/* Body */}

@@ -67,7 +67,7 @@ function ImageCarousel({ images, aspectClass = 'w-full h-full', objectFit = 'obj
 export default function ContextPage() {
   const navigate = useNavigate()
   const { project, building, amenities } = useProject()
-  const { lang } = useLang()
+  const { lang, toggle } = useLang()
   const [openAmenity, setOpenAmenity] = useState(null)
 
   const name        = lang === 'es' ? project.name        : project.nameEN
@@ -86,11 +86,13 @@ export default function ContextPage() {
             <span className="label-luxury text-accent" style={{ fontSize: '0.45rem', letterSpacing: '0.22em' }}>BOUTIQUE·STUDIO</span>
           </div>
           <span className="label-luxury text-text/40 hidden sm:block" style={{ fontSize: '0.55rem' }}>{name?.toUpperCase()}</span>
-          <div className="flex items-center gap-2 label-luxury" style={{ fontSize: '0.6rem' }}>
-            <span className="text-text">ES</span>
+          <button onClick={toggle} data-cursor="hover"
+            className="flex items-center gap-2 label-luxury"
+            style={{ fontSize: '0.6rem' }}>
+            <span style={{ color: lang === 'es' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>ES</span>
             <span style={{ color: 'var(--color-accent)' }}>|</span>
-            <span style={{ opacity: 0.4 }}>EN</span>
-          </div>
+            <span style={{ color: lang === 'en' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>EN</span>
+          </button>
         </div>
 
         {/* Body */}
