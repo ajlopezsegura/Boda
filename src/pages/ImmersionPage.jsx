@@ -40,20 +40,6 @@ function PixelStreamingPlaceholder({ unit, timeOverlay }) {
       )}
       {/* Time of day tint */}
       <div className="absolute inset-0 transition-all duration-700" style={{ backgroundColor: timeOverlay }} />
-      {/* PS placeholder notice */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-3 px-8 py-6 text-center"
-          style={{ backgroundColor: 'rgba(26,33,48,0.7)', backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(184,152,72,0.2)' }}>
-          <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-accent)' }} />
-          <p className="display-heading text-text" style={{ fontSize: '0.7rem', letterSpacing: '0.18em' }}>
-            PIXEL STREAMING
-          </p>
-          <p className="label-luxury" style={{ fontSize: '0.52rem', color: 'rgba(184,152,72,0.6)', maxWidth: 200 }}>
-            La experiencia interactiva en tiempo real estará disponible próximamente
-          </p>
-        </div>
-      </div>
     </div>
   )
 }
@@ -66,8 +52,9 @@ export default function ImmersionPage() {
   const { project, materials } = useProject()
   const { lang }    = useLang()
 
-  const [loading, setLoading]     = useState(true)
-  const [panelOpen, setPanelOpen] = useState(false)
+  const [loading, setLoading]       = useState(true)
+  const [panelOpen, setPanelOpen]   = useState(false)
+  const [psToast, setPsToast]       = useState(false)
   const [activeTime, setActiveTime] = useState('morning')
   const [activeRoom, setActiveRoom] = useState('salon')
   const [selected, setSelected]   = useState({
@@ -215,6 +202,17 @@ export default function ImmersionPage() {
 
         {/* ── Bottom bar ── */}
         <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between px-5 sm:px-8 pb-5 z-10 gap-4">
+          {/* PS launch button */}
+          <button onClick={() => { setPsToast(true); setTimeout(() => setPsToast(false), 3000) }}
+            data-cursor="hover"
+            className="flex items-center gap-2 label-luxury px-4 py-2.5 transition-all duration-300 min-h-[40px]"
+            style={{ border: '1px solid rgba(184,152,72,0.5)', color: 'var(--color-accent)', fontSize: '0.58rem',
+              backgroundColor: 'rgba(13,17,23,0.55)', backdropFilter: 'blur(10px)' }}
+            onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.1)'}
+            onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(13,17,23,0.55)'}>
+            {lang === 'es' ? 'Empezar experiencia' : 'Start experience'}
+          </button>
+
           {/* Material config toggle */}
           <button onClick={() => setPanelOpen(true)} data-cursor="hover"
             className="flex items-center gap-2 label-luxury px-4 py-2.5 transition-all duration-300 min-h-[40px]"
@@ -242,6 +240,23 @@ export default function ImmersionPage() {
             })}
           </div>
         </div>
+
+        {/* ── PS coming soon toast ── */}
+        <AnimatePresence>
+          {psToast && (
+            <motion.div
+              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 12 }}
+              transition={{ duration: 0.3 }}
+              className="absolute bottom-20 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 px-5 py-3"
+              style={{ backgroundColor: 'rgba(26,33,48,0.95)', backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(184,152,72,0.25)', whiteSpace: 'nowrap' }}>
+              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-accent)' }} />
+              <p className="label-luxury" style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.8)' }}>
+                {lang === 'es' ? 'Experiencia interactiva — Próximamente' : 'Interactive experience — Coming soon'}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ── Material configurator panel ── */}
         <AnimatePresence>
