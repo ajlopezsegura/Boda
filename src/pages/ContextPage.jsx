@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { Waves, Dumbbell, TreePine, Car, ShieldCheck, Sparkles } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Waves, Dumbbell, TreePine, Car, ShieldCheck, Sparkles, ChevronDown } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
@@ -12,11 +12,10 @@ export default function ContextPage() {
   const navigate = useNavigate()
   const { project, building, amenities } = useProject()
   const { lang } = useLang()
-  const [hoveredAmenity, setHoveredAmenity] = useState(null)
+  const [openAmenity, setOpenAmenity] = useState(null)
 
   const name        = lang === 'es' ? project.name        : project.nameEN
   const description = lang === 'es' ? project.description : project.descriptionEN
-  const hovered     = amenities?.find(a => a.id === hoveredAmenity)
 
   return (
     <PageTransition>
@@ -45,8 +44,10 @@ export default function ContextPage() {
             <img src={project.aerialImage} alt={name} className="w-full h-full object-cover" />
             <div className="absolute inset-0"
               style={{ background: 'linear-gradient(to right, transparent 50%, var(--color-bg) 100%)' }} />
+            <div className="absolute inset-0"
+              style={{ background: 'linear-gradient(to bottom, transparent 60%, var(--color-bg) 100%)' }} />
             {/* Compass */}
-            <div className="absolute top-4 left-4 sm:top-6 sm:left-6 flex flex-col items-center"
+            <div className="absolute top-4 left-4 sm:top-6 sm:left-6"
               style={{ width: 40, height: 40, border: '1px solid rgba(184,152,72,0.4)', borderRadius: '50%',
                 backgroundColor: 'rgba(26,33,48,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <span className="display-heading text-accent" style={{ fontSize: '0.65rem' }}>N</span>
@@ -69,10 +70,10 @@ export default function ContextPage() {
               <div className="h-px mb-5" style={{ backgroundColor: 'rgba(184,152,72,0.15)' }} />
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {[
-                  { label: 'Unidades',     value: building?.totalUnits },
-                  { label: 'Tipologías',   value: building?.typologies?.join(', ') },
-                  { label: 'Superficie',   value: building?.surfaceRange },
-                  { label: 'Desde',        value: '350.000 €' },
+                  { label: 'Unidades',   value: building?.totalUnits },
+                  { label: 'Tipologías', value: building?.typologies?.join(', ') },
+                  { label: 'Superficie', value: building?.surfaceRange },
+                  { label: 'Desde',      value: '350.000 €' },
                 ].map(item => (
                   <div key={item.label}>
                     <p className="label-luxury mb-1" style={{ color: 'var(--color-accent)', opacity: 0.6, fontSize: '0.55rem' }}>{item.label}</p>
@@ -83,48 +84,67 @@ export default function ContextPage() {
               <div className="h-px mt-5" style={{ backgroundColor: 'rgba(184,152,72,0.15)' }} />
             </motion.div>
 
-            {/* Amenities */}
+            {/* Amenities — accordion */}
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }}>
               <p className="label-luxury mb-4" style={{ color: 'var(--color-accent)', opacity: 0.7 }}>Amenities</p>
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
+              <div className="flex flex-col gap-1">
                 {amenities?.map(amenity => {
                   const Icon = ICONS[amenity.icon]
                   const label = lang === 'es' ? amenity.label : amenity.labelEN
-                  const isHovered = hoveredAmenity === amenity.id
+                  const desc  = lang === 'es' ? amenity.description : amenity.descriptionEN
+                  const isOpen = openAmenity === amenity.id
+
                   return (
-                    <button
-                      key={amenity.id}
-                      onMouseEnter={() => setHoveredAmenity(amenity.id)}
-                      onMouseLeave={() => setHoveredAmenity(null)}
-                      onClick={() => setHoveredAmenity(isHovered ? null : amenity.id)}
-                      data-cursor="hover"
-                      className="flex flex-col items-center gap-2 p-2 sm:p-3 transition-all duration-400"
-                      style={{
-                        border: '1px solid',
-                        borderColor: isHovered ? 'rgba(184,152,72,0.6)' : 'rgba(184,152,72,0.15)',
-                        backgroundColor: isHovered ? 'rgba(184,152,72,0.08)' : 'transparent',
-                      }}
-                    >
-                      {Icon && <Icon size={16} strokeWidth={1.2}
-                        color={isHovered ? 'var(--color-accent)' : 'rgba(244,241,234,0.45)'} />}
-                      <span className="label-luxury text-center leading-tight"
-                        style={{ fontSize: '0.48rem', color: isHovered ? 'var(--color-accent)' : 'var(--color-text-muted)' }}>
-                        {label}
-                      </span>
-                    </button>
+                    <div key={amenity.id}
+                      style={{ border: '1px solid', borderColor: isOpen ? 'rgba(184,152,72,0.45)' : 'rgba(184,152,72,0.12)', transition: 'border-color 0.3s' }}>
+
+                      {/* Row header */}
+                      <button
+                        onClick={() => setOpenAmenity(isOpen ? null : amenity.id)}
+                        data-cursor="hover"
+                        className="w-full flex items-center gap-3 px-4 py-3 transition-colors duration-300"
+                        style={{ backgroundColor: isOpen ? 'rgba(184,152,72,0.06)' : 'transparent' }}
+                      >
+                        {Icon && <Icon size={14} strokeWidth={1.2}
+                          color={isOpen ? 'var(--color-accent)' : 'rgba(244,241,234,0.45)'} />}
+                        <span className="flex-1 text-left label-luxury"
+                          style={{ fontSize: '0.6rem', color: isOpen ? 'var(--color-accent)' : 'var(--color-text-muted)' }}>
+                          {label}
+                        </span>
+                        <ChevronDown size={12}
+                          color={isOpen ? 'var(--color-accent)' : 'rgba(244,241,234,0.3)'}
+                          style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s' }} />
+                      </button>
+
+                      {/* Expanded content */}
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.div
+                            key="content"
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                            style={{ overflow: 'hidden' }}
+                          >
+                            <div className="px-4 pb-4 flex flex-col sm:flex-row gap-4">
+                              {amenity.image && (
+                                <img src={amenity.image} alt={label}
+                                  className="w-full sm:w-48 h-32 object-cover flex-shrink-0"
+                                  style={{ opacity: 0.85 }} />
+                              )}
+                              <p className="font-sans font-light"
+                                style={{ fontSize: '0.85rem', lineHeight: 1.75, color: 'var(--color-text-muted)' }}>
+                                {desc}
+                              </p>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
                   )
                 })}
               </div>
-
-              {/* Image preview on hover */}
-              {hovered?.image && (
-                <motion.div key={hovered.id}
-                  initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 100 }}
-                  transition={{ duration: 0.35 }}
-                  className="mt-3 overflow-hidden">
-                  <img src={hovered.image} alt={hovered.label} className="w-full h-full object-cover" />
-                </motion.div>
-              )}
             </motion.div>
 
             {/* CTA */}

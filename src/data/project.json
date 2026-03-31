@@ -22,12 +22,12 @@
   },
 
   "amenities": [
-    { "id": "pool",     "icon": "Waves",       "label": "Piscina",       "labelEN": "Pool",         "image": "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&q=80" },
-    { "id": "gym",      "icon": "Dumbbell",    "label": "Gimnasio",      "labelEN": "Gym",          "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80" },
-    { "id": "garden",   "icon": "TreePine",    "label": "Jardines",      "labelEN": "Gardens",      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" },
-    { "id": "parking",  "icon": "Car",         "label": "Parking",       "labelEN": "Parking",      "image": null },
-    { "id": "security", "icon": "ShieldCheck", "label": "Seguridad 24h", "labelEN": "24h Security", "image": null },
-    { "id": "spa",      "icon": "Sparkles",    "label": "Spa & Wellness","labelEN": "Spa & Wellness","image": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80" }
+    { "id": "pool",     "icon": "Waves",       "label": "Piscina",       "labelEN": "Pool",         "description": "Piscina infinity con vistas al mar Mediterráneo. Zona de hamacas y servicio de pool bar en temporada.", "descriptionEN": "Infinity pool with views of the Mediterranean Sea. Sun lounger area and pool bar service in season.", "image": "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&q=80" },
+    { "id": "gym",      "icon": "Dumbbell",    "label": "Gimnasio",      "labelEN": "Gym",          "description": "Gimnasio completamente equipado con máquinas de última generación, zona de pesas libres y sala de estiramiento.", "descriptionEN": "Fully equipped gym with state-of-the-art machines, free weights area and stretching room.", "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80" },
+    { "id": "garden",   "icon": "TreePine",    "label": "Jardines",      "labelEN": "Gardens",      "description": "Jardines mediterráneos diseñados por el estudio de paisajismo Amate con especies autóctonas y zonas de descanso privadas.", "descriptionEN": "Mediterranean gardens designed by landscape studio Amate with native species and private rest areas.", "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" },
+    { "id": "parking",  "icon": "Car",         "label": "Parking",       "labelEN": "Parking",      "description": "Plaza de garaje incluida con cada vivienda. Puntos de recarga para vehículo eléctrico disponibles en todas las plazas.", "descriptionEN": "Garage space included with each home. Electric vehicle charging points available in all spaces.", "image": "https://images.unsplash.com/photo-1470224114660-3f6686c562eb?w=800&q=80" },
+    { "id": "security", "icon": "ShieldCheck", "label": "Seguridad 24h", "labelEN": "24h Security", "description": "Seguridad perimetral con vigilancia 24 horas, acceso por videoportero y control de accesos con tecnología biométrica.", "descriptionEN": "Perimeter security with 24-hour surveillance, video intercom access and biometric access control.", "image": "https://images.unsplash.com/photo-1558002038-1055907df827?w=800&q=80" },
+    { "id": "spa",      "icon": "Sparkles",    "label": "Spa & Wellness","labelEN": "Spa & Wellness","description": "Circuito de aguas termal, sauna finlandesa, hammam y sala de tratamientos. Un espacio de bienestar exclusivo para residentes.", "descriptionEN": "Thermal water circuit, Finnish sauna, hammam and treatment rooms. An exclusive wellness space for residents.", "image": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80" }
   ],
 
   "units": [
