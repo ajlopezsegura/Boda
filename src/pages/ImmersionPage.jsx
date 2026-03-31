@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Sliders, X, Check, Sun, Sunset, Moon, Sunrise } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Sliders, X, Check, Sun, Sunset, Moon, Sunrise } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useUnit, useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
@@ -31,27 +31,60 @@ const MAT_LABELS = {
   kitchen: { es: 'Cocina',  en: 'Kitchen' },
 }
 
-// ─── Room → image mapping ─────────────────────────────────────────────────────
+// ─── Room → images ────────────────────────────────────────────────────────────
 const ROOM_IMAGES = {
-  salon:      './assets/images/Salon 04.jpg',
-  cocina:     './assets/images/Cocina (1).jpg',
-  dormitorio: './assets/images/Dormitorio (1).jpg',
-  bano:       './assets/images/Baño (1).jpg',
-  terraza:    './assets/images/Terraza (1).jpg',
+  salon:      ['./assets/images/Salon 01.webp','./assets/images/salon 02.webp','./assets/images/Salon 03.jpg','./assets/images/Salon 04.jpg','./assets/images/Salon 05.jpg'],
+  cocina:     ['./assets/images/Cocina (1).jpg','./assets/images/Cocina (2).jpg','./assets/images/Cocina (3).jpg'],
+  dormitorio: ['./assets/images/Dormitorio (1).jpg','./assets/images/Dormitorio (2).jpg','./assets/images/Dormitorio (3).jpg'],
+  bano:       ['./assets/images/Baño (1).jpg','./assets/images/Baño (2).jpg','./assets/images/Baño (3).jpg'],
+  terraza:    ['./assets/images/Terraza (1).jpg','./assets/images/Terraza (2).jpg'],
 }
 
 // ─── Pixel Streaming placeholder ─────────────────────────────────────────────
-function PixelStreamingPlaceholder({ unit, activeRoom, timeOverlay }) {
-  const img = ROOM_IMAGES[activeRoom] ?? unit.thumbnail
+function PixelStreamingPlaceholder({ activeRoom, imgIndex, onPrev, onNext, timeOverlay }) {
+  const imgs = ROOM_IMAGES[activeRoom] ?? []
+  const src  = imgs[imgIndex] ?? imgs[0]
+  const showArrows = imgs.length > 1
+
   return (
     <div className="absolute inset-0">
-      <AnimatePresence mode="crossfade">
-        <motion.img key={img} src={img} alt=""
+      <AnimatePresence mode="wait">
+        <motion.img key={src} src={src} alt=""
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
           className="absolute inset-0 w-full h-full object-cover" />
       </AnimatePresence>
       <div className="absolute inset-0 transition-all duration-700" style={{ backgroundColor: timeOverlay }} />
+
+      {/* Arrows */}
+      {showArrows && (
+        <>
+          <button onClick={onPrev} data-cursor="hover"
+            className="absolute left-16 sm:left-20 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center transition-all duration-300"
+            style={{ width: 36, height: 36, backgroundColor: 'rgba(26,33,48,0.5)', backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(184,152,72,0.25)' }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--color-accent)'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'}>
+            <ChevronLeft size={16} color="rgba(244,241,234,0.7)" />
+          </button>
+          <button onClick={onNext} data-cursor="hover"
+            className="absolute right-16 sm:right-20 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center transition-all duration-300"
+            style={{ width: 36, height: 36, backgroundColor: 'rgba(26,33,48,0.5)', backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(184,152,72,0.25)' }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--color-accent)'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'}>
+            <ChevronRight size={16} color="rgba(244,241,234,0.7)" />
+          </button>
+          {/* Dots */}
+          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
+            {imgs.map((_, i) => (
+              <div key={i} className="rounded-full transition-all duration-300"
+                style={{ width: i === imgIndex ? 16 : 5, height: 5,
+                  backgroundColor: i === imgIndex ? 'var(--color-accent)' : 'rgba(244,241,234,0.3)' }} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }
@@ -69,6 +102,7 @@ export default function ImmersionPage() {
   const [psToast, setPsToast]       = useState(false)
   const [activeTime, setActiveTime] = useState('morning')
   const [activeRoom, setActiveRoom] = useState('salon')
+  const [imgIndex, setImgIndex]     = useState(0)
   const [selected, setSelected]   = useState({
     floor:   materials?.floor?.[0]?.id   ?? null,
     walls:   materials?.walls?.[0]?.id   ?? null,
@@ -80,6 +114,28 @@ export default function ImmersionPage() {
     const t = setTimeout(() => setLoading(false), 2200)
     return () => clearTimeout(t)
   }, [])
+
+  // Reset image index when room changes
+  useEffect(() => { setImgIndex(0) }, [activeRoom])
+
+  // Auto-advance slideshow every 5s
+  useEffect(() => {
+    if (loading || panelOpen) return
+    const imgs = ROOM_IMAGES[activeRoom] ?? []
+    if (imgs.length <= 1) return
+    const t = setInterval(() => setImgIndex(i => (i + 1) % imgs.length), 5000)
+    return () => clearInterval(t)
+  }, [activeRoom, loading, panelOpen])
+
+  const handlePrev = useCallback(() => {
+    const len = (ROOM_IMAGES[activeRoom] ?? []).length
+    setImgIndex(i => (i - 1 + len) % len)
+  }, [activeRoom])
+
+  const handleNext = useCallback(() => {
+    const len = (ROOM_IMAGES[activeRoom] ?? []).length
+    setImgIndex(i => (i + 1) % len)
+  }, [activeRoom])
 
   if (!unit) {
     return (
@@ -132,7 +188,7 @@ export default function ImmersionPage() {
         </AnimatePresence>
 
         {/* ── Pixel Streaming area ── */}
-        <PixelStreamingPlaceholder unit={unit} activeRoom={activeRoom} timeOverlay={timeData.overlay} />
+        <PixelStreamingPlaceholder activeRoom={activeRoom} imgIndex={imgIndex} onPrev={handlePrev} onNext={handleNext} timeOverlay={timeData.overlay} />
 
         {/* Dark vignette */}
         <div className="absolute inset-0 pointer-events-none"
