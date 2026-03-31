@@ -4,108 +4,62 @@
     "nameEN": "Mediterranean House",
     "subtitle": "Barcelona — 2025",
     "architect": "The Visuals Boutique",
-    "description": "Una residencia que dialoga con el paisaje mediterráneo a través de la luz, los materiales nobles y la continuidad entre interior y exterior. Cada espacio es concebido como un episodio de una narrativa más amplia.",
-    "descriptionEN": "A residence in dialogue with the Mediterranean landscape through light, noble materials and the continuity between interior and exterior. Each space is conceived as an episode in a broader narrative.",
+    "description": "Una residencia que dialoga con el paisaje mediterráneo a través de la luz, los materiales nobles y la continuidad entre interior y exterior.",
+    "descriptionEN": "A residence in dialogue with the Mediterranean landscape through light, noble materials and the continuity between interior and exterior.",
+    "heroVideo": null,
     "heroImage": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1920&q=90",
+    "aerialImage": "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1920&q=90",
     "accentColor": "#B89848"
   },
-  "spaces": [
-    {
-      "id": "salon",
-      "label": "Salón",
-      "labelEN": "Living Room",
-      "type": "interior",
-      "description": "El corazón de la casa. Un espacio de doble altura donde la piedra caliza, la madera de roble y la luz cenital crean una atmósfera serena y atemporal.",
-      "descriptionEN": "The heart of the house. A double-height space where limestone, oak wood and zenithal light create a serene and timeless atmosphere.",
-      "thumbnail": "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=600&q=80",
-      "psStreamUrl": null,
-      "model": null,
-      "modelConfig": null,
-      "materials": [
-        { "id": "limestone", "label": "Caliza Natural", "labelEN": "Natural Limestone", "swatch": "#E8E0D0" },
-        { "id": "marble_white", "label": "Mármol Blanco", "labelEN": "White Marble", "swatch": "#F2EEE8" },
-        { "id": "wood_oak", "label": "Roble Natural", "labelEN": "Natural Oak", "swatch": "#B89848" }
-      ],
-      "images": [
-        { "src": "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=1400&q=85", "caption": "Luz de mañana", "captionEN": "Morning light" },
-        { "src": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1400&q=85", "caption": "Vista lateral", "captionEN": "Side view" },
-        { "src": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1400&q=85", "caption": "Detalle texturas", "captionEN": "Texture detail" },
-        { "src": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=1400&q=85", "caption": "Vista nocturna", "captionEN": "Evening view" }
-      ],
-      "video": null,
-      "hotspot": { "x": 15, "y": 30, "w": 28, "h": 22 },
-      "order": 1
-    },
-    {
-      "id": "cocina",
-      "label": "Cocina",
-      "labelEN": "Kitchen",
-      "type": "interior",
-      "description": "Un espacio funcional concebido como una pieza de artesanía. Los volúmenes blancos contrastan con las encimeras de mármol negro marquina y los tiradores de latón.",
-      "descriptionEN": "A functional space conceived as a piece of craftsmanship. White volumes contrast with Marquina black marble countertops and brass handles.",
-      "thumbnail": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
-      "psStreamUrl": null,
-      "model": null,
-      "modelConfig": null,
-      "materials": [
-        { "id": "marquina", "label": "Mármol Marquina", "labelEN": "Marquina Marble", "swatch": "#2A2520" },
-        { "id": "brass", "label": "Latón Mate", "labelEN": "Matte Brass", "swatch": "#B89848" }
-      ],
-      "images": [
-        { "src": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1400&q=85", "caption": "Encimera y volúmenes", "captionEN": "Countertop and volumes" },
-        { "src": "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=1400&q=85", "caption": "Isla central", "captionEN": "Central island" }
-      ],
-      "video": null,
-      "hotspot": { "x": 55, "y": 20, "w": 22, "h": 20 },
-      "order": 2
-    },
-    {
-      "id": "dormitorio",
-      "label": "Dormitorio Principal",
-      "labelEN": "Master Bedroom",
-      "type": "interior",
-      "description": "Un santuario de calma. Lino natural, madera oscura y una terraza privada con vistas al jardín mediterráneo.",
-      "descriptionEN": "A sanctuary of calm. Natural linen, dark wood and a private terrace overlooking the Mediterranean garden.",
-      "thumbnail": "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=600&q=80",
-      "psStreamUrl": null,
-      "model": null,
-      "modelConfig": null,
-      "materials": [
-        { "id": "linen", "label": "Lino Natural", "labelEN": "Natural Linen", "swatch": "#D8CFC0" },
-        { "id": "walnut", "label": "Nogal Oscuro", "labelEN": "Dark Walnut", "swatch": "#5C4035" }
-      ],
-      "images": [
-        { "src": "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1400&q=85", "caption": "Amanecer", "captionEN": "Dawn" },
-        { "src": "https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?w=1400&q=85", "caption": "Cabecero", "captionEN": "Headboard" },
-        { "src": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1400&q=85", "caption": "Terraza privada", "captionEN": "Private terrace" }
-      ],
-      "video": null,
-      "hotspot": { "x": 62, "y": 50, "w": 25, "h": 22 },
-      "order": 3
-    },
-    {
-      "id": "exterior",
-      "label": "Exterior",
-      "labelEN": "Exterior",
-      "type": "exterior",
-      "description": "La fachada de piedra y las terrazas escalonadas dialogan con el paisaje. La piscina de borde infinito prolonga visualmente el horizonte mediterráneo.",
-      "descriptionEN": "The stone facade and terraced decks engage with the landscape. The infinity pool visually extends the Mediterranean horizon.",
-      "thumbnail": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80",
-      "psStreamUrl": null,
-      "model": null,
-      "modelConfig": null,
-      "materials": null,
-      "images": [
-        { "src": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=85", "caption": "Fachada principal", "captionEN": "Main facade" },
-        { "src": "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=1400&q=85", "caption": "Piscina al atardecer", "captionEN": "Pool at sunset" },
-        { "src": "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1400&q=85", "caption": "Vista aérea", "captionEN": "Aerial view" }
-      ],
-      "video": null,
-      "hotspot": { "x": 30, "y": 65, "w": 35, "h": 25 },
-      "order": 4
-    }
+
+  "building": {
+    "totalUnits": 24,
+    "typologies": ["1D", "2D", "3D", "4D", "Ático"],
+    "surfaceRange": "65 – 320 m²",
+    "priceRange": "350.000 – 1.200.000 €",
+    "location": "Barcelona, España",
+    "completion": "Q4 2026"
+  },
+
+  "amenities": [
+    { "id": "pool",     "icon": "Waves",       "label": "Piscina",       "labelEN": "Pool",         "image": "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=800&q=80" },
+    { "id": "gym",      "icon": "Dumbbell",    "label": "Gimnasio",      "labelEN": "Gym",          "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80" },
+    { "id": "garden",   "icon": "TreePine",    "label": "Jardines",      "labelEN": "Gardens",      "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" },
+    { "id": "parking",  "icon": "Car",         "label": "Parking",       "labelEN": "Parking",      "image": null },
+    { "id": "security", "icon": "ShieldCheck", "label": "Seguridad 24h", "labelEN": "24h Security", "image": null },
+    { "id": "spa",      "icon": "Sparkles",    "label": "Spa & Wellness","labelEN": "Spa & Wellness","image": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&q=80" }
   ],
-  "floorPlan": {
-    "src": ""
+
+  "units": [
+    { "id": "1A", "floor": 1, "bedrooms": 2, "bathrooms": 2, "surface": 98,  "orientation": "Sur",   "price": 420000, "status": "sold",      "thumbnail": "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=600&q=80", "floorPlan": null },
+    { "id": "1B", "floor": 1, "bedrooms": 3, "bathrooms": 2, "surface": 120, "orientation": "Norte", "price": 495000, "status": "reserved",  "thumbnail": "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80", "floorPlan": null },
+    { "id": "1C", "floor": 1, "bedrooms": 2, "bathrooms": 1, "surface": 85,  "orientation": "Este",  "price": 365000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80", "floorPlan": null },
+    { "id": "2A", "floor": 2, "bedrooms": 2, "bathrooms": 2, "surface": 100, "orientation": "Sur",   "price": 440000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80", "floorPlan": null },
+    { "id": "2B", "floor": 2, "bedrooms": 3, "bathrooms": 2, "surface": 125, "orientation": "Norte", "price": 510000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80", "floorPlan": null },
+    { "id": "2C", "floor": 2, "bedrooms": 1, "bathrooms": 1, "surface": 68,  "orientation": "Oeste", "price": 295000, "status": "sold",      "thumbnail": "https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=600&q=80", "floorPlan": null },
+    { "id": "3A", "floor": 3, "bedrooms": 3, "bathrooms": 2, "surface": 130, "orientation": "Sur",   "price": 560000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1540518614846-7eded433c457?w=600&q=80", "floorPlan": null },
+    { "id": "3B", "floor": 3, "bedrooms": 2, "bathrooms": 2, "surface": 105, "orientation": "Sur",   "price": 475000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?w=600&q=80", "floorPlan": null },
+    { "id": "3C", "floor": 3, "bedrooms": 4, "bathrooms": 3, "surface": 165, "orientation": "Sur",   "price": 720000, "status": "reserved",  "thumbnail": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80", "floorPlan": null },
+    { "id": "4A", "floor": 4, "bedrooms": 4, "bathrooms": 3, "surface": 180, "orientation": "Sur",   "price": 810000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80", "floorPlan": null },
+    { "id": "4B", "floor": 4, "bedrooms": 3, "bathrooms": 2, "surface": 135, "orientation": "Este",  "price": 590000, "status": "available", "thumbnail": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80", "floorPlan": null },
+    { "id": "AT1","floor": 5, "bedrooms": 4, "bathrooms": 4, "surface": 280, "orientation": "Sur",   "price": 1150000,"status": "available", "thumbnail": "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=600&q=80", "floorPlan": null }
+  ],
+
+  "materials": {
+    "floor": [
+      { "id": "roble",   "label": "Roble Natural",  "labelEN": "Natural Oak",     "swatch": "#C8A07A" },
+      { "id": "caliza",  "label": "Caliza Natural",  "labelEN": "Natural Limestone","swatch": "#E8E0D0" },
+      { "id": "microcemento", "label": "Microcemento", "labelEN": "Microcement",  "swatch": "#9A9690" }
+    ],
+    "walls": [
+      { "id": "blanco",  "label": "Blanco Roto",    "labelEN": "Off White",       "swatch": "#F2EEE8" },
+      { "id": "caliza_p","label": "Caliza Pintada", "labelEN": "Painted Limestone","swatch": "#D8CFC0" },
+      { "id": "grafito", "label": "Grafito",         "labelEN": "Graphite",        "swatch": "#4A4A4A" }
+    ],
+    "kitchen": [
+      { "id": "marquina","label": "Mármol Marquina","labelEN": "Marquina Marble",  "swatch": "#2A2520" },
+      { "id": "bianco",  "label": "Mármol Bianco",  "labelEN": "Bianco Marble",   "swatch": "#F0EDE8" },
+      { "id": "laton",   "label": "Latón Mate",      "labelEN": "Matte Brass",     "swatch": "#B89848" }
+    ]
   }
 }
