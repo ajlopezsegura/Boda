@@ -6,7 +6,7 @@
     "architect": "The Visuals Boutique",
     "description": "Una residencia frente al mar donde la luz mediterránea, los materiales nobles y el sonido del océano definen cada momento del día.",
     "descriptionEN": "A seafront residence where Mediterranean light, noble materials and the sound of the ocean define every moment of the day.",
-    "heroVideo": null,
+    "heroVideo": "/assets/videos/hero.mp4",
     "heroImage": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=90",
     "aerialImage": "/assets/images/las-conchas-aerea.jpg",
     "accentColor": "#B89848"
