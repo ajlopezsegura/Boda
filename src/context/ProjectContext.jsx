@@ -17,7 +17,7 @@ export function useProject() {
   return ctx
 }
 
-export function useSpace(id) {
-  const { spaces } = useProject()
-  return spaces.find(s => s.id === id) ?? null
+export function useUnit(id) {
+  const { units } = useProject()
+  return units?.find(u => u.id === id) ?? null
 }
