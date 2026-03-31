@@ -182,8 +182,8 @@ export default function ContextPage() {
                             <div className="flex flex-col gap-3 px-4 pb-4">
                               {/* Full image / carousel */}
                               {imgs.length > 0 && (
-                                <div className="relative overflow-hidden" style={{ height: 180 }}>
-                                  <ImageCarousel images={imgs} auto={true} interval={3500} />
+                                <div className="relative overflow-hidden" style={{ height: 220, backgroundColor: 'rgba(13,17,23,0.6)' }}>
+                                  <ImageCarousel images={imgs} auto={true} interval={3500} objectFit="object-contain" />
                                 </div>
                               )}
                               {/* Description */}
