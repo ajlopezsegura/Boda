@@ -178,7 +178,7 @@ export default function SelectionPage() {
                           {/* Thumbnail */}
                           {unit.thumbnail && (
                             <img src={unit.thumbnail} alt={`Vivienda ${unit.id}`}
-                              className="w-full sm:w-48 h-32 object-cover flex-shrink-0"
+                              className="w-full sm:w-48 h-32 object-contain flex-shrink-0 bg-[#0d1117]"
                               style={{ opacity: 0.85 }} />
                           )}
 

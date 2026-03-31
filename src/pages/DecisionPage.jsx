@@ -82,7 +82,7 @@ export default function DecisionPage() {
               style={{ border: '1px solid rgba(184,152,72,0.2)', backgroundColor: 'rgba(184,152,72,0.03)' }}>
               <div className="flex gap-4 p-4 sm:p-5">
                 {unit?.thumbnail && (
-                  <img src={unit.thumbnail} alt="" className="w-24 h-20 sm:w-32 sm:h-24 object-cover flex-shrink-0" style={{ opacity: 0.85 }} />
+                  <img src={unit.thumbnail} alt="" className="w-24 h-20 sm:w-32 sm:h-24 object-contain flex-shrink-0 bg-[#0d1117]" style={{ opacity: 0.9 }} />
                 )}
                 <div className="flex flex-col justify-center gap-2 flex-1 min-w-0">
                   {unit ? (
