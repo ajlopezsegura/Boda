@@ -175,14 +175,23 @@ export default function ImmersionPage() {
             </span>
           </div>
 
-          <button onClick={() => { localStorage.setItem('tvbs_selection', JSON.stringify({ unitId: unit.id, materials: selected })); navigate('/decision') }} data-cursor="hover"
-            className="label-luxury px-5 py-2 transition-all duration-300 min-h-[36px]"
-            style={{ border: '1px solid var(--color-accent)', color: 'var(--color-accent)', fontSize: '0.58rem',
-              backgroundColor: 'rgba(26,33,48,0.5)', backdropFilter: 'blur(8px)' }}
-            onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.14)'}
-            onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(26,33,48,0.5)'}>
-            {lang === 'es' ? 'Reservar →' : 'Reserve →'}
-          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={toggle} data-cursor="hover"
+              className="flex items-center gap-1.5 label-luxury"
+              style={{ fontSize: '0.58rem', backgroundColor: 'rgba(13,17,23,0.5)', backdropFilter: 'blur(8px)', padding: '0.4rem 0.75rem' }}>
+              <span style={{ color: lang === 'es' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>ES</span>
+              <span style={{ color: 'var(--color-accent)' }}>|</span>
+              <span style={{ color: lang === 'en' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>EN</span>
+            </button>
+            <button onClick={() => { localStorage.setItem('tvbs_selection', JSON.stringify({ unitId: unit.id, materials: selected })); navigate('/decision') }} data-cursor="hover"
+              className="label-luxury px-5 py-2 transition-all duration-300 min-h-[36px]"
+              style={{ border: '1px solid var(--color-accent)', color: 'var(--color-accent)', fontSize: '0.58rem',
+                backgroundColor: 'rgba(26,33,48,0.5)', backdropFilter: 'blur(8px)' }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.14)'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(26,33,48,0.5)'}>
+              {lang === 'es' ? 'Reservar →' : 'Reserve →'}
+            </button>
+          </div>
         </div>
 
         {/* ── Room navigation (left side) ── */}

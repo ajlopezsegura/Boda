@@ -100,10 +100,10 @@ export default function ContextPage() {
               <div className="h-px mb-5" style={{ backgroundColor: 'rgba(184,152,72,0.15)' }} />
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {[
-                  { label: 'Unidades',   value: building?.totalUnits },
-                  { label: 'Tipologías', value: building?.typologies?.join(', ') },
-                  { label: 'Superficie', value: building?.surfaceRange },
-                  { label: 'Desde',      value: '350.000 €' },
+                  { label: lang === 'es' ? 'Unidades'   : 'Units',      value: building?.totalUnits },
+                  { label: lang === 'es' ? 'Tipologías' : 'Typologies', value: building?.typologies?.join(', ') },
+                  { label: lang === 'es' ? 'Superficie' : 'Surface',    value: building?.surfaceRange },
+                  { label: lang === 'es' ? 'Desde'      : 'From',       value: '350.000 €' },
                 ].map(item => (
                   <div key={item.label}>
                     <p className="label-luxury mb-1" style={{ color: 'var(--color-accent)', opacity: 0.6, fontSize: '0.55rem' }}>{item.label}</p>
@@ -184,7 +184,7 @@ export default function ContextPage() {
                 style={{ borderColor: 'rgba(184,152,72,0.45)', color: 'var(--color-text)' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.08)' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.45)'; e.currentTarget.style.backgroundColor = 'transparent' }}>
-                Ver viviendas disponibles →
+                {lang === 'es' ? 'Ver viviendas disponibles →' : 'View available residences →'}
               </button>
             </motion.div>
           </div>
