@@ -48,7 +48,7 @@ export default function CoverPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.0, delay: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
             className="label-luxury mb-8 sm:mb-12"
-            style={{ color: 'rgba(184,152,72,0.6)', fontSize: '0.6rem', letterSpacing: '0.25em' }}
+            style={{ color: 'rgba(184,152,72,0.9)', fontSize: '0.6rem', letterSpacing: '0.25em', fontWeight: 700 }}
           >
             THE VISUALS BOUTIQUE·STUDIO
           </motion.p>
