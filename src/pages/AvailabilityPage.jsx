@@ -84,9 +84,11 @@ export default function AvailabilityPage() {
     return result
   }, [units, filters, sortBy])
 
+  const [expandedId, setExpandedId] = useState(null)
+
   const isFilterActive = Object.entries(filters).some(([k, v]) => v !== DEFAULT_FILTERS[k])
   const setFilter      = (key, value) => setFilters(f => ({ ...f, [key]: value }))
-  const resetFilters   = () => setFilters(DEFAULT_FILTERS)
+  const resetFilters   = () => { setFilters(DEFAULT_FILTERS); setExpandedId(null) }
 
   function chipStyle(active) {
     return {
@@ -222,19 +224,25 @@ export default function AvailabilityPage() {
           {filtered.map((unit, i) => {
             const st         = STATUS_CONFIG[unit.status]
             const canExplore = unit.status === 'available'
+            const isExpanded = expandedId === unit.id
+
             return (
               <motion.div key={unit.id}
                 initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }} transition={{ duration: 0.2, delay: Math.min(i * 0.03, 0.2) }}
-                className="mb-px"
-                style={{ borderBottom: '1px solid rgba(184,152,72,0.07)' }}>
+                style={{
+                  borderBottom: '1px solid rgba(184,152,72,0.07)',
+                  borderLeft: `2px solid ${isExpanded ? 'var(--color-accent)' : 'transparent'}`,
+                  transition: 'border-color 0.2s',
+                }}>
 
-                {/* Desktop row */}
-                <div className="hidden sm:grid items-center px-4 py-3 transition-colors duration-200"
-                  style={{ ...cols, backgroundColor: canExplore ? 'transparent' : 'rgba(0,0,0,0.1)' }}
-                  onMouseEnter={e => { if (canExplore) e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.03)' }}
-                  onMouseLeave={e => e.currentTarget.style.backgroundColor = canExplore ? 'transparent' : 'rgba(0,0,0,0.1)'}>
-
+                {/* Desktop row — clickable */}
+                <button
+                  className="hidden sm:grid w-full text-left items-center px-4 py-3 transition-colors duration-200 cursor-pointer"
+                  style={{ ...cols, backgroundColor: isExpanded ? 'rgba(184,152,72,0.05)' : 'transparent' }}
+                  onClick={() => setExpandedId(isExpanded ? null : unit.id)}
+                  onMouseEnter={e => { if (!isExpanded) e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.03)' }}
+                  onMouseLeave={e => { if (!isExpanded) e.currentTarget.style.backgroundColor = 'transparent' }}>
                   <span className="display-heading text-text" style={{ fontSize: '0.82rem', letterSpacing: '0.06em' }}>
                     {unit.name}
                     {unit.featured && <span className="ml-1.5 label-luxury" style={{ fontSize: '0.38rem', color: 'var(--color-accent)', verticalAlign: 'middle' }}>★</span>}
@@ -247,26 +255,23 @@ export default function AvailabilityPage() {
                   <span className="label-luxury" style={{ fontSize: '0.65rem', color: unit.status === 'sold' ? 'rgba(244,241,234,0.2)' : 'var(--color-text)' }}>
                     {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
                   </span>
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
                     <span className="label-luxury px-2 py-0.5 whitespace-nowrap"
                       style={{ fontSize: '0.44rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}` }}>
                       {lang === 'es' ? st.es : st.en}
                     </span>
-                    {canExplore && (
-                      <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
-                        className="label-luxury px-2.5 py-1.5 transition-all duration-200 flex-shrink-0"
-                        style={{ border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(244,241,234,0.5)', fontSize: '0.46rem' }}
-                        onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.06)' }}
-                        onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'; e.currentTarget.style.color = 'rgba(244,241,234,0.5)'; e.currentTarget.style.backgroundColor = 'transparent' }}>
-                        →
-                      </button>
-                    )}
+                    <span className="label-luxury ml-auto" style={{ fontSize: '0.55rem', color: 'rgba(184,152,72,0.4)', transition: 'transform 0.2s', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>
+                      ↓
+                    </span>
                   </div>
-                </div>
+                </button>
 
-                {/* Mobile row */}
-                <div className="flex sm:hidden items-center justify-between px-4 py-3 gap-3">
-                  <div className="flex flex-col gap-0.5 min-w-0">
+                {/* Mobile row — clickable */}
+                <button
+                  className="flex sm:hidden w-full items-center justify-between px-4 py-3 gap-3"
+                  style={{ backgroundColor: isExpanded ? 'rgba(184,152,72,0.05)' : 'transparent' }}
+                  onClick={() => setExpandedId(isExpanded ? null : unit.id)}>
+                  <div className="flex flex-col gap-0.5 min-w-0 text-left">
                     <span className="display-heading text-text" style={{ fontSize: '0.85rem' }}>{unit.name}</span>
                     <span className="label-luxury text-text/40" style={{ fontSize: '0.5rem' }}>
                       {unit.floor}ª · {unit.bedrooms}{lang === 'es' ? 'D' : 'B'} · {unit.surface} m²
@@ -280,15 +285,89 @@ export default function AvailabilityPage() {
                       style={{ fontSize: '0.44rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}` }}>
                       {lang === 'es' ? st.es : st.en}
                     </span>
-                    {canExplore && (
-                      <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
-                        className="label-luxury px-2.5 py-1.5"
-                        style={{ border: '1px solid rgba(184,152,72,0.3)', color: 'rgba(244,241,234,0.5)', fontSize: '0.5rem' }}>
-                        →
-                      </button>
-                    )}
+                    <span className="label-luxury" style={{ fontSize: '0.55rem', color: 'rgba(184,152,72,0.4)', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>↓</span>
                   </div>
-                </div>
+                </button>
+
+                {/* Expanded card panel */}
+                <AnimatePresence initial={false}>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      style={{ overflow: 'hidden', borderTop: '1px solid rgba(184,152,72,0.1)' }}>
+                      <div className="flex flex-col sm:flex-row gap-0" style={{ backgroundColor: 'rgba(184,152,72,0.03)' }}>
+
+                        {/* Image */}
+                        {unit.hero_image && (
+                          <div className="flex-shrink-0 overflow-hidden" style={{ width: '100%', maxWidth: 260, height: 180, backgroundColor: '#0d1117' }}>
+                            <img src={unit.hero_image} alt={unit.name}
+                              className="w-full h-full object-cover"
+                              style={{ opacity: unit.status === 'sold' ? 0.35 : 0.9 }} />
+                          </div>
+                        )}
+
+                        {/* Details */}
+                        <div className="flex flex-col justify-between gap-4 px-5 py-4 flex-1">
+                          <div className="flex flex-col gap-3">
+                            <div className="flex items-start justify-between gap-2">
+                              <div>
+                                <p className="display-heading text-text" style={{ fontSize: '1rem', letterSpacing: '0.08em' }}>
+                                  {unit.name}
+                                  {unit.featured && <span className="ml-2 label-luxury" style={{ fontSize: '0.42rem', color: 'var(--color-accent)' }}>★ {lang === 'es' ? 'DESTACADA' : 'FEATURED'}</span>}
+                                </p>
+                                <p className="label-luxury mt-0.5" style={{ fontSize: '0.5rem', color: 'rgba(184,152,72,0.5)' }}>{unit.typology}</p>
+                              </div>
+                              {unit.view_label && (
+                                <span className="label-luxury px-2 py-1 flex-shrink-0"
+                                  style={{ fontSize: '0.44rem', color: 'rgba(184,152,72,0.55)', border: '1px solid rgba(184,152,72,0.2)' }}>
+                                  {unit.view_label}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+                              {[
+                                { label: lang === 'es' ? 'Planta'      : 'Floor',       value: `${unit.floor}ª`         },
+                                { label: lang === 'es' ? 'Dormitorios' : 'Bedrooms',    value: unit.bedrooms            },
+                                { label: lang === 'es' ? 'Baños'       : 'Bathrooms',   value: unit.bathrooms           },
+                                { label: lang === 'es' ? 'Superficie'  : 'Surface',     value: `${unit.surface} m²`     },
+                                { label: lang === 'es' ? 'Terraza'     : 'Terrace',     value: unit.terrace_area_m2 > 0 ? `${unit.terrace_area_m2} m²` : '—' },
+                              ].map(d => (
+                                <div key={d.label}>
+                                  <p className="label-luxury" style={{ fontSize: '0.44rem', color: 'rgba(184,152,72,0.4)' }}>{d.label}</p>
+                                  <p className="label-luxury text-text/70" style={{ fontSize: '0.6rem' }}>{d.value}</p>
+                                </div>
+                              ))}
+                            </div>
+
+                            {unit.short_description && (
+                              <p className="label-luxury" style={{ fontSize: '0.52rem', color: 'rgba(244,241,234,0.35)', lineHeight: 1.7 }}>
+                                {unit.short_description}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between pt-3" style={{ borderTop: '1px solid rgba(184,152,72,0.1)' }}>
+                            <p className="display-heading"
+                              style={{ fontSize: '1rem', letterSpacing: '0.04em', color: unit.status === 'sold' ? 'rgba(244,241,234,0.2)' : 'var(--color-accent)' }}>
+                              {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
+                            </p>
+                            {canExplore && (
+                              <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
+                                className="label-luxury flex items-center gap-2 px-5 py-2.5 transition-all duration-300 min-h-[40px]"
+                                style={{ border: '1px solid var(--color-accent)', color: 'var(--color-accent)', fontSize: '0.55rem' }}
+                                onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.1)'}
+                                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
+                                {lang === 'es' ? 'Ver vivienda' : 'View unit'} →
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             )
           })}
