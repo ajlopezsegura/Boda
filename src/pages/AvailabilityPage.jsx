@@ -1,57 +1,38 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, SlidersHorizontal, X } from 'lucide-react'
+import { ChevronLeft, SlidersHorizontal, X, LayoutGrid, List } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 
 const STATUS_CONFIG = {
-  available: { es: 'Disponible', en: 'Available', color: 'var(--color-accent)',        bg: 'rgba(184,152,72,0.12)' },
-  reserved:  { es: 'Reservada',  en: 'Reserved',  color: 'rgba(255,200,80,0.9)',        bg: 'rgba(255,200,80,0.10)' },
-  sold:      { es: 'Vendida',    en: 'Sold',       color: 'rgba(244,241,234,0.3)',       bg: 'rgba(244,241,234,0.05)' },
+  available: { es: 'Disponible', en: 'Available', color: 'var(--color-accent)',  bg: 'rgba(184,152,72,0.12)' },
+  reserved:  { es: 'Reservada',  en: 'Reserved',  color: 'rgba(255,200,80,0.9)', bg: 'rgba(255,200,80,0.10)' },
+  sold:      { es: 'Vendida',    en: 'Sold',       color: 'rgba(244,241,234,0.3)',bg: 'rgba(244,241,234,0.05)'},
 }
 
 const SORT_OPTIONS = [
-  { value: 'price_asc',    es: 'Precio: menor a mayor',     en: 'Price: low to high'       },
-  { value: 'price_desc',   es: 'Precio: mayor a menor',     en: 'Price: high to low'       },
-  { value: 'surface_asc',  es: 'Superficie: menor a mayor', en: 'Surface: small to large'  },
-  { value: 'surface_desc', es: 'Superficie: mayor a menor', en: 'Surface: large to small'  },
-  { value: 'floor_asc',    es: 'Planta: ascendente',        en: 'Floor: ascending'         },
-  { value: 'floor_desc',   es: 'Planta: descendente',       en: 'Floor: descending'        },
+  { value: 'price_asc',    es: 'Precio: menor a mayor',     en: 'Price: low to high'      },
+  { value: 'price_desc',   es: 'Precio: mayor a menor',     en: 'Price: high to low'      },
+  { value: 'surface_asc',  es: 'Superficie: menor a mayor', en: 'Surface: small to large' },
+  { value: 'surface_desc', es: 'Superficie: mayor a menor', en: 'Surface: large to small' },
+  { value: 'floor_asc',    es: 'Planta: ascendente',        en: 'Floor: ascending'        },
+  { value: 'floor_desc',   es: 'Planta: descendente',       en: 'Floor: descending'       },
 ]
 
 const DEFAULT_FILTERS = {
-  status:     'all',
-  bedrooms:   'all',
-  priceMin:   '',
-  priceMax:   '',
-  surfaceMin: '',
-  surfaceMax: '',
+  status: 'all', bedrooms: 'all',
+  priceMin: '', priceMax: '',
+  surfaceMin: '', surfaceMax: '',
   has_terrace: false,
 }
 
-const labelStyle  = { fontSize: '0.5rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.5)' }
-const inputStyle  = {
+const labelStyle = { fontSize: '0.5rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.5)' }
+const inputStyle = {
   fontSize: '0.72rem', color: 'var(--color-text)', backgroundColor: 'transparent',
   border: 'none', borderBottom: '1px solid rgba(184,152,72,0.2)', outline: 'none',
   width: '90px', paddingBottom: '2px', fontFamily: 'inherit',
-}
-
-function FilterChip({ active, onClick, children }) {
-  return (
-    <button onClick={onClick} data-cursor="hover"
-      className="label-luxury px-3 py-1.5 transition-all duration-200"
-      style={{
-        fontSize: '0.52rem', border: '1px solid',
-        borderColor:       active ? 'var(--color-accent)' : 'rgba(184,152,72,0.18)',
-        color:             active ? 'var(--color-accent)' : 'rgba(244,241,234,0.4)',
-        backgroundColor:   active ? 'rgba(184,152,72,0.07)' : 'transparent',
-        minWidth: 32,
-      }}>
-      {children}
-    </button>
-  )
 }
 
 export default function AvailabilityPage() {
@@ -62,6 +43,7 @@ export default function AvailabilityPage() {
   const [filters, setFilters]         = useState(DEFAULT_FILTERS)
   const [sortBy, setSortBy]           = useState('price_asc')
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [viewMode, setViewMode]       = useState('table') // 'table' | 'grid'
 
   const name = lang === 'es' ? project.name : project.nameEN
 
@@ -78,7 +60,6 @@ export default function AvailabilityPage() {
   const filtered = useMemo(() => {
     if (!units) return []
     let result = [...units]
-
     if (filters.status !== 'all')   result = result.filter(u => u.status === filters.status)
     if (filters.bedrooms !== 'all') {
       const n = parseInt(filters.bedrooms)
@@ -89,7 +70,6 @@ export default function AvailabilityPage() {
     if (filters.surfaceMin !== '') result = result.filter(u => u.surface >= parseInt(filters.surfaceMin))
     if (filters.surfaceMax !== '') result = result.filter(u => u.surface <= parseInt(filters.surfaceMax))
     if (filters.has_terrace)       result = result.filter(u => u.has_terrace)
-
     result.sort((a, b) => {
       switch (sortBy) {
         case 'price_asc':    return a.price - b.price
@@ -105,21 +85,20 @@ export default function AvailabilityPage() {
   }, [units, filters, sortBy])
 
   const isFilterActive = Object.entries(filters).some(([k, v]) => v !== DEFAULT_FILTERS[k])
+  const setFilter      = (key, value) => setFilters(f => ({ ...f, [key]: value }))
+  const resetFilters   = () => setFilters(DEFAULT_FILTERS)
 
-  const setFilter    = (key, value) => setFilters(f => ({ ...f, [key]: value }))
-  const resetFilters = () => setFilters(DEFAULT_FILTERS)
-
-  // ── Shared filter controls (rendered in both desktop bar and mobile drawer) ──
-  function FilterControls({ mobile = false }) {
-    const chipSize = mobile ? '0.55rem' : '0.52rem'
-    const chipStyle = (active) => ({
-      fontSize: chipSize, border: '1px solid',
+  function chipStyle(active) {
+    return {
+      fontSize: '0.52rem', border: '1px solid',
       borderColor:     active ? 'var(--color-accent)' : 'rgba(184,152,72,0.18)',
       color:           active ? 'var(--color-accent)' : 'rgba(244,241,234,0.4)',
       backgroundColor: active ? 'rgba(184,152,72,0.07)' : 'transparent',
       minWidth: 32,
-    })
+    }
+  }
 
+  function FilterControls({ mobile = false }) {
     return (
       <>
         {/* Status */}
@@ -163,22 +142,20 @@ export default function AvailabilityPage() {
           <span className="label-luxury" style={labelStyle}>{lang === 'es' ? 'PRECIO (€)' : 'PRICE (€)'}</span>
           {mobile ? (
             <div className="grid grid-cols-2 gap-3">
-              <input type="number" placeholder={`Mín ${priceRange.min.toLocaleString('es-ES')}`}
-                value={filters.priceMin} onChange={e => setFilter('priceMin', e.target.value)}
+              <input type="number" placeholder={`Mín`} value={filters.priceMin}
+                onChange={e => setFilter('priceMin', e.target.value)}
                 style={{ ...inputStyle, width: '100%' }} />
-              <input type="number" placeholder={`Máx ${priceRange.max.toLocaleString('es-ES')}`}
-                value={filters.priceMax} onChange={e => setFilter('priceMax', e.target.value)}
+              <input type="number" placeholder={`Máx`} value={filters.priceMax}
+                onChange={e => setFilter('priceMax', e.target.value)}
                 style={{ ...inputStyle, width: '100%' }} />
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <input type="number" placeholder={priceRange.min.toLocaleString('es-ES')}
-                value={filters.priceMin} onChange={e => setFilter('priceMin', e.target.value)}
-                style={inputStyle} />
+              <input type="number" placeholder={priceRange.min.toLocaleString('es-ES')} value={filters.priceMin}
+                onChange={e => setFilter('priceMin', e.target.value)} style={inputStyle} />
               <span className="label-luxury" style={{ fontSize: '0.45rem', color: 'rgba(184,152,72,0.3)' }}>—</span>
-              <input type="number" placeholder={priceRange.max.toLocaleString('es-ES')}
-                value={filters.priceMax} onChange={e => setFilter('priceMax', e.target.value)}
-                style={inputStyle} />
+              <input type="number" placeholder={priceRange.max.toLocaleString('es-ES')} value={filters.priceMax}
+                onChange={e => setFilter('priceMax', e.target.value)} style={inputStyle} />
             </div>
           )}
         </div>
@@ -188,22 +165,20 @@ export default function AvailabilityPage() {
           <span className="label-luxury" style={labelStyle}>{lang === 'es' ? 'SUPERFICIE (m²)' : 'SURFACE (m²)'}</span>
           {mobile ? (
             <div className="grid grid-cols-2 gap-3">
-              <input type="number" placeholder={`Mín ${surfaceRange.min}`}
-                value={filters.surfaceMin} onChange={e => setFilter('surfaceMin', e.target.value)}
+              <input type="number" placeholder={`Mín`} value={filters.surfaceMin}
+                onChange={e => setFilter('surfaceMin', e.target.value)}
                 style={{ ...inputStyle, width: '100%' }} />
-              <input type="number" placeholder={`Máx ${surfaceRange.max}`}
-                value={filters.surfaceMax} onChange={e => setFilter('surfaceMax', e.target.value)}
+              <input type="number" placeholder={`Máx`} value={filters.surfaceMax}
+                onChange={e => setFilter('surfaceMax', e.target.value)}
                 style={{ ...inputStyle, width: '100%' }} />
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <input type="number" placeholder={String(surfaceRange.min)}
-                value={filters.surfaceMin} onChange={e => setFilter('surfaceMin', e.target.value)}
-                style={inputStyle} />
+              <input type="number" placeholder={String(surfaceRange.min)} value={filters.surfaceMin}
+                onChange={e => setFilter('surfaceMin', e.target.value)} style={inputStyle} />
               <span className="label-luxury" style={{ fontSize: '0.45rem', color: 'rgba(184,152,72,0.3)' }}>—</span>
-              <input type="number" placeholder={String(surfaceRange.max)}
-                value={filters.surfaceMax} onChange={e => setFilter('surfaceMax', e.target.value)}
-                style={inputStyle} />
+              <input type="number" placeholder={String(surfaceRange.max)} value={filters.surfaceMax}
+                onChange={e => setFilter('surfaceMax', e.target.value)} style={inputStyle} />
             </div>
           )}
         </div>
@@ -218,6 +193,197 @@ export default function AvailabilityPage() {
           </button>
         </div>
       </>
+    )
+  }
+
+  // ── Table view ────────────────────────────────────────────────────────────────
+  function TableView() {
+    const cols = {
+      gridTemplateColumns: '90px 1fr 60px 60px 90px 100px 110px 44px',
+      gap: '0 1rem',
+    }
+    return (
+      <div>
+        {/* Column headers */}
+        <div className="hidden sm:grid label-luxury px-4 pb-2"
+          style={{ ...cols, fontSize: '0.48rem', color: 'rgba(184,152,72,0.45)', letterSpacing: '0.15em' }}>
+          <span>{lang === 'es' ? 'VIVIENDA' : 'UNIT'}</span>
+          <span>{lang === 'es' ? 'TIPOLOGÍA' : 'TYPE'}</span>
+          <span>{lang === 'es' ? 'PLANTA' : 'FLOOR'}</span>
+          <span>{lang === 'es' ? 'DORM.' : 'BEDS'}</span>
+          <span>{lang === 'es' ? 'SUPERFICIE' : 'AREA'}</span>
+          <span>{lang === 'es' ? 'ORIENTACIÓN' : 'ORIENT.'}</span>
+          <span>{lang === 'es' ? 'PRECIO' : 'PRICE'}</span>
+          <span>{lang === 'es' ? 'ESTADO' : 'STATUS'}</span>
+        </div>
+        <div className="h-px mb-1" style={{ backgroundColor: 'rgba(184,152,72,0.1)' }} />
+
+        <AnimatePresence mode="popLayout">
+          {filtered.map((unit, i) => {
+            const st         = STATUS_CONFIG[unit.status]
+            const canExplore = unit.status === 'available'
+            return (
+              <motion.div key={unit.id}
+                initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }} transition={{ duration: 0.2, delay: Math.min(i * 0.03, 0.2) }}
+                className="mb-px"
+                style={{ borderBottom: '1px solid rgba(184,152,72,0.07)' }}>
+
+                {/* Desktop row */}
+                <div className="hidden sm:grid items-center px-4 py-3 transition-colors duration-200"
+                  style={{ ...cols, backgroundColor: canExplore ? 'transparent' : 'rgba(0,0,0,0.1)' }}
+                  onMouseEnter={e => { if (canExplore) e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.03)' }}
+                  onMouseLeave={e => e.currentTarget.style.backgroundColor = canExplore ? 'transparent' : 'rgba(0,0,0,0.1)'}>
+
+                  <span className="display-heading text-text" style={{ fontSize: '0.82rem', letterSpacing: '0.06em' }}>
+                    {unit.name}
+                    {unit.featured && <span className="ml-1.5 label-luxury" style={{ fontSize: '0.38rem', color: 'var(--color-accent)', verticalAlign: 'middle' }}>★</span>}
+                  </span>
+                  <span className="label-luxury text-text/50" style={{ fontSize: '0.55rem' }}>{unit.typology}</span>
+                  <span className="label-luxury text-text/50" style={{ fontSize: '0.58rem' }}>{unit.floor}ª</span>
+                  <span className="label-luxury text-text/50" style={{ fontSize: '0.58rem' }}>{unit.bedrooms}</span>
+                  <span className="label-luxury text-text/50" style={{ fontSize: '0.58rem' }}>{unit.surface} m²</span>
+                  <span className="label-luxury text-text/50" style={{ fontSize: '0.55rem' }}>{unit.orientation}</span>
+                  <span className="label-luxury" style={{ fontSize: '0.65rem', color: unit.status === 'sold' ? 'rgba(244,241,234,0.2)' : 'var(--color-text)' }}>
+                    {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
+                  </span>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="label-luxury px-2 py-0.5 whitespace-nowrap"
+                      style={{ fontSize: '0.44rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}` }}>
+                      {lang === 'es' ? st.es : st.en}
+                    </span>
+                    {canExplore && (
+                      <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
+                        className="label-luxury px-2.5 py-1.5 transition-all duration-200 flex-shrink-0"
+                        style={{ border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(244,241,234,0.5)', fontSize: '0.46rem' }}
+                        onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.06)' }}
+                        onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'; e.currentTarget.style.color = 'rgba(244,241,234,0.5)'; e.currentTarget.style.backgroundColor = 'transparent' }}>
+                        →
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Mobile row */}
+                <div className="flex sm:hidden items-center justify-between px-4 py-3 gap-3">
+                  <div className="flex flex-col gap-0.5 min-w-0">
+                    <span className="display-heading text-text" style={{ fontSize: '0.85rem' }}>{unit.name}</span>
+                    <span className="label-luxury text-text/40" style={{ fontSize: '0.5rem' }}>
+                      {unit.floor}ª · {unit.bedrooms}{lang === 'es' ? 'D' : 'B'} · {unit.surface} m²
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <span className="label-luxury" style={{ fontSize: '0.62rem', color: unit.status === 'sold' ? 'rgba(244,241,234,0.2)' : 'var(--color-text)' }}>
+                      {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
+                    </span>
+                    <span className="label-luxury px-2 py-0.5"
+                      style={{ fontSize: '0.44rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}` }}>
+                      {lang === 'es' ? st.es : st.en}
+                    </span>
+                    {canExplore && (
+                      <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
+                        className="label-luxury px-2.5 py-1.5"
+                        style={{ border: '1px solid rgba(184,152,72,0.3)', color: 'rgba(244,241,234,0.5)', fontSize: '0.5rem' }}>
+                        →
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )
+          })}
+        </AnimatePresence>
+      </div>
+    )
+  }
+
+  // ── Card view ─────────────────────────────────────────────────────────────────
+  function GridView() {
+    return (
+      <AnimatePresence mode="popLayout">
+        <motion.div key="grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.map((unit, i) => {
+            const st         = STATUS_CONFIG[unit.status]
+            const canExplore = unit.status === 'available'
+            return (
+              <motion.div key={unit.id}
+                initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.3) }}
+                style={{ border: '1px solid rgba(184,152,72,0.15)', backgroundColor: 'rgba(184,152,72,0.02)' }}>
+                <div className="relative overflow-hidden" style={{ height: 180, backgroundColor: '#0d1117' }}>
+                  {unit.hero_image
+                    ? <img src={unit.hero_image} alt={unit.name}
+                        className="w-full h-full object-cover transition-transform duration-700"
+                        style={{ opacity: unit.status === 'sold' ? 0.35 : 0.85 }}
+                        onMouseEnter={e => { if (canExplore) e.currentTarget.style.transform = 'scale(1.04)' }}
+                        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} />
+                    : <div className="w-full h-full flex items-center justify-center">
+                        <span className="label-luxury" style={{ fontSize: '0.5rem', color: 'rgba(184,152,72,0.2)' }}>—</span>
+                      </div>
+                  }
+                  <div className="absolute top-3 right-3">
+                    <span className="label-luxury px-2.5 py-1"
+                      style={{ fontSize: '0.46rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}`, backdropFilter: 'blur(8px)' }}>
+                      {lang === 'es' ? st.es : st.en}
+                    </span>
+                  </div>
+                  {unit.featured && (
+                    <div className="absolute top-3 left-3">
+                      <span className="label-luxury px-2.5 py-1"
+                        style={{ fontSize: '0.44rem', color: 'var(--color-bg)', backgroundColor: 'var(--color-accent)' }}>
+                        {lang === 'es' ? 'DESTACADA' : 'FEATURED'}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="p-4 flex flex-col gap-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="display-heading text-text" style={{ fontSize: '1.05rem', letterSpacing: '0.08em' }}>{unit.name}</p>
+                      <p className="label-luxury mt-0.5" style={{ fontSize: '0.5rem', color: 'rgba(184,152,72,0.5)' }}>{unit.typology}</p>
+                    </div>
+                    {unit.view_label && (
+                      <span className="label-luxury px-2 py-1 flex-shrink-0"
+                        style={{ fontSize: '0.44rem', color: 'rgba(184,152,72,0.55)', border: '1px solid rgba(184,152,72,0.18)' }}>
+                        {unit.view_label}
+                      </span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-4 gap-1">
+                    {[
+                      { label: lang === 'es' ? 'Planta'  : 'Floor',   value: `${unit.floor}ª`    },
+                      { label: lang === 'es' ? 'Dorm.'   : 'Beds',    value: unit.bedrooms       },
+                      { label: lang === 'es' ? 'Sup.'    : 'Area',    value: `${unit.surface}m²` },
+                      { label: lang === 'es' ? 'Orient.' : 'Orient.', value: unit.orientation    },
+                    ].map(d => (
+                      <div key={d.label}>
+                        <p className="label-luxury" style={{ fontSize: '0.42rem', color: 'rgba(184,152,72,0.4)' }}>{d.label}</p>
+                        <p className="label-luxury text-text/70" style={{ fontSize: '0.56rem' }}>{d.value}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between pt-2" style={{ borderTop: '1px solid rgba(184,152,72,0.1)' }}>
+                    <p className="display-heading"
+                      style={{ fontSize: '0.9rem', letterSpacing: '0.04em', color: unit.status === 'sold' ? 'rgba(244,241,234,0.2)' : 'var(--color-accent)' }}>
+                      {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
+                    </p>
+                    {canExplore && (
+                      <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
+                        className="label-luxury flex items-center gap-1.5 px-3 py-2 transition-all duration-300 min-h-[36px]"
+                        style={{ border: '1px solid rgba(184,152,72,0.3)', color: 'rgba(244,241,234,0.6)', fontSize: '0.52rem' }}
+                        onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.06)' }}
+                        onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.3)'; e.currentTarget.style.color = 'rgba(244,241,234,0.6)'; e.currentTarget.style.backgroundColor = 'transparent' }}>
+                        {lang === 'es' ? 'Ver detalle' : 'View detail'} →
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )
+          })}
+        </motion.div>
+      </AnimatePresence>
     )
   }
 
@@ -245,8 +411,8 @@ export default function AvailabilityPage() {
           </button>
         </div>
 
-        {/* ── Title + mobile filter toggle ── */}
-        <div className="flex-shrink-0 px-6 sm:px-10 pt-6 pb-3 flex items-end justify-between">
+        {/* ── Title bar ── */}
+        <div className="flex-shrink-0 px-6 sm:px-10 pt-6 pb-3 flex items-end justify-between gap-4">
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <h2 className="display-heading text-text"
               style={{ fontSize: 'clamp(1.1rem, 3vw, 1.6rem)', letterSpacing: '0.1em' }}>
@@ -257,26 +423,44 @@ export default function AvailabilityPage() {
             </p>
           </motion.div>
 
-          {/* Mobile filter toggle */}
-          <button onClick={() => setFiltersOpen(o => !o)} data-cursor="hover"
-            className="flex sm:hidden items-center gap-2 label-luxury px-4 py-2"
-            style={{
-              border: `1px solid ${isFilterActive ? 'var(--color-accent)' : 'rgba(184,152,72,0.25)'}`,
-              color: isFilterActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.5)',
-              fontSize: '0.58rem',
-            }}>
-            <SlidersHorizontal size={12} />
-            {lang === 'es' ? 'Filtros' : 'Filters'}
-            {isFilterActive && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />}
-          </button>
+          <div className="flex items-center gap-2">
+            {/* View toggle */}
+            <div className="flex" style={{ border: '1px solid rgba(184,152,72,0.2)' }}>
+              {[
+                { mode: 'table', Icon: List },
+                { mode: 'grid',  Icon: LayoutGrid },
+              ].map(({ mode, Icon }) => (
+                <button key={mode} onClick={() => setViewMode(mode)} data-cursor="hover"
+                  className="flex items-center justify-center transition-all duration-200"
+                  style={{
+                    width: 32, height: 32,
+                    backgroundColor: viewMode === mode ? 'rgba(184,152,72,0.12)' : 'transparent',
+                    color: viewMode === mode ? 'var(--color-accent)' : 'rgba(244,241,234,0.3)',
+                    borderRight: mode === 'table' ? '1px solid rgba(184,152,72,0.2)' : 'none',
+                  }}>
+                  <Icon size={13} />
+                </button>
+              ))}
+            </div>
+
+            {/* Mobile filter toggle */}
+            <button onClick={() => setFiltersOpen(o => !o)} data-cursor="hover"
+              className="flex sm:hidden items-center gap-2 label-luxury px-3 py-2"
+              style={{
+                border: `1px solid ${isFilterActive ? 'var(--color-accent)' : 'rgba(184,152,72,0.25)'}`,
+                color: isFilterActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.5)',
+                fontSize: '0.55rem',
+              }}>
+              <SlidersHorizontal size={12} />
+              {isFilterActive && <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />}
+            </button>
+          </div>
         </div>
 
         {/* ── Desktop filter bar ── */}
         <div className="hidden sm:flex flex-shrink-0 px-10 pb-4 gap-6 flex-wrap items-end"
           style={{ borderBottom: '1px solid rgba(184,152,72,0.08)' }}>
           <FilterControls />
-
-          {/* Sort + clear — pushed right */}
           <div className="flex flex-col gap-2 ml-auto">
             <span className="label-luxury" style={labelStyle}>{lang === 'es' ? 'ORDENAR' : 'SORT'}</span>
             <div className="flex gap-3 items-center">
@@ -313,8 +497,7 @@ export default function AvailabilityPage() {
               style={{ borderBottom: '1px solid rgba(184,152,72,0.1)', backgroundColor: 'rgba(184,152,72,0.02)' }}>
               <div className="px-6 py-5 flex flex-col gap-5">
                 <FilterControls mobile />
-                <div className="flex items-center gap-4 flex-wrap pt-1"
-                  style={{ borderTop: '1px solid rgba(184,152,72,0.08)' }}>
+                <div className="flex items-center gap-4 flex-wrap pt-1" style={{ borderTop: '1px solid rgba(184,152,72,0.08)' }}>
                   <div className="flex flex-col gap-2">
                     <span className="label-luxury" style={labelStyle}>{lang === 'es' ? 'ORDENAR' : 'SORT'}</span>
                     <select value={sortBy} onChange={e => setSortBy(e.target.value)}
@@ -341,144 +524,26 @@ export default function AvailabilityPage() {
           )}
         </AnimatePresence>
 
-        {/* ── Cards grid ── */}
-        <div className="flex-1 min-h-0 overflow-y-auto px-6 sm:px-10 py-6">
-          <AnimatePresence mode="popLayout">
-            {filtered.length > 0 ? (
-              <motion.div
-                key="grid"
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filtered.map((unit, i) => {
-                  const st         = STATUS_CONFIG[unit.status]
-                  const canExplore = unit.status === 'available'
-
-                  return (
-                    <motion.div key={unit.id}
-                      initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.97 }}
-                      transition={{ duration: 0.3, delay: Math.min(i * 0.05, 0.3) }}
-                      style={{ border: '1px solid rgba(184,152,72,0.15)', backgroundColor: 'rgba(184,152,72,0.02)' }}>
-
-                      {/* Image */}
-                      <div className="relative overflow-hidden" style={{ height: 180, backgroundColor: '#0d1117' }}>
-                        {unit.hero_image ? (
-                          <img src={unit.hero_image} alt={unit.name}
-                            className="w-full h-full object-cover transition-transform duration-700"
-                            style={{ opacity: unit.status === 'sold' ? 0.35 : 0.85 }}
-                            onMouseEnter={e => { if (canExplore) e.currentTarget.style.transform = 'scale(1.04)' }}
-                            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'} />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <span className="label-luxury" style={{ fontSize: '0.5rem', color: 'rgba(184,152,72,0.2)' }}>
-                              {lang === 'es' ? 'Sin imagen' : 'No image'}
-                            </span>
-                          </div>
-                        )}
-
-                        {/* Status badge */}
-                        <div className="absolute top-3 right-3">
-                          <span className="label-luxury px-2.5 py-1"
-                            style={{ fontSize: '0.46rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}`, backdropFilter: 'blur(8px)' }}>
-                            {lang === 'es' ? st.es : st.en}
-                          </span>
-                        </div>
-
-                        {unit.featured && (
-                          <div className="absolute top-3 left-3">
-                            <span className="label-luxury px-2.5 py-1"
-                              style={{ fontSize: '0.44rem', color: 'var(--color-bg)', backgroundColor: 'var(--color-accent)' }}>
-                              {lang === 'es' ? 'DESTACADA' : 'FEATURED'}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-4 flex flex-col gap-3">
-
-                        {/* Name + typology + view */}
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <p className="display-heading text-text" style={{ fontSize: '1.05rem', letterSpacing: '0.08em' }}>
-                              {unit.name}
-                            </p>
-                            <p className="label-luxury mt-0.5" style={{ fontSize: '0.5rem', color: 'rgba(184,152,72,0.5)' }}>
-                              {unit.typology}
-                            </p>
-                          </div>
-                          {unit.view_label && (
-                            <span className="label-luxury px-2 py-1 flex-shrink-0"
-                              style={{ fontSize: '0.44rem', color: 'rgba(184,152,72,0.55)', border: '1px solid rgba(184,152,72,0.18)' }}>
-                              {unit.view_label}
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Key data */}
-                        <div className="grid grid-cols-4 gap-1">
-                          {[
-                            { label: lang === 'es' ? 'Planta'  : 'Floor',   value: `${unit.floor}ª`    },
-                            { label: lang === 'es' ? 'Dorm.'   : 'Beds',    value: unit.bedrooms       },
-                            { label: lang === 'es' ? 'Sup.'    : 'Area',    value: `${unit.surface} m²` },
-                            { label: lang === 'es' ? 'Orient.' : 'Orient.', value: unit.orientation    },
-                          ].map(d => (
-                            <div key={d.label}>
-                              <p className="label-luxury" style={{ fontSize: '0.42rem', color: 'rgba(184,152,72,0.4)' }}>{d.label}</p>
-                              <p className="label-luxury text-text/70" style={{ fontSize: '0.56rem' }}>{d.value}</p>
-                            </div>
-                          ))}
-                        </div>
-
-                        {unit.short_description && (
-                          <p className="label-luxury" style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.3)', lineHeight: 1.7 }}>
-                            {unit.short_description}
-                          </p>
-                        )}
-
-                        {/* Price + CTA */}
-                        <div className="flex items-center justify-between pt-2"
-                          style={{ borderTop: '1px solid rgba(184,152,72,0.1)' }}>
-                          <p className="display-heading"
-                            style={{ fontSize: '0.9rem', letterSpacing: '0.04em', color: unit.status === 'sold' ? 'rgba(244,241,234,0.2)' : 'var(--color-accent)' }}>
-                            {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
-                          </p>
-                          {canExplore && (
-                            <button
-                              onClick={() => navigate(`/inmersion/${unit.slug}`)}
-                              data-cursor="hover"
-                              className="label-luxury flex items-center gap-1.5 px-3 py-2 transition-all duration-300 min-h-[36px]"
-                              style={{ border: '1px solid rgba(184,152,72,0.3)', color: 'rgba(244,241,234,0.6)', fontSize: '0.52rem' }}
-                              onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.06)' }}
-                              onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.3)'; e.currentTarget.style.color = 'rgba(244,241,234,0.6)'; e.currentTarget.style.backgroundColor = 'transparent' }}>
-                              {lang === 'es' ? 'Ver detalle' : 'View detail'}
-                              <span>→</span>
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )
-                })}
-              </motion.div>
-            ) : (
-              <motion.div key="empty"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center py-20 gap-4">
-                <p className="label-luxury" style={{ color: 'rgba(184,152,72,0.35)', fontSize: '0.6rem' }}>
-                  {lang === 'es' ? 'No hay unidades con esos filtros' : 'No units match those filters'}
-                </p>
-                {isFilterActive && (
-                  <button onClick={resetFilters} data-cursor="hover"
-                    className="label-luxury px-5 py-2 transition-all duration-300"
-                    style={{ border: '1px solid rgba(184,152,72,0.3)', color: 'rgba(184,152,72,0.5)', fontSize: '0.55rem' }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.3)'; e.currentTarget.style.color = 'rgba(184,152,72,0.5)' }}>
-                    {lang === 'es' ? 'Limpiar filtros' : 'Clear filters'}
-                  </button>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
+        {/* ── Content ── */}
+        <div className="flex-1 min-h-0 overflow-y-auto px-6 sm:px-10 py-5">
+          {filtered.length > 0 ? (
+            viewMode === 'table' ? <TableView /> : <GridView />
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <p className="label-luxury" style={{ color: 'rgba(184,152,72,0.35)', fontSize: '0.6rem' }}>
+                {lang === 'es' ? 'No hay unidades con esos filtros' : 'No units match those filters'}
+              </p>
+              {isFilterActive && (
+                <button onClick={resetFilters} data-cursor="hover"
+                  className="label-luxury px-5 py-2 transition-all duration-300"
+                  style={{ border: '1px solid rgba(184,152,72,0.3)', color: 'rgba(184,152,72,0.5)', fontSize: '0.55rem' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.3)'; e.currentTarget.style.color = 'rgba(184,152,72,0.5)' }}>
+                  {lang === 'es' ? 'Limpiar filtros' : 'Clear filters'}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </PageTransition>
