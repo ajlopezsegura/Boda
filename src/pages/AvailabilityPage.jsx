@@ -354,7 +354,7 @@ export default function AvailabilityPage() {
                               {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
                             </p>
                             {canExplore && (
-                              <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
+                              <button onClick={() => navigate(`/availability/${unit.slug}`)} data-cursor="hover"
                                 className="label-luxury flex items-center gap-2 px-5 py-2.5 transition-all duration-300 min-h-[40px]"
                                 style={{ border: '1px solid var(--color-accent)', color: 'var(--color-accent)', fontSize: '0.55rem' }}
                                 onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.1)'}
@@ -448,7 +448,7 @@ export default function AvailabilityPage() {
                       {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
                     </p>
                     {canExplore && (
-                      <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
+                      <button onClick={() => navigate(`/availability/${unit.slug}`)} data-cursor="hover"
                         className="label-luxury flex items-center gap-1.5 px-3 py-2 transition-all duration-300 min-h-[36px]"
                         style={{ border: '1px solid rgba(184,152,72,0.3)', color: 'rgba(244,241,234,0.6)', fontSize: '0.52rem' }}
                         onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.06)' }}
