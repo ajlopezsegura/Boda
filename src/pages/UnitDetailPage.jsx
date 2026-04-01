@@ -261,7 +261,10 @@ export default function UnitDetailPage() {
                 {/* Primary CTA */}
                 {canAct ? (
                   <button
-                    onClick={() => navigate('/decision')}
+                    onClick={() => {
+                      localStorage.setItem('tvbs_selection', JSON.stringify({ unitId: unit.id, materials: {} }))
+                      navigate('/decision')
+                    }}
                     data-cursor="hover"
                     className="w-full label-luxury py-4 flex items-center justify-center gap-2 transition-opacity duration-200"
                     style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.6rem', letterSpacing: '0.18em' }}
