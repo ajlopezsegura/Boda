@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main, claude/check-progress-VPlBw, claude/v2-sales-flow]
+    branches: [main, claude/check-progress-VPlBw, claude/v2-sales-flow, claude/v3-sales-flow]
 
 permissions:
   contents: write
