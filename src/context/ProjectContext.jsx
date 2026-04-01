@@ -19,5 +19,5 @@ export function useProject() {
 
 export function useUnit(id) {
   const { units } = useProject()
-  return units?.find(u => u.id === id) ?? null
+  return units?.find(u => u.id === id || u.slug === id) ?? null
 }
