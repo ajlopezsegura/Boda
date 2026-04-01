@@ -45,7 +45,7 @@ export default function DecisionPage() {
         {/* Header */}
         <div className="flex-shrink-0 flex items-center justify-between px-6 sm:px-10 py-4"
           style={{ borderBottom: '1px solid rgba(184,152,72,0.12)' }}>
-          <button onClick={() => navigate(unit ? `/inmersion/${unit.id}` : '/seleccion')} data-cursor="hover"
+          <button onClick={() => navigate(unit ? `/availability/${unit.slug}` : '/availability')} data-cursor="hover"
             className="flex items-center gap-1.5 label-luxury transition-all duration-300"
             style={{ color: 'rgba(244,241,234,0.45)', fontSize: '0.6rem' }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
