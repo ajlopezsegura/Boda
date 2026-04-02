@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Check, Car, Package, Eye, X } from 'lucide-react'
+import { ChevronLeft, Check, Car, Package, Eye, X, GitCompareArrows } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useUnit, useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
+import { useCompare } from '../context/CompareContext'
 
 const STATUS_CONFIG = {
   available: { es: 'Disponible', en: 'Available', color: 'var(--color-accent)',  bg: 'rgba(184,152,72,0.12)' },
@@ -59,6 +60,8 @@ export default function UnitDetailPage() {
   const unit         = useUnit(slug)
   const { project }  = useProject()
   const { lang, toggle } = useLang()
+
+  const { ids: compareIds, toggle: toggleCompare, isIn, canAdd } = useCompare()
 
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [galleryIdx,  setGalleryIdx]  = useState(0)
@@ -303,6 +306,37 @@ export default function UnitDetailPage() {
                     onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.18)'; e.currentTarget.style.color = 'rgba(244,241,234,0.35)' }}>
                     {lang === 'es' ? 'Recibir ficha' : 'Receive brochure'}
                   </button>
+                </div>
+
+                {/* Compare */}
+                <div className="flex gap-3 pt-1">
+                  <button
+                    onClick={() => toggleCompare(unit.id)}
+                    disabled={!isIn(unit.id) && !canAdd(unit.id)}
+                    data-cursor="hover"
+                    className="flex-1 label-luxury py-3 flex items-center justify-center gap-2 transition-all duration-300"
+                    style={{
+                      border: `1px solid ${isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.2)'}`,
+                      color: isIn(unit.id) ? 'var(--color-accent)' : 'rgba(244,241,234,0.4)',
+                      fontSize: '0.55rem',
+                      opacity: !isIn(unit.id) && !canAdd(unit.id) ? 0.35 : 1,
+                    }}
+                    onMouseEnter={e => { if (isIn(unit.id) || canAdd(unit.id)) e.currentTarget.style.borderColor = 'var(--color-accent)' }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.2)' }}>
+                    {isIn(unit.id)
+                      ? <><Check size={12} />{lang === 'es' ? 'En comparador' : 'In comparator'}</>
+                      : <><GitCompareArrows size={12} />{lang === 'es' ? 'Añadir al comparador' : 'Add to comparator'}</>
+                    }
+                  </button>
+                  {compareIds.length >= 2 && (
+                    <button onClick={() => navigate('/compare')} data-cursor="hover"
+                      className="label-luxury py-3 px-4 flex items-center justify-center gap-1.5 transition-all duration-300"
+                      style={{ border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(184,152,72,0.55)', fontSize: '0.52rem' }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'; e.currentTarget.style.color = 'rgba(184,152,72,0.55)' }}>
+                      {lang === 'es' ? `Ver comparador (${compareIds.length})` : `View comparator (${compareIds.length})`} →
+                    </button>
+                  )}
                 </div>
               </motion.div>
             </div>

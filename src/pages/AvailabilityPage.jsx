@@ -1,10 +1,11 @@
 import { useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, SlidersHorizontal, X, LayoutGrid, List } from 'lucide-react'
+import { ChevronLeft, SlidersHorizontal, X, LayoutGrid, List, Check } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
+import { useCompare } from '../context/CompareContext'
 
 const STATUS_CONFIG = {
   available: { es: 'Disponible', en: 'Available', color: 'var(--color-accent)',  bg: 'rgba(184,152,72,0.12)' },
@@ -39,6 +40,8 @@ export default function AvailabilityPage() {
   const navigate = useNavigate()
   const { project, units } = useProject()
   const { lang, toggle } = useLang()
+
+  const { ids: compareIds, toggle: toggleCompare, clear: clearCompare, isIn, canAdd } = useCompare()
 
   const [filters, setFilters]         = useState(DEFAULT_FILTERS)
   const [sortBy, setSortBy]           = useState('price_asc')
@@ -201,7 +204,7 @@ export default function AvailabilityPage() {
   // ── Table view ────────────────────────────────────────────────────────────────
   function TableView() {
     const cols = {
-      gridTemplateColumns: '90px 1fr 60px 60px 90px 100px 110px 44px',
+      gridTemplateColumns: '28px 90px 1fr 60px 60px 90px 100px 110px 44px',
       gap: '0 1rem',
     }
     return (
@@ -209,6 +212,7 @@ export default function AvailabilityPage() {
         {/* Column headers */}
         <div className="hidden sm:grid label-luxury px-4 pb-2"
           style={{ ...cols, fontSize: '0.48rem', color: 'rgba(184,152,72,0.45)', letterSpacing: '0.15em' }}>
+          <span /> {/* compare toggle column */}
           <span>{lang === 'es' ? 'VIVIENDA' : 'UNIT'}</span>
           <span>{lang === 'es' ? 'TIPOLOGÍA' : 'TYPE'}</span>
           <span>{lang === 'es' ? 'PLANTA' : 'FLOOR'}</span>
@@ -237,12 +241,30 @@ export default function AvailabilityPage() {
                 }}>
 
                 {/* Desktop row — clickable */}
-                <button
+                <div
+                  role="button" tabIndex={0}
                   className="hidden sm:grid w-full text-left items-center px-4 py-3 transition-colors duration-200 cursor-pointer"
                   style={{ ...cols, backgroundColor: isExpanded ? 'rgba(184,152,72,0.05)' : 'transparent' }}
                   onClick={() => setExpandedId(isExpanded ? null : unit.id)}
                   onMouseEnter={e => { if (!isExpanded) e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.03)' }}
                   onMouseLeave={e => { if (!isExpanded) e.currentTarget.style.backgroundColor = 'transparent' }}>
+                  {/* Compare toggle */}
+                  <button
+                    onClick={e => { e.stopPropagation(); toggleCompare(unit.id) }}
+                    data-cursor="hover"
+                    disabled={!isIn(unit.id) && !canAdd(unit.id)}
+                    className="flex items-center justify-center transition-all duration-200"
+                    style={{
+                      width: 20, height: 20, flexShrink: 0,
+                      border: `1px solid ${isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.25)'}`,
+                      backgroundColor: isIn(unit.id) ? 'rgba(184,152,72,0.12)' : 'transparent',
+                      opacity: !isIn(unit.id) && !canAdd(unit.id) ? 0.25 : 1,
+                    }}>
+                    {isIn(unit.id)
+                      ? <Check size={9} style={{ color: 'var(--color-accent)' }} />
+                      : <span style={{ fontSize: '0.65rem', color: 'rgba(184,152,72,0.5)', lineHeight: 1 }}>+</span>
+                    }
+                  </button>
                   <span className="display-heading text-text" style={{ fontSize: '0.82rem', letterSpacing: '0.06em' }}>
                     {unit.name}
                     {unit.featured && <span className="ml-1.5 label-luxury" style={{ fontSize: '0.38rem', color: 'var(--color-accent)', verticalAlign: 'middle' }}>★</span>}
@@ -264,14 +286,32 @@ export default function AvailabilityPage() {
                       ↓
                     </span>
                   </div>
-                </button>
+                </div>
 
                 {/* Mobile row — clickable */}
-                <button
-                  className="flex sm:hidden w-full items-center justify-between px-4 py-3 gap-3"
+                <div
+                  role="button" tabIndex={0}
+                  className="flex sm:hidden w-full items-center px-4 py-3 gap-2.5"
                   style={{ backgroundColor: isExpanded ? 'rgba(184,152,72,0.05)' : 'transparent' }}
                   onClick={() => setExpandedId(isExpanded ? null : unit.id)}>
-                  <div className="flex flex-col gap-0.5 min-w-0 text-left">
+                  {/* Compare toggle */}
+                  <button
+                    onClick={e => { e.stopPropagation(); toggleCompare(unit.id) }}
+                    data-cursor="hover"
+                    disabled={!isIn(unit.id) && !canAdd(unit.id)}
+                    className="flex items-center justify-center flex-shrink-0 transition-all duration-200"
+                    style={{
+                      width: 22, height: 22,
+                      border: `1px solid ${isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.25)'}`,
+                      backgroundColor: isIn(unit.id) ? 'rgba(184,152,72,0.12)' : 'transparent',
+                      opacity: !isIn(unit.id) && !canAdd(unit.id) ? 0.25 : 1,
+                    }}>
+                    {isIn(unit.id)
+                      ? <Check size={10} style={{ color: 'var(--color-accent)' }} />
+                      : <span style={{ fontSize: '0.7rem', color: 'rgba(184,152,72,0.5)', lineHeight: 1 }}>+</span>
+                    }
+                  </button>
+                  <div className="flex flex-col gap-0.5 min-w-0 text-left flex-1">
                     <span className="display-heading text-text" style={{ fontSize: '0.85rem' }}>{unit.name}</span>
                     <span className="label-luxury text-text/40" style={{ fontSize: '0.5rem' }}>
                       {unit.floor}ª · {unit.bedrooms}{lang === 'es' ? 'D' : 'B'} · {unit.surface} m²
@@ -287,7 +327,7 @@ export default function AvailabilityPage() {
                     </span>
                     <span className="label-luxury" style={{ fontSize: '0.55rem', color: 'rgba(184,152,72,0.4)', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block', transition: 'transform 0.2s' }}>↓</span>
                   </div>
-                </button>
+                </div>
 
                 {/* Expanded card panel */}
                 <AnimatePresence initial={false}>
@@ -442,6 +482,24 @@ export default function AvailabilityPage() {
                       </div>
                     ))}
                   </div>
+                  {/* Compare toggle */}
+                  <button
+                    onClick={e => { e.stopPropagation(); toggleCompare(unit.id) }}
+                    disabled={!isIn(unit.id) && !canAdd(unit.id)}
+                    data-cursor="hover"
+                    className="self-start flex items-center gap-1.5 label-luxury px-2.5 py-1.5 transition-all duration-200"
+                    style={{
+                      border: `1px solid ${isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.2)'}`,
+                      color: isIn(unit.id) ? 'var(--color-accent)' : 'rgba(244,241,234,0.4)',
+                      fontSize: '0.44rem',
+                      opacity: !isIn(unit.id) && !canAdd(unit.id) ? 0.3 : 1,
+                    }}>
+                    {isIn(unit.id) && <Check size={9} style={{ color: 'var(--color-accent)' }} />}
+                    {isIn(unit.id)
+                      ? (lang === 'es' ? 'En comparador' : 'In comparator')
+                      : (lang === 'es' ? '+ Comparar' : '+ Compare')
+                    }
+                  </button>
                   <div className="flex items-center justify-between pt-2" style={{ borderTop: '1px solid rgba(184,152,72,0.1)' }}>
                     <p className="display-heading"
                       style={{ fontSize: '0.9rem', letterSpacing: '0.04em', color: unit.status === 'sold' ? 'rgba(244,241,234,0.2)' : 'var(--color-accent)' }}>
@@ -624,6 +682,38 @@ export default function AvailabilityPage() {
             </div>
           )}
         </div>
+
+        {/* ── Compare floating bar ── */}
+        <AnimatePresence>
+          {compareIds.length >= 2 && (
+            <motion.div
+              initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 60, opacity: 0 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+              className="flex-shrink-0 flex items-center justify-between gap-4 px-6 sm:px-10 py-3"
+              style={{ borderTop: '1px solid rgba(184,152,72,0.3)', backgroundColor: 'rgba(13,17,23,0.97)', backdropFilter: 'blur(12px)' }}>
+              <span className="label-luxury" style={{ fontSize: '0.5rem', color: 'rgba(184,152,72,0.6)' }}>
+                {compareIds.length} {lang === 'es' ? 'unidades en comparador' : 'units in comparator'}
+              </span>
+              <div className="flex items-center gap-3">
+                <button onClick={clearCompare} data-cursor="hover"
+                  className="flex items-center gap-1.5 label-luxury transition-colors duration-200"
+                  style={{ fontSize: '0.5rem', color: 'rgba(184,152,72,0.45)' }}
+                  onMouseEnter={e => e.currentTarget.style.color = 'rgba(244,241,234,0.6)'}
+                  onMouseLeave={e => e.currentTarget.style.color = 'rgba(184,152,72,0.45)'}>
+                  <X size={10} />
+                  {lang === 'es' ? 'Limpiar' : 'Clear'}
+                </button>
+                <button onClick={() => navigate('/compare')} data-cursor="hover"
+                  className="label-luxury px-5 py-2.5 flex items-center gap-2 transition-opacity duration-200"
+                  style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.55rem', letterSpacing: '0.15em' }}
+                  onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
+                  onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+                  {lang === 'es' ? `COMPARAR (${compareIds.length}) →` : `COMPARE (${compareIds.length}) →`}
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </PageTransition>
   )

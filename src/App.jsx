@@ -7,6 +7,7 @@ import AvailabilityPage  from './pages/AvailabilityPage'
 import UnitDetailPage    from './pages/UnitDetailPage'
 import ImmersionPage     from './pages/ImmersionPage'
 import DecisionPage      from './pages/DecisionPage'
+import ComparePage       from './pages/ComparePage'
 
 export default function App() {
   const location = useLocation()
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/availability/:slug"      element={<UnitDetailPage />} />
           <Route path="/inmersion/:unitId"       element={<ImmersionPage />} />
           <Route path="/decision"                element={<DecisionPage />} />
+          <Route path="/compare"                 element={<ComparePage />} />
           <Route path="/seleccion"               element={<Navigate to="/availability" replace />} />
         </Routes>
       </AnimatePresence>
