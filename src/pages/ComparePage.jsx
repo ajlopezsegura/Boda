@@ -266,8 +266,13 @@ export default function ComparePage() {
                       {unit.status !== 'sold' && (
                         <button
                           onClick={() => {
-                            localStorage.setItem('tvbs_selection', JSON.stringify({ unitId: unit.id, materials: {} }))
-                            navigate('/decision')
+                            localStorage.setItem('tvbs_lead_context', JSON.stringify({
+                              source: 'comparator',
+                              back_path: '/compare',
+                              unit_ids: units.map(u => u.id),
+                              primary_unit_id: unit.id,
+                            }))
+                            navigate('/contact')
                           }}
                           data-cursor="hover"
                           className="w-full label-luxury py-3 flex items-center justify-center gap-1.5 transition-opacity duration-200"

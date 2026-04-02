@@ -265,8 +265,13 @@ export default function UnitDetailPage() {
                 {canAct ? (
                   <button
                     onClick={() => {
-                      localStorage.setItem('tvbs_selection', JSON.stringify({ unitId: unit.id, materials: {} }))
-                      navigate('/decision')
+                      localStorage.setItem('tvbs_lead_context', JSON.stringify({
+                        source: 'unit_detail',
+                        back_path: `/availability/${unit.slug}`,
+                        unit_ids: [unit.id],
+                        primary_unit_id: unit.id,
+                      }))
+                      navigate('/contact')
                     }}
                     data-cursor="hover"
                     className="w-full label-luxury py-4 flex items-center justify-center gap-2 transition-opacity duration-200"
