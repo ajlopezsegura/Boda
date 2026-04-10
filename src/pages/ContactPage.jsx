@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, Check, Car, Package } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
@@ -78,6 +78,7 @@ export default function ContactPage() {
   // ── Form state ────────────────────────────────────────────────────────────────
   const [intent,     setIntent]     = useState('info')
   const [fields,     setFields]     = useState({ name: '', email: '', phone: '', message: '', preferred_date: '' })
+  const [consent,    setConsent]    = useState(false)
   const [errors,     setErrors]     = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [submitted,  setSubmitted]  = useState(false)
@@ -98,6 +99,7 @@ export default function ContactPage() {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email)) errs.email = t('Email no válido', 'Invalid email')
     if (!fields.phone.trim()) errs.phone = t('Campo obligatorio', 'Required field')
     else if (fields.phone.replace(/\D/g, '').length < 7) errs.phone = t('Teléfono no válido', 'Invalid phone number')
+    if (!consent) errs.consent = t('Debes aceptar la política de privacidad', 'You must accept the privacy policy')
     return errs
   }
 
@@ -473,6 +475,40 @@ export default function ContactPage() {
                             transition: 'border-color 0.2s',
                           }} />
                       </Field>
+
+                      {/* Consent checkbox */}
+                      <div className="flex flex-col gap-1.5">
+                        <label className="flex items-start gap-3 cursor-pointer" style={{ userSelect: 'none' }}>
+                          <input
+                            type="checkbox"
+                            checked={consent}
+                            onChange={e => {
+                              setConsent(e.target.checked)
+                              if (errors.consent) setErrors(er => ({ ...er, consent: null }))
+                            }}
+                            style={{
+                              flexShrink: 0,
+                              marginTop: 2,
+                              width: 14,
+                              height: 14,
+                              accentColor: 'var(--color-accent)',
+                              cursor: 'pointer',
+                            }}
+                          />
+                          <span className="font-sans font-light"
+                            style={{ fontSize: '0.72rem', color: 'rgba(244,241,234,0.45)', lineHeight: 1.6 }}>
+                            {lang === 'es'
+                              ? <>He leído y acepto la{' '}<Link to="/privacy" className="underline" style={{ color: 'rgba(184,152,72,0.7)' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(184,152,72,0.7)'}>política de privacidad</Link></>
+                              : <>I have read and accept the{' '}<Link to="/privacy" className="underline" style={{ color: 'rgba(184,152,72,0.7)' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(184,152,72,0.7)'}>privacy policy</Link></>
+                            }
+                          </span>
+                        </label>
+                        {errors.consent && (
+                          <span style={{ fontSize: '0.44rem', color: 'rgba(220,70,70,0.75)', fontFamily: 'inherit' }}>
+                            {errors.consent}
+                          </span>
+                        )}
+                      </div>
 
                       {/* Mobile commercial note */}
                       <p className="label-luxury lg:hidden"

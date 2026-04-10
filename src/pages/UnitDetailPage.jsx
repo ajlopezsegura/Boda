@@ -304,7 +304,7 @@ export default function UnitDetailPage() {
                       {lang === 'es' ? 'Experiencia inmersiva' : 'Immersive experience'}
                     </button>
                   )}
-                  <button data-cursor="hover"
+                  <button onClick={() => navigate(`/summary/${unit.slug}`)} data-cursor="hover"
                     className="flex-1 label-luxury py-3 flex items-center justify-center gap-2 transition-all duration-300"
                     style={{ border: '1px solid rgba(184,152,72,0.18)', color: 'rgba(244,241,234,0.35)', fontSize: '0.55rem' }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.4)'; e.currentTarget.style.color = 'var(--color-text)' }}
