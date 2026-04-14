@@ -285,13 +285,14 @@ function LoginScreen({ onLogin }) {
 
 /* ─── Admin panel ─────────────────────────────────────────── */
 export default function AdminPage() {
-  const [authed,  setAuthed]  = useState(() => localStorage.getItem('tvbs_admin') === ADMIN_PASSWORD)
-  const [tab,     setTab]     = useState('units')   // 'units' | 'leads'
-  const [units,   setUnits]   = useState([])
-  const [leads,   setLeads]   = useState([])
-  const [loading, setLoading] = useState(true)
-  const [saving,  setSaving]  = useState(null)
-  const [toast,   setToast]   = useState(null)
+  const [authed,    setAuthed]    = useState(() => localStorage.getItem('tvbs_admin') === ADMIN_PASSWORD)
+  const [tab,       setTab]       = useState('units')
+  const [units,     setUnits]     = useState([])
+  const [leads,     setLeads]     = useState([])
+  const [sessions,  setSessions]  = useState([])
+  const [loading,   setLoading]   = useState(true)
+  const [saving,    setSaving]    = useState(null)
+  const [toast,     setToast]     = useState(null)
 
   function handleLogin()  { localStorage.setItem('tvbs_admin', ADMIN_PASSWORD); setAuthed(true) }
   function handleLogout() { localStorage.removeItem('tvbs_admin'); setAuthed(false) }
@@ -301,9 +302,11 @@ export default function AdminPage() {
     Promise.all([
       supabase.from('units').select('id,typology,floor,bedrooms,surface,price,status').eq('project_slug', PROJECT_SLUG).order('id'),
       supabase.from('leads').select('*').eq('project_slug', PROJECT_SLUG).order('created_at', { ascending: false }),
-    ]).then(([{ data: u }, { data: l }]) => {
+      supabase.from('page_sessions').select('*').eq('project_slug', PROJECT_SLUG).order('updated_at', { ascending: false }).limit(200),
+    ]).then(([{ data: u }, { data: l }, { data: s }]) => {
       if (u) setUnits(u)
       if (l) setLeads(l)
+      if (s) setSessions(s)
       setLoading(false)
     })
   }, [authed])
@@ -370,8 +373,9 @@ export default function AdminPage() {
       {/* Tabs */}
       <div style={{ display: 'flex', padding: '0 40px', borderBottom: '1px solid rgba(184,152,72,0.1)' }}>
         {[
-          { key: 'units', label: 'DISPONIBILIDAD', count: units.length },
-          { key: 'leads', label: 'LEADS', count: leads.length, hot: hotLeads.length },
+          { key: 'units',    label: 'DISPONIBILIDAD', count: units.length },
+          { key: 'leads',    label: 'LEADS',          count: leads.length, hot: hotLeads.length },
+          { key: 'activity', label: 'ACTIVIDAD',      count: sessions.filter(s => !s.converted).length },
         ].map(t => (
           <button key={t.key} onClick={() => setTab(t.key)} style={{
             padding: '16px 0', marginRight: 32, background: 'none', border: 'none',
@@ -488,6 +492,133 @@ export default function AdminPage() {
           )}
         </div>
       )}
+
+      {/* ── ACTIVIDAD TAB ── */}
+      {tab === 'activity' && (() => {
+        const anon       = sessions.filter(s => !s.converted)
+        const today      = new Date().toDateString()
+        const todaySess  = sessions.filter(s => new Date(s.updated_at).toDateString() === today)
+        const converted  = sessions.filter(s => s.converted).length
+        const convRate   = sessions.length > 0 ? Math.round((converted / sessions.length) * 100) : 0
+
+        return (
+          <div style={{ padding: '24px 40px 0' }}>
+            {/* Stats */}
+            <div style={{ display: 'flex', gap: 16, marginBottom: 28 }}>
+              {[
+                { label: 'TOTAL VISITAS',  value: sessions.length },
+                { label: 'HOY',            value: todaySess.length },
+                { label: 'CONVERSIÓN',     value: convRate + '%' },
+                { label: 'SIN CONTACTO',   value: anon.length },
+              ].map(s => (
+                <div key={s.label} style={{
+                  padding: '14px 20px', border: '1px solid rgba(184,152,72,0.1)',
+                  background: 'rgba(184,152,72,0.02)', minWidth: 100,
+                }}>
+                  <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.4)', marginBottom: 6 }}>{s.label}</div>
+                  <div style={{ fontSize: '1.4rem', color: 'var(--color-accent)', fontWeight: 300 }}>{s.value}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Column headers */}
+            {anon.length > 0 && (
+              <div style={{
+                display: 'grid', gridTemplateColumns: '1fr 80px 80px 100px 32px',
+                gap: 16, padding: '0 16px 10px',
+                borderBottom: '1px solid rgba(184,152,72,0.12)',
+                fontSize: '0.42rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.4)',
+              }}>
+                <span>RECORRIDO</span><span>PÁGINAS</span><span>TIEMPO</span><span>ÚLTIMA VEZ</span><span></span>
+              </div>
+            )}
+
+            {anon.length === 0 ? (
+              <div style={{ padding: '60px 0', textAlign: 'center', color: 'rgba(244,241,234,0.2)', fontSize: '0.6rem', letterSpacing: '0.1em' }}>
+                AÚN NO HAY ACTIVIDAD ANÓNIMA
+              </div>
+            ) : (
+              <div style={{ paddingTop: 8 }}>
+                {anon.map((sess, i) => {
+                  const trail    = Array.isArray(sess.trail) ? sess.trail : []
+                  const views    = trail.filter(e => e.type === 'page_view')
+                  const totalMs  = views.reduce((acc, e) => acc + (e.duration_ms ?? 0), 0)
+                  const hasUnit  = views.some(e => e.page?.startsWith('/availability/'))
+                  const hasImm   = views.some(e => e.page?.startsWith('/inmersion/'))
+                  const hasCmp   = views.some(e => e.page === '/compare')
+                  const hasDec   = views.some(e => e.page === '/decision')
+                  const [expSess, setExpSess] = useState(false)
+
+                  return (
+                    <motion.div key={sess.id}
+                      initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.03 }}
+                      style={{ border: '1px solid rgba(184,152,72,0.07)', marginBottom: 6, background: 'rgba(184,152,72,0.01)' }}>
+                      <div style={{
+                        display: 'grid', gridTemplateColumns: '1fr 80px 80px 100px 32px',
+                        gap: 16, padding: '12px 16px', alignItems: 'center',
+                        cursor: views.length > 0 ? 'pointer' : 'default',
+                      }} onClick={() => views.length > 0 && setExpSess(e => !e)}>
+                        {/* Milestones */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                          {[
+                            { show: hasUnit, label: 'VIVIENDA' },
+                            { show: hasCmp,  label: 'COMPARÓ' },
+                            { show: hasImm,  label: 'INMERSIÓN' },
+                            { show: hasDec,  label: 'DECISIÓN' },
+                          ].filter(m => m.show).map(m => (
+                            <span key={m.label} style={{
+                              padding: '2px 7px', fontSize: '0.4rem', letterSpacing: '0.1em',
+                              border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(184,152,72,0.7)',
+                            }}>{m.label}</span>
+                          ))}
+                          {!hasUnit && !hasCmp && !hasImm && (
+                            <span style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.25)' }}>Solo exploró</span>
+                          )}
+                        </div>
+                        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{views.length}</span>
+                        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{formatDuration(totalMs) ?? '—'}</span>
+                        <span style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.3)' }}>
+                          {formatDate(sess.updated_at).split(' · ')[0]}
+                        </span>
+                        <ChevronRight size={12} style={{
+                          color: 'rgba(184,152,72,0.4)',
+                          transform: expSess ? 'rotate(90deg)' : 'rotate(0)',
+                          transition: 'transform 0.2s',
+                        }} />
+                      </div>
+                      <AnimatePresence>
+                        {expSess && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}
+                            style={{ overflow: 'hidden' }}>
+                            <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid rgba(184,152,72,0.07)' }}>
+                              <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.4)', margin: '10px 0 8px' }}>
+                                RECORRIDO
+                              </div>
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                                {views.map((ev, j) => (
+                                  <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                    <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(184,152,72,0.35)', flexShrink: 0 }} />
+                                    <span style={{ fontSize: '0.52rem', color: 'rgba(244,241,234,0.5)' }}>{pageLabel(ev.page)}</span>
+                                    {formatDuration(ev.duration_ms) && (
+                                      <span style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.45)' }}>{formatDuration(ev.duration_ms)}</span>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )
+      })()}
 
       {/* Toast */}
       <AnimatePresence>

@@ -65,7 +65,7 @@ export default function ContactPage() {
   const navigate            = useNavigate()
   const { units: allUnits } = useProject()
   const { lang, toggle }    = useLang()
-  const { sessionId, trail } = useSession()
+  const { sessionId, trail, markConverted } = useSession()
 
   // ── Read context ──────────────────────────────────────────────────────────────
   const ctx = useMemo(() => {
@@ -150,6 +150,7 @@ export default function ContactPage() {
     try {
       const { error } = await supabase.from('leads').insert(payload)
       if (error) console.error('[TVBS] Lead insert error:', error.message)
+      else markConverted()
     } catch (err) {
       console.warn('[TVBS] Could not save lead to Supabase:', err.message)
     }
