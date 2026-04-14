@@ -52,7 +52,7 @@ export default function CoverPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.0, delay: 0.3, ease: [0.43, 0.13, 0.23, 0.96] }}
             className="label-luxury mb-8 sm:mb-12"
-            style={{ color: 'rgba(184,152,72,0.85)', fontSize: '0.58rem', letterSpacing: '0.28em' }}
+            style={{ color: 'var(--color-accent)', fontSize: '0.6rem', letterSpacing: '0.28em' }}
           >
             THE VISUALS BOUTIQUE·STUDIO
           </motion.p>
@@ -83,19 +83,17 @@ export default function CoverPage() {
             style={{ backgroundColor: 'var(--color-accent)' }}
           />
 
-          {/* Tagline — the meaningful line */}
+          {/* Tagline — product descriptor */}
           {tagline && (
             <motion.p
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 1.5 }}
-              className="font-sans font-light"
+              className="label-luxury"
               style={{
-                fontSize: 'clamp(0.82rem, 2vw, 1rem)',
-                lineHeight: 1.55,
-                color: 'rgba(244,241,234,0.88)',
-                maxWidth: '38ch',
-                letterSpacing: '0.01em',
+                fontSize: '0.62rem',
+                letterSpacing: '0.2em',
+                color: 'rgba(244,241,234,0.82)',
               }}
             >
               {tagline}
