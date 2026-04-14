@@ -27,6 +27,8 @@ export function ProjectProvider({ children }) {
           name:          projectRow.name,
           nameEN:        projectRow.name_en,
           subtitle:      projectRow.subtitle,
+          tagline:       projectRow.tagline    ?? null,
+          taglineEN:     projectRow.tagline_en ?? null,
           architect:     projectRow.architect,
           description:   projectRow.description,
           descriptionEN: projectRow.description_en,
