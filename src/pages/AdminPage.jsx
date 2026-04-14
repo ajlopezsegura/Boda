@@ -241,6 +241,8 @@ function ActivityCard({ sess, index }) {
   const hasImm  = views.some(e => e.page?.startsWith('/inmersion/'))
   const hasCmp  = views.some(e => e.page === '/compare') || trail.some(e => e.type === 'compare_add')
   const hasDec  = views.some(e => e.page === '/decision')
+  const hasAmen = trail.some(e => e.type === 'amenity_open')
+  const hasEnto = trail.some(e => e.type === 'section_view' && e.section === 'entorno')
   const device  = trail.find(e => e.type === 'device_info')?.device ?? 'desktop'
   const DeviceIcon = device === 'mobile' ? Smartphone : device === 'tablet' ? Tablet : Monitor
 
@@ -262,13 +264,15 @@ function ActivityCard({ sess, index }) {
             { show: hasCmp,  label: 'COMPARÓ' },
             { show: hasImm,  label: 'INMERSIÓN' },
             { show: hasDec,  label: 'DECISIÓN' },
+            { show: hasAmen, label: 'AMENITIES' },
+            { show: hasEnto, label: 'ENTORNO' },
           ].filter(m => m.show).map(m => (
             <span key={m.label} style={{
               padding: '2px 7px', fontSize: '0.4rem', letterSpacing: '0.1em',
               border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(184,152,72,0.7)',
             }}>{m.label}</span>
           ))}
-          {!hasUnit && !hasCmp && !hasImm && !hasDec && (
+          {!hasUnit && !hasCmp && !hasImm && !hasDec && !hasAmen && !hasEnto && (
             <span style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.25)' }}>Solo exploró</span>
           )}
         </div>
@@ -301,15 +305,33 @@ function ActivityCard({ sess, index }) {
                 RECORRIDO
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                {views.map((ev, j) => (
-                  <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(184,152,72,0.35)', flexShrink: 0 }} />
-                    <span style={{ fontSize: '0.52rem', color: 'rgba(244,241,234,0.5)' }}>{pageLabel(ev.page)}</span>
-                    {formatDuration(ev.duration_ms) && (
-                      <span style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.45)' }}>{formatDuration(ev.duration_ms)}</span>
-                    )}
-                  </div>
-                ))}
+                {trail.filter(ev => ['page_view','section_view','amenity_open','compare_add'].includes(ev.type)).map((ev, j) => {
+                  let dot = 'rgba(184,152,72,0.35)'
+                  let label = ''
+                  let extra = null
+                  if (ev.type === 'page_view') {
+                    label = pageLabel(ev.page)
+                    extra = formatDuration(ev.duration_ms)
+                  } else if (ev.type === 'section_view') {
+                    const names = { obra: 'Sección: OBRA', entorno: 'Sección: ENTORNO', amenities: 'Sección: AMENITIES',
+                                    build: 'Section: BUILD', location: 'Section: LOCATION' }
+                    label = names[ev.section] ?? `Sección: ${ev.section}`
+                    dot = 'rgba(184,152,72,0.55)'
+                  } else if (ev.type === 'amenity_open') {
+                    label = `Vio: ${(ev.label ?? ev.id ?? '').toUpperCase()}`
+                    dot = 'rgba(184,152,72,0.6)'
+                  } else if (ev.type === 'compare_add') {
+                    label = `Comparador: ${ev.unit_id ?? ''}`
+                    dot = 'rgba(244,241,234,0.3)'
+                  }
+                  return (
+                    <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: '50%', background: dot, flexShrink: 0 }} />
+                      <span style={{ fontSize: '0.52rem', color: 'rgba(244,241,234,0.5)' }}>{label}</span>
+                      {extra && <span style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.45)' }}>{extra}</span>}
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </motion.div>

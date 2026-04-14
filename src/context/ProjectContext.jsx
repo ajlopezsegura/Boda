@@ -37,9 +37,11 @@ export function ProjectProvider({ children }) {
           gallery:       projectRow.gallery ?? [],
           floorPlan:     projectRow.floor_plan ?? null,
         },
-        building:  projectRow.building_data ?? {},
-        amenities: projectRow.amenities      ?? [],
-        materials: projectRow.materials      ?? {},
+        building:      projectRow.building_data    ?? {},
+        amenities:     projectRow.amenities       ?? [],
+        materials:     projectRow.materials       ?? {},
+        construction:  projectRow.construction_data ?? null,
+        nearby:        projectRow.nearby          ?? [],
         units:     unitRows                  ?? [],
       })
       setError(null)

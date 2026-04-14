@@ -48,6 +48,22 @@
     "location": "Marbella, España",
     "completion": "Q4 2026"
   },
+  "construction": {
+    "status": "En construcción",
+    "statusEN": "Under Construction",
+    "phase": "Fase 1 · Cimentación y estructura",
+    "phaseEN": "Phase 1 · Foundation & structure",
+    "completion": 35,
+    "delivery": "Q4 2026"
+  },
+  "nearby": [
+    { "id": "beach",       "icon": "Waves",       "es": "Playa",             "en": "Beach",            "dist": "50 m"   },
+    { "id": "puerto",      "icon": "Anchor",       "es": "Puerto Banús",      "en": "Puerto Banús",     "dist": "3 km"   },
+    { "id": "golf",        "icon": "Flag",         "es": "Campo de golf",     "en": "Golf course",      "dist": "1.2 km" },
+    { "id": "shopping",    "icon": "ShoppingBag",  "es": "Centro comercial",  "en": "Shopping centre",  "dist": "1.5 km" },
+    { "id": "airport",     "icon": "Plane",        "es": "Aeropuerto Málaga", "en": "Málaga Airport",   "dist": "45 min" },
+    { "id": "restaurants", "icon": "Utensils",     "es": "Restaurantes",      "en": "Restaurants",      "dist": "200 m"  }
+  ],
   "amenities": [
     {
       "id": "pool",
