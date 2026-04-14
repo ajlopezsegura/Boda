@@ -105,32 +105,55 @@ CREATE TRIGGER trigger_projects_updated_at
 
 -- ── Row Level Security ────────────────────────────────────────
 
-ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
-ALTER TABLE units    ENABLE ROW LEVEL SECURITY;
-ALTER TABLE leads    ENABLE ROW LEVEL SECURITY;
+-- ── Tabla de sesiones anónimas ────────────────────────────────
 
-DROP POLICY IF EXISTS "projects_public_select" ON projects;
-DROP POLICY IF EXISTS "projects_auth_update"   ON projects;
-DROP POLICY IF EXISTS "units_public_select"    ON units;
-DROP POLICY IF EXISTS "units_auth_update"      ON units;
-DROP POLICY IF EXISTS "leads_public_insert"    ON leads;
-DROP POLICY IF EXISTS "leads_auth_select"      ON leads;
-DROP POLICY IF EXISTS "leads_auth_update"      ON leads;
+CREATE TABLE IF NOT EXISTS page_sessions (
+  id           UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  session_id   TEXT UNIQUE NOT NULL,
+  project_slug TEXT,
+  trail        JSONB DEFAULT '[]',
+  pages_count  INTEGER DEFAULT 0,
+  converted    BOOLEAN DEFAULT FALSE,
+  started_at   TIMESTAMPTZ DEFAULT NOW(),
+  updated_at   TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ── Row Level Security ────────────────────────────────────────
+
+ALTER TABLE projects      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE units         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE leads         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE page_sessions ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "projects_public_select"  ON projects;
+DROP POLICY IF EXISTS "projects_auth_update"    ON projects;
+DROP POLICY IF EXISTS "units_public_select"     ON units;
+DROP POLICY IF EXISTS "units_auth_update"       ON units;
+DROP POLICY IF EXISTS "admin_update_units"      ON units;
+DROP POLICY IF EXISTS "leads_public_insert"     ON leads;
+DROP POLICY IF EXISTS "leads_auth_select"       ON leads;
+DROP POLICY IF EXISTS "leads_auth_update"       ON leads;
+DROP POLICY IF EXISTS "admin_select_leads"      ON leads;
+DROP POLICY IF EXISTS "sessions_public_all"     ON page_sessions;
 
 -- La app puede leer proyectos y unidades sin autenticación
 CREATE POLICY "projects_public_select" ON projects FOR SELECT USING (true);
 CREATE POLICY "units_public_select"    ON units    FOR SELECT USING (true);
 
--- El dashboard (autenticado) puede editar
-CREATE POLICY "projects_auth_update" ON projects FOR UPDATE USING (auth.role() = 'authenticated');
-CREATE POLICY "units_auth_update"    ON units    FOR UPDATE USING (auth.role() = 'authenticated');
+-- El panel admin (clave pública) puede actualizar estados de unidades
+CREATE POLICY "admin_update_units" ON units
+  FOR UPDATE USING (true)
+  WITH CHECK (status IN ('available', 'reserved', 'sold'));
 
 -- Cualquiera puede enviar un lead (formulario de contacto)
 CREATE POLICY "leads_public_insert" ON leads FOR INSERT WITH CHECK (true);
 
--- Solo el dashboard (autenticado) puede leer y gestionar leads
-CREATE POLICY "leads_auth_select" ON leads FOR SELECT USING (auth.role() = 'authenticated');
-CREATE POLICY "leads_auth_update" ON leads FOR UPDATE USING (auth.role() = 'authenticated');
+-- El panel admin (clave pública) puede leer leads
+CREATE POLICY "admin_select_leads" ON leads FOR SELECT USING (true);
+
+-- Sesiones anónimas: lectura y escritura pública (solo analytics)
+CREATE POLICY "sessions_public_all" ON page_sessions
+  FOR ALL USING (true) WITH CHECK (true);
 
 -- ── Seed: Proyecto ────────────────────────────────────────────
 
