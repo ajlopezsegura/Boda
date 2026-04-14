@@ -241,7 +241,7 @@ function ObraTab({ construction, lang }) {
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function ContextPage() {
   const navigate  = useNavigate()
-  const { project, building, amenities, construction, nearby, exteriorImages } = useProject()
+  const { project, building, amenities, construction, nearby } = useProject()
   const { lang, toggle } = useLang()
   const { trackEvent } = useSession()
 
@@ -251,7 +251,7 @@ export default function ContextPage() {
 
   const name        = lang === 'es' ? project.name        : project.nameEN
   const description = lang === 'es' ? project.description : project.descriptionEN
-  const defaultImages = (exteriorImages?.length > 0) ? exteriorImages : (project.gallery ?? [project.aerialImage])
+  const defaultImages = (project.exteriorImages?.length > 0) ? project.exteriorImages : (project.gallery ?? [project.aerialImage])
 
   // Left panel shows selected item images or exterior-only default
   const displayImages  = (selectedItem?.item?.images?.length > 0) ? selectedItem.item.images : defaultImages
