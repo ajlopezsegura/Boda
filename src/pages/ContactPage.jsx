@@ -53,7 +53,7 @@ function Field({ label, error, children }) {
 
 export default function ContactPage() {
   const navigate            = useNavigate()
-  const { units: allUnits } = useProject()
+  const { units: allUnits, project } = useProject()
   const { lang, toggle }    = useLang()
   const { sessionId, trail, markConverted } = useSession()
 
@@ -148,10 +148,11 @@ export default function ContactPage() {
   const backPath = ctx?.back_path ?? '/availability'
 
   // WhatsApp message pre-filled
+  const projectName = lang === 'es' ? project?.name : (project?.nameEN ?? project?.name)
   const waText = encodeURIComponent(
     lang === 'es'
-      ? 'Hola, me gustaría obtener más información sobre Las Conchas.'
-      : 'Hello, I would like to get more information about Las Conchas.'
+      ? `Hola, me gustaría obtener más información sobre ${projectName}.`
+      : `Hello, I would like to get more information about ${projectName}.`
   )
   const waUrl = `https://wa.me/${WA_NUMBER}?text=${waText}`
 
