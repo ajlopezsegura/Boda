@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import LuxuryCursor      from './components/cursor/LuxuryCursor'
 import CoverPage         from './pages/CoverPage'
 import ContextPage       from './pages/ContextPage'
@@ -11,9 +11,29 @@ import ComparePage       from './pages/ComparePage'
 import ContactPage       from './pages/ContactPage'
 import SummaryPage       from './pages/SummaryPage'
 import PrivacyPage       from './pages/PrivacyPage'
+import { useProject }    from './context/ProjectContext'
 
 export default function App() {
-  const location = useLocation()
+  const location        = useLocation()
+  const { loading }     = useProject()
+
+  if (loading) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="fixed inset-0 flex items-center justify-center"
+        style={{ backgroundColor: 'var(--color-bg)' }}>
+        <div className="flex flex-col items-center gap-4">
+          <div style={{
+            width: 32, height: 32, border: '1px solid rgba(184,152,72,0.3)',
+            borderTopColor: 'var(--color-accent)', borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+          }} />
+          <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+        </div>
+      </motion.div>
+    )
+  }
 
   return (
     <>
