@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Check, Car, Package, Eye, X, GitCompareArrows } from 'lucide-react'
+import { ChevronLeft, Check, Car, Package, Eye, X, GitCompareArrows, Share2 } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useUnit, useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { useCompare } from '../context/CompareContext'
+import { shareOrCopy, shareBase } from '../lib/share'
 
 const STATUS_CONFIG = {
   available: { es: 'Disponible', en: 'Available', color: 'var(--color-accent)',  bg: 'rgba(184,152,72,0.12)' },
@@ -65,6 +66,16 @@ export default function UnitDetailPage() {
 
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [galleryIdx,  setGalleryIdx]  = useState(0)
+  const [shareDone,   setShareDone]   = useState(false)
+
+  async function handleShare() {
+    const url = `${shareBase()}#/availability/${unit.slug}`
+    const result = await shareOrCopy(url, `${unit.name} · ${project?.name ?? ''}`)
+    if (result === 'copied' || result === 'shared') {
+      setShareDone(true)
+      setTimeout(() => setShareDone(false), 2000)
+    }
+  }
 
   const openGallery = (i = 0) => { setGalleryIdx(i); setGalleryOpen(true) }
 
@@ -123,12 +134,22 @@ export default function UnitDetailPage() {
           <span className="label-luxury text-text/40 hidden sm:block" style={{ fontSize: '0.55rem' }}>
             {projectName?.toUpperCase()} · {unit.name}
           </span>
-          <button onClick={toggle} data-cursor="hover"
-            className="flex items-center gap-2 label-luxury" style={{ fontSize: '0.6rem' }}>
-            <span style={{ color: lang === 'es' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>ES</span>
-            <span style={{ color: 'var(--color-accent)' }}>|</span>
-            <span style={{ color: lang === 'en' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>EN</span>
-          </button>
+          <div className="flex items-center gap-4">
+            <button onClick={handleShare} data-cursor="hover"
+              className="flex items-center gap-1.5 label-luxury transition-colors duration-300"
+              style={{ fontSize: '0.55rem', color: shareDone ? 'var(--color-accent)' : 'rgba(244,241,234,0.45)' }}
+              onMouseEnter={e => !shareDone && (e.currentTarget.style.color = 'var(--color-accent)')}
+              onMouseLeave={e => !shareDone && (e.currentTarget.style.color = 'rgba(244,241,234,0.45)')}>
+              {shareDone ? <Check size={12} /> : <Share2 size={12} />}
+              {shareDone ? (lang === 'es' ? 'Copiado' : 'Copied') : (lang === 'es' ? 'Compartir' : 'Share')}
+            </button>
+            <button onClick={toggle} data-cursor="hover"
+              className="flex items-center gap-2 label-luxury" style={{ fontSize: '0.6rem' }}>
+              <span style={{ color: lang === 'es' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>ES</span>
+              <span style={{ color: 'var(--color-accent)' }}>|</span>
+              <span style={{ color: lang === 'en' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>EN</span>
+            </button>
+          </div>
         </div>
 
         {/* ── Scrollable body ── */}

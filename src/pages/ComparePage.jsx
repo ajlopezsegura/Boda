@@ -1,10 +1,12 @@
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ChevronLeft, X, Check, ArrowRight } from 'lucide-react'
+import { ChevronLeft, X, Check, ArrowRight, Share2 } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useCompare } from '../context/CompareContext'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
+import { shareOrCopy, shareBase } from '../lib/share'
 
 const STATUS_CONFIG = {
   available: { es: 'Disponible', en: 'Available', color: 'var(--color-accent)',  bg: 'rgba(184,152,72,0.12)' },
@@ -67,9 +69,30 @@ function getBestSet(row, units) {
 
 export default function ComparePage() {
   const navigate              = useNavigate()
-  const { ids, remove, clear } = useCompare()
+  const { ids, toggle: toggleCompare, remove, clear } = useCompare()
   const { units: allUnits }   = useProject()
   const { lang, toggle }      = useLang()
+  const [searchParams]        = useSearchParams()
+  const [shareDone,  setShareDone]  = useState(false)
+
+  /* Restore compare state from shared URL: #/compare?units=1a,2b,3a */
+  useEffect(() => {
+    const param = searchParams.get('units')
+    if (!param || !allUnits) return
+    param.split(',').forEach(id => {
+      if (!ids.includes(id) && allUnits.find(u => u.id === id)) toggleCompare(id)
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allUnits])
+
+  async function handleShare() {
+    const url = `${shareBase()}#/compare?units=${ids.join(',')}`
+    const result = await shareOrCopy(url, lang === 'es' ? 'Comparativa de viviendas' : 'Unit comparison')
+    if (result === 'copied' || result === 'shared') {
+      setShareDone(true)
+      setTimeout(() => setShareDone(false), 2000)
+    }
+  }
 
   const units = ids.map(id => allUnits?.find(u => u.id === id)).filter(Boolean)
   const nCols = units.length
@@ -117,12 +140,24 @@ export default function ComparePage() {
           <span className="label-luxury text-text/40 hidden sm:block" style={{ fontSize: '0.55rem' }}>
             {lang === 'es' ? 'COMPARADOR DE UNIDADES' : 'UNIT COMPARATOR'}
           </span>
-          <button onClick={toggle} data-cursor="hover"
-            className="flex items-center gap-2 label-luxury" style={{ fontSize: '0.6rem' }}>
-            <span style={{ color: lang === 'es' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>ES</span>
-            <span style={{ color: 'var(--color-accent)' }}>|</span>
-            <span style={{ color: lang === 'en' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>EN</span>
-          </button>
+          <div className="flex items-center gap-4">
+            {ids.length >= 2 && (
+              <button onClick={handleShare} data-cursor="hover"
+                className="flex items-center gap-1.5 label-luxury transition-colors duration-300"
+                style={{ fontSize: '0.55rem', color: shareDone ? 'var(--color-accent)' : 'rgba(244,241,234,0.45)' }}
+                onMouseEnter={e => !shareDone && (e.currentTarget.style.color = 'var(--color-accent)')}
+                onMouseLeave={e => !shareDone && (e.currentTarget.style.color = 'rgba(244,241,234,0.45)')}>
+                {shareDone ? <Check size={12} /> : <Share2 size={12} />}
+                {shareDone ? (lang === 'es' ? 'Copiado' : 'Copied') : (lang === 'es' ? 'Compartir' : 'Share')}
+              </button>
+            )}
+            <button onClick={toggle} data-cursor="hover"
+              className="flex items-center gap-2 label-luxury" style={{ fontSize: '0.6rem' }}>
+              <span style={{ color: lang === 'es' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>ES</span>
+              <span style={{ color: 'var(--color-accent)' }}>|</span>
+              <span style={{ color: lang === 'en' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>EN</span>
+            </button>
+          </div>
         </div>
 
         {/* ── Scrollable body ── */}
