@@ -1,17 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Waves, Dumbbell, TreePine, Car, ShieldCheck, Sparkles, ChevronDown,
-  Anchor, Flag, ShoppingBag, Plane, Utensils, MapPin,
+  Waves, Dumbbell, TreePine, Car, ShieldCheck, Sparkles,
+  Anchor, Flag, ShoppingBag, Plane, Utensils, MapPin, Images, X,
 } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { useSession } from '../context/SessionContext'
 
-const AMENITY_ICONS = { Waves, Dumbbell, TreePine, Car, ShieldCheck, Sparkles }
-const NEARBY_ICONS  = { Waves, Anchor, Flag, ShoppingBag, Plane, Utensils, MapPin }
+const ALL_ICONS = { Waves, Dumbbell, TreePine, Car, ShieldCheck, Sparkles, Anchor, Flag, ShoppingBag, Plane, Utensils, MapPin }
 
 const TABS = [
   { id: 'obra',      es: 'OBRA',      en: 'BUILD'     },
@@ -19,26 +18,96 @@ const TABS = [
   { id: 'amenities', es: 'AMENITIES', en: 'AMENITIES' },
 ]
 
-// ─── Auto-only carousel ───────────────────────────────────────────────────────
-function ImageCarousel({ images, interval = 4000 }) {
+// ─── Image carousel (controlled) ────────────────────────────────────────────
+function ImageCarousel({ images, resetKey, interval = 4000 }) {
   const [idx, setIdx] = useState(0)
   const len = images?.length ?? 0
-  useEffect(() => { setIdx(0) }, [images])
+
+  // Reset to 0 whenever the image set changes
+  useEffect(() => { setIdx(0) }, [resetKey])
+
   useEffect(() => {
     if (len <= 1) return
     const t = setInterval(() => setIdx(i => (i + 1) % len), interval)
     return () => clearInterval(t)
   }, [len, interval])
+
   if (!len) return null
   return (
     <div className="relative w-full h-full overflow-hidden">
       <AnimatePresence mode="wait">
-        <motion.img key={images[idx]} src={images[idx]} alt=""
+        <motion.img key={`${resetKey}-${idx}`} src={images[idx]} alt=""
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.6 }}
           className="absolute inset-0 w-full h-full object-cover" />
       </AnimatePresence>
     </div>
+  )
+}
+
+// ─── Shared item row (amenity or nearby) ─────────────────────────────────────
+function ItemRow({ item, isSelected, onClick, lang, showDist }) {
+  const Icon  = ALL_ICONS[item.icon] ?? MapPin
+  const label = lang === 'es' ? (item.label ?? item.es) : (item.labelEN ?? item.en)
+  return (
+    <button onClick={onClick} data-cursor="hover"
+      className="w-full flex items-center gap-3 px-4 py-3 transition-all duration-200 text-left"
+      style={{
+        border: `1px solid ${isSelected ? 'rgba(184,152,72,0.5)' : 'rgba(184,152,72,0.12)'}`,
+        backgroundColor: isSelected ? 'rgba(184,152,72,0.07)' : 'transparent',
+        marginBottom: 4,
+      }}
+      onMouseEnter={e => { if (!isSelected) e.currentTarget.style.borderColor = 'rgba(184,152,72,0.28)' }}
+      onMouseLeave={e => { if (!isSelected) e.currentTarget.style.borderColor = 'rgba(184,152,72,0.12)' }}>
+      <Icon size={14} strokeWidth={1.2}
+        color={isSelected ? 'var(--color-accent)' : 'rgba(244,241,234,0.45)'}
+        style={{ flexShrink: 0 }} />
+      <span className="flex-1 label-luxury"
+        style={{ fontSize: '0.6rem', color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)' }}>
+        {label}
+      </span>
+      {showDist && item.dist && (
+        <span className="label-luxury flex-shrink-0"
+          style={{ fontSize: '0.48rem', color: 'rgba(184,152,72,0.55)', letterSpacing: '0.1em' }}>
+          {item.dist}
+        </span>
+      )}
+    </button>
+  )
+}
+
+// ─── Detail panel (shown below list when item selected) ───────────────────────
+function DetailPanel({ item, lang, onClose }) {
+  const desc     = lang === 'es' ? (item.description ?? item.descriptionEN) : (item.descriptionEN ?? item.description)
+  const hasImgs  = (item.images?.length ?? 0) > 0
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 4 }} transition={{ duration: 0.25 }}
+      style={{ border: '1px solid rgba(184,152,72,0.2)', borderTop: 'none', padding: '16px 16px 14px', backgroundColor: 'rgba(184,152,72,0.03)' }}>
+
+      <div className="flex items-start justify-between gap-4 mb-3">
+        <p className="font-sans font-light flex-1"
+          style={{ fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--color-text-muted)' }}>
+          {desc ?? (lang === 'es' ? 'Sin descripción disponible.' : 'No description available.')}
+        </p>
+        <button onClick={onClose} data-cursor="hover"
+          style={{ color: 'rgba(184,152,72,0.4)', flexShrink: 0, marginTop: 2 }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'rgba(184,152,72,0.4)'}>
+          <X size={14} />
+        </button>
+      </div>
+
+      {hasImgs && (
+        <p className="label-luxury flex items-center gap-1.5"
+          style={{ fontSize: '0.48rem', color: 'rgba(184,152,72,0.55)', letterSpacing: '0.15em' }}>
+          <Images size={11} />
+          {lang === 'es' ? `VER GALERÍA — ${item.images.length} FOTOS EN PANTALLA` : `SEE GALLERY — ${item.images.length} PHOTOS ON SCREEN`}
+        </p>
+      )}
+    </motion.div>
   )
 }
 
@@ -49,172 +118,80 @@ function ObraTab({ construction, lang }) {
       {lang === 'es' ? 'Información de obra no disponible.' : 'Build info not available.'}
     </p>
   )
-  const status = lang === 'es' ? construction.status   : construction.statusEN
-  const phase  = lang === 'es' ? construction.phase    : construction.phaseEN
+  const status = lang === 'es' ? construction.status  : construction.statusEN
+  const phase  = lang === 'es' ? construction.phase   : construction.phaseEN
   const pct    = construction.completion ?? 0
 
   return (
     <div className="flex flex-col gap-5">
-      {/* Status badge */}
       <div>
         <span className="label-luxury px-3 py-1.5" style={{
           fontSize: '0.5rem', letterSpacing: '0.15em',
           color: 'rgba(255,200,80,0.9)', backgroundColor: 'rgba(255,200,80,0.08)',
           border: '1px solid rgba(255,200,80,0.3)',
-        }}>
-          ● {status?.toUpperCase()}
-        </span>
+        }}>● {status?.toUpperCase()}</span>
       </div>
-
-      {/* Phase */}
       <div>
         <p className="label-luxury mb-1.5" style={{ fontSize: '0.48rem', color: 'rgba(184,152,72,0.5)', letterSpacing: '0.18em' }}>
           {lang === 'es' ? 'FASE ACTUAL' : 'CURRENT PHASE'}
         </p>
-        <p className="font-sans font-light text-text" style={{ fontSize: '0.85rem', lineHeight: 1.6 }}>
-          {phase}
-        </p>
+        <p className="font-sans font-light text-text" style={{ fontSize: '0.85rem', lineHeight: 1.6 }}>{phase}</p>
       </div>
-
-      {/* Progress bar */}
       <div>
         <div className="flex items-center justify-between mb-2">
           <p className="label-luxury" style={{ fontSize: '0.48rem', color: 'rgba(184,152,72,0.5)', letterSpacing: '0.18em' }}>
             {lang === 'es' ? 'AVANCE DE OBRA' : 'BUILD PROGRESS'}
           </p>
-          <p className="label-luxury" style={{ fontSize: '0.52rem', color: 'var(--color-accent)' }}>
-            {pct}%
-          </p>
+          <p className="label-luxury" style={{ fontSize: '0.52rem', color: 'var(--color-accent)' }}>{pct}%</p>
         </div>
         <div style={{ height: 3, backgroundColor: 'rgba(184,152,72,0.12)', borderRadius: 2 }}>
-          <motion.div
-            initial={{ width: 0 }} animate={{ width: `${pct}%` }}
+          <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }}
             transition={{ duration: 1.2, ease: [0.43, 0.13, 0.23, 0.96] }}
-            style={{ height: '100%', backgroundColor: 'var(--color-accent)', borderRadius: 2 }}
-          />
+            style={{ height: '100%', backgroundColor: 'var(--color-accent)', borderRadius: 2 }} />
         </div>
       </div>
-
-      {/* Delivery */}
       <div>
         <p className="label-luxury mb-1.5" style={{ fontSize: '0.48rem', color: 'rgba(184,152,72,0.5)', letterSpacing: '0.18em' }}>
           {lang === 'es' ? 'ENTREGA ESTIMADA' : 'ESTIMATED DELIVERY'}
         </p>
-        <p className="font-sans font-light text-text" style={{ fontSize: '0.9rem' }}>
-          {construction.delivery}
-        </p>
+        <p className="font-sans font-light text-text" style={{ fontSize: '0.9rem' }}>{construction.delivery}</p>
       </div>
-    </div>
-  )
-}
-
-// ─── ENTORNO tab ──────────────────────────────────────────────────────────────
-function EntornoTab({ nearby, lang, onItemView }) {
-  if (!nearby?.length) return (
-    <p className="label-luxury" style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.3)' }}>
-      {lang === 'es' ? 'Información de entorno no disponible.' : 'Location info not available.'}
-    </p>
-  )
-  return (
-    <div className="grid grid-cols-2 gap-2">
-      {nearby.map(item => {
-        const Icon  = NEARBY_ICONS[item.icon] ?? MapPin
-        const label = lang === 'es' ? item.es : item.en
-        return (
-          <div key={item.id}
-            style={{ border: '1px solid rgba(184,152,72,0.12)', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: 10 }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = 'rgba(184,152,72,0.3)'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(184,152,72,0.12)'}>
-            <Icon size={14} strokeWidth={1.2} color="rgba(184,152,72,0.6)" style={{ flexShrink: 0 }} />
-            <div className="flex-1 min-w-0">
-              <p className="label-luxury truncate" style={{ fontSize: '0.52rem', color: 'rgba(244,241,234,0.7)' }}>{label}</p>
-            </div>
-            <span className="label-luxury flex-shrink-0" style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.6)', letterSpacing: '0.1em' }}>
-              {item.dist}
-            </span>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
-// ─── AMENITIES tab ────────────────────────────────────────────────────────────
-function AmenitiesTab({ amenities, lang, openAmenity, onToggle }) {
-  return (
-    <div className="flex flex-col gap-1">
-      {amenities?.map(amenity => {
-        const Icon   = AMENITY_ICONS[amenity.icon]
-        const label  = lang === 'es' ? amenity.label       : amenity.labelEN
-        const desc   = lang === 'es' ? amenity.description : amenity.descriptionEN
-        const imgs   = amenity.images ?? []
-        const isOpen = openAmenity === amenity.id
-        return (
-          <div key={amenity.id}
-            style={{ border: '1px solid', borderColor: isOpen ? 'rgba(184,152,72,0.45)' : 'rgba(184,152,72,0.12)', transition: 'border-color 0.3s' }}>
-            <button onClick={() => onToggle(amenity)} data-cursor="hover"
-              className="w-full flex items-center gap-3 px-4 py-3 transition-colors duration-300"
-              style={{ backgroundColor: isOpen ? 'rgba(184,152,72,0.06)' : 'transparent' }}>
-              {Icon && <Icon size={14} strokeWidth={1.2} color={isOpen ? 'var(--color-accent)' : 'rgba(244,241,234,0.45)'} />}
-              <span className="flex-1 text-left label-luxury"
-                style={{ fontSize: '0.6rem', color: isOpen ? 'var(--color-accent)' : 'var(--color-text-muted)' }}>
-                {label}
-              </span>
-              <ChevronDown size={12} color={isOpen ? 'var(--color-accent)' : 'rgba(244,241,234,0.3)'}
-                style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s', flexShrink: 0 }} />
-            </button>
-            <AnimatePresence initial={false}>
-              {isOpen && (
-                <motion.div key="body"
-                  initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: 'easeInOut' }}
-                  style={{ overflow: 'hidden' }}>
-                  <div className="flex flex-col gap-3 px-4 pb-4">
-                    {imgs.length > 0 && (
-                      <div className="relative overflow-hidden" style={{ height: 220, backgroundColor: '#0d1117' }}>
-                        <ImageCarousel images={imgs} interval={3500} />
-                      </div>
-                    )}
-                    {desc && (
-                      <p className="font-sans font-light"
-                        style={{ fontSize: '0.82rem', lineHeight: 1.75, color: 'var(--color-text-muted)' }}>
-                        {desc}
-                      </p>
-                    )}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        )
-      })}
     </div>
   )
 }
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function ContextPage() {
-  const navigate = useNavigate()
+  const navigate  = useNavigate()
   const { project, building, amenities, construction, nearby } = useProject()
   const { lang, toggle } = useLang()
   const { trackEvent } = useSession()
 
-  const [activeTab,  setActiveTab]  = useState('obra')
-  const [openAmenity, setOpenAmenity] = useState(null)
+  const [activeTab,    setActiveTab]    = useState('obra')
+  const [selectedItem, setSelectedItem] = useState(null) // { type, item }
 
   const name        = lang === 'es' ? project.name        : project.nameEN
   const description = lang === 'es' ? project.description : project.descriptionEN
   const gallery     = project.gallery ?? [project.aerialImage]
 
+  // Left panel shows selected item images or project gallery
+  const displayImages  = (selectedItem?.item?.images?.length > 0) ? selectedItem.item.images : gallery
+  const carouselKey    = selectedItem?.item?.id ?? 'gallery'
+
   function switchTab(tab) {
     setActiveTab(tab)
+    setSelectedItem(null)
     trackEvent('section_view', { section: tab })
   }
 
-  function handleAmenityToggle(amenity) {
-    const isOpening = openAmenity !== amenity.id
-    setOpenAmenity(isOpening ? amenity.id : null)
-    if (isOpening) trackEvent('amenity_open', { id: amenity.id, label: amenity.label })
+  function handleItemClick(type, item) {
+    if (selectedItem?.item?.id === item.id) {
+      setSelectedItem(null)
+    } else {
+      setSelectedItem({ type, item })
+      if (type === 'amenity') trackEvent('amenity_open', { id: item.id, label: item.label })
+      else                    trackEvent('nearby_view',  { id: item.id, label: item.es   })
+    }
   }
 
   return (
@@ -240,9 +217,24 @@ export default function ContextPage() {
         {/* Body */}
         <div className="flex-1 min-h-0 flex flex-col md:flex-row overflow-hidden">
 
-          {/* Left — slideshow */}
+          {/* Left — dynamic image panel */}
           <div className="relative flex-shrink-0 md:w-1/2 h-48 sm:h-64 md:h-full overflow-hidden">
-            <ImageCarousel images={gallery} interval={4000} />
+            <ImageCarousel images={displayImages} resetKey={carouselKey} interval={4000} />
+
+            {/* Label overlay when showing a specific item */}
+            <AnimatePresence>
+              {selectedItem && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="absolute bottom-6 left-6 label-luxury"
+                  style={{ fontSize: '0.5rem', letterSpacing: '0.2em', color: 'rgba(184,152,72,0.8)',
+                    backgroundColor: 'rgba(13,17,23,0.7)', padding: '4px 10px', backdropFilter: 'blur(8px)' }}>
+                  {lang === 'es'
+                    ? (selectedItem.item.label ?? selectedItem.item.es)
+                    : (selectedItem.item.labelEN ?? selectedItem.item.en)}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <div className="absolute inset-0 pointer-events-none"
               style={{ background: 'linear-gradient(to right, transparent 55%, var(--color-bg) 100%)' }} />
             <div className="absolute inset-0 pointer-events-none"
@@ -299,8 +291,7 @@ export default function ContextPage() {
                         color: isActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.35)' }}>
                       {lang === 'es' ? tab.es : tab.en}
                       {isActive && (
-                        <motion.div layoutId="tab-underline"
-                          className="absolute bottom-0 left-0 right-0 h-px"
+                        <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-px"
                           style={{ backgroundColor: 'var(--color-accent)' }} />
                       )}
                     </button>
@@ -312,16 +303,45 @@ export default function ContextPage() {
               <AnimatePresence mode="wait">
                 <motion.div key={activeTab}
                   initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.25 }}>
-                  {activeTab === 'obra' && (
-                    <ObraTab construction={construction} lang={lang} />
-                  )}
+                  exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
+
+                  {/* OBRA */}
+                  {activeTab === 'obra' && <ObraTab construction={construction} lang={lang} />}
+
+                  {/* ENTORNO — same pattern as amenities */}
                   {activeTab === 'entorno' && (
-                    <EntornoTab nearby={nearby} lang={lang} />
+                    <div>
+                      {nearby?.map(item => (
+                        <div key={item.id}>
+                          <ItemRow item={item} lang={lang} showDist
+                            isSelected={selectedItem?.item?.id === item.id}
+                            onClick={() => handleItemClick('nearby', item)} />
+                          <AnimatePresence>
+                            {selectedItem?.item?.id === item.id && (
+                              <DetailPanel item={item} lang={lang} onClose={() => setSelectedItem(null)} />
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      ))}
+                    </div>
                   )}
+
+                  {/* AMENITIES */}
                   {activeTab === 'amenities' && (
-                    <AmenitiesTab amenities={amenities} lang={lang}
-                      openAmenity={openAmenity} onToggle={handleAmenityToggle} />
+                    <div>
+                      {amenities?.map(item => (
+                        <div key={item.id}>
+                          <ItemRow item={item} lang={lang} showDist={false}
+                            isSelected={selectedItem?.item?.id === item.id}
+                            onClick={() => handleItemClick('amenity', item)} />
+                          <AnimatePresence>
+                            {selectedItem?.item?.id === item.id && (
+                              <DetailPanel item={item} lang={lang} onClose={() => setSelectedItem(null)} />
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </motion.div>
               </AnimatePresence>
