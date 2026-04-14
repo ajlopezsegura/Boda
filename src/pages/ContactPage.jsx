@@ -23,17 +23,15 @@ const STATUS_CONFIG = {
 }
 
 const INTENTS = [
-  { id: 'info',     es: 'Solicitar información',    en: 'Request information'    },
-  { id: 'visit',    es: 'Solicitar visita',          en: 'Request a visit'        },
-  { id: 'call',     es: 'Agendar llamada',           en: 'Schedule a call'        },
-  { id: 'interest', es: 'Me interesa esta vivienda', en: "I'm interested"         },
+  { id: 'info',  es: 'Solicitar información', en: 'Request information' },
+  { id: 'visit', es: 'Solicitar visita',       en: 'Request a visit'     },
+  { id: 'call',  es: 'Agendar llamada',        en: 'Schedule a call'     },
 ]
 
 const SUBMIT_LABEL = {
-  info:     { es: 'ENVIAR SOLICITUD',   en: 'SEND REQUEST'      },
-  visit:    { es: 'SOLICITAR VISITA',   en: 'REQUEST VISIT'     },
-  call:     { es: 'AGENDAR LLAMADA',    en: 'SCHEDULE CALL'     },
-  interest: { es: 'CONFIRMAR INTERÉS',  en: 'CONFIRM INTEREST'  },
+  info:  { es: 'ENVIAR SOLICITUD', en: 'SEND REQUEST'  },
+  visit: { es: 'SOLICITAR VISITA', en: 'REQUEST VISIT' },
+  call:  { es: 'AGENDAR LLAMADA',  en: 'SCHEDULE CALL' },
 }
 
 const labelSty = { fontSize: '0.5rem', letterSpacing: '0.2em', color: 'rgba(184,152,72,0.5)' }
