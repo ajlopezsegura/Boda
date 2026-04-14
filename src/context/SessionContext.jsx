@@ -12,6 +12,13 @@ function generateId() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36)
 }
 
+function getDeviceType() {
+  const ua = navigator.userAgent
+  if (/iPad/i.test(ua) || (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1)) return 'tablet'
+  if (/Mobi|Android|iPhone|iPod/i.test(ua)) return 'mobile'
+  return 'desktop'
+}
+
 export function SessionProvider({ children }) {
   const location = useLocation()
 
@@ -23,7 +30,7 @@ export function SessionProvider({ children }) {
     return id
   })
 
-  const [trail, setTrail]   = useState([])
+  const [trail, setTrail]   = useState(() => [{ type: 'device_info', device: getDeviceType(), ts: Date.now() }])
   const enterTime           = useRef(Date.now())
   const prevPage            = useRef(null)
   const trailRef            = useRef([])  // always-current ref for async callbacks

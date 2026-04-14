@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LogOut, Check, Loader2, ChevronDown, ChevronRight, Flame, Snowflake } from 'lucide-react'
+import { LogOut, Check, Loader2, ChevronDown, ChevronRight, Flame, Snowflake, Monitor, Smartphone, Tablet } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 const PROJECT_SLUG   = (import.meta.env.VITE_PROJECT_SLUG   ?? 'las-conchas').trim()
@@ -241,6 +241,8 @@ function ActivityCard({ sess, index }) {
   const hasImm  = views.some(e => e.page?.startsWith('/inmersion/'))
   const hasCmp  = views.some(e => e.page === '/compare') || trail.some(e => e.type === 'compare_add')
   const hasDec  = views.some(e => e.page === '/decision')
+  const device  = trail.find(e => e.type === 'device_info')?.device ?? 'desktop'
+  const DeviceIcon = device === 'mobile' ? Smartphone : device === 'tablet' ? Tablet : Monitor
 
   return (
     <motion.div
@@ -249,7 +251,7 @@ function ActivityCard({ sess, index }) {
       style={{ border: '1px solid rgba(184,152,72,0.07)', marginBottom: 6, background: 'rgba(184,152,72,0.01)' }}>
 
       <div style={{
-        display: 'grid', gridTemplateColumns: '1fr 80px 80px 100px 32px',
+        display: 'grid', gridTemplateColumns: '1fr 90px 60px 60px 100px 32px',
         gap: 16, padding: '12px 16px', alignItems: 'center',
         cursor: views.length > 0 ? 'pointer' : 'default',
       }} onClick={() => views.length > 0 && setExpanded(e => !e)}>
@@ -271,6 +273,12 @@ function ActivityCard({ sess, index }) {
           )}
         </div>
 
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <DeviceIcon size={11} style={{ color: 'rgba(184,152,72,0.45)', flexShrink: 0 }} />
+          <span style={{ fontSize: '0.44rem', color: 'rgba(244,241,234,0.3)', letterSpacing: '0.08em' }}>
+            {device.toUpperCase()}
+          </span>
+        </div>
         <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{views.length}</span>
         <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{formatDuration(totalMs) ?? '—'}</span>
         <span style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.3)' }}>
@@ -604,12 +612,12 @@ export default function AdminPage() {
             {/* Column headers */}
             {anon.length > 0 && (
               <div style={{
-                display: 'grid', gridTemplateColumns: '1fr 80px 80px 100px 32px',
+                display: 'grid', gridTemplateColumns: '1fr 90px 60px 60px 100px 32px',
                 gap: 16, padding: '0 16px 10px',
                 borderBottom: '1px solid rgba(184,152,72,0.12)',
                 fontSize: '0.42rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.4)',
               }}>
-                <span>RECORRIDO</span><span>PÁGINAS</span><span>TIEMPO</span><span>ÚLTIMA VEZ</span><span></span>
+                <span>RECORRIDO</span><span>DISPOSITIVO</span><span>PÁGS</span><span>TIEMPO</span><span>ÚLTIMA VEZ</span><span></span>
               </div>
             )}
 
