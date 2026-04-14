@@ -5,7 +5,8 @@ import { useLang } from '../../context/LangContext'
 import { useCompare } from '../../context/CompareContext'
 
 /* Pages where the CTA should NOT appear */
-const HIDDEN_ON = ['/contact', '/admin', '/privacy', '/summary']
+const HIDDEN_EXACT  = ['/']
+const HIDDEN_PREFIX = ['/contact', '/admin', '/privacy', '/summary']
 
 export default function ContactCTA() {
   const location = useLocation()
@@ -17,7 +18,9 @@ export default function ContactCTA() {
   const compareBarVisible = location.pathname.startsWith('/availability') && ids.length >= 2
   const bottomPos = compareBarVisible ? 88 : 24
 
-  const hidden = HIDDEN_ON.some(p => location.pathname.startsWith(p))
+  const hidden =
+    HIDDEN_EXACT.includes(location.pathname) ||
+    HIDDEN_PREFIX.some(p => location.pathname.startsWith(p))
 
   function handleClick() {
     // Preserve any existing lead context (unit pages set this already).

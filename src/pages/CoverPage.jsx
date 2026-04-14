@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import PageTransition from '../components/layout/PageTransition'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
+import { MessageCircle } from 'lucide-react'
 
 export default function CoverPage() {
   const navigate = useNavigate()
@@ -12,7 +13,9 @@ export default function CoverPage() {
   const [videoFailed, setVideoFailed] = useState(false)
 
   const name    = lang === 'es' ? project.name    : project.nameEN
-  const tagline = lang === 'es' ? project.tagline : (project.taglineEN ?? project.tagline)
+  const tagline = lang === 'es'
+    ? (project.tagline    ?? '24 residencias · Primera línea de playa · Marbella')
+    : (project.taglineEN  ?? project.tagline ?? '24 residences · Beachfront · Marbella')
   const showVideo = project.heroVideo && !videoFailed
 
   return (
@@ -111,36 +114,67 @@ export default function CoverPage() {
             {project.subtitle}
           </motion.p>
 
-          {/* CTA */}
-          <motion.button
+          {/* CTAs */}
+          <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 2.2 }}
-            onClick={() => navigate('/proyecto')}
-            data-cursor="hover"
-            className="mt-10 sm:mt-14 label-luxury flex items-center gap-3 transition-all duration-500"
-            style={{
-              border: '1px solid rgba(184,152,72,0.7)',
-              backgroundColor: 'rgba(184,152,72,0.10)',
-              color: 'var(--color-accent)',
-              fontSize: '0.65rem',
-              letterSpacing: '0.22em',
-              padding: '14px 36px',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.18)'
-              e.currentTarget.style.borderColor = 'var(--color-accent)'
-              e.currentTarget.style.color = '#ffffff'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.10)'
-              e.currentTarget.style.borderColor = 'rgba(184,152,72,0.7)'
-              e.currentTarget.style.color = 'var(--color-accent)'
-            }}
+            className="mt-10 sm:mt-14 flex items-center gap-4"
           >
-            {lang === 'es' ? 'ENTRAR' : 'ENTER'}
-            <span style={{ display: 'inline-block', marginLeft: 2 }}>→</span>
-          </motion.button>
+            <button
+              onClick={() => navigate('/proyecto')}
+              data-cursor="hover"
+              className="label-luxury flex items-center gap-3 transition-all duration-500"
+              style={{
+                border: '1px solid rgba(184,152,72,0.7)',
+                backgroundColor: 'rgba(184,152,72,0.10)',
+                color: 'var(--color-accent)',
+                fontSize: '0.65rem',
+                letterSpacing: '0.22em',
+                padding: '14px 36px',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.18)'
+                e.currentTarget.style.borderColor = 'var(--color-accent)'
+                e.currentTarget.style.color = '#ffffff'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.10)'
+                e.currentTarget.style.borderColor = 'rgba(184,152,72,0.7)'
+                e.currentTarget.style.color = 'var(--color-accent)'
+              }}
+            >
+              {lang === 'es' ? 'ENTRAR' : 'ENTER'}
+              <span style={{ display: 'inline-block', marginLeft: 2 }}>→</span>
+            </button>
+
+            <button
+              onClick={() => navigate('/contact')}
+              data-cursor="hover"
+              className="label-luxury flex items-center gap-2.5 transition-all duration-500"
+              style={{
+                border: '1px solid rgba(184,152,72,0.7)',
+                backgroundColor: 'rgba(184,152,72,0.10)',
+                color: 'var(--color-accent)',
+                fontSize: '0.65rem',
+                letterSpacing: '0.22em',
+                padding: '14px 28px',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.18)'
+                e.currentTarget.style.borderColor = 'var(--color-accent)'
+                e.currentTarget.style.color = '#ffffff'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.10)'
+                e.currentTarget.style.borderColor = 'rgba(184,152,72,0.7)'
+                e.currentTarget.style.color = 'var(--color-accent)'
+              }}
+            >
+              <MessageCircle size={13} />
+              {lang === 'es' ? 'CONTACTAR' : 'CONTACT'}
+            </button>
+          </motion.div>
         </div>
       </div>
     </PageTransition>
