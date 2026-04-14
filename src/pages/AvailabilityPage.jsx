@@ -14,6 +14,7 @@ const STATUS_CONFIG = {
 }
 
 const SORT_OPTIONS = [
+  { value: 'unit_id',      es: 'Vivienda (A-Z)',            en: 'Unit (A-Z)'              },
   { value: 'price_asc',    es: 'Precio: menor a mayor',     en: 'Price: low to high'      },
   { value: 'price_desc',   es: 'Precio: mayor a menor',     en: 'Price: high to low'      },
   { value: 'surface_asc',  es: 'Superficie: menor a mayor', en: 'Surface: small to large' },
@@ -44,7 +45,7 @@ export default function AvailabilityPage() {
   const { ids: compareIds, toggle: toggleCompare, clear: clearCompare, isIn, canAdd } = useCompare()
 
   const [filters, setFilters]         = useState(DEFAULT_FILTERS)
-  const [sortBy, setSortBy]           = useState('price_asc')
+  const [sortBy, setSortBy]           = useState('unit_id')
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [viewMode, setViewMode]       = useState('table') // 'table' | 'grid'
 
@@ -75,6 +76,7 @@ export default function AvailabilityPage() {
     if (filters.has_terrace)       result = result.filter(u => u.has_terrace)
     result.sort((a, b) => {
       switch (sortBy) {
+        case 'unit_id':      return a.id.localeCompare(b.id, undefined, { numeric: true })
         case 'price_asc':    return a.price - b.price
         case 'price_desc':   return b.price - a.price
         case 'surface_asc':  return a.surface - b.surface
