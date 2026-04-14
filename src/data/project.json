@@ -10,6 +10,7 @@
     "heroImage": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=90",
     "aerialImage": "./assets/images/las-conchas-aerea.jpg",
     "accentColor": "#B89848",
+    "floorPlan": { "src": "./assets/floorplan.svg" },
     "gallery": [
       "./assets/images/las-conchas-aerea.jpg",
       "./assets/images/Salon 01.webp",
@@ -131,7 +132,7 @@
       "view_label": "Sea View",
       "short_description": "Apartamento sur con terraza privada y vistas al Mediterráneo. Luminosidad natural todo el día.",
       "highlights": ["Orientación sur", "Terraza privada 16 m²", "Vistas al Mediterráneo", "Plaza de garaje incluida"],
-      "hero_image": "./assets/images/Salon 01.webp", "thumbnail": "./assets/images/Salon 01.webp", "plan_image": null,
+      "hero_image": "./assets/images/Salon 01.webp", "thumbnail": "./assets/images/Salon 01.webp", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/Salon 01.webp", "./assets/images/Dormitorio (1).jpg", "./assets/images/Baño (1).jpg", "./assets/images/Terraza (1).jpg"]
     },
     {
@@ -146,7 +147,7 @@
       "view_label": "Garden View",
       "short_description": "Amplio apartamento de 3 dormitorios con acceso directo al jardín privado y zona de día diferenciada.",
       "highlights": ["3 dormitorios", "Acceso directo al jardín", "Zona de día amplia", "Acabados de primera calidad"],
-      "hero_image": "./assets/images/Dormitorio (1).jpg", "thumbnail": "./assets/images/Dormitorio (1).jpg", "plan_image": null,
+      "hero_image": "./assets/images/Dormitorio (1).jpg", "thumbnail": "./assets/images/Dormitorio (1).jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/salon 02.webp", "./assets/images/Dormitorio (2).jpg", "./assets/images/Cocina (1).jpg", "./assets/images/Baño (2).jpg"]
     },
     {
@@ -161,7 +162,7 @@
       "view_label": "Pool View",
       "short_description": "Apartamento orientado al este con luminosidad natural en las mañanas y terraza con vistas a la piscina.",
       "highlights": ["Terraza 13 m²", "Vistas a la piscina", "Luz matinal natural", "Acceso directo a jardines"],
-      "hero_image": "./assets/images/Salon 03.jpg", "thumbnail": "./assets/images/Salon 03.jpg", "plan_image": null,
+      "hero_image": "./assets/images/Salon 03.jpg", "thumbnail": "./assets/images/Salon 03.jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/Salon 03.jpg", "./assets/images/Cocina (2).jpg", "./assets/images/Terraza (1).jpg", "./assets/images/Piscina (1).jpg"]
     },
     {
@@ -176,7 +177,7 @@
       "view_label": "Sea View",
       "short_description": "Apartamento de 2 dormitorios con terraza sur y vistas directas al Mediterráneo desde la segunda planta.",
       "highlights": ["Vistas al mar desde terraza", "Orientación sur", "2 baños completos", "Plaza de garaje incluida"],
-      "hero_image": "./assets/images/Salon 04.jpg", "thumbnail": "./assets/images/Cocina (1).jpg", "plan_image": null,
+      "hero_image": "./assets/images/Salon 04.jpg", "thumbnail": "./assets/images/Cocina (1).jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/Salon 04.jpg", "./assets/images/Cocina (1).jpg", "./assets/images/Piscina (2).jpg", "./assets/images/Terraza (2).jpg"]
     },
     {
@@ -191,7 +192,7 @@
       "view_label": "Garden View",
       "short_description": "3 dormitorios con zona de estar diferenciada, cocina independiente y acabados de primera calidad.",
       "highlights": ["3 dormitorios amplios", "Cocina independiente", "Vistas al jardín", "Trastero incluido"],
-      "hero_image": "./assets/images/Salon 05.jpg", "thumbnail": "./assets/images/Salon 04.jpg", "plan_image": null,
+      "hero_image": "./assets/images/Salon 05.jpg", "thumbnail": "./assets/images/Salon 04.jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/Salon 05.jpg", "./assets/images/Dormitorio (3).jpg", "./assets/images/Baño (2).jpg", "./assets/images/Cocina (3).jpg"]
     },
     {
@@ -206,7 +207,7 @@
       "view_label": "Pool View",
       "short_description": "Apartamento compacto de 1 dormitorio con terraza oeste y vistas a la piscina. Perfecto como inversión.",
       "highlights": ["Terraza privada 8 m²", "Vistas a la piscina", "Planta alta", "Excelente relación calidad-precio"],
-      "hero_image": "./assets/images/Dormitorio (2).jpg", "thumbnail": "./assets/images/Dormitorio (2).jpg", "plan_image": null,
+      "hero_image": "./assets/images/Dormitorio (2).jpg", "thumbnail": "./assets/images/Dormitorio (2).jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/salon 02.webp", "./assets/images/Dormitorio (2).jpg", "./assets/images/Baño (3).jpg"]
     },
     {
@@ -221,7 +222,7 @@
       "view_label": "Sea View",
       "short_description": "Unidad destacada. 3 dormitorios con gran terraza sur, vistas panorámicas al Mediterráneo y acabados premium.",
       "highlights": ["Gran terraza sur 20 m²", "Vistas panorámicas al mar", "3 dormitorios + 2 baños", "Garaje y trastero incluidos"],
-      "hero_image": "./assets/images/Salon 05.jpg", "thumbnail": "./assets/images/Salon 05.jpg", "plan_image": null,
+      "hero_image": "./assets/images/Salon 05.jpg", "thumbnail": "./assets/images/Salon 05.jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/Salon 01.webp", "./assets/images/Salon 03.jpg", "./assets/images/Terraza (1).jpg", "./assets/images/Piscina (2).jpg", "./assets/images/Cocina (1).jpg"]
     },
     {
@@ -236,7 +237,7 @@
       "view_label": "Sea View",
       "short_description": "2 dormitorios con terraza sur, muy luminoso y tranquilo. Una de las mejores relaciones precio-calidad del edificio.",
       "highlights": ["Terraza sur 17 m²", "Vistas al Mediterráneo", "Planta alta", "Muy luminoso"],
-      "hero_image": "./assets/images/Terraza (1).jpg", "thumbnail": "./assets/images/Terraza (1).jpg", "plan_image": null,
+      "hero_image": "./assets/images/Terraza (1).jpg", "thumbnail": "./assets/images/Terraza (1).jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/Salon 04.jpg", "./assets/images/Terraza (2).jpg", "./assets/images/Piscina (1).jpg", "./assets/images/Dormitorio (1).jpg"]
     },
     {
@@ -251,7 +252,7 @@
       "view_label": "Sea View",
       "short_description": "4 dormitorios con gran terraza sur ideal para familias. Máxima amplitud y vistas directas al mar.",
       "highlights": ["4 dormitorios", "Gran terraza 27 m²", "3 baños completos", "Garaje y trastero incluidos"],
-      "hero_image": "./assets/images/Dormitorio (3).jpg", "thumbnail": "./assets/images/Dormitorio (3).jpg", "plan_image": null,
+      "hero_image": "./assets/images/Dormitorio (3).jpg", "thumbnail": "./assets/images/Dormitorio (3).jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/Salon 05.jpg", "./assets/images/Dormitorio (1).jpg", "./assets/images/Dormitorio (2).jpg", "./assets/images/Cocina (2).jpg", "./assets/images/Terraza (2).jpg"]
     },
     {
@@ -266,7 +267,7 @@
       "view_label": "Sea View",
       "short_description": "4 dormitorios con terraza de 30 m² y una de las mejores orientaciones del edificio. Vistas al mar desde todas las estancias principales.",
       "highlights": ["Terraza sur 30 m²", "Vistas al mar en todas las estancias", "4 dormitorios + 3 baños", "Garaje doble disponible"],
-      "hero_image": "./assets/images/Terraza (2).jpg", "thumbnail": "./assets/images/Terraza (2).jpg", "plan_image": null,
+      "hero_image": "./assets/images/Terraza (2).jpg", "thumbnail": "./assets/images/Terraza (2).jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/Salon 01.webp", "./assets/images/Salon 03.jpg", "./assets/images/Cocina (3).jpg", "./assets/images/Terraza (1).jpg", "./assets/images/Piscina (3).jpg"]
     },
     {
@@ -281,7 +282,7 @@
       "view_label": "Pool View",
       "short_description": "3 dormitorios con terraza este y espléndidas vistas a la piscina y los jardines desde la cuarta planta.",
       "highlights": ["Terraza este 21 m²", "Vistas a piscina y jardines", "Planta 4", "Trastero incluido"],
-      "hero_image": "./assets/images/Cocina (2).jpg", "thumbnail": "./assets/images/Cocina (2).jpg", "plan_image": null,
+      "hero_image": "./assets/images/Cocina (2).jpg", "thumbnail": "./assets/images/Cocina (2).jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/Salon 03.jpg", "./assets/images/Cocina (3).jpg", "./assets/images/Piscina (1).jpg", "./assets/images/Baño (1).jpg", "./assets/images/Terraza (2).jpg"]
     },
     {
@@ -296,7 +297,7 @@
       "view_label": "Panoramic View",
       "short_description": "Ático exclusivo con terraza de 70 m² y vistas panorámicas a 360º al Mediterráneo. La pieza más singular del edificio.",
       "highlights": ["Terraza panorámica 70 m²", "Vistas 360° al Mediterráneo", "4 dormitorios + 4 baños", "Doble garaje + trastero"],
-      "hero_image": "./assets/images/Salon 05.jpg", "thumbnail": "./assets/images/Salon 05.jpg", "plan_image": null,
+      "hero_image": "./assets/images/Salon 05.jpg", "thumbnail": "./assets/images/Salon 05.jpg", "plan_image": "./assets/floorplan.svg",
       "gallery_images": ["./assets/images/Salon 04.jpg", "./assets/images/Salon 05.jpg", "./assets/images/Terraza (1).jpg", "./assets/images/Terraza (2).jpg", "./assets/images/Piscina (1).jpg", "./assets/images/Piscina (2).jpg"]
     }
   ],

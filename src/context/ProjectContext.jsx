@@ -35,6 +35,7 @@ export function ProjectProvider({ children }) {
           aerialImage:   projectRow.aerial_image,
           accentColor:   projectRow.accent_color,
           gallery:       projectRow.gallery ?? [],
+          floorPlan:     projectRow.floor_plan ?? null,
         },
         building:  projectRow.building_data ?? {},
         amenities: projectRow.amenities      ?? [],

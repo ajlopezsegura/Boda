@@ -3,7 +3,8 @@ import ZoneHotspot from './ZoneHotspot'
 import { useProject } from '../../context/ProjectContext'
 
 export default function FloorPlanMap() {
-  const { spaces, floorPlan } = useProject()
+  const { project, spaces } = useProject()
+  const floorPlan = project?.floorPlan
 
   if (!floorPlan?.src) return null
 

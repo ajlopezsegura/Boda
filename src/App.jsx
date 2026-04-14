@@ -11,6 +11,7 @@ import ComparePage       from './pages/ComparePage'
 import ContactPage       from './pages/ContactPage'
 import SummaryPage       from './pages/SummaryPage'
 import PrivacyPage       from './pages/PrivacyPage'
+import MapPage          from './pages/MapPage'
 import AdminPage        from './pages/AdminPage'
 import ContactCTA       from './components/ui/ContactCTA'
 import { useProject }    from './context/ProjectContext'
@@ -52,6 +53,7 @@ export default function App() {
           <Route path="/compare"                 element={<ComparePage />} />
           <Route path="/contact"                 element={<ContactPage />} />
           <Route path="/summary/:slug"           element={<SummaryPage />} />
+          <Route path="/map"                     element={<MapPage />} />
           <Route path="/privacy"                 element={<PrivacyPage />} />
           <Route path="/admin"                   element={<AdminPage />} />
           <Route path="/seleccion"               element={<Navigate to="/availability" replace />} />
