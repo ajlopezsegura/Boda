@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, Check, Car, Package, Eye, X, GitCompareArrows, Share2 } from 'lucide-react'
@@ -18,6 +18,16 @@ function GalleryModal({ images, startIndex, onClose }) {
   const [idx, setIdx] = useState(startIndex)
   const prev = () => setIdx(i => (i - 1 + images.length) % images.length)
   const next = () => setIdx(i => (i + 1) % images.length)
+
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'ArrowRight') next()
+      if (e.key === 'ArrowLeft')  prev()
+      if (e.key === 'Escape')     onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [images.length, onClose])
 
   return (
     <motion.div
