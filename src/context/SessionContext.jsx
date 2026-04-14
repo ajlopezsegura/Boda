@@ -2,8 +2,11 @@ import { createContext, useContext, useState, useEffect, useCallback, useRef } f
 import { useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
-const SessionContext  = createContext(null)
-const PROJECT_SLUG    = import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas'
+const SessionContext = createContext(null)
+const PROJECT_SLUG     = import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas'
+
+/* Pages that should never be tracked */
+const EXCLUDED = ['/admin', '/privacy']
 
 function generateId() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36)
@@ -33,7 +36,11 @@ export function SessionProvider({ children }) {
     const now  = Date.now()
     const page = location.pathname
 
-    if (prevPage.current) {
+    // Skip excluded pages (admin, privacy)
+    if (EXCLUDED.some(p => page.startsWith(p))) return
+
+    // Close previous page with duration
+    if (prevPage.current && !EXCLUDED.some(p => prevPage.current.startsWith(p))) {
       const duration_ms = now - enterTime.current
       setTrail(prev => {
         const copy = [...prev]
@@ -49,7 +56,13 @@ export function SessionProvider({ children }) {
 
     prevPage.current  = page
     enterTime.current = now
-    setTrail(prev => [...prev, { type: 'page_view', page, ts: now, duration_ms: null }])
+
+    // Prevent duplicate entries (React StrictMode fires effects twice in dev)
+    setTrail(prev => {
+      const last = prev[prev.length - 1]
+      if (last?.type === 'page_view' && last?.page === page) return prev
+      return [...prev, { type: 'page_view', page, ts: now, duration_ms: null }]
+    })
   }, [location.pathname])
 
   /* ── Save session to Supabase ── */
