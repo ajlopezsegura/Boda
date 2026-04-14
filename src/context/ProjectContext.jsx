@@ -4,7 +4,7 @@ import projectDataFallback from '../data/project.json'
 
 const ProjectContext = createContext(null)
 
-const PROJECT_SLUG = import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas'
+const PROJECT_SLUG = (import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas').trim()
 
 export function ProjectProvider({ children }) {
   const [data,    setData]    = useState(null)

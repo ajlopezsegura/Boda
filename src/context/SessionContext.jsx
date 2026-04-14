@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 const SessionContext = createContext(null)
-const PROJECT_SLUG     = import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas'
+const PROJECT_SLUG     = (import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas').trim()
 
 /* Pages that should never be tracked */
 const EXCLUDED = ['/admin', '/privacy']
