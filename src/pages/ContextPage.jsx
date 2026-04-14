@@ -179,7 +179,7 @@ export default function ContextPage() {
             {/* CTA */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7, delay: 0.5 }}
               className="flex-shrink-0 pb-2">
-              <button onClick={() => navigate('/seleccion')} data-cursor="hover"
+              <button onClick={() => navigate('/availability')} data-cursor="hover"
                 className="label-luxury border transition-all duration-500 min-h-[44px] px-8 flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
                 style={{ borderColor: 'rgba(184,152,72,0.45)', color: 'var(--color-text)' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.08)' }}

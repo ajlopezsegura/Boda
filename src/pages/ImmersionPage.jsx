@@ -156,7 +156,7 @@ export default function ImmersionPage() {
 
         {/* ── Header ── */}
         <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-5 sm:px-8 py-4 z-10">
-          <button onClick={() => navigate('/seleccion')} data-cursor="hover"
+          <button onClick={() => navigate(`/availability/${unit.slug}`)} data-cursor="hover"
             className="flex items-center gap-1.5 label-luxury transition-all duration-300"
             style={{ color: 'rgba(244,241,234,0.5)', fontSize: '0.58rem' }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}

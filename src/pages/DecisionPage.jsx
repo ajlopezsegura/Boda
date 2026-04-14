@@ -45,7 +45,7 @@ export default function DecisionPage() {
         {/* Header */}
         <div className="flex-shrink-0 flex items-center justify-between px-6 sm:px-10 py-4"
           style={{ borderBottom: '1px solid rgba(184,152,72,0.12)' }}>
-          <button onClick={() => navigate(unit ? `/inmersion/${unit.id}` : '/seleccion')} data-cursor="hover"
+          <button onClick={() => navigate(unit ? `/availability/${unit.slug}` : '/availability')} data-cursor="hover"
             className="flex items-center gap-1.5 label-luxury transition-all duration-300"
             style={{ color: 'rgba(244,241,234,0.45)', fontSize: '0.6rem' }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
@@ -168,10 +168,10 @@ export default function DecisionPage() {
                   </button>
 
                   <div className="flex gap-3">
-                    <button data-cursor="hover"
+                    <button onClick={() => unit && navigate(`/summary/${unit.slug}`)} data-cursor="hover"
                       className="flex-1 label-luxury py-3 flex items-center justify-center gap-2 transition-all duration-300"
-                      style={{ border: '1px solid rgba(184,152,72,0.18)', color: 'rgba(244,241,234,0.45)', fontSize: '0.58rem' }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.4)'; e.currentTarget.style.color = 'var(--color-text)' }}
+                      style={{ border: '1px solid rgba(184,152,72,0.18)', color: 'rgba(244,241,234,0.45)', fontSize: '0.58rem', opacity: unit ? 1 : 0.35 }}
+                      onMouseEnter={e => { if (unit) { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.4)'; e.currentTarget.style.color = 'var(--color-text)' } }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.18)'; e.currentTarget.style.color = 'rgba(244,241,234,0.45)' }}>
                       <Download size={13} /> {lang === 'es' ? 'Dossier PDF' : 'PDF Dossier'}
                     </button>
