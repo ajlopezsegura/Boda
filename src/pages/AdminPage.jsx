@@ -239,7 +239,7 @@ function ActivityCard({ sess, index }) {
   const totalMs = views.reduce((acc, e) => acc + (e.duration_ms ?? 0), 0)
   const hasUnit = views.some(e => e.page?.startsWith('/availability/'))
   const hasImm  = views.some(e => e.page?.startsWith('/inmersion/'))
-  const hasCmp  = views.some(e => e.page === '/compare')
+  const hasCmp  = views.some(e => e.page === '/compare') || trail.some(e => e.type === 'compare_add')
   const hasDec  = views.some(e => e.page === '/decision')
 
   return (

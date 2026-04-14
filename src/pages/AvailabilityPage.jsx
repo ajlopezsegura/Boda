@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, SlidersHorizontal, X, LayoutGrid, List, Check } from 'lucide-react'
@@ -6,6 +6,7 @@ import PageTransition from '../components/layout/PageTransition'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { useCompare } from '../context/CompareContext'
+import { useSession } from '../context/SessionContext'
 
 const STATUS_CONFIG = {
   available: { es: 'Disponible', en: 'Available', color: 'var(--color-accent)',  bg: 'rgba(184,152,72,0.12)' },
@@ -43,6 +44,12 @@ export default function AvailabilityPage() {
   const { lang, toggle } = useLang()
 
   const { ids: compareIds, toggle: toggleCompare, clear: clearCompare, isIn, canAdd } = useCompare()
+  const { trackEvent } = useSession()
+
+  const handleCompareToggle = useCallback((unitId) => {
+    toggleCompare(unitId)
+    if (!compareIds.includes(unitId)) trackEvent('compare_add', { unit_id: unitId })
+  }, [toggleCompare, trackEvent, compareIds])
 
   const [filters, setFilters]         = useState(DEFAULT_FILTERS)
   const [sortBy, setSortBy]           = useState('unit_id')
@@ -252,7 +259,7 @@ export default function AvailabilityPage() {
                   onMouseLeave={e => { if (!isExpanded) e.currentTarget.style.backgroundColor = 'transparent' }}>
                   {/* Compare toggle */}
                   <button
-                    onClick={e => { e.stopPropagation(); toggleCompare(unit.id) }}
+                    onClick={e => { e.stopPropagation(); handleCompareToggle(unit.id) }}
                     data-cursor="hover"
                     disabled={!isIn(unit.id) && !canAdd(unit.id)}
                     className="flex items-center justify-center transition-all duration-200"
@@ -298,7 +305,7 @@ export default function AvailabilityPage() {
                   onClick={() => setExpandedId(isExpanded ? null : unit.id)}>
                   {/* Compare toggle */}
                   <button
-                    onClick={e => { e.stopPropagation(); toggleCompare(unit.id) }}
+                    onClick={e => { e.stopPropagation(); handleCompareToggle(unit.id) }}
                     data-cursor="hover"
                     disabled={!isIn(unit.id) && !canAdd(unit.id)}
                     className="flex items-center justify-center flex-shrink-0 transition-all duration-200"
@@ -486,7 +493,7 @@ export default function AvailabilityPage() {
                   </div>
                   {/* Compare toggle */}
                   <button
-                    onClick={e => { e.stopPropagation(); toggleCompare(unit.id) }}
+                    onClick={e => { e.stopPropagation(); handleCompareToggle(unit.id) }}
                     disabled={!isIn(unit.id) && !canAdd(unit.id)}
                     data-cursor="hover"
                     className="self-start flex items-center gap-1.5 label-luxury px-2.5 py-1.5 transition-all duration-200"
