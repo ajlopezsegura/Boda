@@ -5,6 +5,7 @@ import App from './App'
 import { ProjectProvider } from './context/ProjectContext'
 import { LangProvider } from './context/LangContext'
 import { CompareProvider } from './context/CompareContext'
+import { SessionProvider } from './context/SessionContext'
 import './styles/index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -13,7 +14,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <LangProvider>
         <ProjectProvider>
           <CompareProvider>
-            <App />
+            <SessionProvider>
+              <App />
+            </SessionProvider>
           </CompareProvider>
         </ProjectProvider>
       </LangProvider>

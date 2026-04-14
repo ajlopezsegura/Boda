@@ -5,6 +5,16 @@ import { ChevronLeft, Check, Car, Package } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
+import { useSession } from '../context/SessionContext'
+import { supabase } from '../lib/supabase'
+
+const PROJECT_SLUG = import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas'
+
+const HOT_SOURCES = ['decision', 'summary']
+
+function getTemperature(source) {
+  return HOT_SOURCES.includes(source) ? 'hot' : 'cold'
+}
 
 const STATUS_CONFIG = {
   available: { es: 'Disponible', en: 'Available', color: 'var(--color-accent)',  bg: 'rgba(184,152,72,0.12)' },
@@ -54,9 +64,10 @@ function Field({ label, error, children }) {
 }
 
 export default function ContactPage() {
-  const navigate           = useNavigate()
+  const navigate            = useNavigate()
   const { units: allUnits } = useProject()
-  const { lang, toggle }   = useLang()
+  const { lang, toggle }    = useLang()
+  const { sessionId, trail } = useSession()
 
   // ── Read context ──────────────────────────────────────────────────────────────
   const ctx = useMemo(() => {
@@ -104,24 +115,26 @@ export default function ContactPage() {
   }
 
   // ── Submit ────────────────────────────────────────────────────────────────────
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     const errs = validate()
     if (Object.keys(errs).length > 0) { setErrors(errs); return }
 
     setSubmitting(true)
+
+    const sourcePage    = ctx?.source ?? 'unknown'
+    const temperature   = getTemperature(sourcePage)
+
     const payload = {
-      timestamp:           new Date().toISOString(),
-      source_page:         ctx?.source ?? 'unknown',
+      project_slug:    PROJECT_SLUG,
+      source_page:     sourcePage,
       intent,
-      unit_ids:            ctx?.unit_ids ?? [],
-      primary_unit_id:     ctx?.primary_unit_id ?? null,
-      comparison_unit_ids: isMulti ? (ctx?.unit_ids ?? []) : [],
-      unit_snapshot:       units.map(u => ({
-        unit_id: u.id, unit_name: u.name, price: u.price,
-        bedrooms: u.bedrooms, built_area_m2: u.built_area_m2,
-        typology: u.typology, floor: u.floor, status: u.status,
-        orientation: u.orientation, terrace_area_m2: u.terrace_area_m2,
+      unit_ids:        ctx?.unit_ids ?? [],
+      primary_unit_id: ctx?.primary_unit_id ?? null,
+      unit_snapshot:   units.map(u => ({
+        unit_id: u.id, typology: u.typology, floor: u.floor,
+        bedrooms: u.bedrooms, surface: u.surface,
+        price: u.price, status: u.status,
       })),
       contact: {
         name:           fields.name.trim(),
@@ -130,34 +143,28 @@ export default function ContactPage() {
         preferred_date: showDate && fields.preferred_date ? fields.preferred_date : null,
         message:        fields.message.trim() || null,
       },
+      session_trail:    trail,
+      lead_score:       temperature === 'hot' ? 15 : 3,
+      lead_temperature: temperature,
+      status:           'new',
     }
 
-    localStorage.setItem('tvbs_lead', JSON.stringify(payload))
-    console.log('[TVBS Lead]', payload)
+    try {
+      const { error } = await supabase.from('leads').insert(payload)
+      if (error) console.error('[TVBS] Lead insert error:', error.message)
+    } catch (err) {
+      console.warn('[TVBS] Could not save lead to Supabase:', err.message)
+    }
 
-    setTimeout(() => { setSubmitting(false); setSubmitted(true) }, 1200)
+    setSubmitting(false)
+    setSubmitted(true)
   }
 
-  // ── No context guard ──────────────────────────────────────────────────────────
-  if (!ctx || units.length === 0) {
-    return (
-      <PageTransition>
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-5"
-          style={{ backgroundColor: 'var(--color-bg)' }}>
-          <p className="display-heading text-text/20"
-            style={{ fontSize: 'clamp(1rem,4vw,1.5rem)', letterSpacing: '0.1em', textAlign: 'center' }}>
-            {lang === 'es' ? 'SELECCIONA UNA VIVIENDA PRIMERO' : 'SELECT A UNIT FIRST'}
-          </p>
-          <button onClick={() => navigate('/availability')} data-cursor="hover"
-            className="label-luxury px-6 py-3 transition-all duration-300"
-            style={{ border: '1px solid rgba(184,152,72,0.3)', color: 'rgba(184,152,72,0.6)', fontSize: '0.58rem' }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.3)'; e.currentTarget.style.color = 'rgba(184,152,72,0.6)' }}>
-            {lang === 'es' ? '← Ver disponibilidad' : '← View availability'}
-          </button>
-        </div>
-      </PageTransition>
-    )
+  // ── If no context set yet, create a generic one (CTA from early pages) ────────
+  if (!ctx) {
+    localStorage.setItem('tvbs_lead_context', JSON.stringify({
+      source: 'general', unit_ids: [], primary_unit_id: null, back_path: '/',
+    }))
   }
 
   const backPath = ctx.back_path ?? '/availability'

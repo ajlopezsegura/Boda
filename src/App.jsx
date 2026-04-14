@@ -12,6 +12,7 @@ import ContactPage       from './pages/ContactPage'
 import SummaryPage       from './pages/SummaryPage'
 import PrivacyPage       from './pages/PrivacyPage'
 import AdminPage        from './pages/AdminPage'
+import ContactCTA       from './components/ui/ContactCTA'
 import { useProject }    from './context/ProjectContext'
 
 export default function App() {
@@ -39,6 +40,7 @@ export default function App() {
   return (
     <>
       <LuxuryCursor />
+      <ContactCTA />
       <AnimatePresence mode="wait" initial={false}>
         <Routes location={location} key={location.pathname}>
           <Route path="/"                        element={<CoverPage />} />
