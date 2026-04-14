@@ -8,7 +8,7 @@ import { useLang } from '../context/LangContext'
 import { useSession } from '../context/SessionContext'
 import { supabase } from '../lib/supabase'
 
-const PROJECT_SLUG = import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas'
+const PROJECT_SLUG = (import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas').trim()
 
 const HOT_SOURCES = ['decision', 'summary']
 
