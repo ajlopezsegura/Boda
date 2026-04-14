@@ -178,13 +178,20 @@ export default function ContextPage() {
 
             {/* CTA */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7, delay: 0.5 }}
-              className="flex-shrink-0 pb-2">
+              className="flex-shrink-0 pb-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <button onClick={() => navigate('/availability')} data-cursor="hover"
-                className="label-luxury border transition-all duration-500 min-h-[44px] px-8 flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
+                className="label-luxury border transition-all duration-500 min-h-[44px] px-8 flex items-center gap-2 justify-center sm:justify-start"
                 style={{ borderColor: 'rgba(184,152,72,0.45)', color: 'var(--color-text)' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.08)' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.45)'; e.currentTarget.style.backgroundColor = 'transparent' }}>
                 {lang === 'es' ? 'Ver viviendas disponibles →' : 'View available residences →'}
+              </button>
+              <button onClick={() => navigate('/map')} data-cursor="hover"
+                className="label-luxury border transition-all duration-500 min-h-[44px] px-6 flex items-center gap-2 justify-center sm:justify-start"
+                style={{ borderColor: 'rgba(184,152,72,0.2)', color: 'rgba(244,241,234,0.45)', fontSize: '0.52rem' }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.45)'; e.currentTarget.style.color = 'var(--color-text)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.2)'; e.currentTarget.style.color = 'rgba(244,241,234,0.45)' }}>
+                {lang === 'es' ? 'Ver plano →' : 'Floor plan →'}
               </button>
             </motion.div>
           </div>
