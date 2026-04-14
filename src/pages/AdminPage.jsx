@@ -231,6 +231,86 @@ function LeadCard({ lead, index }) {
   )
 }
 
+/* ─── Activity card (anonymous session) ──────────────────── */
+function ActivityCard({ sess, index }) {
+  const [expanded, setExpanded] = useState(false)
+  const trail   = Array.isArray(sess.trail) ? sess.trail : []
+  const views   = trail.filter(e => e.type === 'page_view')
+  const totalMs = views.reduce((acc, e) => acc + (e.duration_ms ?? 0), 0)
+  const hasUnit = views.some(e => e.page?.startsWith('/availability/'))
+  const hasImm  = views.some(e => e.page?.startsWith('/inmersion/'))
+  const hasCmp  = views.some(e => e.page === '/compare')
+  const hasDec  = views.some(e => e.page === '/decision')
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.03 }}
+      style={{ border: '1px solid rgba(184,152,72,0.07)', marginBottom: 6, background: 'rgba(184,152,72,0.01)' }}>
+
+      <div style={{
+        display: 'grid', gridTemplateColumns: '1fr 80px 80px 100px 32px',
+        gap: 16, padding: '12px 16px', alignItems: 'center',
+        cursor: views.length > 0 ? 'pointer' : 'default',
+      }} onClick={() => views.length > 0 && setExpanded(e => !e)}>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+          {[
+            { show: hasUnit, label: 'VIVIENDA' },
+            { show: hasCmp,  label: 'COMPARÓ' },
+            { show: hasImm,  label: 'INMERSIÓN' },
+            { show: hasDec,  label: 'DECISIÓN' },
+          ].filter(m => m.show).map(m => (
+            <span key={m.label} style={{
+              padding: '2px 7px', fontSize: '0.4rem', letterSpacing: '0.1em',
+              border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(184,152,72,0.7)',
+            }}>{m.label}</span>
+          ))}
+          {!hasUnit && !hasCmp && !hasImm && !hasDec && (
+            <span style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.25)' }}>Solo exploró</span>
+          )}
+        </div>
+
+        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{views.length}</span>
+        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{formatDuration(totalMs) ?? '—'}</span>
+        <span style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.3)' }}>
+          {formatDate(sess.updated_at).split(' · ')[0]}
+        </span>
+        <ChevronRight size={12} style={{
+          color: 'rgba(184,152,72,0.4)',
+          transform: expanded ? 'rotate(90deg)' : 'rotate(0)',
+          transition: 'transform 0.2s',
+        }} />
+      </div>
+
+      <AnimatePresence>
+        {expanded && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}
+            style={{ overflow: 'hidden' }}>
+            <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid rgba(184,152,72,0.07)' }}>
+              <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.4)', margin: '10px 0 8px' }}>
+                RECORRIDO
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                {views.map((ev, j) => (
+                  <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(184,152,72,0.35)', flexShrink: 0 }} />
+                    <span style={{ fontSize: '0.52rem', color: 'rgba(244,241,234,0.5)' }}>{pageLabel(ev.page)}</span>
+                    {formatDuration(ev.duration_ms) && (
+                      <span style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.45)' }}>{formatDuration(ev.duration_ms)}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
+
 /* ─── Password screen ─────────────────────────────────────── */
 function LoginScreen({ onLogin }) {
   const [pwd, setPwd]     = useState('')
@@ -539,81 +619,7 @@ export default function AdminPage() {
               </div>
             ) : (
               <div style={{ paddingTop: 8 }}>
-                {anon.map((sess, i) => {
-                  const trail    = Array.isArray(sess.trail) ? sess.trail : []
-                  const views    = trail.filter(e => e.type === 'page_view')
-                  const totalMs  = views.reduce((acc, e) => acc + (e.duration_ms ?? 0), 0)
-                  const hasUnit  = views.some(e => e.page?.startsWith('/availability/'))
-                  const hasImm   = views.some(e => e.page?.startsWith('/inmersion/'))
-                  const hasCmp   = views.some(e => e.page === '/compare')
-                  const hasDec   = views.some(e => e.page === '/decision')
-                  const [expSess, setExpSess] = useState(false)
-
-                  return (
-                    <motion.div key={sess.id}
-                      initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.03 }}
-                      style={{ border: '1px solid rgba(184,152,72,0.07)', marginBottom: 6, background: 'rgba(184,152,72,0.01)' }}>
-                      <div style={{
-                        display: 'grid', gridTemplateColumns: '1fr 80px 80px 100px 32px',
-                        gap: 16, padding: '12px 16px', alignItems: 'center',
-                        cursor: views.length > 0 ? 'pointer' : 'default',
-                      }} onClick={() => views.length > 0 && setExpSess(e => !e)}>
-                        {/* Milestones */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                          {[
-                            { show: hasUnit, label: 'VIVIENDA' },
-                            { show: hasCmp,  label: 'COMPARÓ' },
-                            { show: hasImm,  label: 'INMERSIÓN' },
-                            { show: hasDec,  label: 'DECISIÓN' },
-                          ].filter(m => m.show).map(m => (
-                            <span key={m.label} style={{
-                              padding: '2px 7px', fontSize: '0.4rem', letterSpacing: '0.1em',
-                              border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(184,152,72,0.7)',
-                            }}>{m.label}</span>
-                          ))}
-                          {!hasUnit && !hasCmp && !hasImm && (
-                            <span style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.25)' }}>Solo exploró</span>
-                          )}
-                        </div>
-                        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{views.length}</span>
-                        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{formatDuration(totalMs) ?? '—'}</span>
-                        <span style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.3)' }}>
-                          {formatDate(sess.updated_at).split(' · ')[0]}
-                        </span>
-                        <ChevronRight size={12} style={{
-                          color: 'rgba(184,152,72,0.4)',
-                          transform: expSess ? 'rotate(90deg)' : 'rotate(0)',
-                          transition: 'transform 0.2s',
-                        }} />
-                      </div>
-                      <AnimatePresence>
-                        {expSess && (
-                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}
-                            style={{ overflow: 'hidden' }}>
-                            <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid rgba(184,152,72,0.07)' }}>
-                              <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.4)', margin: '10px 0 8px' }}>
-                                RECORRIDO
-                              </div>
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                                {views.map((ev, j) => (
-                                  <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                    <div style={{ width: 4, height: 4, borderRadius: '50%', background: 'rgba(184,152,72,0.35)', flexShrink: 0 }} />
-                                    <span style={{ fontSize: '0.52rem', color: 'rgba(244,241,234,0.5)' }}>{pageLabel(ev.page)}</span>
-                                    {formatDuration(ev.duration_ms) && (
-                                      <span style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.45)' }}>{formatDuration(ev.duration_ms)}</span>
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  )
-                })}
+                {anon.map((sess, i) => <ActivityCard key={sess.id} sess={sess} index={i} />)}
               </div>
             )}
           </div>
