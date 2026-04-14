@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageCircle } from 'lucide-react'
 import { useLang } from '../../context/LangContext'
+import { useCompare } from '../../context/CompareContext'
 
 /* Pages where the CTA should NOT appear */
 const HIDDEN_ON = ['/contact', '/admin', '/privacy', '/summary']
@@ -10,6 +11,11 @@ export default function ContactCTA() {
   const location = useLocation()
   const navigate = useNavigate()
   const { lang } = useLang()
+  const { ids } = useCompare()
+
+  /* Lift button above the comparator bar when it's visible on the availability page */
+  const compareBarVisible = location.pathname.startsWith('/availability') && ids.length >= 2
+  const bottomPos = compareBarVisible ? 88 : 24
 
   const hidden = HIDDEN_ON.some(p => location.pathname.startsWith(p))
 
@@ -52,17 +58,18 @@ export default function ContactCTA() {
           transition={{ duration: 0.3, delay: 0.8 }}
           onClick={handleClick}
           data-cursor="hover"
+          className="sm:pr-[18px]"
           style={{
-            position: 'fixed', bottom: 28, right: 28, zIndex: 40,
+            position: 'fixed', bottom: bottomPos, right: 20, zIndex: 40,
+            transition: 'bottom 0.25s ease, border-color 0.2s, background 0.2s',
             display: 'flex', alignItems: 'center', gap: 8,
-            padding: '10px 18px 10px 14px',
+            padding: '11px 14px',
             background: 'rgba(18,16,12,0.92)',
             border: '1px solid rgba(184,152,72,0.35)',
             color: 'var(--color-accent)',
             fontSize: '0.5rem', letterSpacing: '0.15em',
             fontFamily: 'inherit', cursor: 'pointer',
             backdropFilter: 'blur(12px)',
-            transition: 'border-color 0.2s, background 0.2s',
           }}
           onMouseEnter={e => {
             e.currentTarget.style.borderColor = 'rgba(184,152,72,0.7)'
@@ -72,8 +79,8 @@ export default function ContactCTA() {
             e.currentTarget.style.borderColor = 'rgba(184,152,72,0.35)'
             e.currentTarget.style.background  = 'rgba(18,16,12,0.92)'
           }}>
-          <MessageCircle size={13} />
-          {lang === 'es' ? 'CONTACTAR' : 'CONTACT'}
+          <MessageCircle size={14} />
+          <span className="hidden sm:inline">{lang === 'es' ? 'CONTACTAR' : 'CONTACT'}</span>
         </motion.button>
       )}
     </AnimatePresence>

@@ -17,6 +17,10 @@ export default function AppShell() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    if (project?.name) document.title = `${project.name} · Marbella`
+  }, [project?.name])
+
   const projectName = lang === 'es' ? project.name : project.nameEN
 
   return (
