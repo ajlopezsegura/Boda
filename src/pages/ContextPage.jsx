@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Waves, Dumbbell, TreePine, Car, ShieldCheck, Sparkles,
-  Anchor, Flag, ShoppingBag, Plane, Utensils, MapPin, Images, X,
+  Anchor, Flag, ShoppingBag, Plane, Utensils, MapPin, Images, X, ChevronLeft, ChevronRight,
 } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useProject } from '../context/ProjectContext'
@@ -76,10 +76,85 @@ function ItemRow({ item, isSelected, onClick, lang, showDist }) {
   )
 }
 
+// ─── Lightbox ────────────────────────────────────────────────────────────────
+function Lightbox({ images, startIndex = 0, onClose }) {
+  const [idx, setIdx] = useState(startIndex)
+  const len = images.length
+
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'ArrowRight') setIdx(i => (i + 1) % len)
+      if (e.key === 'ArrowLeft')  setIdx(i => (i - 1 + len) % len)
+      if (e.key === 'Escape')     onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [len, onClose])
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onClick={onClose}
+      style={{ position: 'fixed', inset: 0, zIndex: 100, backgroundColor: 'rgba(10,12,18,0.97)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+      {/* Image */}
+      <AnimatePresence mode="wait">
+        <motion.img key={idx} src={images[idx]} alt=""
+          initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }} transition={{ duration: 0.25 }}
+          onClick={e => e.stopPropagation()}
+          style={{ maxWidth: '90vw', maxHeight: '85vh', objectFit: 'contain', userSelect: 'none' }} />
+      </AnimatePresence>
+
+      {/* Prev */}
+      {len > 1 && (
+        <button onClick={e => { e.stopPropagation(); setIdx(i => (i - 1 + len) % len) }}
+          style={{ position: 'absolute', left: 20, top: '50%', transform: 'translateY(-50%)',
+            color: 'rgba(184,152,72,0.7)', background: 'rgba(18,16,12,0.6)', border: '1px solid rgba(184,152,72,0.2)',
+            padding: '10px 8px', cursor: 'pointer' }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'rgba(184,152,72,0.7)'}>
+          <ChevronLeft size={18} />
+        </button>
+      )}
+
+      {/* Next */}
+      {len > 1 && (
+        <button onClick={e => { e.stopPropagation(); setIdx(i => (i + 1) % len) }}
+          style={{ position: 'absolute', right: 20, top: '50%', transform: 'translateY(-50%)',
+            color: 'rgba(184,152,72,0.7)', background: 'rgba(18,16,12,0.6)', border: '1px solid rgba(184,152,72,0.2)',
+            padding: '10px 8px', cursor: 'pointer' }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'rgba(184,152,72,0.7)'}>
+          <ChevronRight size={18} />
+        </button>
+      )}
+
+      {/* Counter */}
+      <div style={{ position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)' }}
+        onClick={e => e.stopPropagation()}>
+        <span className="label-luxury" style={{ fontSize: '0.48rem', color: 'rgba(184,152,72,0.5)', letterSpacing: '0.2em' }}>
+          {idx + 1} / {len}
+        </span>
+      </div>
+
+      {/* Close */}
+      <button onClick={onClose}
+        style={{ position: 'absolute', top: 20, right: 20, color: 'rgba(184,152,72,0.6)',
+          background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}
+        onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+        onMouseLeave={e => e.currentTarget.style.color = 'rgba(184,152,72,0.6)'}>
+        <X size={20} />
+      </button>
+    </motion.div>
+  )
+}
+
 // ─── Detail panel (shown below list when item selected) ───────────────────────
-function DetailPanel({ item, lang, onClose }) {
-  const desc     = lang === 'es' ? (item.description ?? item.descriptionEN) : (item.descriptionEN ?? item.description)
-  const hasImgs  = (item.images?.length ?? 0) > 0
+function DetailPanel({ item, lang, onClose, onOpenGallery }) {
+  const desc    = lang === 'es' ? (item.description ?? item.descriptionEN) : (item.descriptionEN ?? item.description)
+  const hasImgs = (item.images?.length ?? 0) > 0
 
   return (
     <motion.div
@@ -101,11 +176,14 @@ function DetailPanel({ item, lang, onClose }) {
       </div>
 
       {hasImgs && (
-        <p className="label-luxury flex items-center gap-1.5"
-          style={{ fontSize: '0.48rem', color: 'rgba(184,152,72,0.55)', letterSpacing: '0.15em' }}>
+        <button onClick={onOpenGallery} data-cursor="hover"
+          className="label-luxury flex items-center gap-1.5 transition-colors duration-200"
+          style={{ fontSize: '0.48rem', color: 'rgba(184,152,72,0.55)', letterSpacing: '0.15em', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+          onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+          onMouseLeave={e => e.currentTarget.style.color = 'rgba(184,152,72,0.55)'}>
           <Images size={11} />
-          {lang === 'es' ? `VER GALERÍA — ${item.images.length} FOTOS EN PANTALLA` : `SEE GALLERY — ${item.images.length} PHOTOS ON SCREEN`}
-        </p>
+          {lang === 'es' ? `VER GALERÍA →` : `SEE GALLERY →`}
+        </button>
       )}
     </motion.div>
   )
@@ -169,6 +247,7 @@ export default function ContextPage() {
 
   const [activeTab,    setActiveTab]    = useState('obra')
   const [selectedItem, setSelectedItem] = useState(null) // { type, item }
+  const [lightbox,     setLightbox]     = useState(null) // { images, index }
 
   const name        = lang === 'es' ? project.name        : project.nameEN
   const description = lang === 'es' ? project.description : project.descriptionEN
@@ -196,6 +275,14 @@ export default function ContextPage() {
 
   return (
     <PageTransition>
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightbox && (
+          <Lightbox images={lightbox.images} startIndex={lightbox.index}
+            onClose={() => setLightbox(null)} />
+        )}
+      </AnimatePresence>
+
       <div className="absolute inset-0 flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--color-bg)' }}>
 
         {/* Header */}
@@ -318,7 +405,8 @@ export default function ContextPage() {
                             onClick={() => handleItemClick('nearby', item)} />
                           <AnimatePresence>
                             {selectedItem?.item?.id === item.id && (
-                              <DetailPanel item={item} lang={lang} onClose={() => setSelectedItem(null)} />
+                              <DetailPanel item={item} lang={lang} onClose={() => setSelectedItem(null)}
+                            onOpenGallery={() => setLightbox({ images: item.images, index: 0 })} />
                             )}
                           </AnimatePresence>
                         </div>
@@ -336,7 +424,8 @@ export default function ContextPage() {
                             onClick={() => handleItemClick('amenity', item)} />
                           <AnimatePresence>
                             {selectedItem?.item?.id === item.id && (
-                              <DetailPanel item={item} lang={lang} onClose={() => setSelectedItem(null)} />
+                              <DetailPanel item={item} lang={lang} onClose={() => setSelectedItem(null)}
+                            onOpenGallery={() => setLightbox({ images: item.images, index: 0 })} />
                             )}
                           </AnimatePresence>
                         </div>
