@@ -78,8 +78,8 @@ export default function CoverPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 1.6 }}
-            className="label-luxury text-text/60"
-            style={{ fontSize: '0.65rem', letterSpacing: '0.22em' }}
+            className="label-luxury text-text/80"
+            style={{ fontSize: '0.65rem', letterSpacing: '0.22em', fontWeight: 500 }}
           >
             {project.subtitle}
           </motion.p>
