@@ -9,7 +9,7 @@ import { supabase } from '../lib/supabase'
 import { useProject } from '../context/ProjectContext'
 
 const PROJECT_SLUG  = (import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas').trim()
-const WA_NUMBER     = '34600000000' // ← cambia por el número de WhatsApp real (sin + ni espacios)
+const WA_NUMBER     = '34665263089'
 
 const HOT_SOURCES   = ['decision', 'summary']
 const getTemperature = source => HOT_SOURCES.includes(source) ? 'hot' : 'cold'
