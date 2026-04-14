@@ -11,6 +11,7 @@ import ComparePage       from './pages/ComparePage'
 import ContactPage       from './pages/ContactPage'
 import SummaryPage       from './pages/SummaryPage'
 import PrivacyPage       from './pages/PrivacyPage'
+import AdminPage        from './pages/AdminPage'
 import { useProject }    from './context/ProjectContext'
 
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="/contact"                 element={<ContactPage />} />
           <Route path="/summary/:slug"           element={<SummaryPage />} />
           <Route path="/privacy"                 element={<PrivacyPage />} />
+          <Route path="/admin"                   element={<AdminPage />} />
           <Route path="/seleccion"               element={<Navigate to="/availability" replace />} />
         </Routes>
       </AnimatePresence>
