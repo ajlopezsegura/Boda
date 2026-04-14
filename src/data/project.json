@@ -11,6 +11,14 @@
     "aerialImage": "./assets/images/las-conchas-aerea.jpg",
     "accentColor": "#B89848",
     "floorPlan": { "src": "./assets/floorplan.svg" },
+    "exteriorImages": [
+      "./assets/images/las-conchas-aerea.jpg",
+      "./assets/images/Piscina (1).jpg",
+      "./assets/images/Piscina (2).jpg",
+      "./assets/images/Piscina (3).jpg",
+      "./assets/images/Terraza (1).jpg",
+      "./assets/images/Terraza (2).jpg"
+    ],
     "gallery": [
       "./assets/images/las-conchas-aerea.jpg",
       "./assets/images/Salon 01.webp",
