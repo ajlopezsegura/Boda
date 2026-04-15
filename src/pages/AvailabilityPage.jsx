@@ -104,9 +104,9 @@ export default function AvailabilityPage() {
 
   function chipStyle(active) {
     return {
-      fontSize: '0.52rem', border: '1px solid',
+      fontSize: '0.62rem', border: '1px solid',
       borderColor:     active ? 'var(--color-accent)' : 'rgba(184,152,72,0.18)',
-      color:           active ? 'var(--color-accent)' : 'rgba(244,241,234,0.4)',
+      color:           active ? 'var(--color-accent)' : 'rgba(244,241,234,0.7)',
       backgroundColor: active ? 'rgba(184,152,72,0.07)' : 'transparent',
       minWidth: 32,
     }
@@ -220,7 +220,7 @@ export default function AvailabilityPage() {
       <div>
         {/* Column headers */}
         <div className="hidden sm:grid label-luxury px-4 pb-2"
-          style={{ ...cols, fontSize: '0.48rem', color: 'rgba(184,152,72,0.45)', letterSpacing: '0.15em' }}>
+          style={{ ...cols, fontSize: '0.58rem', color: 'rgba(184,152,72,0.65)', letterSpacing: '0.15em' }}>
           <span style={{ color: 'rgba(184,152,72,0.85)' }}>{lang === 'es' ? 'COMPARAR' : 'COMPARE'}</span>
           <span>{lang === 'es' ? 'VIVIENDA' : 'UNIT'}</span>
           <span>{lang === 'es' ? 'TIPOLOGÍA' : 'TYPE'}</span>
@@ -280,17 +280,17 @@ export default function AvailabilityPage() {
                     {unit.name}
                     {unit.featured && <span className="ml-1.5 label-luxury" style={{ fontSize: '0.38rem', color: 'var(--color-accent)', verticalAlign: 'middle' }}>★</span>}
                   </span>
-                  <span className="label-luxury text-text/50" style={{ fontSize: '0.55rem' }}>{unit.typology}</span>
-                  <span className="label-luxury text-text/50" style={{ fontSize: '0.58rem' }}>{unit.floor}ª</span>
-                  <span className="label-luxury text-text/50" style={{ fontSize: '0.58rem' }}>{unit.bedrooms}</span>
-                  <span className="label-luxury text-text/50" style={{ fontSize: '0.58rem' }}>{unit.surface} m²</span>
-                  <span className="label-luxury text-text/50" style={{ fontSize: '0.55rem' }}>{unit.orientation}</span>
-                  <span className="label-luxury" style={{ fontSize: '0.65rem', color: unit.status === 'sold' ? 'rgba(244,241,234,0.2)' : 'var(--color-text)' }}>
+                  <span className="label-luxury" style={{ fontSize: '0.65rem', color: 'rgba(244,241,234,0.78)' }}>{unit.typology}</span>
+                  <span className="label-luxury" style={{ fontSize: '0.65rem', color: 'rgba(244,241,234,0.78)' }}>{unit.floor}ª</span>
+                  <span className="label-luxury" style={{ fontSize: '0.65rem', color: 'rgba(244,241,234,0.78)' }}>{unit.bedrooms}</span>
+                  <span className="label-luxury" style={{ fontSize: '0.65rem', color: 'rgba(244,241,234,0.78)' }}>{unit.surface} m²</span>
+                  <span className="label-luxury" style={{ fontSize: '0.65rem', color: 'rgba(244,241,234,0.78)' }}>{unit.orientation}</span>
+                  <span className="label-luxury" style={{ fontSize: '0.72rem', color: unit.status === 'sold' ? 'rgba(244,241,234,0.2)' : 'var(--color-text)' }}>
                     {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="label-luxury px-2 py-0.5 whitespace-nowrap"
-                      style={{ fontSize: '0.44rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}` }}>
+                      style={{ fontSize: '0.55rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}` }}>
                       {lang === 'es' ? st.es : st.en}
                     </span>
                     <span className="label-luxury ml-auto" style={{ fontSize: '0.55rem', color: 'rgba(184,152,72,0.4)', transition: 'transform 0.2s', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>
@@ -572,7 +572,7 @@ export default function AvailabilityPage() {
               style={{ fontSize: 'clamp(1.1rem, 3vw, 1.6rem)', letterSpacing: '0.1em' }}>
               {lang === 'es' ? 'DISPONIBILIDAD' : 'AVAILABILITY'}
             </h2>
-            <p className="label-luxury mt-1" style={{ fontSize: '0.52rem', color: 'rgba(184,152,72,0.5)' }}>
+            <p className="label-luxury mt-1" style={{ fontSize: '0.6rem', color: 'rgba(184,152,72,0.7)' }}>
               {filtered.length} {lang === 'es' ? 'unidades encontradas' : 'units found'}
             </p>
           </motion.div>
