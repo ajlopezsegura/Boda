@@ -8,7 +8,7 @@ export default {
         'bg-card':      '#364556',  // Azul Medianoche TVBS
         'bg-deep':      '#1A2130',
         text:           '#F4F1EA',  // Blanco Marfil
-        'text-muted':   'rgba(244,241,234,0.50)',
+        'text-muted':   'rgba(244,241,234,0.68)',
         bone:           '#E5E2DA',  // Hueso Neutro TVBS
         accent:         '#B89848',  // Oro Absoluto TVBS
         'accent-light': '#CEB060',

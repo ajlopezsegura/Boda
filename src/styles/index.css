@@ -8,7 +8,7 @@
   --color-bg-card:      #364556;
   --color-bg-deep:      #1A2130;
   --color-text:         #F4F1EA;
-  --color-text-muted:   rgba(244,241,234,0.50);
+  --color-text-muted:   rgba(244,241,234,0.68);
   --color-bone:         #E5E2DA;
   --color-accent:       #B89848;
   --color-accent-light: #CEB060;
@@ -56,13 +56,13 @@ body {
 /* Label utility */
 .label-luxury {
   font-family: Montserrat, sans-serif;
-  font-weight: 300;
-  font-size: 0.7rem;   /* bumped from 0.65 for mobile legibility */
+  font-weight: 400;
+  font-size: 0.75rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 @media (min-width: 640px) {
-  .label-luxury { font-size: 0.65rem; letter-spacing: 0.18em; }
+  .label-luxury { font-size: 0.72rem; letter-spacing: 0.18em; }
 }
 
 /* Display heading */
