@@ -34,12 +34,12 @@ function ImageCarousel({ images, resetKey, interval = 4000 }) {
 
   if (!len) return null
   return (
-    <div className="relative w-full h-full overflow-hidden">
+    <div className="relative w-full h-full overflow-hidden" style={{ backgroundColor: 'var(--color-bg)' }}>
       <AnimatePresence mode="wait">
         <motion.img key={`${resetKey}-${idx}`} src={images[idx]} alt=""
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
-          className="absolute inset-0 w-full h-full object-cover" />
+          className="absolute inset-0 w-full h-full object-contain" />
       </AnimatePresence>
     </div>
   )
