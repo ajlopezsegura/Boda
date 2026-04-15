@@ -8,6 +8,17 @@ import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { shareOrCopy, shareBase } from '../lib/share'
 
+function useIsMobile(bp = 640) {
+  const [m, setM] = useState(() => window.innerWidth < bp)
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${bp - 1}px)`)
+    const h = e => setM(e.matches)
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
+  }, [bp])
+  return m
+}
+
 const STATUS_CONFIG = {
   available: { es: 'Disponible', en: 'Available', color: 'var(--color-accent)',  bg: 'rgba(184,152,72,0.12)' },
   reserved:  { es: 'Reservada',  en: 'Reserved',  color: 'rgba(255,200,80,0.9)', bg: 'rgba(255,200,80,0.10)' },
@@ -73,6 +84,7 @@ export default function ComparePage() {
   const { units: allUnits }   = useProject()
   const { lang, toggle }      = useLang()
   const [searchParams]        = useSearchParams()
+  const mob                         = useIsMobile()
   const [shareDone,  setShareDone]  = useState(false)
 
   /* Restore compare state from shared URL: #/compare?units=1a,2b,3a */
@@ -119,7 +131,8 @@ export default function ComparePage() {
     )
   }
 
-  const gridCols = `170px repeat(${nCols}, 1fr)`
+  const labelW   = mob ? '90px' : '170px'
+  const gridCols = `${labelW} repeat(${nCols}, 1fr)`
 
   return (
     <PageTransition>
@@ -187,7 +200,7 @@ export default function ComparePage() {
 
             {/* Table — horizontally scrollable on mobile */}
             <div className="overflow-x-auto">
-              <div style={{ minWidth: nCols === 2 ? 540 : 720 }}>
+              <div style={{ minWidth: mob ? (nCols === 2 ? 340 : nCols * 150 + 90) : (nCols === 2 ? 540 : 720) }}>
 
                 {/* ── Unit header cards ── */}
                 <div className="grid gap-3 mb-px" style={{ gridTemplateColumns: gridCols }}>
@@ -200,7 +213,7 @@ export default function ComparePage() {
                         transition={{ delay: i * 0.07 }}
                         style={{ border: '1px solid rgba(184,152,72,0.15)' }}>
                         {/* Image */}
-                        <div className="relative overflow-hidden" style={{ height: 130, backgroundColor: '#0d1117' }}>
+                        <div className="relative overflow-hidden" style={{ height: mob ? 90 : 130, backgroundColor: '#0d1117' }}>
                           {unit.hero_image
                             ? <img src={unit.hero_image} alt={unit.name}
                                 className="w-full h-full object-cover"
@@ -227,11 +240,11 @@ export default function ComparePage() {
                           </div>
                         </div>
                         {/* Name */}
-                        <div className="px-3 py-2.5">
-                          <p className="display-heading text-text" style={{ fontSize: '0.85rem', letterSpacing: '0.08em' }}>
+                        <div style={{ padding: mob ? '6px 8px' : '10px 12px' }}>
+                          <p className="display-heading text-text" style={{ fontSize: mob ? '0.68rem' : '0.85rem', letterSpacing: '0.08em' }}>
                             {unit.name}
                           </p>
-                          <p className="label-luxury mt-0.5" style={{ fontSize: '0.45rem', color: 'rgba(184,152,72,0.5)' }}>
+                          <p className="label-luxury mt-0.5" style={{ fontSize: mob ? '0.4rem' : '0.45rem', color: 'rgba(184,152,72,0.5)' }}>
                             {unit.typology}
                           </p>
                         </div>
@@ -252,10 +265,10 @@ export default function ComparePage() {
                         borderBottom: '1px solid rgba(184,152,72,0.06)',
                       }}>
                       {/* Label */}
-                      <div className="flex items-center px-3 py-3"
-                        style={{ borderRight: '1px solid rgba(184,152,72,0.07)' }}>
+                      <div className="flex items-center"
+                        style={{ padding: mob ? '8px 6px' : '12px', borderRight: '1px solid rgba(184,152,72,0.07)' }}>
                         <span className="label-luxury"
-                          style={{ fontSize: '0.44rem', color: 'rgba(184,152,72,0.4)', letterSpacing: '0.15em' }}>
+                          style={{ fontSize: mob ? '0.38rem' : '0.44rem', color: 'rgba(184,152,72,0.4)', letterSpacing: mob ? '0.08em' : '0.15em' }}>
                           {lang === 'es' ? row.labelEs : row.labelEn}
                         </span>
                       </div>
@@ -267,7 +280,8 @@ export default function ComparePage() {
                         const isBool = row.best === 'bool'
 
                         return (
-                          <div key={unit.id} className="flex items-center px-4 py-3"
+                          <div key={unit.id} className="flex items-center"
+                            style={{ padding: mob ? '8px 6px' : '12px 16px' }}
                             style={{
                               borderRight: uIdx < nCols - 1 ? '1px solid rgba(184,152,72,0.06)' : 'none',
                               backgroundColor: isBest ? 'rgba(184,152,72,0.07)' : 'transparent',
@@ -279,7 +293,7 @@ export default function ComparePage() {
                             ) : (
                               <span className="label-luxury"
                                 style={{
-                                  fontSize: row.key === 'price' ? '0.68rem' : '0.58rem',
+                                  fontSize: row.key === 'price' ? (mob ? '0.55rem' : '0.68rem') : (mob ? '0.48rem' : '0.58rem'),
                                   color: isBest ? 'var(--color-accent)' : 'rgba(244,241,234,0.6)',
                                   letterSpacing: row.key === 'price' ? '0.02em' : '0',
                                 }}>

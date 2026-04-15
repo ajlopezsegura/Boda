@@ -8,6 +8,17 @@ import { useLang } from '../context/LangContext'
 import { useCompare } from '../context/CompareContext'
 import { shareOrCopy, shareBase } from '../lib/share'
 
+function useIsMobile(bp = 640) {
+  const [m, setM] = useState(() => window.innerWidth < bp)
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${bp - 1}px)`)
+    const h = e => setM(e.matches)
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
+  }, [bp])
+  return m
+}
+
 const STATUS_CONFIG = {
   available: { es: 'Disponible', en: 'Available', color: 'var(--color-accent)',  bg: 'rgba(184,152,72,0.12)' },
   reserved:  { es: 'Reservada',  en: 'Reserved',  color: 'rgba(255,200,80,0.9)', bg: 'rgba(255,200,80,0.10)' },
@@ -73,6 +84,7 @@ export default function UnitDetailPage() {
   const { lang, toggle } = useLang()
 
   const { ids: compareIds, toggle: toggleCompare, isIn, canAdd } = useCompare()
+  const mob = useIsMobile()
 
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [galleryIdx,  setGalleryIdx]  = useState(0)
@@ -186,9 +198,13 @@ export default function UnitDetailPage() {
               style={{ background: 'linear-gradient(to bottom, rgba(13,17,23,0.1) 0%, transparent 40%, rgba(13,17,23,0.75) 100%)' }} />
 
             {/* Hero content */}
-            <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-10 pb-7 flex items-end justify-between gap-4">
+            <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-10 pb-7"
+              style={mob
+                ? { display: 'flex', flexDirection: 'column', gap: 8 }
+                : { display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16 }
+              }>
               <div>
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center gap-3 mb-2" style={{ flexWrap: 'wrap' }}>
                   <span className="label-luxury px-2.5 py-1"
                     style={{ fontSize: '0.48rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}`, backdropFilter: 'blur(8px)' }}>
                     {lang === 'es' ? st.es : st.en}
@@ -199,8 +215,8 @@ export default function UnitDetailPage() {
                       {lang === 'es' ? 'DESTACADA' : 'FEATURED'}
                     </span>
                   )}
-                  {unit.view_label && (
-                    <span className="label-luxury px-2.5 py-1 hidden sm:inline"
+                  {unit.view_label && !mob && (
+                    <span className="label-luxury px-2.5 py-1"
                       style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.7)', border: '1px solid rgba(184,152,72,0.25)', backdropFilter: 'blur(8px)' }}>
                       {unit.view_label}
                     </span>
@@ -213,7 +229,7 @@ export default function UnitDetailPage() {
                   {unit.typology} · {lang === 'es' ? 'Planta' : 'Floor'} {unit.floor} · {unit.orientation}
                 </p>
               </div>
-              <div className="flex-shrink-0 text-right">
+              <div style={{ flexShrink: 0, textAlign: mob ? 'left' : 'right' }}>
                 <p className="display-heading"
                   style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', letterSpacing: '0.06em', color: unit.status === 'sold' ? 'rgba(244,241,234,0.25)' : 'var(--color-accent)' }}>
                   {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
@@ -328,7 +344,7 @@ export default function UnitDetailPage() {
                 )}
 
                 {/* Secondary CTAs */}
-                <div className="flex gap-3">
+                <div className="flex gap-3" style={{ flexDirection: mob ? 'column' : 'row' }}>
                   {unit.status === 'available' && (
                     <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
                       className="flex-1 label-luxury py-3 flex items-center justify-center gap-2 transition-all duration-300"
@@ -336,7 +352,9 @@ export default function UnitDetailPage() {
                       onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-text)' }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'; e.currentTarget.style.color = 'rgba(244,241,234,0.55)' }}>
                       <Eye size={13} />
-                      {lang === 'es' ? 'Configurador de vivienda' : 'Unit configurator'}
+                      {mob
+                        ? (lang === 'es' ? 'Configurador' : 'Configurator')
+                        : (lang === 'es' ? 'Configurador de vivienda' : 'Unit configurator')}
                     </button>
                   )}
                   <button onClick={() => navigate(`/summary/${unit.slug}`)} data-cursor="hover"
@@ -349,7 +367,7 @@ export default function UnitDetailPage() {
                 </div>
 
                 {/* Compare */}
-                <div className="flex gap-3 pt-1">
+                <div className="flex pt-1" style={{ gap: 12, flexDirection: mob ? 'column' : 'row' }}>
                   <button
                     onClick={() => toggleCompare(unit.id)}
                     disabled={!isIn(unit.id) && !canAdd(unit.id)}
