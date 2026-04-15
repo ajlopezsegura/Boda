@@ -1,20 +1,22 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import LuxuryCursor      from './components/cursor/LuxuryCursor'
-import CoverPage         from './pages/CoverPage'
-import ContextPage       from './pages/ContextPage'
-import AvailabilityPage  from './pages/AvailabilityPage'
-import UnitDetailPage    from './pages/UnitDetailPage'
-import ImmersionPage     from './pages/ImmersionPage'
-import DecisionPage      from './pages/DecisionPage'
-import ComparePage       from './pages/ComparePage'
-import ContactPage       from './pages/ContactPage'
-import SummaryPage       from './pages/SummaryPage'
-import PrivacyPage       from './pages/PrivacyPage'
-import MapPage          from './pages/MapPage'
-import AdminPage        from './pages/AdminPage'
 import AppFooter        from './components/layout/AppFooter'
 import { useProject }    from './context/ProjectContext'
+
+const CoverPage         = lazy(() => import('./pages/CoverPage'))
+const ContextPage       = lazy(() => import('./pages/ContextPage'))
+const AvailabilityPage  = lazy(() => import('./pages/AvailabilityPage'))
+const UnitDetailPage    = lazy(() => import('./pages/UnitDetailPage'))
+const ImmersionPage     = lazy(() => import('./pages/ImmersionPage'))
+const DecisionPage      = lazy(() => import('./pages/DecisionPage'))
+const ComparePage       = lazy(() => import('./pages/ComparePage'))
+const ContactPage       = lazy(() => import('./pages/ContactPage'))
+const SummaryPage       = lazy(() => import('./pages/SummaryPage'))
+const PrivacyPage       = lazy(() => import('./pages/PrivacyPage'))
+const MapPage           = lazy(() => import('./pages/MapPage'))
+const AdminPage         = lazy(() => import('./pages/AdminPage'))
 
 export default function App() {
   const location        = useLocation()
@@ -43,21 +45,34 @@ export default function App() {
       <LuxuryCursor />
       <AppFooter />
       <AnimatePresence mode="sync" initial={false}>
-        <Routes location={location} key={location.pathname}>
-          <Route path="/"                        element={<CoverPage />} />
-          <Route path="/proyecto"                element={<ContextPage />} />
-          <Route path="/availability"            element={<AvailabilityPage />} />
-          <Route path="/availability/:slug"      element={<UnitDetailPage />} />
-          <Route path="/inmersion/:unitId"       element={<ImmersionPage />} />
-          <Route path="/decision"                element={<DecisionPage />} />
-          <Route path="/compare"                 element={<ComparePage />} />
-          <Route path="/contact"                 element={<ContactPage />} />
-          <Route path="/summary/:slug"           element={<SummaryPage />} />
-          <Route path="/map"                     element={<MapPage />} />
-          <Route path="/privacy"                 element={<PrivacyPage />} />
-          <Route path="/admin"                   element={<AdminPage />} />
-          <Route path="/seleccion"               element={<Navigate to="/availability" replace />} />
-        </Routes>
+        <Suspense fallback={
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            className="fixed inset-0 flex items-center justify-center"
+            style={{ backgroundColor: 'var(--color-bg)' }}>
+            <div style={{
+              width: 24, height: 24, border: '1px solid rgba(184,152,72,0.3)',
+              borderTopColor: 'var(--color-accent)', borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+            }} />
+          </motion.div>
+        }>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/"                        element={<CoverPage />} />
+            <Route path="/proyecto"                element={<ContextPage />} />
+            <Route path="/availability"            element={<AvailabilityPage />} />
+            <Route path="/availability/:slug"      element={<UnitDetailPage />} />
+            <Route path="/inmersion/:unitId"       element={<ImmersionPage />} />
+            <Route path="/decision"                element={<DecisionPage />} />
+            <Route path="/compare"                 element={<ComparePage />} />
+            <Route path="/contact"                 element={<ContactPage />} />
+            <Route path="/summary/:slug"           element={<SummaryPage />} />
+            <Route path="/map"                     element={<MapPage />} />
+            <Route path="/privacy"                 element={<PrivacyPage />} />
+            <Route path="/admin"                   element={<AdminPage />} />
+            <Route path="/seleccion"               element={<Navigate to="/availability" replace />} />
+          </Routes>
+        </Suspense>
       </AnimatePresence>
     </>
   )
