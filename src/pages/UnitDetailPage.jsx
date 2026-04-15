@@ -141,9 +141,13 @@ export default function UnitDetailPage() {
             <ChevronLeft size={14} />
             {lang === 'es' ? 'Disponibilidad' : 'Availability'}
           </button>
-          <span className="label-luxury text-text/40 hidden sm:block" style={{ fontSize: '0.55rem' }}>
+          <button onClick={() => navigate('/proyecto')} data-cursor="hover"
+            className="label-luxury text-text/40 hidden sm:block transition-colors duration-200"
+            style={{ fontSize: '0.55rem', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+            onMouseLeave={e => e.currentTarget.style.color = ''}>
             {projectName?.toUpperCase()} · {unit.name}
-          </span>
+          </button>
           <div className="flex items-center gap-4">
             <button onClick={handleShare} data-cursor="hover"
               className="flex items-center gap-1.5 label-luxury transition-colors duration-300"
@@ -332,7 +336,7 @@ export default function UnitDetailPage() {
                       onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-text)' }}
                       onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'; e.currentTarget.style.color = 'rgba(244,241,234,0.55)' }}>
                       <Eye size={13} />
-                      {lang === 'es' ? 'Experiencia inmersiva' : 'Immersive experience'}
+                      {lang === 'es' ? 'Configurador de vivienda' : 'Unit configurator'}
                     </button>
                   )}
                   <button onClick={() => navigate(`/summary/${unit.slug}`)} data-cursor="hover"
