@@ -302,26 +302,29 @@ export default function AvailabilityPage() {
                 {/* Mobile row — clickable */}
                 <div
                   role="button" tabIndex={0}
-                  className="flex sm:hidden w-full items-center px-4 py-3 gap-2.5"
+                  className="flex sm:hidden w-full items-center px-4 py-3 gap-3"
                   style={{ backgroundColor: isExpanded ? 'rgba(184,152,72,0.05)' : 'transparent' }}
                   onClick={() => setExpandedId(isExpanded ? null : unit.id)}>
                   {/* Compare toggle */}
-                  <button
-                    onClick={e => { e.stopPropagation(); handleCompareToggle(unit.id) }}
-                    data-cursor="hover"
-                    disabled={!isIn(unit.id) && !canAdd(unit.id)}
-                    className="flex items-center justify-center flex-shrink-0 transition-all duration-200"
-                    style={{
-                      width: 22, height: 22,
-                      border: `1px solid ${isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.25)'}`,
-                      backgroundColor: isIn(unit.id) ? 'rgba(184,152,72,0.12)' : 'transparent',
-                      opacity: !isIn(unit.id) && !canAdd(unit.id) ? 0.25 : 1,
-                    }}>
-                    {isIn(unit.id)
-                      ? <Check size={10} style={{ color: 'var(--color-accent)' }} />
-                      : <span style={{ fontSize: '0.7rem', color: 'rgba(184,152,72,0.5)', lineHeight: 1 }}>+</span>
-                    }
-                  </button>
+                  <div className="flex flex-col items-center gap-1 flex-shrink-0" style={{ width: 28 }}>
+                    <button
+                      onClick={e => { e.stopPropagation(); handleCompareToggle(unit.id) }}
+                      data-cursor="hover"
+                      disabled={!isIn(unit.id) && !canAdd(unit.id)}
+                      className="flex items-center justify-center transition-all duration-200"
+                      style={{
+                        width: 26, height: 26,
+                        border: `1px solid ${isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.35)'}`,
+                        backgroundColor: isIn(unit.id) ? 'rgba(184,152,72,0.15)' : 'rgba(184,152,72,0.04)',
+                        opacity: !isIn(unit.id) && !canAdd(unit.id) ? 0.25 : 1,
+                      }}>
+                      {isIn(unit.id)
+                        ? <Check size={10} style={{ color: 'var(--color-accent)' }} />
+                        : <span style={{ fontSize: '0.75rem', color: 'rgba(184,152,72,0.6)', lineHeight: 1 }}>+</span>
+                      }
+                    </button>
+                    {i === 0 && <span className="label-luxury" style={{ fontSize: '0.35rem', color: 'rgba(184,152,72,0.5)', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>COMP.</span>}
+                  </div>
                   <div className="flex flex-col gap-0.5 min-w-0 text-left flex-1">
                     <span className="display-heading text-text" style={{ fontSize: '0.85rem' }}>{unit.name}</span>
                     <span className="label-luxury text-text/40" style={{ fontSize: '0.5rem' }}>
