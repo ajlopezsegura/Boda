@@ -10,19 +10,18 @@ const HIDDEN_PREFIX  = ['/contact', '/admin', '/privacy', '/summary', '/inmersio
 
 // ── Journey steps ─────────────────────────────────────────────────────────────
 const STEPS = [
-  { id: 'proyecto',      es: 'PROYECTO',        en: 'PROJECT',       short: 'PRO' },
-  { id: 'disponibilidad',es: 'DISPONIBILIDAD',  en: 'AVAILABILITY',  short: 'DISP' },
-  { id: 'vivienda',      es: 'VIVIENDA',        en: 'UNIT',          short: 'VIV' },
-  { id: 'decision',      es: 'DECISIÓN',        en: 'DECISION',      short: 'DEC' },
+  { id: 'proyecto',       es: 'PROYECTO',       en: 'PROJECT'      },
+  { id: 'disponibilidad', es: 'DISPONIB.',       en: 'AVAILABILITY' },
+  { id: 'vivienda',       es: 'VIVIENDA',        en: 'UNIT'         },
+  { id: 'decision',       es: 'DECISIÓN',        en: 'DECISION'     },
 ]
 
 function getStepIndex(pathname) {
   if (pathname === '/proyecto' || pathname === '/map') return 0
-  if (pathname === '/availability') return 1
+  if (pathname === '/availability' || pathname === '/compare') return 1
   if (pathname.startsWith('/availability/')) return 2
-  if (pathname === '/compare') return 1 // comparator is part of the browse phase
   if (pathname === '/decision') return 3
-  return -1 // unknown — don't highlight any step
+  return -1
 }
 
 function useIsMobile(bp = 640) {
@@ -64,71 +63,71 @@ export default function AppFooter() {
           transition={{ duration: 0.3, delay: 0.6 }}
           style={{
             position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 30,
-            height: 48,
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: mob ? '0 14px' : '0 32px',
+            height: 52,
             backgroundColor: 'var(--color-bg)',
             borderTop: '1px solid rgba(184,152,72,0.12)',
           }}>
 
-          {/* Journey progress indicator */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: mob ? 0 : 2 }}>
+          {/* ── Journey progress — absolutely left-aligned ── */}
+          <div style={{
+            position: 'absolute',
+            left: mob ? 14 : 32,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            display: 'flex',
+            alignItems: 'center',
+          }}>
             {STEPS.map((step, i) => {
               const isPast    = currentStep > i
               const isCurrent = currentStep === i
-              const isFuture  = currentStep < i || currentStep === -1
 
               return (
                 <div key={step.id} style={{ display: 'flex', alignItems: 'center' }}>
-                  {/* Connecting line before dot (skip first) */}
+
+                  {/* Connecting line (skip first) */}
                   {i > 0 && (
                     <div style={{
-                      width: mob ? 12 : 20,
+                      width: mob ? 10 : 18,
                       height: 1,
-                      backgroundColor: isPast || isCurrent
-                        ? 'rgba(184,152,72,0.45)'
-                        : 'rgba(184,152,72,0.12)',
+                      backgroundColor: (isPast || isCurrent)
+                        ? 'rgba(184,152,72,0.4)'
+                        : 'rgba(184,152,72,0.1)',
                       transition: 'background-color 0.4s',
                     }} />
                   )}
 
                   {/* Dot + label */}
-                  <div style={{
-                    display: 'flex', flexDirection: 'column', alignItems: 'center',
-                    gap: 2, position: 'relative',
-                  }}>
-                    {/* Dot */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
                     <div style={{
-                      width: isCurrent ? 7 : 5,
-                      height: isCurrent ? 7 : 5,
+                      width:  isCurrent ? 8 : 6,
+                      height: isCurrent ? 8 : 6,
                       borderRadius: '50%',
                       backgroundColor: isCurrent
                         ? 'var(--color-accent)'
                         : isPast
-                          ? 'rgba(184,152,72,0.5)'
+                          ? 'rgba(184,152,72,0.45)'
                           : 'rgba(184,152,72,0.15)',
-                      border: isCurrent ? '1px solid rgba(184,152,72,0.8)' : 'none',
+                      boxShadow: isCurrent ? '0 0 6px rgba(184,152,72,0.5)' : 'none',
                       transition: 'all 0.4s',
                       flexShrink: 0,
                     }} />
 
-                    {/* Label (desktop only) */}
+                    {/* Label — desktop only */}
                     {!mob && (
                       <span style={{
-                        position: 'absolute',
-                        top: 12,
-                        fontSize: '0.32rem',
-                        letterSpacing: '0.1em',
+                        fontSize: '0.42rem',
+                        letterSpacing: '0.12em',
                         fontWeight: 400,
-                        whiteSpace: 'nowrap',
-                        color: isCurrent
-                          ? 'rgba(184,152,72,0.7)'
-                          : isPast
-                            ? 'rgba(184,152,72,0.35)'
-                            : 'rgba(184,152,72,0.15)',
-                        transition: 'color 0.4s',
                         fontFamily: "'Montserrat', sans-serif",
                         textTransform: 'uppercase',
+                        whiteSpace: 'nowrap',
+                        lineHeight: 1,
+                        color: isCurrent
+                          ? 'rgba(184,152,72,0.75)'
+                          : isPast
+                            ? 'rgba(184,152,72,0.35)'
+                            : 'rgba(184,152,72,0.18)',
+                        transition: 'color 0.4s',
                       }}>
                         {lang === 'es' ? step.es : step.en}
                       </span>
@@ -139,33 +138,41 @@ export default function AppFooter() {
             })}
           </div>
 
-          {/* CTA button */}
-          <button
-            onClick={() => navigate('/contact')}
-            data-cursor="hover"
-            className="label-luxury flex items-center gap-2.5 transition-all duration-400"
-            style={{
-              border: '1px solid rgba(184,152,72,0.7)',
-              backgroundColor: 'rgba(184,152,72,0.10)',
-              color: 'var(--color-accent)',
-              fontSize: mob ? '0.52rem' : '0.58rem',
-              letterSpacing: '0.22em',
-              padding: mob ? '7px 16px' : '8px 22px',
-              flexShrink: 0,
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.18)'
-              e.currentTarget.style.borderColor = 'var(--color-accent)'
-              e.currentTarget.style.color = '#ffffff'
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.10)'
-              e.currentTarget.style.borderColor = 'rgba(184,152,72,0.7)'
-              e.currentTarget.style.color = 'var(--color-accent)'
-            }}
-          >
-            {lang === 'es' ? 'CONTACTAR' : 'CONTACT'}
-          </button>
+          {/* ── CONTACTAR — absolutely centered ── */}
+          <div style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}>
+            <button
+              onClick={() => navigate('/contact')}
+              data-cursor="hover"
+              className="label-luxury flex items-center gap-2.5 transition-all duration-300"
+              style={{
+                border: '1px solid rgba(184,152,72,0.7)',
+                backgroundColor: 'rgba(184,152,72,0.10)',
+                color: 'var(--color-accent)',
+                fontSize: mob ? '0.52rem' : '0.58rem',
+                letterSpacing: '0.22em',
+                padding: mob ? '7px 16px' : '8px 22px',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.18)'
+                e.currentTarget.style.borderColor = 'var(--color-accent)'
+                e.currentTarget.style.color = '#ffffff'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.10)'
+                e.currentTarget.style.borderColor = 'rgba(184,152,72,0.7)'
+                e.currentTarget.style.color = 'var(--color-accent)'
+              }}
+            >
+              {lang === 'es' ? 'CONTACTAR' : 'CONTACT'}
+            </button>
+          </div>
+
         </motion.footer>
       )}
     </AnimatePresence>
