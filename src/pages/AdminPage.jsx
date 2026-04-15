@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LogOut, Check, Loader2, ChevronDown, ChevronRight, Flame, Snowflake, Monitor, Smartphone, Tablet } from 'lucide-react'
+import { LogOut, Check, Loader2, ChevronDown, ChevronRight, Flame, Snowflake, Monitor, Smartphone, Tablet, Globe, RotateCcw } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
 const PROJECT_SLUG   = (import.meta.env.VITE_PROJECT_SLUG   ?? 'las-conchas').trim()
@@ -223,7 +223,7 @@ function LeadCard({ lead, index, mob }) {
 }
 
 /* ─── Activity card (anonymous session) ──────────────────── */
-function ActivityCard({ sess, index, mob }) {
+function ActivityCard({ sess, index, mob, allSessions }) {
   const [expanded, setExpanded] = useState(false)
   const trail   = Array.isArray(sess.trail) ? sess.trail : []
   const views   = trail.filter(e => e.type === 'page_view')
@@ -237,6 +237,15 @@ function ActivityCard({ sess, index, mob }) {
   const device  = trail.find(e => e.type === 'device_info')?.device ?? 'desktop'
   const DeviceIcon = device === 'mobile' ? Smartphone : device === 'tablet' ? Tablet : Monitor
 
+  // New enriched data
+  const visitorVisits = sess.visitor_id
+    ? allSessions.filter(s => s.visitor_id === sess.visitor_id).length
+    : 1
+  const isReturning   = visitorVisits > 1
+  const referrer      = sess.referrer || trail.find(e => e.type === 'device_info')?.referrer || 'directo'
+  const userLang      = sess.user_lang || trail.find(e => e.type === 'device_info')?.lang || null
+  const screenSize    = sess.screen_size || trail.find(e => e.type === 'device_info')?.screen || null
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
@@ -246,13 +255,29 @@ function ActivityCard({ sess, index, mob }) {
       <div style={mob ? {
         padding: '12px 14px', cursor: views.length > 0 ? 'pointer' : 'default',
       } : {
-        display: 'grid', gridTemplateColumns: '1fr 90px 60px 60px 100px 32px',
+        display: 'grid', gridTemplateColumns: '1fr 90px 50px 60px 60px 100px 32px',
         gap: 16, padding: '12px 16px', alignItems: 'center',
         cursor: views.length > 0 ? 'pointer' : 'default',
       }} onClick={() => views.length > 0 && setExpanded(e => !e)}>
 
         {/* Badges */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', ...(mob ? { marginBottom: 8 } : {}) }}>
+          {isReturning && (
+            <span style={{
+              padding: '2px 7px', fontSize: '0.55rem', letterSpacing: '0.1em',
+              border: '1px solid rgba(255,180,60,0.4)', color: 'rgba(255,180,60,0.85)',
+              background: 'rgba(255,180,60,0.08)',
+              display: 'flex', alignItems: 'center', gap: 4,
+            }}>
+              <RotateCcw size={8} /> {visitorVisits}ª VISITA
+            </span>
+          )}
+          {referrer !== 'directo' && (
+            <span style={{
+              padding: '2px 7px', fontSize: '0.55rem', letterSpacing: '0.1em',
+              border: '1px solid rgba(140,180,255,0.3)', color: 'rgba(140,180,255,0.7)',
+            }}>{referrer.toUpperCase()}</span>
+          )}
           {[
             { show: hasUnit, label: 'VIVIENDA' },
             { show: hasCmp,  label: 'COMPARÓ' },
@@ -266,7 +291,7 @@ function ActivityCard({ sess, index, mob }) {
               border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(184,152,72,0.7)',
             }}>{m.label}</span>
           ))}
-          {!hasUnit && !hasCmp && !hasImm && !hasDec && !hasAmen && !hasEnto && (
+          {!isReturning && !hasUnit && !hasCmp && !hasImm && !hasDec && !hasAmen && !hasEnto && referrer === 'directo' && (
             <span style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.25)' }}>Solo exploró</span>
           )}
           {mob && <ChevronRight size={12} style={{ color: 'rgba(184,152,72,0.4)', transform: expanded ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.2s', marginLeft: 'auto' }} />}
@@ -274,10 +299,13 @@ function ActivityCard({ sess, index, mob }) {
 
         {/* Meta row */}
         {mob ? (
-          <div style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: '0.55rem', color: 'rgba(244,241,234,0.55)' }}>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: '0.55rem', color: 'rgba(244,241,234,0.55)', flexWrap: 'wrap' }}>
             <DeviceIcon size={11} style={{ color: 'rgba(184,152,72,0.45)' }} />
             <span>{views.length} págs</span>
             <span>{formatDuration(totalMs) ?? '—'}</span>
+            {userLang && <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+              <Globe size={9} style={{ color: 'rgba(184,152,72,0.35)' }} />{userLang.toUpperCase().slice(0, 2)}
+            </span>}
             <span style={{ marginLeft: 'auto' }}>{formatDate(sess.updated_at)}</span>
           </div>
         ) : (
@@ -285,6 +313,10 @@ function ActivityCard({ sess, index, mob }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
               <DeviceIcon size={11} style={{ color: 'rgba(184,152,72,0.45)', flexShrink: 0 }} />
               <span style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.65)', letterSpacing: '0.08em' }}>{device.toUpperCase()}</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              {userLang && <Globe size={9} style={{ color: 'rgba(184,152,72,0.35)', flexShrink: 0 }} />}
+              <span style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.55)' }}>{userLang ? userLang.toUpperCase().slice(0, 2) : '—'}</span>
             </div>
             <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{views.length}</span>
             <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{formatDuration(totalMs) ?? '—'}</span>
@@ -300,6 +332,20 @@ function ActivityCard({ sess, index, mob }) {
             exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}
             style={{ overflow: 'hidden' }}>
             <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid rgba(184,152,72,0.07)' }}>
+              {/* Session metadata */}
+              <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', padding: '10px 0 8px', marginBottom: 4, borderBottom: '1px solid rgba(184,152,72,0.05)' }}>
+                {[
+                  { label: 'ORIGEN', value: referrer.toUpperCase() },
+                  { label: 'IDIOMA', value: userLang ? userLang.toUpperCase() : null },
+                  { label: 'PANTALLA', value: screenSize },
+                  { label: 'VISITA', value: isReturning ? `${visitorVisits}ª de este visitante` : 'Primera' },
+                ].filter(m => m.value).map(m => (
+                  <div key={m.label}>
+                    <div style={{ fontSize: '0.45rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.45)', marginBottom: 3 }}>{m.label}</div>
+                    <div style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.65)' }}>{m.value}</div>
+                  </div>
+                ))}
+              </div>
               <div style={{ fontSize: '0.55rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.65)', margin: '10px 0 8px' }}>
                 RECORRIDO
               </div>
@@ -677,6 +723,9 @@ export default function AdminPage() {
         const todaySess  = sessions.filter(s => new Date(s.updated_at).toDateString() === today)
         const converted  = sessions.filter(s => s.converted).length
         const convRate   = sessions.length > 0 ? Math.round((converted / sessions.length) * 100) : 0
+        const uniqueVids = new Set(sessions.map(s => s.visitor_id).filter(Boolean))
+        const returning  = sessions.filter(s => s.visitor_id && sessions.filter(s2 => s2.visitor_id === s.visitor_id).length > 1)
+        const uniqueReturning = new Set(returning.map(s => s.visitor_id)).size
 
         return (
           <div style={{ padding: mob ? '16px 16px 0' : '24px 40px 0' }}>
@@ -684,10 +733,10 @@ export default function AdminPage() {
             <div style={{ display: 'flex', alignItems: mob ? 'stretch' : 'flex-start', justifyContent: 'space-between', marginBottom: mob ? 16 : 28, flexDirection: mob ? 'column' : 'row', gap: mob ? 10 : 0 }}>
             <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr 1fr' : 'repeat(4, auto)', gap: mob ? 8 : 16 }}>
               {[
-                { label: 'VISITAS',       value: sessions.length },
-                { label: 'HOY',            value: todaySess.length },
-                { label: 'CONVERSIÓN',     value: convRate + '%' },
-                { label: 'ANÓNIMAS',       value: anon.length },
+                { label: 'VISITAS',        value: sessions.length },
+                { label: 'HOY',             value: todaySess.length },
+                { label: 'ÚNICOS',          value: uniqueVids.size || sessions.length },
+                { label: 'RECURRENTES',     value: uniqueReturning },
               ].map(s => (
                 <div key={s.label} style={{
                   padding: mob ? '10px 14px' : '14px 20px', border: '1px solid rgba(184,152,72,0.1)',
@@ -719,12 +768,12 @@ export default function AdminPage() {
             {/* Column headers — desktop only */}
             {!mob && anon.length > 0 && (
               <div style={{
-                display: 'grid', gridTemplateColumns: '1fr 90px 60px 60px 100px 32px',
+                display: 'grid', gridTemplateColumns: '1fr 90px 50px 60px 60px 100px 32px',
                 gap: 16, padding: '0 16px 10px',
                 borderBottom: '1px solid rgba(184,152,72,0.12)',
                 fontSize: '0.55rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.65)',
               }}>
-                <span>RECORRIDO</span><span>DISPOSITIVO</span><span>PÁGS</span><span>TIEMPO</span><span>ÚLTIMA VEZ</span><span></span>
+                <span>RECORRIDO</span><span>DISPOSITIVO</span><span>IDIOMA</span><span>PÁGS</span><span>TIEMPO</span><span>ÚLTIMA VEZ</span><span></span>
               </div>
             )}
 
@@ -734,7 +783,7 @@ export default function AdminPage() {
               </div>
             ) : (
               <div style={{ paddingTop: 8 }}>
-                {anon.map((sess, i) => <ActivityCard key={sess.id} sess={sess} index={i} mob={mob} />)}
+                {anon.map((sess, i) => <ActivityCard key={sess.id} sess={sess} index={i} mob={mob} allSessions={sessions} />)}
               </div>
             )}
           </div>

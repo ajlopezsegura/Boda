@@ -108,14 +108,19 @@ CREATE TRIGGER trigger_projects_updated_at
 -- ── Tabla de sesiones anónimas ────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS page_sessions (
-  id           UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  session_id   TEXT UNIQUE NOT NULL,
-  project_slug TEXT,
-  trail        JSONB DEFAULT '[]',
-  pages_count  INTEGER DEFAULT 0,
-  converted    BOOLEAN DEFAULT FALSE,
-  started_at   TIMESTAMPTZ DEFAULT NOW(),
-  updated_at   TIMESTAMPTZ DEFAULT NOW()
+  id            UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  session_id    TEXT UNIQUE NOT NULL,
+  visitor_id    TEXT,
+  visit_number  INTEGER DEFAULT 1,
+  referrer      TEXT DEFAULT 'directo',
+  user_lang     TEXT,
+  screen_size   TEXT,
+  project_slug  TEXT,
+  trail         JSONB DEFAULT '[]',
+  pages_count   INTEGER DEFAULT 0,
+  converted     BOOLEAN DEFAULT FALSE,
+  started_at    TIMESTAMPTZ DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ── Row Level Security ────────────────────────────────────────

@@ -19,6 +19,36 @@ function getDeviceType() {
   return 'desktop'
 }
 
+function getVisitorId() {
+  const key = 'tvbs_vid'
+  let id = localStorage.getItem(key)
+  if (!id) { id = generateId(); localStorage.setItem(key, id) }
+  return id
+}
+
+function getVisitNumber(visitorId) {
+  const key = `tvbs_visits_${visitorId}`
+  const n = parseInt(localStorage.getItem(key) || '0', 10) + 1
+  localStorage.setItem(key, String(n))
+  return n
+}
+
+function getReferrerSource() {
+  const ref = document.referrer
+  if (!ref) return 'directo'
+  try {
+    const host = new URL(ref).hostname
+    if (host.includes('google'))    return 'google'
+    if (host.includes('instagram')) return 'instagram'
+    if (host.includes('facebook') || host.includes('fb.'))  return 'facebook'
+    if (host.includes('linkedin'))  return 'linkedin'
+    if (host.includes('twitter') || host.includes('t.co'))  return 'twitter'
+    if (host.includes('whatsapp') || host.includes('wa.'))  return 'whatsapp'
+    if (host.includes('tiktok'))    return 'tiktok'
+    return host
+  } catch { return ref.slice(0, 60) }
+}
+
 export function SessionProvider({ children }) {
   const location = useLocation()
 
@@ -30,9 +60,20 @@ export function SessionProvider({ children }) {
     return id
   })
 
+  const [visitorId]   = useState(getVisitorId)
+  const [visitNumber] = useState(() => getVisitNumber(getVisitorId()))
+  const [referrer]    = useState(getReferrerSource)
+  const [userLang]    = useState(() => navigator.language || 'unknown')
+  const [screenSize]  = useState(() => `${screen.width}x${screen.height}`)
+
   // trailRef is always current (updated synchronously on every mutation)
   // trail state is derived — only used to expose trail to consumers (ContactPage)
-  const trailRef  = useRef([{ type: 'device_info', device: getDeviceType(), ts: Date.now() }])
+  const trailRef  = useRef([{
+    type: 'device_info', device: getDeviceType(), ts: Date.now(),
+    screen: `${screen.width}x${screen.height}`,
+    lang: navigator.language || 'unknown',
+    referrer: getReferrerSource(),
+  }])
   const [trail, setTrail] = useState(trailRef.current)
 
   const enterTime = useRef(Date.now())
@@ -44,15 +85,20 @@ export function SessionProvider({ children }) {
     if (t.length === 0) return
     try {
       await supabase.from('page_sessions').upsert({
-        session_id:   sessionId,
-        project_slug: PROJECT_SLUG,
-        trail:        t,
-        pages_count:  t.filter(e => e.type === 'page_view').length,
+        session_id:    sessionId,
+        visitor_id:    visitorId,
+        visit_number:  visitNumber,
+        referrer,
+        user_lang:     userLang,
+        screen_size:   screenSize,
+        project_slug:  PROJECT_SLUG,
+        trail:         t,
+        pages_count:   t.filter(e => e.type === 'page_view').length,
         converted,
-        updated_at:   new Date().toISOString(),
+        updated_at:    new Date().toISOString(),
       }, { onConflict: 'session_id' })
     } catch { /* silent — analytics must never break the app */ }
-  }, [sessionId])
+  }, [sessionId, visitorId, visitNumber, referrer, userLang, screenSize])
 
   // ── Auto-track page views ─────────────────────────────────────────────────
   useEffect(() => {
