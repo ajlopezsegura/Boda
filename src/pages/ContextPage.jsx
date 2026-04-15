@@ -374,7 +374,7 @@ export default function ContextPage() {
                   return (
                     <button key={tab.id} onClick={() => switchTab(tab.id)} data-cursor="hover"
                       className="label-luxury px-4 py-2.5 transition-all duration-200 relative"
-                      style={{ fontSize: '0.52rem', letterSpacing: '0.18em',
+                      style={{ fontSize: '0.65rem', letterSpacing: '0.18em',
                         color: isActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.35)' }}>
                       {lang === 'es' ? tab.es : tab.en}
                       {isActive && (
