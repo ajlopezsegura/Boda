@@ -551,7 +551,7 @@ export default function AvailabilityPage() {
             <ChevronLeft size={14} />
             {lang === 'es' ? 'Volver' : 'Back'}
           </button>
-          <button onClick={() => navigate('/proyecto')} data-cursor="hover"
+          <button onClick={() => navigate('/')} data-cursor="hover"
             className="label-luxury text-text/40 hidden sm:block transition-colors duration-200"
             style={{ fontSize: '0.55rem', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}

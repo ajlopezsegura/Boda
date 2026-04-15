@@ -292,7 +292,7 @@ export default function ContextPage() {
             <span className="display-heading text-text" style={{ fontSize: 'clamp(0.6rem, 2vw, 0.75rem)', letterSpacing: '0.12em' }}>THE VISUALS</span>
             <span className="label-luxury text-accent" style={{ fontSize: '0.45rem', letterSpacing: '0.22em' }}>BOUTIQUE·STUDIO</span>
           </div>
-          <button onClick={() => navigate('/proyecto')} data-cursor="hover"
+          <button onClick={() => navigate('/')} data-cursor="hover"
             className="label-luxury text-text/40 hidden sm:block transition-colors duration-200"
             style={{ fontSize: '0.55rem', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
