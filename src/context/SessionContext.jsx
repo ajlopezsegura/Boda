@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 const SessionContext = createContext(null)
-const PROJECT_SLUG     = (import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas').trim()
+const PROJECT_SLUG = (import.meta.env.VITE_PROJECT_SLUG ?? 'las-conchas').trim()
 
 /* Pages that should never be tracked */
 const EXCLUDED = ['/admin', '/privacy']
@@ -30,49 +30,15 @@ export function SessionProvider({ children }) {
     return id
   })
 
-  const [trail, setTrail]   = useState(() => [{ type: 'device_info', device: getDeviceType(), ts: Date.now() }])
-  const enterTime           = useRef(Date.now())
-  const prevPage            = useRef(null)
-  const trailRef            = useRef([])  // always-current ref for async callbacks
+  // trailRef is always current (updated synchronously on every mutation)
+  // trail state is derived — only used to expose trail to consumers (ContactPage)
+  const trailRef  = useRef([{ type: 'device_info', device: getDeviceType(), ts: Date.now() }])
+  const [trail, setTrail] = useState(trailRef.current)
 
-  /* Keep ref in sync with state */
-  useEffect(() => { trailRef.current = trail }, [trail])
+  const enterTime = useRef(Date.now())
+  const prevPage  = useRef(null)
 
-  /* ── Auto-track page views ── */
-  useEffect(() => {
-    const now  = Date.now()
-    const page = location.pathname
-
-    // Skip excluded pages (admin, privacy)
-    if (EXCLUDED.some(p => page.startsWith(p))) return
-
-    // Close previous page with duration
-    if (prevPage.current && !EXCLUDED.some(p => prevPage.current.startsWith(p))) {
-      const duration_ms = now - enterTime.current
-      setTrail(prev => {
-        const copy = [...prev]
-        for (let i = copy.length - 1; i >= 0; i--) {
-          if (copy[i].type === 'page_view' && copy[i].page === prevPage.current) {
-            copy[i] = { ...copy[i], duration_ms }
-            break
-          }
-        }
-        return copy
-      })
-    }
-
-    prevPage.current  = page
-    enterTime.current = now
-
-    // Prevent duplicate entries (React StrictMode fires effects twice in dev)
-    setTrail(prev => {
-      const last = prev[prev.length - 1]
-      if (last?.type === 'page_view' && last?.page === page) return prev
-      return [...prev, { type: 'page_view', page, ts: now, duration_ms: null }]
-    })
-  }, [location.pathname])
-
-  /* ── Save session to Supabase ── */
+  // ── Save session to Supabase ──────────────────────────────────────────────
   const saveSession = useCallback(async (converted = false) => {
     const t = trailRef.current
     if (t.length === 0) return
@@ -85,24 +51,69 @@ export function SessionProvider({ children }) {
         converted,
         updated_at:   new Date().toISOString(),
       }, { onConflict: 'session_id' })
-    } catch { /* silent — analytics should never break the app */ }
+    } catch { /* silent — analytics must never break the app */ }
   }, [sessionId])
 
-  /* ── Auto-save when tab goes hidden ── */
+  // ── Auto-track page views ─────────────────────────────────────────────────
   useEffect(() => {
-    function onHide() {
-      if (document.visibilityState === 'hidden') saveSession(false)
+    const now  = Date.now()
+    const page = location.pathname
+
+    if (EXCLUDED.some(p => page.startsWith(p))) return
+
+    // Close previous page: find its page_view entry and stamp duration_ms
+    if (prevPage.current && !EXCLUDED.some(p => prevPage.current.startsWith(p))) {
+      const duration_ms = now - enterTime.current
+      let found = false
+      const updated = trailRef.current.map(e => {
+        if (!found && e.type === 'page_view' && e.page === prevPage.current && e.duration_ms === null) {
+          found = true
+          return { ...e, duration_ms }
+        }
+        return e
+      })
+      if (found) {
+        trailRef.current = updated
+        setTrail(updated)
+      }
     }
+
+    prevPage.current  = page
+    enterTime.current = now
+
+    // Prevent duplicate entries (React StrictMode fires effects twice in dev)
+    const last = trailRef.current[trailRef.current.length - 1]
+    if (last?.type === 'page_view' && last?.page === page) return
+
+    const next = [...trailRef.current, { type: 'page_view', page, ts: now, duration_ms: null }]
+    trailRef.current = next
+    setTrail(next)
+
+    // Persist after every navigation so admin always sees up-to-date data
+    saveSession(false)
+  }, [location.pathname, saveSession])
+
+  // ── Save on tab hide and on page unload (belt + suspenders) ──────────────
+  useEffect(() => {
+    function onHide()   { if (document.visibilityState === 'hidden') saveSession(false) }
+    function onUnload() { saveSession(false) }
     document.addEventListener('visibilitychange', onHide)
-    return () => document.removeEventListener('visibilitychange', onHide)
+    window.addEventListener('beforeunload', onUnload)
+    return () => {
+      document.removeEventListener('visibilitychange', onHide)
+      window.removeEventListener('beforeunload', onUnload)
+    }
   }, [saveSession])
 
-  /* ── Manual event tracking ── */
+  // ── Manual event tracking ─────────────────────────────────────────────────
+  // Updates trailRef synchronously so saveSession() always reads fresh data
   const trackEvent = useCallback((type, data = {}) => {
-    setTrail(prev => [...prev, { type, ...data, ts: Date.now() }])
+    const event = { type, ...data, ts: Date.now() }
+    trailRef.current = [...trailRef.current, event]
+    setTrail(prev => [...prev, event])
   }, [])
 
-  /* ── Mark as converted (call after lead insert) ── */
+  // ── Mark as converted (call after lead insert) ────────────────────────────
   const markConverted = useCallback(() => saveSession(true), [saveSession])
 
   return (

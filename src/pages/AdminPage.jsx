@@ -305,7 +305,7 @@ function ActivityCard({ sess, index }) {
                 RECORRIDO
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                {trail.filter(ev => ['page_view','section_view','amenity_open','compare_add'].includes(ev.type)).map((ev, j) => {
+                {trail.filter(ev => ['page_view','section_view','amenity_open','nearby_view','compare_add'].includes(ev.type)).map((ev, j) => {
                   let dot = 'rgba(184,152,72,0.35)'
                   let label = ''
                   let extra = null
@@ -318,11 +318,16 @@ function ActivityCard({ sess, index }) {
                     label = names[ev.section] ?? `Sección: ${ev.section}`
                     dot = 'rgba(184,152,72,0.55)'
                   } else if (ev.type === 'amenity_open') {
-                    label = `Vio: ${(ev.label ?? ev.id ?? '').toUpperCase()}`
-                    dot = 'rgba(184,152,72,0.6)'
+                    const lbl = typeof ev.label === 'object' ? (ev.label?.es ?? ev.label?.en ?? '') : (ev.label ?? ev.id ?? '')
+                    label = `Amenity: ${lbl.toUpperCase()}`
+                    dot = 'rgba(184,152,72,0.7)'
+                  } else if (ev.type === 'nearby_view') {
+                    const lbl = typeof ev.label === 'object' ? (ev.label?.es ?? ev.label?.en ?? '') : (ev.label ?? ev.id ?? '')
+                    label = `Entorno: ${lbl.toUpperCase()}`
+                    dot = 'rgba(140,200,255,0.55)'
                   } else if (ev.type === 'compare_add') {
-                    label = `Comparador: ${ev.unit_id ?? ''}`
-                    dot = 'rgba(244,241,234,0.3)'
+                    label = `Comparó: vivienda ${ev.unit_id ?? ''}`
+                    dot = 'rgba(244,200,80,0.5)'
                   }
                   return (
                     <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -395,17 +400,30 @@ function LoginScreen({ onLogin }) {
 
 /* ─── Admin panel ─────────────────────────────────────────── */
 export default function AdminPage() {
-  const [authed,    setAuthed]    = useState(() => localStorage.getItem('tvbs_admin') === ADMIN_PASSWORD)
-  const [tab,       setTab]       = useState('units')
-  const [units,     setUnits]     = useState([])
-  const [leads,     setLeads]     = useState([])
-  const [sessions,  setSessions]  = useState([])
-  const [loading,   setLoading]   = useState(true)
-  const [saving,    setSaving]    = useState(null)
-  const [toast,     setToast]     = useState(null)
+  const [authed,      setAuthed]      = useState(() => localStorage.getItem('tvbs_admin') === ADMIN_PASSWORD)
+  const [tab,         setTab]         = useState('units')
+  const [units,       setUnits]       = useState([])
+  const [leads,       setLeads]       = useState([])
+  const [sessions,    setSessions]    = useState([])
+  const [loading,     setLoading]     = useState(true)
+  const [refreshing,  setRefreshing]  = useState(false)
+  const [saving,      setSaving]      = useState(null)
+  const [toast,       setToast]       = useState(null)
 
   function handleLogin()  { localStorage.setItem('tvbs_admin', ADMIN_PASSWORD); setAuthed(true) }
   function handleLogout() { localStorage.removeItem('tvbs_admin'); setAuthed(false) }
+
+  async function refreshActivity() {
+    setRefreshing(true)
+    const [{ data: l }, { data: s }] = await Promise.all([
+      supabase.from('leads').select('*').eq('project_slug', PROJECT_SLUG).order('created_at', { ascending: false }),
+      supabase.from('page_sessions').select('*').eq('project_slug', PROJECT_SLUG).order('updated_at', { ascending: false }).limit(200),
+    ])
+    if (l) setLeads(l)
+    if (s) setSessions(s)
+    setRefreshing(false)
+    showToast('Actividad actualizada')
+  }
 
   useEffect(() => {
     if (!authed) return
@@ -613,8 +631,9 @@ export default function AdminPage() {
 
         return (
           <div style={{ padding: '24px 40px 0' }}>
-            {/* Stats */}
-            <div style={{ display: 'flex', gap: 16, marginBottom: 28 }}>
+            {/* Stats + refresh */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 28 }}>
+            <div style={{ display: 'flex', gap: 16 }}>
               {[
                 { label: 'TOTAL VISITAS',  value: sessions.length },
                 { label: 'HOY',            value: todaySess.length },
@@ -629,6 +648,23 @@ export default function AdminPage() {
                   <div style={{ fontSize: '1.4rem', color: 'var(--color-accent)', fontWeight: 300 }}>{s.value}</div>
                 </div>
               ))}
+            </div>
+            {/* Refresh button */}
+            <button onClick={refreshActivity} disabled={refreshing} style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '8px 14px', border: '1px solid rgba(184,152,72,0.25)',
+              background: 'rgba(184,152,72,0.05)', color: 'rgba(184,152,72,0.7)',
+              fontSize: '0.55rem', letterSpacing: '0.14em', fontFamily: 'inherit',
+              cursor: refreshing ? 'default' : 'pointer', opacity: refreshing ? 0.5 : 1,
+              transition: 'all 0.2s', flexShrink: 0,
+            }}
+            onMouseEnter={e => { if (!refreshing) { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'; e.currentTarget.style.color = 'rgba(184,152,72,0.7)' }}>
+              {refreshing
+                ? <Loader2 size={10} style={{ animation: 'spin 1s linear infinite' }} />
+                : <span style={{ fontSize: '0.7rem' }}>↻</span>}
+              ACTUALIZAR
+            </button>
             </div>
 
             {/* Column headers */}
