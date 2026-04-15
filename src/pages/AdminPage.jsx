@@ -58,7 +58,7 @@ function StatusSelect({ value, onChange, disabled }) {
       <button onClick={() => !disabled && setOpen(o => !o)} style={{
         display: 'flex', alignItems: 'center', gap: 8, padding: '5px 10px 5px 12px',
         border: `1px solid ${cfg.color}`, background: cfg.bg, color: cfg.color,
-        fontSize: '0.52rem', letterSpacing: '0.14em', fontFamily: 'inherit',
+        fontSize: '0.62rem', letterSpacing: '0.14em', fontFamily: 'inherit',
         cursor: disabled ? 'default' : 'pointer', whiteSpace: 'nowrap', minWidth: 110,
         transition: 'opacity 0.15s', opacity: disabled ? 0.5 : 1,
       }}>
@@ -81,7 +81,7 @@ function StatusSelect({ value, onChange, disabled }) {
                 display: 'block', width: '100%', padding: '9px 14px',
                 background: key === value ? s.bg : 'transparent', border: 'none',
                 borderBottom: '1px solid rgba(184,152,72,0.07)', color: s.color,
-                fontSize: '0.52rem', letterSpacing: '0.14em', fontFamily: 'inherit',
+                fontSize: '0.62rem', letterSpacing: '0.14em', fontFamily: 'inherit',
                 cursor: 'pointer', textAlign: 'left', transition: 'background 0.1s',
               }}
               onMouseEnter={e => e.currentTarget.style.background = s.bg}
@@ -136,14 +136,14 @@ function LeadCard({ lead, index }) {
           <div style={{ fontSize: '0.72rem', color: 'rgba(244,241,234,0.85)', letterSpacing: '0.04em', marginBottom: 3 }}>
             {contact.name ?? '—'}
           </div>
-          <div style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.35)', letterSpacing: '0.06em' }}>
+          <div style={{ fontSize: '0.62rem', color: 'rgba(244,241,234,0.68)', letterSpacing: '0.06em' }}>
             {contact.email ?? ''}
           </div>
         </div>
 
         {/* Phone + unit */}
         <div>
-          <div style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.55)', marginBottom: 3 }}>
+          <div style={{ fontSize: '0.62rem', color: 'rgba(244,241,234,0.78)', marginBottom: 3 }}>
             {contact.phone ?? '—'}
           </div>
           {unit && (
@@ -157,13 +157,13 @@ function LeadCard({ lead, index }) {
         </div>
 
         {/* Source */}
-        <div style={{ fontSize: '0.48rem', letterSpacing: '0.08em', color: 'rgba(244,241,234,0.3)' }}>
+        <div style={{ fontSize: '0.6rem', letterSpacing: '0.08em', color: 'rgba(244,241,234,0.65)' }}>
           <div style={{ marginBottom: 2 }}>VÍA {(lead.source_page ?? 'unknown').toUpperCase()}</div>
           <div>{views.length} páginas visitadas</div>
         </div>
 
         {/* Date */}
-        <div style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.3)', letterSpacing: '0.04em' }}>
+        <div style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)', letterSpacing: '0.04em' }}>
           {formatDate(lead.created_at)}
         </div>
 
@@ -207,7 +207,7 @@ function LeadCard({ lead, index }) {
                         {pageLabel(ev.page)}
                       </span>
                       {dur && (
-                        <span style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.5)' }}>
+                        <span style={{ fontSize: '0.58rem', color: 'rgba(184,152,72,0.75)' }}>
                           {dur}
                         </span>
                       )}
@@ -217,7 +217,7 @@ function LeadCard({ lead, index }) {
               </div>
               {contact.message && (
                 <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid rgba(184,152,72,0.08)' }}>
-                  <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.4)', marginBottom: 6 }}>MENSAJE</div>
+                  <div style={{ fontSize: '0.55rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.65)', marginBottom: 6 }}>MENSAJE</div>
                   <div style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.5)', fontStyle: 'italic' }}>
                     "{contact.message}"
                   </div>
@@ -268,7 +268,7 @@ function ActivityCard({ sess, index }) {
             { show: hasEnto, label: 'ENTORNO' },
           ].filter(m => m.show).map(m => (
             <span key={m.label} style={{
-              padding: '2px 7px', fontSize: '0.4rem', letterSpacing: '0.1em',
+              padding: '2px 7px', fontSize: '0.55rem', letterSpacing: '0.1em',
               border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(184,152,72,0.7)',
             }}>{m.label}</span>
           ))}
@@ -279,13 +279,13 @@ function ActivityCard({ sess, index }) {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <DeviceIcon size={11} style={{ color: 'rgba(184,152,72,0.45)', flexShrink: 0 }} />
-          <span style={{ fontSize: '0.44rem', color: 'rgba(244,241,234,0.3)', letterSpacing: '0.08em' }}>
+          <span style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.65)', letterSpacing: '0.08em' }}>
             {device.toUpperCase()}
           </span>
         </div>
-        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{views.length}</span>
-        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{formatDuration(totalMs) ?? '—'}</span>
-        <span style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.3)' }}>
+        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{views.length}</span>
+        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{formatDuration(totalMs) ?? '—'}</span>
+        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)' }}>
           {formatDate(sess.updated_at).split(' · ')[0]}
         </span>
         <ChevronRight size={12} style={{
@@ -301,7 +301,7 @@ function ActivityCard({ sess, index }) {
             exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }}
             style={{ overflow: 'hidden' }}>
             <div style={{ padding: '0 16px 14px 16px', borderTop: '1px solid rgba(184,152,72,0.07)' }}>
-              <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.4)', margin: '10px 0 8px' }}>
+              <div style={{ fontSize: '0.55rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.65)', margin: '10px 0 8px' }}>
                 RECORRIDO
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
@@ -327,8 +327,8 @@ function ActivityCard({ sess, index }) {
                   return (
                     <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <div style={{ width: 4, height: 4, borderRadius: '50%', background: dot, flexShrink: 0 }} />
-                      <span style={{ fontSize: '0.52rem', color: 'rgba(244,241,234,0.5)' }}>{label}</span>
-                      {extra && <span style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.45)' }}>{extra}</span>}
+                      <span style={{ fontSize: '0.65rem', color: 'rgba(244,241,234,0.78)' }}>{label}</span>
+                      {extra && <span style={{ fontSize: '0.58rem', color: 'rgba(184,152,72,0.75)' }}>{extra}</span>}
                     </div>
                   )
                 })}
@@ -381,7 +381,7 @@ function LoginScreen({ onLogin }) {
           <button type="submit" style={{
             width: '100%', padding: '12px', border: '1px solid rgba(184,152,72,0.35)',
             background: 'rgba(184,152,72,0.06)', color: 'var(--color-accent)',
-            fontSize: '0.52rem', letterSpacing: '0.2em', fontFamily: 'inherit', cursor: 'pointer', transition: 'all 0.2s',
+            fontSize: '0.65rem', letterSpacing: '0.2em', fontFamily: 'inherit', cursor: 'pointer', transition: 'all 0.2s',
           }}
           onMouseEnter={e => e.currentTarget.style.background = 'rgba(184,152,72,0.12)'}
           onMouseLeave={e => e.currentTarget.style.background = 'rgba(184,152,72,0.06)'}>
@@ -491,20 +491,20 @@ export default function AdminPage() {
             padding: '16px 0', marginRight: 32, background: 'none', border: 'none',
             borderBottom: `1px solid ${tab === t.key ? 'var(--color-accent)' : 'transparent'}`,
             color: tab === t.key ? 'var(--color-accent)' : 'rgba(244,241,234,0.3)',
-            fontSize: '0.48rem', letterSpacing: '0.18em', fontFamily: 'inherit',
+            fontSize: '0.62rem', letterSpacing: '0.18em', fontFamily: 'inherit',
             cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 8,
           }}>
             {t.label}
             <span style={{
               padding: '1px 6px', background: 'rgba(184,152,72,0.1)',
               border: '1px solid rgba(184,152,72,0.2)',
-              fontSize: '0.42rem', color: 'rgba(184,152,72,0.6)',
+              fontSize: '0.55rem', color: 'rgba(184,152,72,0.75)',
             }}>{t.count}</span>
             {t.hot > 0 && (
               <span style={{
                 padding: '1px 6px', background: 'rgba(255,140,0,0.1)',
                 border: '1px solid rgba(255,140,0,0.3)',
-                fontSize: '0.42rem', color: 'rgba(255,140,0,0.8)',
+                fontSize: '0.55rem', color: 'rgba(255,140,0,0.9)',
                 display: 'flex', alignItems: 'center', gap: 3,
               }}>
                 <Flame size={8} /> {t.hot}
@@ -517,13 +517,13 @@ export default function AdminPage() {
       {/* ── UNITS TAB ── */}
       {tab === 'units' && (
         <div style={{ padding: '24px 40px 0' }}>
-          <div style={{ fontSize: '0.62rem', letterSpacing: '0.06em', color: 'rgba(244,241,234,0.35)', marginBottom: 20 }}>
+          <div style={{ fontSize: '0.68rem', letterSpacing: '0.06em', color: 'rgba(244,241,234,0.65)', marginBottom: 20 }}>
             {units.length} viviendas · haz clic en el estado para cambiarlo
           </div>
           <div style={{
             display: 'grid', gridTemplateColumns: '72px 1fr 64px 72px 80px 1fr 130px',
             gap: 16, padding: '8px 16px 12px', borderBottom: '1px solid rgba(184,152,72,0.12)',
-            fontSize: '0.42rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.4)',
+            fontSize: '0.55rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.65)',
           }}>
             <span>VIVIENDA</span><span>TIPOLOGÍA</span><span>PLANTA</span>
             <span>DORM.</span><span>SUP. M²</span><span>PRECIO</span>
@@ -540,10 +540,10 @@ export default function AdminPage() {
               onMouseEnter={e => e.currentTarget.style.background = 'rgba(184,152,72,0.055)'}
               onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? 'rgba(184,152,72,0.025)' : 'transparent'}>
               <span style={{ fontSize: '0.85rem', letterSpacing: '0.06em', color: 'rgba(244,241,234,0.85)', fontWeight: 300 }}>{unit.id}</span>
-              <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', color: 'rgba(244,241,234,0.4)', textTransform: 'uppercase' }}>{unit.typology}</span>
-              <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{unit.floor}ª</span>
-              <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{unit.bedrooms}</span>
-              <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.4)' }}>{unit.surface}</span>
+              <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', color: 'rgba(244,241,234,0.72)', textTransform: 'uppercase' }}>{unit.typology}</span>
+              <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{unit.floor}ª</span>
+              <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{unit.bedrooms}</span>
+              <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{unit.surface}</span>
               <span style={{ fontSize: '0.72rem', letterSpacing: '0.04em', color: unit.price ? 'rgba(244,241,234,0.65)' : 'rgba(244,241,234,0.2)' }}>
                 {unit.price ? unit.price.toLocaleString('es-ES') + ' €' : '—'}
               </span>
@@ -571,7 +571,7 @@ export default function AdminPage() {
                 padding: '14px 20px', border: '1px solid rgba(184,152,72,0.1)',
                 background: 'rgba(184,152,72,0.02)', minWidth: 100,
               }}>
-                <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.4)', marginBottom: 6 }}>{s.label}</div>
+                <div style={{ fontSize: '0.55rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.65)', marginBottom: 6 }}>{s.label}</div>
                 <div style={{ fontSize: '1.4rem', color: s.color, fontWeight: 300 }}>{s.value}</div>
               </div>
             ))}
@@ -583,7 +583,7 @@ export default function AdminPage() {
               display: 'grid', gridTemplateColumns: '28px 1fr 1fr 120px 160px 32px',
               gap: 16, padding: '0 16px 10px',
               borderBottom: '1px solid rgba(184,152,72,0.12)',
-              fontSize: '0.42rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.4)',
+              fontSize: '0.55rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.65)',
             }}>
               <span></span><span>CONTACTO</span><span>TELÉFONO / VIVIENDA</span>
               <span>ORIGEN</span><span>FECHA</span><span></span>
@@ -625,7 +625,7 @@ export default function AdminPage() {
                   padding: '14px 20px', border: '1px solid rgba(184,152,72,0.1)',
                   background: 'rgba(184,152,72,0.02)', minWidth: 100,
                 }}>
-                  <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.4)', marginBottom: 6 }}>{s.label}</div>
+                  <div style={{ fontSize: '0.55rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.65)', marginBottom: 6 }}>{s.label}</div>
                   <div style={{ fontSize: '1.4rem', color: 'var(--color-accent)', fontWeight: 300 }}>{s.value}</div>
                 </div>
               ))}
@@ -637,7 +637,7 @@ export default function AdminPage() {
                 display: 'grid', gridTemplateColumns: '1fr 90px 60px 60px 100px 32px',
                 gap: 16, padding: '0 16px 10px',
                 borderBottom: '1px solid rgba(184,152,72,0.12)',
-                fontSize: '0.42rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.4)',
+                fontSize: '0.55rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.65)',
               }}>
                 <span>RECORRIDO</span><span>DISPOSITIVO</span><span>PÁGS</span><span>TIEMPO</span><span>ÚLTIMA VEZ</span><span></span>
               </div>
@@ -664,7 +664,7 @@ export default function AdminPage() {
               position: 'fixed', bottom: 32, left: '50%', transform: 'translateX(-50%)',
               display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px',
               border: '1px solid rgba(184,152,72,0.3)', background: 'rgba(18,16,12,0.95)',
-              fontSize: '0.52rem', letterSpacing: '0.12em', color: 'var(--color-accent)',
+              fontSize: '0.65rem', letterSpacing: '0.12em', color: 'var(--color-accent)',
               backdropFilter: 'blur(8px)', whiteSpace: 'nowrap',
             }}>
             <Check size={12} />{toast.toUpperCase()}
