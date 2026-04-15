@@ -6,6 +6,18 @@ import PageTransition from '../components/layout/PageTransition'
 import { useUnit, useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 
+// ─── Responsive hook ─────────────────────────────────────────────────────────
+function useIsMobile(bp = 640) {
+  const [m, setM] = useState(() => window.innerWidth < bp)
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${bp - 1}px)`)
+    const h = e => setM(e.matches)
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
+  }, [bp])
+  return m
+}
+
 // ─── Time of day config ───────────────────────────────────────────────────────
 const TIMES = [
   { id: 'dawn',      icon: Sunrise, es: 'Amanecer',  en: 'Dawn',      overlay: 'rgba(255,180,100,0.18)' },
@@ -65,6 +77,7 @@ export default function ImmersionPage() {
   const unit        = useUnit(unitId)
   const { project, materials } = useProject()
   const { lang, toggle } = useLang()
+  const mob = useIsMobile()
 
   const [loading, setLoading]       = useState(true)
   const [panelOpen, setPanelOpen]   = useState(false)
@@ -155,7 +168,8 @@ export default function ImmersionPage() {
           style={{ background: 'linear-gradient(to bottom, rgba(13,17,23,0.65) 0%, transparent 25%, transparent 70%, rgba(13,17,23,0.75) 100%)' }} />
 
         {/* ── Header ── */}
-        <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-5 sm:px-8 py-4 z-10">
+        <div className="absolute top-0 left-0 right-0 flex items-center justify-between z-10"
+          style={{ padding: mob ? '12px 14px' : '16px 32px' }}>
           <button onClick={() => navigate(`/availability/${unit.slug}`)} data-cursor="hover"
             className="flex items-center gap-1.5 label-luxury transition-all duration-300"
             style={{ color: 'rgba(244,241,234,0.5)', fontSize: '0.58rem' }}
@@ -170,112 +184,168 @@ export default function ImmersionPage() {
             <span className="label-luxury text-accent" style={{ fontSize: '0.5rem', letterSpacing: '0.22em', opacity: 0.7 }}>
               {lang === 'es' ? roomData.es : roomData.en}
             </span>
-            <span className="label-luxury text-text/30" style={{ fontSize: '0.44rem', letterSpacing: '0.15em' }}>
-              {unit.id} · {unit.floor}ª {lang === 'es' ? 'planta' : 'floor'}
-            </span>
+            {!mob && (
+              <span className="label-luxury text-text/30" style={{ fontSize: '0.44rem', letterSpacing: '0.15em' }}>
+                {unit.id} · {unit.floor}ª {lang === 'es' ? 'planta' : 'floor'}
+              </span>
+            )}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center" style={{ gap: mob ? 8 : 12 }}>
             <button onClick={toggle} data-cursor="hover"
               className="flex items-center gap-1.5 label-luxury"
-              style={{ fontSize: '0.58rem', backgroundColor: 'rgba(13,17,23,0.5)', backdropFilter: 'blur(8px)', padding: '0.4rem 0.75rem' }}>
+              style={{ fontSize: mob ? '0.52rem' : '0.58rem', backgroundColor: 'rgba(13,17,23,0.5)', backdropFilter: 'blur(8px)', padding: mob ? '0.35rem 0.55rem' : '0.4rem 0.75rem' }}>
               <span style={{ color: lang === 'es' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>ES</span>
               <span style={{ color: 'var(--color-accent)' }}>|</span>
               <span style={{ color: lang === 'en' ? 'var(--color-text)' : 'rgba(244,241,234,0.35)' }}>EN</span>
             </button>
             <button onClick={() => { localStorage.setItem('tvbs_selection', JSON.stringify({ unitId: unit.id, materials: selected })); navigate('/decision') }} data-cursor="hover"
-              className="label-luxury px-5 py-2 transition-all duration-300 min-h-[36px]"
+              className="label-luxury transition-all duration-300"
               style={{ border: '1px solid var(--color-accent)', color: 'var(--color-accent)', fontSize: '0.58rem',
-                backgroundColor: 'rgba(26,33,48,0.5)', backdropFilter: 'blur(8px)' }}
+                backgroundColor: 'rgba(26,33,48,0.5)', backdropFilter: 'blur(8px)',
+                padding: mob ? '0.4rem 0.65rem' : '0.5rem 1.25rem', minHeight: mob ? 32 : 36 }}
               onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.14)'}
               onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(26,33,48,0.5)'}>
-              {lang === 'es' ? 'Reservar →' : 'Reserve →'}
+              {mob ? '→' : (lang === 'es' ? 'Reservar →' : 'Reserve →')}
             </button>
           </div>
         </div>
 
-        {/* ── Room navigation (left side) ── */}
-        <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-2">
+        {/* ── Room navigation ── */}
+        <div className="absolute z-10 flex"
+          style={mob
+            ? { bottom: 76, left: 0, right: 0, flexDirection: 'row', justifyContent: 'center', gap: 4, padding: '0 12px' }
+            : { left: 24, top: '50%', transform: 'translateY(-50%)', flexDirection: 'column', gap: 8 }
+          }>
           {ROOMS.map(room => {
             const isActive = activeRoom === room.id
             return (
               <button key={room.id} onClick={() => setActiveRoom(room.id)} data-cursor="hover"
-                className="label-luxury px-3 py-2 text-left transition-all duration-300"
-                style={{
-                  fontSize: '0.52rem',
-                  borderLeft: `2px solid ${isActive ? 'var(--color-accent)' : 'rgba(184,152,72,0.2)'}`,
-                  color: isActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.35)',
-                  backgroundColor: isActive ? 'rgba(184,152,72,0.06)' : 'transparent',
-                  paddingLeft: '0.75rem',
-                }}>
+                className="label-luxury transition-all duration-300"
+                style={mob
+                  ? {
+                      fontSize: '0.46rem',
+                      padding: '5px 10px',
+                      color: isActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.4)',
+                      backgroundColor: isActive ? 'rgba(184,152,72,0.12)' : 'rgba(13,17,23,0.5)',
+                      backdropFilter: 'blur(8px)',
+                      border: `1px solid ${isActive ? 'rgba(184,152,72,0.4)' : 'rgba(184,152,72,0.1)'}`,
+                      whiteSpace: 'nowrap',
+                    }
+                  : {
+                      fontSize: '0.52rem',
+                      padding: '8px 12px',
+                      paddingLeft: '0.75rem',
+                      textAlign: 'left',
+                      borderLeft: `2px solid ${isActive ? 'var(--color-accent)' : 'rgba(184,152,72,0.2)'}`,
+                      color: isActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.35)',
+                      backgroundColor: isActive ? 'rgba(184,152,72,0.06)' : 'transparent',
+                    }
+                }>
                 {lang === 'es' ? room.es : room.en}
               </button>
             )
           })}
         </div>
 
-        {/* ── Time of day control (right side) ── */}
-        <div className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-2">
+        {/* ── Time of day control ── */}
+        <div className="absolute z-10 flex"
+          style={mob
+            ? { top: 52, right: 12, flexDirection: 'row', gap: 4 }
+            : { right: 24, top: '50%', transform: 'translateY(-50%)', flexDirection: 'column', gap: 8 }
+          }>
           {TIMES.map(t => {
             const Icon = t.icon
             const isActive = activeTime === t.id
             return (
               <button key={t.id} onClick={() => setActiveTime(t.id)} data-cursor="hover"
-                className="flex flex-col items-center gap-1 px-2 py-2 transition-all duration-300"
-                style={{
-                  border: '1px solid',
-                  borderColor: isActive ? 'rgba(184,152,72,0.5)' : 'rgba(184,152,72,0.12)',
-                  backgroundColor: isActive ? 'rgba(184,152,72,0.08)' : 'rgba(13,17,23,0.4)',
-                  backdropFilter: 'blur(8px)',
-                }}>
-                <Icon size={13} color={isActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.35)'} strokeWidth={1.5} />
-                <span className="label-luxury" style={{ fontSize: '0.42rem', color: isActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.3)' }}>
-                  {lang === 'es' ? t.es : t.en}
-                </span>
+                className="flex items-center transition-all duration-300"
+                style={mob
+                  ? {
+                      flexDirection: 'column', gap: 0,
+                      padding: '5px 7px',
+                      border: `1px solid ${isActive ? 'rgba(184,152,72,0.5)' : 'rgba(184,152,72,0.1)'}`,
+                      backgroundColor: isActive ? 'rgba(184,152,72,0.1)' : 'rgba(13,17,23,0.5)',
+                      backdropFilter: 'blur(8px)',
+                    }
+                  : {
+                      flexDirection: 'column', gap: 4,
+                      padding: '8px',
+                      border: `1px solid ${isActive ? 'rgba(184,152,72,0.5)' : 'rgba(184,152,72,0.12)'}`,
+                      backgroundColor: isActive ? 'rgba(184,152,72,0.08)' : 'rgba(13,17,23,0.4)',
+                      backdropFilter: 'blur(8px)',
+                    }
+                }>
+                <Icon size={mob ? 11 : 13} color={isActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.35)'} strokeWidth={1.5} />
+                {!mob && (
+                  <span className="label-luxury" style={{ fontSize: '0.42rem', color: isActive ? 'var(--color-accent)' : 'rgba(244,241,234,0.3)' }}>
+                    {lang === 'es' ? t.es : t.en}
+                  </span>
+                )}
               </button>
             )
           })}
         </div>
 
         {/* ── Bottom bar ── */}
-        <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between px-5 sm:px-8 pb-5 z-10 gap-4">
+        <div className="absolute bottom-0 left-0 right-0 z-10"
+          style={mob
+            ? { display: 'flex', flexDirection: 'row', gap: 8, padding: '0 12px 14px 12px' }
+            : { display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: '0 32px 20px 32px', gap: 16 }
+          }>
           {/* PS launch button */}
           <button onClick={() => { setPsToast(true); setTimeout(() => setPsToast(false), 3000) }}
             data-cursor="hover"
-            className="flex items-center gap-2 label-luxury px-4 py-2.5 transition-all duration-300 min-h-[40px]"
-            style={{ border: '1px solid rgba(184,152,72,0.5)', color: 'var(--color-accent)', fontSize: '0.58rem',
-              backgroundColor: 'rgba(13,17,23,0.55)', backdropFilter: 'blur(10px)' }}
+            className="flex items-center justify-center gap-2 label-luxury transition-all duration-300"
+            style={{
+              border: '1px solid rgba(184,152,72,0.5)', color: 'var(--color-accent)',
+              fontSize: mob ? '0.52rem' : '0.58rem',
+              backgroundColor: 'rgba(13,17,23,0.55)', backdropFilter: 'blur(10px)',
+              padding: mob ? '10px 12px' : '10px 16px',
+              minHeight: mob ? 36 : 40,
+              flex: mob ? 1 : 'none',
+            }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.1)'}
             onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(13,17,23,0.55)'}>
-            {lang === 'es' ? 'Empezar experiencia' : 'Start experience'}
+            {mob
+              ? (lang === 'es' ? 'Experiencia' : 'Experience')
+              : (lang === 'es' ? 'Empezar experiencia' : 'Start experience')}
           </button>
 
           {/* Material config toggle */}
           <button onClick={() => setPanelOpen(true)} data-cursor="hover"
-            className="flex items-center gap-2 label-luxury px-4 py-2.5 transition-all duration-300 min-h-[40px]"
-            style={{ border: '1px solid rgba(184,152,72,0.3)', color: 'rgba(244,241,234,0.65)', fontSize: '0.58rem',
-              backgroundColor: 'rgba(13,17,23,0.55)', backdropFilter: 'blur(10px)' }}
+            className="flex items-center justify-center gap-2 label-luxury transition-all duration-300"
+            style={{
+              border: '1px solid rgba(184,152,72,0.3)', color: 'rgba(244,241,234,0.65)',
+              fontSize: mob ? '0.52rem' : '0.58rem',
+              backgroundColor: 'rgba(13,17,23,0.55)', backdropFilter: 'blur(10px)',
+              padding: mob ? '10px 12px' : '10px 16px',
+              minHeight: mob ? 36 : 40,
+              flex: mob ? 1 : 'none',
+            }}
             onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--color-accent)'}
             onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(184,152,72,0.3)'}>
             <Sliders size={12} />
             {lang === 'es' ? 'Materiales' : 'Materials'}
           </button>
 
-          {/* Selected materials swatches */}
-          <div className="hidden sm:flex items-center gap-3">
-            {Object.entries(selected).map(([cat, id]) => {
-              const item = materials?.[cat]?.find(m => m.id === id)
-              if (!item) return null
-              return (
-                <div key={cat} className="flex items-center gap-1.5">
-                  <div className="w-3.5 h-3.5" style={{ backgroundColor: item.swatch, border: '1px solid rgba(244,241,234,0.2)' }} />
-                  <span className="label-luxury" style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.4)' }}>
-                    {lang === 'es' ? item.label : item.labelEN}
-                  </span>
-                </div>
-              )
-            })}
-          </div>
+          {/* Selected materials swatches (desktop only) */}
+          {!mob && (
+            <div className="flex items-center gap-3">
+              {Object.entries(selected).map(([cat, id]) => {
+                const item = materials?.[cat]?.find(m => m.id === id)
+                if (!item) return null
+                return (
+                  <div key={cat} className="flex items-center gap-1.5">
+                    <div className="w-3.5 h-3.5" style={{ backgroundColor: item.swatch, border: '1px solid rgba(244,241,234,0.2)' }} />
+                    <span className="label-luxury" style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.4)' }}>
+                      {lang === 'es' ? item.label : item.labelEN}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
 
         {/* ── PS coming soon toast ── */}
@@ -284,9 +354,9 @@ export default function ImmersionPage() {
             <motion.div
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 12 }}
               transition={{ duration: 0.3 }}
-              className="absolute bottom-20 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 px-5 py-3"
-              style={{ backgroundColor: 'rgba(26,33,48,0.95)', backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(184,152,72,0.25)', whiteSpace: 'nowrap' }}>
+              className="absolute left-1/2 -translate-x-1/2 z-40 flex items-center gap-3"
+              style={{ bottom: mob ? 120 : 80, backgroundColor: 'rgba(26,33,48,0.95)', backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(184,152,72,0.25)', whiteSpace: 'nowrap', padding: mob ? '10px 16px' : '12px 20px' }}>
               <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-accent)' }} />
               <p className="label-luxury" style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.8)' }}>
                 {lang === 'es' ? 'Experiencia interactiva — Próximamente' : 'Interactive experience — Coming soon'}
