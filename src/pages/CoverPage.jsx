@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import PageTransition from '../components/layout/PageTransition'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
-import { MessageCircle } from 'lucide-react'
+
 
 export default function CoverPage() {
   const navigate = useNavigate()
@@ -119,7 +119,7 @@ export default function CoverPage() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 2.2 }}
-            className="mt-10 sm:mt-14 flex items-center gap-4"
+            className="mt-10 sm:mt-14 flex flex-col items-center gap-4"
           >
             <button
               onClick={() => navigate('/proyecto')}
@@ -151,27 +151,22 @@ export default function CoverPage() {
             <button
               onClick={() => navigate('/contact')}
               data-cursor="hover"
-              className="label-luxury flex items-center gap-2.5 transition-all duration-500"
+              className="label-luxury transition-all duration-300"
               style={{
-                border: '1px solid rgba(184,152,72,0.7)',
-                backgroundColor: 'rgba(184,152,72,0.10)',
-                color: 'var(--color-accent)',
-                fontSize: '0.65rem',
-                letterSpacing: '0.22em',
-                padding: '14px 28px',
+                background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0',
+                fontSize: '0.52rem', letterSpacing: '0.2em',
+                color: 'rgba(244,241,234,0.45)',
+                borderBottom: '1px solid rgba(244,241,234,0.25)',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.18)'
-                e.currentTarget.style.borderColor = 'var(--color-accent)'
-                e.currentTarget.style.color = '#ffffff'
+                e.currentTarget.style.color = 'rgba(244,241,234,0.8)'
+                e.currentTarget.style.borderBottomColor = 'rgba(244,241,234,0.6)'
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.10)'
-                e.currentTarget.style.borderColor = 'rgba(184,152,72,0.7)'
-                e.currentTarget.style.color = 'var(--color-accent)'
+                e.currentTarget.style.color = 'rgba(244,241,234,0.45)'
+                e.currentTarget.style.borderBottomColor = 'rgba(244,241,234,0.25)'
               }}
             >
-              <MessageCircle size={13} />
               {lang === 'es' ? 'CONTACTAR' : 'CONTACT'}
             </button>
           </motion.div>
