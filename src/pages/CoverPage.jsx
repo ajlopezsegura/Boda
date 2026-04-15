@@ -14,8 +14,8 @@ export default function CoverPage() {
 
   const name    = lang === 'es' ? project.name    : project.nameEN
   const tagline = lang === 'es'
-    ? (project.tagline    ?? '24 residencias · Primera línea de playa · Marbella')
-    : (project.taglineEN  ?? project.tagline ?? '24 residences · Beachfront · Marbella')
+    ? (project.tagline    ?? '24 residencias · Primera línea de playa')
+    : (project.taglineEN  ?? project.tagline ?? '24 residences · Beachfront')
   const showVideo = project.heroVideo && !videoFailed
 
   return (
