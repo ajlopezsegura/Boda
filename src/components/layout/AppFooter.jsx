@@ -35,28 +35,13 @@ export default function AppFooter() {
           style={{
             position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 30,
             height: 48,
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
             padding: '0 32px',
             backgroundColor: 'var(--color-bg)',
             borderTop: '1px solid rgba(184,152,72,0.12)',
           }}>
 
-          {/* Left — project identity */}
-          <div className="flex items-center gap-3">
-            <span className="label-luxury" style={{ fontSize: '0.58rem', color: 'rgba(184,152,72,0.6)', letterSpacing: '0.2em' }}>
-              {name?.toUpperCase()}
-            </span>
-            {project?.subtitle && (
-              <>
-                <span style={{ color: 'rgba(184,152,72,0.25)', fontSize: '0.5rem' }}>·</span>
-                <span className="label-luxury hidden sm:inline" style={{ fontSize: '0.52rem', color: 'rgba(244,241,234,0.35)', letterSpacing: '0.12em' }}>
-                  {project.subtitle}
-                </span>
-              </>
-            )}
-          </div>
-
-          {/* Right — CTA */}
+          {/* Center — CTA */}
           <button
             onClick={() => navigate('/contact')}
             data-cursor="hover"
