@@ -38,7 +38,7 @@ function fieldStyle(hasError) {
 function Field({ label, error, children }) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="label-luxury" style={{ fontSize: '0.44rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.5)' }}>
+      <span className="label-luxury" style={{ fontSize: '0.5rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.5)' }}>
         {label}
       </span>
       {children}

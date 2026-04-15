@@ -104,7 +104,7 @@ export default function AvailabilityPage() {
 
   function chipStyle(active) {
     return {
-      fontSize: '0.62rem', border: '1px solid',
+      fontSize: '0.65rem', border: '1px solid',
       borderColor:     active ? 'var(--color-accent)' : 'rgba(184,152,72,0.18)',
       color:           active ? 'var(--color-accent)' : 'rgba(244,241,234,0.7)',
       backgroundColor: active ? 'rgba(184,152,72,0.07)' : 'transparent',
@@ -290,7 +290,7 @@ export default function AvailabilityPage() {
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="label-luxury px-2 py-0.5 whitespace-nowrap"
-                      style={{ fontSize: '0.55rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}` }}>
+                      style={{ fontSize: '0.62rem', color: st.color, backgroundColor: st.bg, border: `1px solid ${st.color}` }}>
                       {lang === 'es' ? st.es : st.en}
                     </span>
                     <span className="label-luxury ml-auto" style={{ fontSize: '0.55rem', color: 'rgba(184,152,72,0.4)', transition: 'transform 0.2s', transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', display: 'inline-block' }}>

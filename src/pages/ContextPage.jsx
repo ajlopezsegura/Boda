@@ -348,7 +348,7 @@ export default function ContextPage() {
             {/* Key data */}
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
               <div className="h-px mb-5" style={{ backgroundColor: 'rgba(184,152,72,0.15)' }} />
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   { label: lang === 'es' ? 'Unidades'   : 'Units',      value: building?.totalUnits },
                   { label: lang === 'es' ? 'Tipologías' : 'Typologies', value: building?.typologies?.join(', ') },

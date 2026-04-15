@@ -131,7 +131,7 @@ export default function ComparePage() {
     )
   }
 
-  const labelW   = mob ? '90px' : '170px'
+  const labelW   = mob ? '90px' : 'max(140px, 12vw)'
   const gridCols = `${labelW} repeat(${nCols}, 1fr)`
 
   return (
@@ -200,7 +200,7 @@ export default function ComparePage() {
 
             {/* Table — horizontally scrollable on mobile */}
             <div className="overflow-x-auto">
-              <div style={{ minWidth: mob ? (nCols === 2 ? 340 : nCols * 150 + 90) : (nCols === 2 ? 540 : 720) }}>
+              <div style={{ minWidth: mob ? (nCols === 2 ? 340 : nCols * 150 + 90) : (nCols === 2 ? 540 : 720), width: '100%' }}>
 
                 {/* ── Unit header cards ── */}
                 <div className="grid gap-3 mb-px" style={{ gridTemplateColumns: gridCols }}>
@@ -293,7 +293,7 @@ export default function ComparePage() {
                             ) : (
                               <span className="label-luxury"
                                 style={{
-                                  fontSize: row.key === 'price' ? (mob ? '0.55rem' : '0.68rem') : (mob ? '0.48rem' : '0.58rem'),
+                                  fontSize: row.key === 'price' ? (mob ? '0.55rem' : '0.72rem') : (mob ? '0.48rem' : '0.63rem'),
                                   color: isBest ? 'var(--color-accent)' : 'rgba(244,241,234,0.6)',
                                   letterSpacing: row.key === 'price' ? '0.02em' : '0',
                                 }}>
@@ -325,7 +325,7 @@ export default function ComparePage() {
                           }}
                           data-cursor="hover"
                           className="w-full label-luxury py-3 flex items-center justify-center gap-1.5 transition-opacity duration-200"
-                          style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.5rem', letterSpacing: '0.15em' }}
+                          style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.56rem', letterSpacing: '0.15em' }}
                           onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
                           onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
                           {lang === 'es' ? 'SOLICITAR' : 'ENQUIRE'}
@@ -336,7 +336,7 @@ export default function ComparePage() {
                         onClick={() => navigate(`/availability/${unit.slug}`)}
                         data-cursor="hover"
                         className="w-full label-luxury py-2.5 flex items-center justify-center gap-1 transition-all duration-300"
-                        style={{ border: '1px solid rgba(184,152,72,0.28)', color: 'rgba(184,152,72,0.55)', fontSize: '0.48rem' }}
+                        style={{ border: '1px solid rgba(184,152,72,0.28)', color: 'rgba(184,152,72,0.55)', fontSize: '0.55rem' }}
                         onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
                         onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.28)'; e.currentTarget.style.color = 'rgba(184,152,72,0.55)' }}>
                         {lang === 'es' ? 'Ver ficha' : 'View detail'} →
