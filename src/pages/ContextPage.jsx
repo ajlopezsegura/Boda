@@ -332,11 +332,6 @@ export default function ContextPage() {
               style={{ background: 'linear-gradient(to right, transparent 55%, var(--color-bg) 100%)' }} />
             <div className="absolute inset-0 pointer-events-none"
               style={{ background: 'linear-gradient(to bottom, transparent 65%, var(--color-bg) 100%)' }} />
-            <div className="absolute top-4 left-4 sm:top-6 sm:left-6 pointer-events-none"
-              style={{ width: 36, height: 36, border: '1px solid rgba(184,152,72,0.4)', borderRadius: '50%',
-                backgroundColor: 'rgba(26,33,48,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span className="display-heading text-accent" style={{ fontSize: '0.6rem' }}>N</span>
-            </div>
           </div>
 
           {/* Right — info */}
