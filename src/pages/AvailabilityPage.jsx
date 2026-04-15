@@ -156,19 +156,19 @@ export default function AvailabilityPage() {
           <span className="label-luxury" style={labelStyle}>{lang === 'es' ? 'PRECIO (€)' : 'PRICE (€)'}</span>
           {mobile ? (
             <div className="grid grid-cols-2 gap-3">
-              <input type="number" placeholder={`Mín`} value={filters.priceMin}
+              <input type="text" inputMode="numeric" placeholder={`Mín`} value={filters.priceMin}
                 onChange={e => setFilter('priceMin', e.target.value)}
                 style={{ ...inputStyle, width: '100%' }} />
-              <input type="number" placeholder={`Máx`} value={filters.priceMax}
+              <input type="text" inputMode="numeric" placeholder={`Máx`} value={filters.priceMax}
                 onChange={e => setFilter('priceMax', e.target.value)}
                 style={{ ...inputStyle, width: '100%' }} />
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <input type="number" placeholder={priceRange.min.toLocaleString('es-ES')} value={filters.priceMin}
+              <input type="text" inputMode="numeric" placeholder={priceRange.min.toLocaleString('es-ES')} value={filters.priceMin}
                 onChange={e => setFilter('priceMin', e.target.value)} style={inputStyle} />
               <span className="label-luxury" style={{ fontSize: '0.45rem', color: 'rgba(184,152,72,0.3)' }}>—</span>
-              <input type="number" placeholder={priceRange.max.toLocaleString('es-ES')} value={filters.priceMax}
+              <input type="text" inputMode="numeric" placeholder={priceRange.max.toLocaleString('es-ES')} value={filters.priceMax}
                 onChange={e => setFilter('priceMax', e.target.value)} style={inputStyle} />
             </div>
           )}
@@ -179,19 +179,19 @@ export default function AvailabilityPage() {
           <span className="label-luxury" style={labelStyle}>{lang === 'es' ? 'SUPERFICIE (m²)' : 'SURFACE (m²)'}</span>
           {mobile ? (
             <div className="grid grid-cols-2 gap-3">
-              <input type="number" placeholder={`Mín`} value={filters.surfaceMin}
+              <input type="text" inputMode="numeric" placeholder={`Mín`} value={filters.surfaceMin}
                 onChange={e => setFilter('surfaceMin', e.target.value)}
                 style={{ ...inputStyle, width: '100%' }} />
-              <input type="number" placeholder={`Máx`} value={filters.surfaceMax}
+              <input type="text" inputMode="numeric" placeholder={`Máx`} value={filters.surfaceMax}
                 onChange={e => setFilter('surfaceMax', e.target.value)}
                 style={{ ...inputStyle, width: '100%' }} />
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <input type="number" placeholder={String(surfaceRange.min)} value={filters.surfaceMin}
+              <input type="text" inputMode="numeric" placeholder={String(surfaceRange.min)} value={filters.surfaceMin}
                 onChange={e => setFilter('surfaceMin', e.target.value)} style={inputStyle} />
               <span className="label-luxury" style={{ fontSize: '0.45rem', color: 'rgba(184,152,72,0.3)' }}>—</span>
-              <input type="number" placeholder={String(surfaceRange.max)} value={filters.surfaceMax}
+              <input type="text" inputMode="numeric" placeholder={String(surfaceRange.max)} value={filters.surfaceMax}
                 onChange={e => setFilter('surfaceMax', e.target.value)} style={inputStyle} />
             </div>
           )}
@@ -615,7 +615,7 @@ export default function AvailabilityPage() {
         {/* ── Desktop filter bar ── */}
         <div className="hidden sm:flex flex-shrink-0 px-10 pb-4 gap-6 flex-wrap items-end"
           style={{ borderBottom: '1px solid rgba(184,152,72,0.08)' }}>
-          <FilterControls />
+          {FilterControls({})}
           <div className="flex flex-col gap-2 ml-auto">
             <span className="label-luxury" style={labelStyle}>{lang === 'es' ? 'ORDENAR' : 'SORT'}</span>
             <div className="flex gap-3 items-center">
@@ -651,7 +651,7 @@ export default function AvailabilityPage() {
               className="flex-shrink-0 overflow-hidden sm:hidden"
               style={{ borderBottom: '1px solid rgba(184,152,72,0.1)', backgroundColor: 'rgba(184,152,72,0.02)' }}>
               <div className="px-6 py-5 flex flex-col gap-5">
-                <FilterControls mobile />
+                {FilterControls({ mobile: true })}
                 <div className="flex items-center gap-4 flex-wrap pt-1" style={{ borderTop: '1px solid rgba(184,152,72,0.08)' }}>
                   <div className="flex flex-col gap-2">
                     <span className="label-luxury" style={labelStyle}>{lang === 'es' ? 'ORDENAR' : 'SORT'}</span>
