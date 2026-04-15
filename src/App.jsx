@@ -13,7 +13,7 @@ import SummaryPage       from './pages/SummaryPage'
 import PrivacyPage       from './pages/PrivacyPage'
 import MapPage          from './pages/MapPage'
 import AdminPage        from './pages/AdminPage'
-import ContactCTA       from './components/ui/ContactCTA'
+import AppFooter        from './components/layout/AppFooter'
 import { useProject }    from './context/ProjectContext'
 
 export default function App() {
@@ -41,7 +41,7 @@ export default function App() {
   return (
     <>
       <LuxuryCursor />
-      <ContactCTA />
+      <AppFooter />
       <AnimatePresence mode="sync" initial={false}>
         <Routes location={location} key={location.pathname}>
           <Route path="/"                        element={<CoverPage />} />
