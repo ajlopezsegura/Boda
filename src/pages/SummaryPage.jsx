@@ -306,7 +306,7 @@ export default function SummaryPage() {
         </div>
 
         {/* ── Scrollable body ── */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="flex-1 min-h-0 overflow-y-auto pb-14">
           <div className="px-6 sm:px-10 py-8 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
 
             {/* LEFT column */}
@@ -344,7 +344,7 @@ export default function SummaryPage() {
                 <p className="label-luxury mb-4" style={{ fontSize: '0.5rem', letterSpacing: '0.2em', color: 'rgba(184,152,72,0.5)' }}>
                   {lang === 'es' ? 'ESPECIFICACIONES' : 'SPECIFICATIONS'}
                 </p>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {specs.map(s => (
                     <div key={s.label} className="flex flex-col gap-1 py-3 px-3"
                       style={{ borderBottom: '1px solid rgba(184,152,72,0.1)' }}>
