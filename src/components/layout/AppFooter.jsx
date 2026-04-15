@@ -37,9 +37,8 @@ export default function AppFooter() {
             height: 48,
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '0 32px',
-            backgroundColor: 'rgba(13,17,23,0.88)',
+            backgroundColor: 'var(--color-bg)',
             borderTop: '1px solid rgba(184,152,72,0.12)',
-            backdropFilter: 'blur(12px)',
           }}>
 
           {/* Left — project identity */}
