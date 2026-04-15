@@ -97,7 +97,7 @@ function StatusSelect({ value, onChange, disabled }) {
 }
 
 /* ─── Lead card ───────────────────────────────────────────── */
-function LeadCard({ lead, index }) {
+function LeadCard({ lead, index, mob }) {
   const [expanded, setExpanded] = useState(false)
   const isHot  = lead.lead_temperature === 'hot'
   const trail  = Array.isArray(lead.session_trail) ? lead.session_trail : []
@@ -117,63 +117,54 @@ function LeadCard({ lead, index }) {
       }}>
 
       {/* Main row */}
-      <div style={{
+      <div style={mob ? {
+        padding: '14px 14px', cursor: trail.length > 0 ? 'pointer' : 'default',
+      } : {
         display: 'grid', gridTemplateColumns: '28px 1fr 1fr 120px 160px 32px',
         gap: 16, padding: '14px 16px', alignItems: 'center',
         cursor: trail.length > 0 ? 'pointer' : 'default',
       }} onClick={() => trail.length > 0 && setExpanded(e => !e)}>
 
-        {/* Temperature */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          {isHot
-            ? <Flame size={14} style={{ color: 'rgba(255,140,0,0.8)' }} />
-            : <Snowflake size={14} style={{ color: 'rgba(140,180,255,0.6)' }} />
-          }
-        </div>
-
-        {/* Contact */}
-        <div>
-          <div style={{ fontSize: '0.72rem', color: 'rgba(244,241,234,0.85)', letterSpacing: '0.04em', marginBottom: 3 }}>
-            {contact.name ?? '—'}
-          </div>
-          <div style={{ fontSize: '0.62rem', color: 'rgba(244,241,234,0.68)', letterSpacing: '0.06em' }}>
-            {contact.email ?? ''}
-          </div>
-        </div>
-
-        {/* Phone + unit */}
-        <div>
-          <div style={{ fontSize: '0.62rem', color: 'rgba(244,241,234,0.78)', marginBottom: 3 }}>
-            {contact.phone ?? '—'}
-          </div>
-          {unit && (
-            <div style={{
-              display: 'inline-block', padding: '2px 8px',
-              border: '1px solid rgba(184,152,72,0.25)',
-              fontSize: '0.45rem', letterSpacing: '0.12em',
-              color: 'rgba(184,152,72,0.7)',
-            }}>VIVIENDA {unit}</div>
-          )}
-        </div>
-
-        {/* Source */}
-        <div style={{ fontSize: '0.6rem', letterSpacing: '0.08em', color: 'rgba(244,241,234,0.65)' }}>
-          <div style={{ marginBottom: 2 }}>VÍA {(lead.source_page ?? 'unknown').toUpperCase()}</div>
-          <div>{views.length} páginas visitadas</div>
-        </div>
-
-        {/* Date */}
-        <div style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)', letterSpacing: '0.04em' }}>
-          {formatDate(lead.created_at)}
-        </div>
-
-        {/* Expand toggle */}
-        {trail.length > 0 && (
-          <ChevronRight size={12} style={{
-            color: 'rgba(184,152,72,0.4)',
-            transform: expanded ? 'rotate(90deg)' : 'rotate(0)',
-            transition: 'transform 0.2s',
-          }} />
+        {mob ? (
+          /* ── Mobile card ── */
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              {isHot
+                ? <Flame size={13} style={{ color: 'rgba(255,140,0,0.8)' }} />
+                : <Snowflake size={13} style={{ color: 'rgba(140,180,255,0.6)' }} />}
+              <span style={{ fontSize: '0.75rem', color: 'rgba(244,241,234,0.85)', flex: 1 }}>{contact.name ?? '—'}</span>
+              {trail.length > 0 && <ChevronRight size={12} style={{ color: 'rgba(184,152,72,0.4)', transform: expanded ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />}
+            </div>
+            <div style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)', marginBottom: 3 }}>{contact.email ?? ''}</div>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)' }}>{contact.phone ?? '—'}</span>
+              {unit && <span style={{ padding: '2px 8px', border: '1px solid rgba(184,152,72,0.25)', fontSize: '0.5rem', letterSpacing: '0.12em', color: 'rgba(184,152,72,0.7)' }}>VIV. {unit}</span>}
+              <span style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.4)', marginLeft: 'auto' }}>{formatDate(lead.created_at).split(' · ')[0]}</span>
+            </div>
+          </>
+        ) : (
+          /* ── Desktop row ── */
+          <>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              {isHot
+                ? <Flame size={14} style={{ color: 'rgba(255,140,0,0.8)' }} />
+                : <Snowflake size={14} style={{ color: 'rgba(140,180,255,0.6)' }} />}
+            </div>
+            <div>
+              <div style={{ fontSize: '0.72rem', color: 'rgba(244,241,234,0.85)', letterSpacing: '0.04em', marginBottom: 3 }}>{contact.name ?? '—'}</div>
+              <div style={{ fontSize: '0.62rem', color: 'rgba(244,241,234,0.68)', letterSpacing: '0.06em' }}>{contact.email ?? ''}</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '0.62rem', color: 'rgba(244,241,234,0.78)', marginBottom: 3 }}>{contact.phone ?? '—'}</div>
+              {unit && <div style={{ display: 'inline-block', padding: '2px 8px', border: '1px solid rgba(184,152,72,0.25)', fontSize: '0.45rem', letterSpacing: '0.12em', color: 'rgba(184,152,72,0.7)' }}>VIVIENDA {unit}</div>}
+            </div>
+            <div style={{ fontSize: '0.6rem', letterSpacing: '0.08em', color: 'rgba(244,241,234,0.65)' }}>
+              <div style={{ marginBottom: 2 }}>VÍA {(lead.source_page ?? 'unknown').toUpperCase()}</div>
+              <div>{views.length} páginas visitadas</div>
+            </div>
+            <div style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)', letterSpacing: '0.04em' }}>{formatDate(lead.created_at)}</div>
+            {trail.length > 0 && <ChevronRight size={12} style={{ color: 'rgba(184,152,72,0.4)', transform: expanded ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />}
+          </>
         )}
       </div>
 
@@ -232,7 +223,7 @@ function LeadCard({ lead, index }) {
 }
 
 /* ─── Activity card (anonymous session) ──────────────────── */
-function ActivityCard({ sess, index }) {
+function ActivityCard({ sess, index, mob }) {
   const [expanded, setExpanded] = useState(false)
   const trail   = Array.isArray(sess.trail) ? sess.trail : []
   const views   = trail.filter(e => e.type === 'page_view')
@@ -252,13 +243,16 @@ function ActivityCard({ sess, index }) {
       transition={{ delay: index * 0.03 }}
       style={{ border: '1px solid rgba(184,152,72,0.07)', marginBottom: 6, background: 'rgba(184,152,72,0.01)' }}>
 
-      <div style={{
+      <div style={mob ? {
+        padding: '12px 14px', cursor: views.length > 0 ? 'pointer' : 'default',
+      } : {
         display: 'grid', gridTemplateColumns: '1fr 90px 60px 60px 100px 32px',
         gap: 16, padding: '12px 16px', alignItems: 'center',
         cursor: views.length > 0 ? 'pointer' : 'default',
       }} onClick={() => views.length > 0 && setExpanded(e => !e)}>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+        {/* Badges */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', ...(mob ? { marginBottom: 8 } : {}) }}>
           {[
             { show: hasUnit, label: 'VIVIENDA' },
             { show: hasCmp,  label: 'COMPARÓ' },
@@ -275,24 +269,29 @@ function ActivityCard({ sess, index }) {
           {!hasUnit && !hasCmp && !hasImm && !hasDec && !hasAmen && !hasEnto && (
             <span style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.25)' }}>Solo exploró</span>
           )}
+          {mob && <ChevronRight size={12} style={{ color: 'rgba(184,152,72,0.4)', transform: expanded ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.2s', marginLeft: 'auto' }} />}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <DeviceIcon size={11} style={{ color: 'rgba(184,152,72,0.45)', flexShrink: 0 }} />
-          <span style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.65)', letterSpacing: '0.08em' }}>
-            {device.toUpperCase()}
-          </span>
-        </div>
-        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{views.length}</span>
-        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{formatDuration(totalMs) ?? '—'}</span>
-        <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)' }}>
-          {formatDate(sess.updated_at).split(' · ')[0]}
-        </span>
-        <ChevronRight size={12} style={{
-          color: 'rgba(184,152,72,0.4)',
-          transform: expanded ? 'rotate(90deg)' : 'rotate(0)',
-          transition: 'transform 0.2s',
-        }} />
+        {/* Meta row */}
+        {mob ? (
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: '0.55rem', color: 'rgba(244,241,234,0.55)' }}>
+            <DeviceIcon size={11} style={{ color: 'rgba(184,152,72,0.45)' }} />
+            <span>{views.length} págs</span>
+            <span>{formatDuration(totalMs) ?? '—'}</span>
+            <span style={{ marginLeft: 'auto' }}>{formatDate(sess.updated_at).split(' · ')[0]}</span>
+          </div>
+        ) : (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+              <DeviceIcon size={11} style={{ color: 'rgba(184,152,72,0.45)', flexShrink: 0 }} />
+              <span style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.65)', letterSpacing: '0.08em' }}>{device.toUpperCase()}</span>
+            </div>
+            <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{views.length}</span>
+            <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{formatDuration(totalMs) ?? '—'}</span>
+            <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)' }}>{formatDate(sess.updated_at).split(' · ')[0]}</span>
+            <ChevronRight size={12} style={{ color: 'rgba(184,152,72,0.4)', transform: expanded ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
+          </>
+        )}
       </div>
 
       <AnimatePresence>
@@ -399,7 +398,19 @@ function LoginScreen({ onLogin }) {
 }
 
 /* ─── Admin panel ─────────────────────────────────────────── */
+function useIsMobile(bp = 640) {
+  const [m, setM] = useState(() => window.innerWidth < bp)
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${bp - 1}px)`)
+    const h = e => setM(e.matches)
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
+  }, [bp])
+  return m
+}
+
 export default function AdminPage() {
+  const mob = useIsMobile()
   const [authed,      setAuthed]      = useState(() => localStorage.getItem('tvbs_admin') === ADMIN_PASSWORD)
   const [tab,         setTab]         = useState('units')
   const [units,       setUnits]       = useState([])
@@ -477,13 +488,13 @@ export default function AdminPage() {
       {/* Header */}
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '24px 40px', borderBottom: '1px solid rgba(184,152,72,0.1)',
+        padding: mob ? '16px 16px' : '24px 40px', borderBottom: '1px solid rgba(184,152,72,0.1)',
       }}>
         <div>
-          <div style={{ fontSize: '0.45rem', letterSpacing: '0.25em', color: 'rgba(184,152,72,0.45)', marginBottom: 4 }}>
+          {!mob && <div style={{ fontSize: '0.45rem', letterSpacing: '0.25em', color: 'rgba(184,152,72,0.45)', marginBottom: 4 }}>
             THE VISUALS BOUTIQUE STUDIO
-          </div>
-          <div style={{ fontSize: '0.85rem', letterSpacing: '0.15em', color: 'var(--color-text)', fontWeight: 300 }}>
+          </div>}
+          <div style={{ fontSize: mob ? '0.75rem' : '0.85rem', letterSpacing: '0.15em', color: 'var(--color-text)', fontWeight: 300 }}>
             PANEL DE GESTIÓN
           </div>
         </div>
@@ -494,23 +505,24 @@ export default function AdminPage() {
         }}
         onMouseEnter={e => e.currentTarget.style.color = 'rgba(244,241,234,0.6)'}
         onMouseLeave={e => e.currentTarget.style.color = 'rgba(244,241,234,0.3)'}>
-          <LogOut size={13} /> SALIR
+          <LogOut size={13} /> {!mob && 'SALIR'}
         </button>
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', padding: '0 40px', borderBottom: '1px solid rgba(184,152,72,0.1)' }}>
+      <div style={{ display: 'flex', padding: mob ? '0 16px' : '0 40px', borderBottom: '1px solid rgba(184,152,72,0.1)', overflowX: 'auto' }}>
         {[
-          { key: 'units',    label: 'DISPONIBILIDAD', count: units.length },
+          { key: 'units',    label: mob ? 'UDS' : 'DISPONIBILIDAD', count: units.length },
           { key: 'leads',    label: 'LEADS',          count: leads.length, hot: hotLeads.length },
-          { key: 'activity', label: 'ACTIVIDAD',      count: sessions.filter(s => !s.converted).length },
+          { key: 'activity', label: mob ? 'ACTIVIDAD' : 'ACTIVIDAD', count: sessions.filter(s => !s.converted).length },
         ].map(t => (
           <button key={t.key} onClick={() => setTab(t.key)} style={{
-            padding: '16px 0', marginRight: 32, background: 'none', border: 'none',
+            padding: '14px 0', marginRight: mob ? 16 : 32, background: 'none', border: 'none',
             borderBottom: `1px solid ${tab === t.key ? 'var(--color-accent)' : 'transparent'}`,
             color: tab === t.key ? 'var(--color-accent)' : 'rgba(244,241,234,0.3)',
-            fontSize: '0.62rem', letterSpacing: '0.18em', fontFamily: 'inherit',
-            cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 8,
+            fontSize: mob ? '0.55rem' : '0.62rem', letterSpacing: '0.18em', fontFamily: 'inherit',
+            cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 6,
+            whiteSpace: 'nowrap', flexShrink: 0,
           }}>
             {t.label}
             <span style={{
@@ -534,40 +546,77 @@ export default function AdminPage() {
 
       {/* ── UNITS TAB ── */}
       {tab === 'units' && (
-        <div style={{ padding: '24px 40px 0' }}>
-          <div style={{ fontSize: '0.68rem', letterSpacing: '0.06em', color: 'rgba(244,241,234,0.65)', marginBottom: 20 }}>
-            {units.length} viviendas · haz clic en el estado para cambiarlo
+        <div style={{ padding: mob ? '16px 16px 0' : '24px 40px 0' }}>
+          <div style={{ fontSize: '0.68rem', letterSpacing: '0.06em', color: 'rgba(244,241,234,0.65)', marginBottom: mob ? 12 : 20 }}>
+            {units.length} viviendas · toca el estado para cambiarlo
           </div>
-          <div style={{
-            display: 'grid', gridTemplateColumns: '72px 1fr 64px 72px 80px 1fr 130px',
-            gap: 16, padding: '8px 16px 12px', borderBottom: '1px solid rgba(184,152,72,0.12)',
-            fontSize: '0.55rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.65)',
-          }}>
-            <span>VIVIENDA</span><span>TIPOLOGÍA</span><span>PLANTA</span>
-            <span>DORM.</span><span>SUP. M²</span><span>PRECIO</span>
-            <span style={{ textAlign: 'right' }}>ESTADO</span>
-          </div>
+
+          {/* Desktop header */}
+          {!mob && (
+            <div style={{
+              display: 'grid', gridTemplateColumns: '72px 1fr 64px 72px 80px 1fr 130px',
+              gap: 16, padding: '8px 16px 12px', borderBottom: '1px solid rgba(184,152,72,0.12)',
+              fontSize: '0.55rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.65)',
+            }}>
+              <span>VIVIENDA</span><span>TIPOLOGÍA</span><span>PLANTA</span>
+              <span>DORM.</span><span>SUP. M²</span><span>PRECIO</span>
+              <span style={{ textAlign: 'right' }}>ESTADO</span>
+            </div>
+          )}
+
           {units.map((unit, i) => (
             <motion.div key={unit.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.03 }} style={{
+              transition={{ delay: i * 0.03 }}
+              style={mob ? {
+                padding: '14px 14px', marginBottom: 8,
+                border: '1px solid rgba(184,152,72,0.08)',
+                background: 'rgba(184,152,72,0.02)',
+              } : {
                 display: 'grid', gridTemplateColumns: '72px 1fr 64px 72px 80px 1fr 130px',
                 gap: 16, padding: '13px 16px', borderBottom: '1px solid rgba(184,152,72,0.06)',
                 alignItems: 'center', background: i % 2 === 0 ? 'rgba(184,152,72,0.025)' : 'transparent',
                 transition: 'background 0.15s',
               }}
-              onMouseEnter={e => e.currentTarget.style.background = 'rgba(184,152,72,0.055)'}
-              onMouseLeave={e => e.currentTarget.style.background = i % 2 === 0 ? 'rgba(184,152,72,0.025)' : 'transparent'}>
-              <span style={{ fontSize: '0.85rem', letterSpacing: '0.06em', color: 'rgba(244,241,234,0.85)', fontWeight: 300 }}>{unit.id}</span>
-              <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', color: 'rgba(244,241,234,0.72)', textTransform: 'uppercase' }}>{unit.typology}</span>
-              <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{unit.floor}ª</span>
-              <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{unit.bedrooms}</span>
-              <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{unit.surface}</span>
-              <span style={{ fontSize: '0.72rem', letterSpacing: '0.04em', color: unit.price ? 'rgba(244,241,234,0.65)' : 'rgba(244,241,234,0.2)' }}>
-                {unit.price ? unit.price.toLocaleString('es-ES') + ' €' : '—'}
-              </span>
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <StatusSelect value={unit.status} onChange={ns => updateStatus(unit.id, ns)} disabled={saving === unit.id} />
-              </div>
+              onMouseEnter={!mob ? (e => e.currentTarget.style.background = 'rgba(184,152,72,0.055)') : undefined}
+              onMouseLeave={!mob ? (e => e.currentTarget.style.background = i % 2 === 0 ? 'rgba(184,152,72,0.025)' : 'transparent') : undefined}>
+
+              {mob ? (
+                /* ── Mobile card ── */
+                <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <span style={{ fontSize: '0.9rem', letterSpacing: '0.06em', color: 'rgba(244,241,234,0.85)', fontWeight: 300 }}>{unit.id}</span>
+                    <StatusSelect value={unit.status} onChange={ns => updateStatus(unit.id, ns)} disabled={saving === unit.id} />
+                  </div>
+                  <div style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)', textTransform: 'uppercase', marginBottom: 6 }}>
+                    {unit.typology}
+                  </div>
+                  <div style={{ display: 'flex', gap: 16, fontSize: '0.58rem', color: 'rgba(244,241,234,0.6)' }}>
+                    <span>{unit.floor}ª planta</span>
+                    <span>{unit.bedrooms} dorm</span>
+                    <span>{unit.surface} m²</span>
+                  </div>
+                  {unit.price && (
+                    <div style={{ fontSize: '0.72rem', color: 'rgba(244,241,234,0.65)', marginTop: 6 }}>
+                      {unit.price.toLocaleString('es-ES')} €
+                    </div>
+                  )}
+                </>
+              ) : (
+                /* ── Desktop row ── */
+                <>
+                  <span style={{ fontSize: '0.85rem', letterSpacing: '0.06em', color: 'rgba(244,241,234,0.85)', fontWeight: 300 }}>{unit.id}</span>
+                  <span style={{ fontSize: '0.55rem', letterSpacing: '0.1em', color: 'rgba(244,241,234,0.72)', textTransform: 'uppercase' }}>{unit.typology}</span>
+                  <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{unit.floor}ª</span>
+                  <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{unit.bedrooms}</span>
+                  <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{unit.surface}</span>
+                  <span style={{ fontSize: '0.72rem', letterSpacing: '0.04em', color: unit.price ? 'rgba(244,241,234,0.65)' : 'rgba(244,241,234,0.2)' }}>
+                    {unit.price ? unit.price.toLocaleString('es-ES') + ' €' : '—'}
+                  </span>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <StatusSelect value={unit.status} onChange={ns => updateStatus(unit.id, ns)} disabled={saving === unit.id} />
+                  </div>
+                </>
+              )}
             </motion.div>
           ))}
         </div>
@@ -575,28 +624,28 @@ export default function AdminPage() {
 
       {/* ── LEADS TAB ── */}
       {tab === 'leads' && (
-        <div style={{ padding: '24px 40px 0' }}>
+        <div style={{ padding: mob ? '16px 16px 0' : '24px 40px 0' }}>
 
           {/* Stats */}
-          <div style={{ display: 'flex', gap: 16, marginBottom: 28 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr 1fr' : 'repeat(4, auto)', gap: mob ? 8 : 16, marginBottom: mob ? 16 : 28 }}>
             {[
-              { label: 'TOTAL LEADS',  value: leads.length,      color: 'rgba(184,152,72,0.7)' },
+              { label: 'TOTAL',       value: leads.length,      color: 'rgba(184,152,72,0.7)' },
               { label: 'HOY',          value: todayLeads.length, color: 'rgba(184,152,72,0.7)' },
-              { label: 'CALIENTES 🔥', value: hotLeads.length,   color: 'rgba(255,140,0,0.8)'  },
-              { label: 'FRÍOS ❄️',    value: leads.length - hotLeads.length, color: 'rgba(140,180,255,0.6)' },
+              { label: 'CALIENTES',    value: hotLeads.length,   color: 'rgba(255,140,0,0.8)'  },
+              { label: 'FRÍOS',        value: leads.length - hotLeads.length, color: 'rgba(140,180,255,0.6)' },
             ].map(s => (
               <div key={s.label} style={{
-                padding: '14px 20px', border: '1px solid rgba(184,152,72,0.1)',
-                background: 'rgba(184,152,72,0.02)', minWidth: 100,
+                padding: mob ? '10px 14px' : '14px 20px', border: '1px solid rgba(184,152,72,0.1)',
+                background: 'rgba(184,152,72,0.02)',
               }}>
                 <div style={{ fontSize: '0.55rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.65)', marginBottom: 6 }}>{s.label}</div>
-                <div style={{ fontSize: '1.4rem', color: s.color, fontWeight: 300 }}>{s.value}</div>
+                <div style={{ fontSize: mob ? '1.1rem' : '1.4rem', color: s.color, fontWeight: 300 }}>{s.value}</div>
               </div>
             ))}
           </div>
 
-          {/* Column headers */}
-          {leads.length > 0 && (
+          {/* Column headers — desktop only */}
+          {!mob && leads.length > 0 && (
             <div style={{
               display: 'grid', gridTemplateColumns: '28px 1fr 1fr 120px 160px 32px',
               gap: 16, padding: '0 16px 10px',
@@ -615,7 +664,7 @@ export default function AdminPage() {
             </div>
           ) : (
             <div style={{ paddingTop: 8 }}>
-              {leads.map((lead, i) => <LeadCard key={lead.id} lead={lead} index={i} />)}
+              {leads.map((lead, i) => <LeadCard key={lead.id} lead={lead} index={i} mob={mob} />)}
             </div>
           )}
         </div>
@@ -630,28 +679,28 @@ export default function AdminPage() {
         const convRate   = sessions.length > 0 ? Math.round((converted / sessions.length) * 100) : 0
 
         return (
-          <div style={{ padding: '24px 40px 0' }}>
+          <div style={{ padding: mob ? '16px 16px 0' : '24px 40px 0' }}>
             {/* Stats + refresh */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 28 }}>
-            <div style={{ display: 'flex', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: mob ? 'stretch' : 'flex-start', justifyContent: 'space-between', marginBottom: mob ? 16 : 28, flexDirection: mob ? 'column' : 'row', gap: mob ? 10 : 0 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr 1fr' : 'repeat(4, auto)', gap: mob ? 8 : 16 }}>
               {[
-                { label: 'TOTAL VISITAS',  value: sessions.length },
+                { label: 'VISITAS',       value: sessions.length },
                 { label: 'HOY',            value: todaySess.length },
                 { label: 'CONVERSIÓN',     value: convRate + '%' },
-                { label: 'SIN CONTACTO',   value: anon.length },
+                { label: 'ANÓNIMAS',       value: anon.length },
               ].map(s => (
                 <div key={s.label} style={{
-                  padding: '14px 20px', border: '1px solid rgba(184,152,72,0.1)',
-                  background: 'rgba(184,152,72,0.02)', minWidth: 100,
+                  padding: mob ? '10px 14px' : '14px 20px', border: '1px solid rgba(184,152,72,0.1)',
+                  background: 'rgba(184,152,72,0.02)',
                 }}>
                   <div style={{ fontSize: '0.55rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.65)', marginBottom: 6 }}>{s.label}</div>
-                  <div style={{ fontSize: '1.4rem', color: 'var(--color-accent)', fontWeight: 300 }}>{s.value}</div>
+                  <div style={{ fontSize: mob ? '1.1rem' : '1.4rem', color: 'var(--color-accent)', fontWeight: 300 }}>{s.value}</div>
                 </div>
               ))}
             </div>
             {/* Refresh button */}
             <button onClick={refreshActivity} disabled={refreshing} style={{
-              display: 'flex', alignItems: 'center', gap: 6,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
               padding: '8px 14px', border: '1px solid rgba(184,152,72,0.25)',
               background: 'rgba(184,152,72,0.05)', color: 'rgba(184,152,72,0.7)',
               fontSize: '0.55rem', letterSpacing: '0.14em', fontFamily: 'inherit',
@@ -667,8 +716,8 @@ export default function AdminPage() {
             </button>
             </div>
 
-            {/* Column headers */}
-            {anon.length > 0 && (
+            {/* Column headers — desktop only */}
+            {!mob && anon.length > 0 && (
               <div style={{
                 display: 'grid', gridTemplateColumns: '1fr 90px 60px 60px 100px 32px',
                 gap: 16, padding: '0 16px 10px',
@@ -685,7 +734,7 @@ export default function AdminPage() {
               </div>
             ) : (
               <div style={{ paddingTop: 8 }}>
-                {anon.map((sess, i) => <ActivityCard key={sess.id} sess={sess} index={i} />)}
+                {anon.map((sess, i) => <ActivityCard key={sess.id} sess={sess} index={i} mob={mob} />)}
               </div>
             )}
           </div>
