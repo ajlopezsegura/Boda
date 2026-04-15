@@ -278,7 +278,7 @@ function ActivityCard({ sess, index, mob }) {
             <DeviceIcon size={11} style={{ color: 'rgba(184,152,72,0.45)' }} />
             <span>{views.length} págs</span>
             <span>{formatDuration(totalMs) ?? '—'}</span>
-            <span style={{ marginLeft: 'auto' }}>{formatDate(sess.updated_at).split(' · ')[0]}</span>
+            <span style={{ marginLeft: 'auto' }}>{formatDate(sess.updated_at)}</span>
           </div>
         ) : (
           <>
@@ -288,7 +288,7 @@ function ActivityCard({ sess, index, mob }) {
             </div>
             <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{views.length}</span>
             <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{formatDuration(totalMs) ?? '—'}</span>
-            <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)' }}>{formatDate(sess.updated_at).split(' · ')[0]}</span>
+            <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)' }}>{formatDate(sess.updated_at)}</span>
             <ChevronRight size={12} style={{ color: 'rgba(184,152,72,0.4)', transform: expanded ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
           </>
         )}
