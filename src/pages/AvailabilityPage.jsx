@@ -213,7 +213,7 @@ export default function AvailabilityPage() {
   // ── Table view ────────────────────────────────────────────────────────────────
   function TableView() {
     const cols = {
-      gridTemplateColumns: '28px 90px 1fr 60px 60px 90px 100px 110px 44px',
+      gridTemplateColumns: '90px 90px 1fr 60px 60px 90px 100px 110px 44px',
       gap: '0 1rem',
     }
     return (
@@ -221,7 +221,7 @@ export default function AvailabilityPage() {
         {/* Column headers */}
         <div className="hidden sm:grid label-luxury px-4 pb-2"
           style={{ ...cols, fontSize: '0.48rem', color: 'rgba(184,152,72,0.45)', letterSpacing: '0.15em' }}>
-          <span style={{ color: 'rgba(184,152,72,0.55)' }}>{lang === 'es' ? 'COMP.' : 'COMP.'}</span>
+          <span style={{ color: 'rgba(184,152,72,0.55)' }}>{lang === 'es' ? 'COMPARAR' : 'COMPARE'}</span>
           <span>{lang === 'es' ? 'VIVIENDA' : 'UNIT'}</span>
           <span>{lang === 'es' ? 'TIPOLOGÍA' : 'TYPE'}</span>
           <span>{lang === 'es' ? 'PLANTA' : 'FLOOR'}</span>
@@ -262,19 +262,18 @@ export default function AvailabilityPage() {
                     onClick={e => { e.stopPropagation(); handleCompareToggle(unit.id) }}
                     data-cursor="hover"
                     disabled={!isIn(unit.id) && !canAdd(unit.id)}
-                    title={lang === 'es' ? 'Añadir al comparador' : 'Add to compare'}
-                    className="flex items-center justify-center transition-all duration-200"
+                    className="label-luxury flex items-center gap-1.5 transition-all duration-200"
                     style={{
-                      width: 26, height: 26, flexShrink: 0,
-                      border: `1px solid ${isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.35)'}`,
-                      backgroundColor: isIn(unit.id) ? 'rgba(184,152,72,0.15)' : 'rgba(184,152,72,0.04)',
+                      fontSize: '0.52rem', letterSpacing: '0.12em', padding: '4px 0',
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      color: isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.5)',
                       opacity: !isIn(unit.id) && !canAdd(unit.id) ? 0.25 : 1,
                     }}
-                    onMouseEnter={e => { if (!isIn(unit.id) && canAdd(unit.id)) e.currentTarget.style.borderColor = 'rgba(184,152,72,0.7)' }}
-                    onMouseLeave={e => { if (!isIn(unit.id)) e.currentTarget.style.borderColor = 'rgba(184,152,72,0.35)' }}>
+                    onMouseEnter={e => { if (!isIn(unit.id) && canAdd(unit.id)) e.currentTarget.style.color = 'var(--color-accent)' }}
+                    onMouseLeave={e => { if (!isIn(unit.id)) e.currentTarget.style.color = 'rgba(184,152,72,0.5)' }}>
                     {isIn(unit.id)
-                      ? <Check size={10} style={{ color: 'var(--color-accent)' }} />
-                      : <span style={{ fontSize: '0.7rem', color: 'rgba(184,152,72,0.65)', lineHeight: 1 }}>+</span>
+                      ? <><Check size={10} />{lang === 'es' ? 'AÑADIDA' : 'ADDED'}</>
+                      : <>+ {lang === 'es' ? 'COMPARAR' : 'COMPARE'}</>
                     }
                   </button>
                   <span className="display-heading text-text" style={{ fontSize: '0.82rem', letterSpacing: '0.06em' }}>
