@@ -161,7 +161,7 @@ export default function ComparePage() {
         </div>
 
         {/* ── Scrollable body ── */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="flex-1 min-h-0 overflow-y-auto pb-14">
           <div className="px-6 sm:px-10 py-6">
 
             {/* Title + clear */}

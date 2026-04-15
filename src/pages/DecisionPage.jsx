@@ -64,7 +64,7 @@ export default function DecisionPage() {
         </div>
 
         {/* Body */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="flex-1 min-h-0 overflow-y-auto pb-14">
           <div className="max-w-2xl mx-auto px-6 sm:px-10 py-8 flex flex-col gap-8">
 
             {/* Title */}

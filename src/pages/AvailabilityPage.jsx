@@ -679,7 +679,7 @@ export default function AvailabilityPage() {
         </AnimatePresence>
 
         {/* ── Content ── */}
-        <div className="flex-1 min-h-0 overflow-y-auto px-6 sm:px-10 py-5">
+        <div className="flex-1 min-h-0 overflow-y-auto px-6 sm:px-10 py-5 pb-14">
           {filtered.length > 0 ? (
             viewMode === 'table' ? <TableView /> : <GridView />
           ) : (

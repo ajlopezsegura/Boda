@@ -340,7 +340,7 @@ export default function ContextPage() {
           </div>
 
           {/* Right — info */}
-          <div className="flex-1 min-h-0 overflow-y-auto px-6 sm:px-10 py-6 sm:py-8 flex flex-col gap-6">
+          <div className="flex-1 min-h-0 overflow-y-auto px-6 sm:px-10 py-6 sm:py-8 pb-14 flex flex-col gap-6">
 
             {/* Description */}
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>

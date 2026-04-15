@@ -167,7 +167,7 @@ export default function UnitDetailPage() {
         </div>
 
         {/* ── Scrollable body ── */}
-        <div className="flex-1 min-h-0 overflow-y-auto">
+        <div className="flex-1 min-h-0 overflow-y-auto pb-14">
 
           {/* ── HERO ── */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }}
