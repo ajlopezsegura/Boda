@@ -43,7 +43,7 @@ export default function AppFooter() {
   const { ids } = useCompare()
   const mob = useIsMobile()
 
-  const compareBarActive = location.pathname.startsWith('/availability') && ids.length >= 2
+  const compareBarActive = location.pathname === '/availability' && ids.length >= 2
 
   const hidden =
     HIDDEN_EXACT.includes(location.pathname) ||
