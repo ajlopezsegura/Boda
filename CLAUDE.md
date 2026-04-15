@@ -81,15 +81,41 @@ Luxury real estate web app for **Las Conchas** — a 24-unit beachfront resident
 - Three tabs: DISPONIBILIDAD (unit status management), LEADS (contact submissions), ACTIVIDAD (anonymous sessions)
 - StatusSelect dropdown to change unit status (available/reserved/sold)
 - Refresh button on activity tab
-- **PENDING: Needs full mobile responsive rewrite** — all layouts use fixed grids that break on mobile
+- Fully responsive with `useIsMobile` hook — card layouts on mobile, stacked grids, compact headers
+
+## Mobile Responsive Status
+
+All pages have been audited and fixed for mobile (640px breakpoint):
+
+| Page | Status | Notes |
+|------|--------|-------|
+| AdminPage | ✅ Done | `useIsMobile` hook, card layouts on mobile, 2x2 stats grid |
+| ImmersionPage | ✅ Done | Room nav → horizontal bar, time controls → icon-only row, compact header |
+| ComparePage | ✅ Done | Narrower label column, compact card headers, smaller fonts |
+| UnitDetailPage | ✅ Done | Hero stacks vertically, CTA buttons stack, compare buttons stack |
+| AvailabilityPage | ✅ Done | Compare hint bar, pb-14, compact compare button |
+| ContextPage | ✅ Done | object-contain for vertical images, compass N removed |
+| SummaryPage | ✅ Done | Specs grid 2-col on mobile, pb-14 |
+| ContactPage | ✅ Already OK | max-w-xl, px-6, responsive grid |
+| DecisionPage | ✅ Already OK | max-w-2xl, flex-wrap, clamp() sizes |
+| SelectionPage | ✅ Already OK | Separate mobile/desktop layouts (hidden sm:grid) |
+| LandingPage | ✅ Already OK | clamp(), responsive padding |
+| CoverPage | ✅ Already OK | clamp(), centered flex |
+| SpacePage | ✅ Already OK | Responsive padding, max-w-xl |
+| MapPage | ✅ Already OK | object-contain, responsive padding |
+| SplashPage | ✅ Already OK | clamp(), centered layout |
+
+**Pattern used:** `useIsMobile(bp=640)` hook with `window.matchMedia` for JS-based responsive logic (required when using inline styles). The `mob` variable controls conditional styles and layout.
 
 ## Known Issues / Pending Work
 
-1. **Admin responsive** — All grids (7-col units, 6-col leads, 6-col activity) need mobile card layouts
-2. **Supabase columns** — `tagline`/`tagline_en` columns don't exist yet in projects table (hardcoded fallback works)
-3. **Real images** — Some amenity/entorno items use Unsplash placeholders
-4. **AppShell component** — exists but not used in App.jsx (orphaned)
-5. **ContactCTA component** — replaced by AppFooter (orphaned)
+1. **Supabase columns** — `tagline`/`tagline_en` columns don't exist yet in projects table (hardcoded fallback works)
+2. **Real images** — Some amenity/entorno items use Unsplash placeholders
+3. **AppShell component** — exists but not used in App.jsx (orphaned)
+4. **ContactCTA component** — replaced by AppFooter (orphaned)
+5. **Compare state persistence** — Compare selection lost on page reload (could use localStorage)
+6. **Font size inconsistencies** — Minor variations between pages (global type scale would help)
+7. **Progress indicators** — No breadcrumbs/step indicator across the buyer journey
 
 ## Commit Convention
 
