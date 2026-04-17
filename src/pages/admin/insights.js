@@ -10,15 +10,15 @@ const W = {
 }
 const DWELL_THRESHOLD_S = 60
 
-// ─── Funnel definition ──────────────────────────────────────
+// ─── Commercial funnel (linear only) ────────────────────────
+// Non-linear actions like compare/configurator live in
+// computeExplorationActions and computeExplorationDeadEnds.
 export const FUNNEL_STEPS = [
-  { key: 'llegaron',     label: 'Llegaron',           check: () => true },
-  { key: 'proyecto',     label: 'Vio el proyecto',    check: t => t.some(e => e.type === 'page_view' && e.page === '/proyecto') },
-  { key: 'unidad',       label: 'Abrió una vivienda', check: t => t.some(e => e.type === 'page_view' && e.page?.startsWith('/availability/') && e.page !== '/availability') },
-  { key: 'configurador', label: 'Configurador',       check: t => t.some(e => e.type === 'page_view' && e.page?.startsWith('/inmersion/')) },
-  { key: 'comparo',      label: 'Comparó',            check: t => t.some(e => e.page === '/compare' || e.type === 'compare_add') },
-  { key: 'decision',     label: 'Decisión',           check: t => t.some(e => e.type === 'page_view' && e.page === '/decision') },
-  { key: 'contacto',     label: 'Formulario',         check: (_, s) => s.converted },
+  { key: 'llegaron',  label: 'Llegaron',           check: () => true },
+  { key: 'proyecto',  label: 'Vio el proyecto',    check: t => t.some(e => e.type === 'page_view' && e.page === '/proyecto') },
+  { key: 'unidad',    label: 'Abrió una vivienda', check: t => t.some(e => e.type === 'page_view' && e.page?.startsWith('/availability/') && e.page !== '/availability') },
+  { key: 'decision',  label: 'Decisión',           check: t => t.some(e => e.type === 'page_view' && e.page === '/decision') },
+  { key: 'contacto',  label: 'Formulario',         check: (_, s) => s.converted },
 ]
 
 // ─── Compute funnel ──────────────────────────────────────────
@@ -328,6 +328,38 @@ export function computeRecommendedAction(rules) {
   if (rules.length === 0) return null
   const top = rules[0]
   return { action: top.action, why: top.insight }
+}
+
+// ─── Exploration actions (session-based counts) ─────────────
+export function computeExplorationActions(sessions) {
+  const compared = sessions.filter(s =>
+    Array.isArray(s.trail) && s.trail.some(e => e.type === 'compare_add' || e.page === '/compare')
+  ).length
+  const configured = sessions.filter(s =>
+    Array.isArray(s.trail) && s.trail.some(e => e.type === 'page_view' && e.page?.startsWith('/inmersion/'))
+  ).length
+  const returning = sessions.filter(s => (s.visit_number ?? 1) > 1).length
+  return { compared, configured, returning, total: sessions.length }
+}
+
+// ─── Exploration dead-ends (interest without closure) ───────
+export function computeExplorationDeadEnds(sessions) {
+  const items = []
+  const withCompareNoDecision = sessions.filter(s => {
+    const t = Array.isArray(s.trail) ? s.trail : []
+    const hasCompare  = t.some(e => e.type === 'compare_add' || e.page === '/compare')
+    const hasDecision = t.some(e => e.type === 'page_view' && e.page === '/decision') || s.converted
+    return hasCompare && !hasDecision
+  }).length
+  const withConfigNoDecision = sessions.filter(s => {
+    const t = Array.isArray(s.trail) ? s.trail : []
+    const hasConfig   = t.some(e => e.type === 'page_view' && e.page?.startsWith('/inmersion/'))
+    const hasDecision = t.some(e => e.type === 'page_view' && e.page === '/decision') || s.converted
+    return hasConfig && !hasDecision
+  }).length
+  if (withCompareNoDecision > 0) items.push({ label: 'Comparó, pero no llegó a decisión',            count: withCompareNoDecision })
+  if (withConfigNoDecision  > 0) items.push({ label: 'Entró en configurador, pero no llegó a decisión', count: withConfigNoDecision })
+  return items
 }
 
 // ─── Behavior segments ───────────────────────────────────────

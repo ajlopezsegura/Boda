@@ -4,7 +4,13 @@ import {
   Tooltip, ResponsiveContainer, Cell,
   LineChart, Line,
 } from 'recharts'
-import { computeSegments, computeFrictionPoints } from './insights'
+import {
+  FUNNEL_STEPS,
+  computeSegments,
+  computeFrictionPoints,
+  computeExplorationActions,
+  computeExplorationDeadEnds,
+} from './insights'
 
 const ACCENT    = '#B89848'
 const ACCENT_DIM= 'rgba(184,152,72,0.35)'
@@ -54,17 +60,7 @@ function Empty() {
   )
 }
 
-/* ── 1. FUNNEL ─────────────────────────────────────────────── */
-const FUNNEL_STEPS = [
-  { key: 'llegaron',    label: 'LLEGARON',          check: () => true },
-  { key: 'proyecto',    label: 'VIO EL PROYECTO',   check: t => t.some(e => e.type === 'page_view' && e.page === '/proyecto') },
-  { key: 'unidad',      label: 'ABRIÓ UNA VIVIENDA',check: t => t.some(e => e.type === 'page_view' && e.page?.startsWith('/availability/')) },
-  { key: 'configurador',label: 'CONFIGURADOR',      check: t => t.some(e => e.type === 'page_view' && e.page?.startsWith('/inmersion/')) },
-  { key: 'comparo',     label: 'COMPARÓ',           check: t => t.some(e => e.page === '/compare' || e.type === 'compare_add') },
-  { key: 'decision',    label: 'DECISIÓN',          check: t => t.some(e => e.type === 'page_view' && e.page === '/decision') },
-  { key: 'contacto',    label: 'FORMULARIO',        check: (_, s) => s.converted },
-]
-
+/* ── 1. FUNNEL COMERCIAL (lineal, desde insights.js) ─────── */
 function FunnelChart({ sessions }) {
   const total = sessions.length
   const data = useMemo(() => {
@@ -74,7 +70,7 @@ function FunnelChart({ sessions }) {
         return step.check(trail, s)
       }).length
       return {
-        label:   step.label,
+        label:   step.label.toUpperCase(),
         count,
         pct:     total > 0 ? Math.round((count / total) * 100) : 0,
         drop:    null,
@@ -270,10 +266,17 @@ function MaterialsChart({ sessions }) {
   const hasAny = Object.values(data).some(c => Object.keys(c).length > 0)
   if (!hasAny) return (
     <div style={{
-      padding: '18px 4px', fontSize: '0.6rem', letterSpacing: '0.04em',
-      color: 'rgba(244,241,234,0.4)', lineHeight: 1.6,
+      padding: '4px 0 0', fontSize: '0.58rem', letterSpacing: '0.04em',
+      color: 'rgba(244,241,234,0.45)', lineHeight: 1.5,
     }}>
-      Aún no hay suficientes selecciones de materiales para detectar preferencias.
+      Sin selecciones todavía.
+      <span style={{
+        display: 'block', marginTop: 3,
+        fontSize: '0.5rem', color: 'rgba(244,241,234,0.3)',
+        letterSpacing: '0.06em',
+      }}>
+        Aparecerán cuando los visitantes usen el configurador.
+      </span>
     </div>
   )
 
@@ -414,25 +417,27 @@ function RoomsAndGallery({ sessions }) {
   )
 }
 
-/* ── 5. SEGMENTOS DE COMPORTAMIENTO ───────────────────────── */
+/* ── 5. SEGMENTOS DE SESIÓN ──────────────────────────────── */
+// Cada sesión es una visita, no un usuario. Un mismo usuario
+// puede sumar varias sesiones a lo largo de distintas visitas.
 const SEGMENT_META = [
   {
     key:   'curiosos',
-    label: 'CURIOSOS',
+    label: 'CURIOSAS',
     color: 'rgba(244,241,234,0.55)',
-    copy:  'Entran y miran, pero no profundizan.',
+    copy:  'Llegaron, miraron algo y se fueron.',
   },
   {
     key:   'exploradores',
-    label: 'EXPLORADORES',
+    label: 'EXPLORATORIAS',
     color: COLD,
-    copy:  'Abren fichas de vivienda y se interesan.',
+    copy:  'Abrieron fichas de vivienda y dedicaron tiempo.',
   },
   {
     key:   'calientes',
     label: 'CALIENTES',
     color: ACCENT,
-    copy:  'Comparan, configuran o llegan a decisión.',
+    copy:  'Compararon, configuraron o llegaron a decisión.',
   },
 ]
 
@@ -497,7 +502,7 @@ function FrictionPoints({ sessions }) {
         const t = Array.isArray(s.trail) ? s.trail : []
         return step.check(t, s)
       }).length
-      return { label: step.label, count, pct: total > 0 ? Math.round((count / total) * 100) : 0 }
+      return { label: step.label.toUpperCase(), count, pct: total > 0 ? Math.round((count / total) * 100) : 0 }
     }).map((item, i, arr) => ({
       ...item,
       drop: i > 0 && arr[i - 1].count > 0
@@ -506,9 +511,13 @@ function FrictionPoints({ sessions }) {
     }))
   }, [sessions])
 
-  const points = useMemo(() => computeFrictionPoints(funnel), [funnel])
+  const points    = useMemo(() => computeFrictionPoints(funnel), [funnel])
+  const deadEnds  = useMemo(() => computeExplorationDeadEnds(sessions), [sessions])
 
-  if (points.length === 0) {
+  const hasPoints    = points.length > 0
+  const hasDeadEnds  = deadEnds.length > 0
+
+  if (!hasPoints && !hasDeadEnds) {
     return (
       <div style={{
         padding: '14px 4px', fontSize: '0.6rem', letterSpacing: '0.04em',
@@ -520,48 +529,96 @@ function FrictionPoints({ sessions }) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-      {points.map((p, i) => (
-        <div key={`${p.from}-${p.to}`} style={{
-          display: 'flex', alignItems: 'center', gap: 12,
-          padding: '10px 12px',
-          background: i === 0 ? 'rgba(210,90,90,0.05)' : 'rgba(184,152,72,0.02)',
-          border: `1px solid ${i === 0 ? 'rgba(210,90,90,0.2)' : 'rgba(184,152,72,0.08)'}`,
-        }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {hasPoints && (
+        <div>
           <div style={{
-            width: 22, height: 22, flexShrink: 0,
-            border: `1px solid ${i === 0 ? RED : 'rgba(184,152,72,0.25)'}`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '0.55rem', letterSpacing: '0.04em',
-            color: i === 0 ? RED : 'rgba(244,241,234,0.55)',
+            fontSize: '0.46rem', letterSpacing: '0.2em',
+            color: 'rgba(210,90,90,0.7)', marginBottom: 8,
           }}>
-            {i + 1}
+            FUGAS DEL RECORRIDO
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{
-              fontSize: '0.58rem', letterSpacing: '0.04em',
-              color: 'rgba(244,241,234,0.75)', lineHeight: 1.5,
-            }}>
-              <span style={{ color: 'rgba(244,241,234,0.5)' }}>{p.from.toLowerCase()}</span>
-              {' → '}
-              <span>{p.to.toLowerCase()}</span>
-            </div>
-            <div style={{
-              fontSize: '0.5rem', letterSpacing: '0.08em',
-              color: 'rgba(244,241,234,0.35)', marginTop: 3,
-            }}>
-              {p.fromCount} → {p.toCount}
-            </div>
-          </div>
-          <div style={{
-            fontSize: '0.72rem', fontWeight: 400,
-            color: i === 0 ? RED : 'rgba(210,90,90,0.6)',
-            letterSpacing: '-0.01em', flexShrink: 0,
-          }}>
-            −{p.drop}%
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {points.map((p, i) => (
+              <div key={`${p.from}-${p.to}`} style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '10px 12px',
+                background: i === 0 ? 'rgba(210,90,90,0.05)' : 'rgba(184,152,72,0.02)',
+                border: `1px solid ${i === 0 ? 'rgba(210,90,90,0.2)' : 'rgba(184,152,72,0.08)'}`,
+              }}>
+                <div style={{
+                  width: 22, height: 22, flexShrink: 0,
+                  border: `1px solid ${i === 0 ? RED : 'rgba(184,152,72,0.25)'}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '0.55rem', letterSpacing: '0.04em',
+                  color: i === 0 ? RED : 'rgba(244,241,234,0.55)',
+                }}>
+                  {i + 1}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontSize: '0.58rem', letterSpacing: '0.04em',
+                    color: 'rgba(244,241,234,0.75)', lineHeight: 1.5,
+                  }}>
+                    <span style={{ color: 'rgba(244,241,234,0.5)' }}>{p.from.toLowerCase()}</span>
+                    {' → '}
+                    <span>{p.to.toLowerCase()}</span>
+                  </div>
+                  <div style={{
+                    fontSize: '0.5rem', letterSpacing: '0.08em',
+                    color: 'rgba(244,241,234,0.35)', marginTop: 3,
+                  }}>
+                    {p.fromCount} → {p.toCount}
+                  </div>
+                </div>
+                <div style={{
+                  fontSize: '0.72rem', fontWeight: 400,
+                  color: i === 0 ? RED : 'rgba(210,90,90,0.6)',
+                  letterSpacing: '-0.01em', flexShrink: 0,
+                }}>
+                  −{p.drop}%
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
+      )}
+
+      {hasDeadEnds && (
+        <div>
+          <div style={{
+            fontSize: '0.46rem', letterSpacing: '0.2em',
+            color: 'rgba(255,180,60,0.75)', marginBottom: 8,
+          }}>
+            INTERÉS SIN CIERRE
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {deadEnds.map(d => (
+              <div key={d.label} style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '10px 12px',
+                background: 'rgba(255,180,60,0.04)',
+                border: '1px solid rgba(255,180,60,0.18)',
+              }}>
+                <div style={{
+                  flex: 1,
+                  fontSize: '0.58rem', letterSpacing: '0.04em',
+                  color: 'rgba(244,241,234,0.75)', lineHeight: 1.5,
+                }}>
+                  {d.label}
+                </div>
+                <div style={{
+                  fontSize: '0.72rem', fontWeight: 400,
+                  color: 'rgba(255,180,60,0.85)',
+                  letterSpacing: '-0.01em', flexShrink: 0,
+                }}>
+                  {d.count}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -609,6 +666,76 @@ function SessionsTrend({ sessions }) {
   )
 }
 
+/* ── 8. ACCIONES DE EXPLORACIÓN (laterales, no lineales) ─── */
+const EXPLORATION_META = [
+  {
+    key:   'compared',
+    label: 'COMPARARON',
+    color: COLD,
+    copy:  'Sesiones que usaron el comparador.',
+  },
+  {
+    key:   'configured',
+    label: 'ENTRARON AL CONFIGURADOR',
+    color: ACCENT,
+    copy:  'Sesiones que abrieron el configurador 3D.',
+  },
+  {
+    key:   'returning',
+    label: 'SESIONES RECURRENTES',
+    color: 'rgba(255,180,60,0.8)',
+    copy:  'Sesiones de visitantes que han vuelto.',
+  },
+]
+
+function ExplorationActions({ sessions }) {
+  const data = useMemo(() => computeExplorationActions(sessions), [sessions])
+  if (data.total === 0) return null
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+      {EXPLORATION_META.map(s => {
+        const count = data[s.key]
+        const pct   = data.total > 0 ? Math.round((count / data.total) * 100) : 0
+        return (
+          <div key={s.key} style={{
+            padding: '14px 16px',
+            border: '1px solid rgba(184,152,72,0.1)',
+            background: 'rgba(184,152,72,0.02)',
+          }}>
+            <div style={{
+              fontSize: '0.5rem', letterSpacing: '0.18em',
+              color: s.color, marginBottom: 10, opacity: 0.9,
+            }}>
+              {s.label}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
+              <span style={{
+                fontSize: '1.4rem', fontWeight: 300,
+                color: 'rgba(244,241,234,0.9)', letterSpacing: '-0.01em',
+              }}>
+                {count}
+              </span>
+              <span style={{
+                fontSize: '0.58rem', letterSpacing: '0.08em',
+                color: 'rgba(244,241,234,0.4)',
+              }}>
+                {pct}%
+              </span>
+            </div>
+            <div style={{
+              fontSize: '0.55rem', letterSpacing: '0.04em',
+              color: 'rgba(244,241,234,0.5)', lineHeight: 1.5,
+            }}>
+              {s.copy}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 /* ── Export ─────────────────────────────────────────────────── */
 export default function ActivityCharts({ sessions, mob }) {
   if (sessions.length === 0) return null
@@ -621,17 +748,17 @@ export default function ActivityCharts({ sessions, mob }) {
 
       {/* Funnel + Tiempo */}
       <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : '1fr 1fr', gap: 14 }}>
-        <ChartCard title="EMBUDO DE CONVERSIÓN">
+        <ChartCard title="EMBUDO COMERCIAL">
           <FunnelChart sessions={sessions} />
         </ChartCard>
-        <ChartCard title="TIEMPO MEDIO POR PÁGINA">
+        <ChartCard title="ATENCIÓN MEDIA POR PÁGINA">
           <TimePerPage sessions={sessions} />
         </ChartCard>
       </div>
 
       {/* Segmentos + Fricción */}
       <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : '1.2fr 1fr', gap: 14 }}>
-        <ChartCard title="SEGMENTOS DE COMPORTAMIENTO">
+        <ChartCard title="SEGMENTOS DE SESIÓN">
           <BehaviorSegments sessions={sessions} />
         </ChartCard>
         <ChartCard title="PUNTOS DE FRICCIÓN">
@@ -639,10 +766,15 @@ export default function ActivityCharts({ sessions, mob }) {
         </ChartCard>
       </div>
 
-      {/* Materiales */}
-      <ChartCard title="MATERIALES MÁS ELEGIDOS EN CONFIGURADOR">
-        <MaterialsChart sessions={sessions} />
-      </ChartCard>
+      {/* Exploración + Materiales */}
+      <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : '1.2fr 1fr', gap: 14 }}>
+        <ChartCard title="ACCIONES DE EXPLORACIÓN">
+          <ExplorationActions sessions={sessions} />
+        </ChartCard>
+        <ChartCard title="MATERIALES ELEGIDOS EN CONFIGURADOR">
+          <MaterialsChart sessions={sessions} />
+        </ChartCard>
+      </div>
 
       {/* Salas + Galería */}
       <RoomsAndGallery sessions={sessions} />
