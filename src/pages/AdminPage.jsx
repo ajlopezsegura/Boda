@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { LogOut, Check, Loader2, ChevronDown, ChevronRight, Flame, Snowflake, Monitor, Smartphone, Tablet, Globe, RotateCcw } from 'lucide-react'
+import { LogOut, Check, Loader2, ChevronDown, ChevronRight, Flame, Snowflake, Monitor, Smartphone, Tablet, Globe, RotateCcw, BarChart3 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
+import OverviewTab from './admin/OverviewTab'
 
 const PROJECT_SLUG   = (import.meta.env.VITE_PROJECT_SLUG   ?? 'las-conchas').trim()
 const ADMIN_PASSWORD = (import.meta.env.VITE_ADMIN_PASSWORD ?? 'admin').trim()
@@ -458,7 +459,7 @@ function useIsMobile(bp = 640) {
 export default function AdminPage() {
   const mob = useIsMobile()
   const [authed,      setAuthed]      = useState(() => localStorage.getItem('tvbs_admin') === ADMIN_PASSWORD)
-  const [tab,         setTab]         = useState('units')
+  const [tab,         setTab]         = useState('overview')
   const [units,       setUnits]       = useState([])
   const [leads,       setLeads]       = useState([])
   const [sessions,    setSessions]    = useState([])
@@ -558,7 +559,8 @@ export default function AdminPage() {
       {/* Tabs */}
       <div style={{ display: 'flex', padding: mob ? '0 16px' : '0 40px', borderBottom: '1px solid rgba(184,152,72,0.1)', overflowX: 'auto' }}>
         {[
-          { key: 'units',    label: mob ? 'UDS' : 'DISPONIBILIDAD', count: units.length },
+          { key: 'overview', label: mob ? 'RESUMEN' : 'RESUMEN',       count: null, icon: BarChart3 },
+          { key: 'units',    label: mob ? 'UDS'     : 'DISPONIBILIDAD', count: units.length },
           { key: 'leads',    label: 'LEADS',          count: leads.length, hot: hotLeads.length },
           { key: 'activity', label: mob ? 'ACTIVIDAD' : 'ACTIVIDAD', count: sessions.filter(s => !s.converted).length },
         ].map(t => (
@@ -570,12 +572,15 @@ export default function AdminPage() {
             cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 6,
             whiteSpace: 'nowrap', flexShrink: 0,
           }}>
+            {t.icon && <t.icon size={11} style={{ opacity: 0.8 }} />}
             {t.label}
-            <span style={{
-              padding: '1px 6px', background: 'rgba(184,152,72,0.1)',
-              border: '1px solid rgba(184,152,72,0.2)',
-              fontSize: '0.55rem', color: 'rgba(184,152,72,0.75)',
-            }}>{t.count}</span>
+            {t.count != null && (
+              <span style={{
+                padding: '1px 6px', background: 'rgba(184,152,72,0.1)',
+                border: '1px solid rgba(184,152,72,0.2)',
+                fontSize: '0.55rem', color: 'rgba(184,152,72,0.75)',
+              }}>{t.count}</span>
+            )}
             {t.hot > 0 && (
               <span style={{
                 padding: '1px 6px', background: 'rgba(255,140,0,0.1)',
@@ -589,6 +594,11 @@ export default function AdminPage() {
           </button>
         ))}
       </div>
+
+      {/* ── OVERVIEW TAB ── */}
+      {tab === 'overview' && (
+        <OverviewTab leads={leads} sessions={sessions} units={units} mob={mob} />
+      )}
 
       {/* ── UNITS TAB ── */}
       {tab === 'units' && (
