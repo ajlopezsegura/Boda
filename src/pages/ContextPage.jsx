@@ -353,7 +353,7 @@ export default function ContextPage() {
                   { label: lang === 'es' ? 'Unidades'   : 'Units',      value: building?.totalUnits },
                   { label: lang === 'es' ? 'Tipologías' : 'Typologies', value: building?.typologies?.join(', ') },
                   { label: lang === 'es' ? 'Superficie' : 'Surface',    value: building?.surfaceRange },
-                  { label: lang === 'es' ? 'Desde'      : 'From',       value: '350.000 €' },
+                  { label: lang === 'es' ? 'Precio'     : 'Price',      value: building?.priceRange },
                 ].map(item => (
                   <div key={item.label}>
                     <p className="label-luxury mb-1" style={{ color: 'var(--color-accent)', opacity: 0.6, fontSize: '0.55rem' }}>{item.label}</p>
