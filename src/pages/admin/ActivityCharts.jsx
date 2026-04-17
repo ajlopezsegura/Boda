@@ -3,11 +3,13 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Cell,
 } from 'recharts'
+import { computeSegments, computeFrictionPoints } from './insights'
 
 const ACCENT    = '#B89848'
 const ACCENT_DIM= 'rgba(184,152,72,0.35)'
 const COLD      = 'rgba(140,180,255,0.65)'
 const GREEN     = 'rgba(91,168,120,0.8)'
+const RED       = 'rgba(210,90,90,0.85)'
 const GRID      = 'rgba(184,152,72,0.06)'
 const TEXT_DIM  = 'rgba(244,241,234,0.4)'
 const ACCENT_LOW= 'rgba(184,152,72,0.08)'
@@ -88,6 +90,11 @@ function FunnelChart({ sessions }) {
 
   const max = data[0]?.count ?? 1
 
+  const biggestDrop = data
+    .map((step, i) => ({ ...step, prev: i > 0 ? data[i - 1] : null }))
+    .filter(step => step.prev && step.drop != null && step.drop > 0)
+    .sort((a, b) => b.drop - a.drop)[0]
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       {data.map((step, i) => {
@@ -148,6 +155,21 @@ function FunnelChart({ sessions }) {
           </div>
         )
       })}
+
+      {biggestDrop && (
+        <div style={{
+          marginTop: 10, paddingTop: 10,
+          borderTop: '1px solid rgba(184,152,72,0.08)',
+          fontSize: '0.55rem', letterSpacing: '0.04em',
+          color: 'rgba(244,241,234,0.55)', lineHeight: 1.5,
+        }}>
+          La mayor pérdida está entre{' '}
+          <span style={{ color: 'rgba(244,241,234,0.85)' }}>{biggestDrop.prev.label.toLowerCase()}</span>
+          {' '}y{' '}
+          <span style={{ color: 'rgba(244,241,234,0.85)' }}>{biggestDrop.label.toLowerCase()}</span>
+          {' '}(<span style={{ color: RED }}>−{biggestDrop.drop}%</span>).
+        </div>
+      )}
     </div>
   )
 }
@@ -175,8 +197,9 @@ function TimePerPage({ sessions }) {
     sessions.forEach(s => {
       const trail = Array.isArray(s.trail) ? s.trail : []
       trail.filter(e => e.type === 'page_view' && e.duration_ms > 2000).forEach(e => {
-        const key = e.page
-        totals[key] = (totals[key] ?? 0) + e.duration_ms
+        const key    = e.page
+        const capped = Math.min(e.duration_ms, 300000)
+        totals[key] = (totals[key] ?? 0) + capped
         counts[key] = (counts[key] ?? 0) + 1
       })
     })
@@ -244,7 +267,14 @@ function MaterialsChart({ sessions }) {
   }, [sessions])
 
   const hasAny = Object.values(data).some(c => Object.keys(c).length > 0)
-  if (!hasAny) return <Empty />
+  if (!hasAny) return (
+    <div style={{
+      padding: '18px 4px', fontSize: '0.6rem', letterSpacing: '0.04em',
+      color: 'rgba(244,241,234,0.4)', lineHeight: 1.6,
+    }}>
+      Aún no hay suficientes selecciones de materiales para detectar preferencias.
+    </div>
+  )
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
@@ -383,6 +413,158 @@ function RoomsAndGallery({ sessions }) {
   )
 }
 
+/* ── 5. SEGMENTOS DE COMPORTAMIENTO ───────────────────────── */
+const SEGMENT_META = [
+  {
+    key:   'curiosos',
+    label: 'CURIOSOS',
+    color: 'rgba(244,241,234,0.55)',
+    copy:  'Entran y miran, pero no profundizan.',
+  },
+  {
+    key:   'exploradores',
+    label: 'EXPLORADORES',
+    color: COLD,
+    copy:  'Abren fichas de vivienda y se interesan.',
+  },
+  {
+    key:   'calientes',
+    label: 'CALIENTES',
+    color: ACCENT,
+    copy:  'Comparan, configuran o llegan a decisión.',
+  },
+]
+
+function BehaviorSegments({ sessions }) {
+  const seg = useMemo(() => computeSegments(sessions), [sessions])
+  if (seg.total === 0) return null
+
+  return (
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(3, 1fr)',
+      gap: 12,
+    }}>
+      {SEGMENT_META.map(s => {
+        const count = seg[s.key]
+        const pct   = seg.total > 0 ? Math.round((count / seg.total) * 100) : 0
+        return (
+          <div key={s.key} style={{
+            padding: '14px 16px',
+            border: '1px solid rgba(184,152,72,0.1)',
+            background: 'rgba(184,152,72,0.02)',
+          }}>
+            <div style={{
+              fontSize: '0.5rem', letterSpacing: '0.18em',
+              color: s.color, marginBottom: 10, opacity: 0.9,
+            }}>
+              {s.label}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
+              <span style={{
+                fontSize: '1.4rem', fontWeight: 300,
+                color: 'rgba(244,241,234,0.9)', letterSpacing: '-0.01em',
+              }}>
+                {count}
+              </span>
+              <span style={{
+                fontSize: '0.58rem', letterSpacing: '0.08em',
+                color: 'rgba(244,241,234,0.4)',
+              }}>
+                {pct}%
+              </span>
+            </div>
+            <div style={{
+              fontSize: '0.55rem', letterSpacing: '0.04em',
+              color: 'rgba(244,241,234,0.5)', lineHeight: 1.5,
+            }}>
+              {s.copy}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+/* ── 6. PUNTOS DE FRICCIÓN ─────────────────────────────────── */
+function FrictionPoints({ sessions }) {
+  const funnel = useMemo(() => {
+    const total = sessions.length
+    return FUNNEL_STEPS.map(step => {
+      const count = sessions.filter(s => {
+        const t = Array.isArray(s.trail) ? s.trail : []
+        return step.check(t, s)
+      }).length
+      return { label: step.label, count, pct: total > 0 ? Math.round((count / total) * 100) : 0 }
+    }).map((item, i, arr) => ({
+      ...item,
+      drop: i > 0 && arr[i - 1].count > 0
+        ? Math.round((1 - item.count / arr[i - 1].count) * 100)
+        : null,
+    }))
+  }, [sessions])
+
+  const points = useMemo(() => computeFrictionPoints(funnel), [funnel])
+
+  if (points.length === 0) {
+    return (
+      <div style={{
+        padding: '14px 4px', fontSize: '0.6rem', letterSpacing: '0.04em',
+        color: 'rgba(244,241,234,0.4)', lineHeight: 1.6,
+      }}>
+        Aún no hay caídas relevantes en el recorrido.
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {points.map((p, i) => (
+        <div key={`${p.from}-${p.to}`} style={{
+          display: 'flex', alignItems: 'center', gap: 12,
+          padding: '10px 12px',
+          background: i === 0 ? 'rgba(210,90,90,0.05)' : 'rgba(184,152,72,0.02)',
+          border: `1px solid ${i === 0 ? 'rgba(210,90,90,0.2)' : 'rgba(184,152,72,0.08)'}`,
+        }}>
+          <div style={{
+            width: 22, height: 22, flexShrink: 0,
+            border: `1px solid ${i === 0 ? RED : 'rgba(184,152,72,0.25)'}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '0.55rem', letterSpacing: '0.04em',
+            color: i === 0 ? RED : 'rgba(244,241,234,0.55)',
+          }}>
+            {i + 1}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{
+              fontSize: '0.58rem', letterSpacing: '0.04em',
+              color: 'rgba(244,241,234,0.75)', lineHeight: 1.5,
+            }}>
+              <span style={{ color: 'rgba(244,241,234,0.5)' }}>{p.from.toLowerCase()}</span>
+              {' → '}
+              <span>{p.to.toLowerCase()}</span>
+            </div>
+            <div style={{
+              fontSize: '0.5rem', letterSpacing: '0.08em',
+              color: 'rgba(244,241,234,0.35)', marginTop: 3,
+            }}>
+              {p.fromCount} → {p.toCount}
+            </div>
+          </div>
+          <div style={{
+            fontSize: '0.72rem', fontWeight: 400,
+            color: i === 0 ? RED : 'rgba(210,90,90,0.6)',
+            letterSpacing: '-0.01em', flexShrink: 0,
+          }}>
+            −{p.drop}%
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 /* ── Export ─────────────────────────────────────────────────── */
 export default function ActivityCharts({ sessions, mob }) {
   if (sessions.length === 0) return null
@@ -397,6 +579,16 @@ export default function ActivityCharts({ sessions, mob }) {
         </ChartCard>
         <ChartCard title="TIEMPO MEDIO POR PÁGINA">
           <TimePerPage sessions={sessions} />
+        </ChartCard>
+      </div>
+
+      {/* Segmentos + Fricción */}
+      <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : '1.2fr 1fr', gap: 14 }}>
+        <ChartCard title="SEGMENTOS DE COMPORTAMIENTO">
+          <BehaviorSegments sessions={sessions} />
+        </ChartCard>
+        <ChartCard title="PUNTOS DE FRICCIÓN">
+          <FrictionPoints sessions={sessions} />
         </ChartCard>
       </div>
 

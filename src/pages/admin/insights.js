@@ -229,7 +229,41 @@ export function runRules({ sessions, leads, funnel, unitScores, sourceDepth }) {
   return rules.sort((a, b) => b.priority - a.priority)
 }
 
-// ─── Reading of the week ─────────────────────────────────────
+// ─── Behavior segments ───────────────────────────────────────
+export function computeSegments(sessions) {
+  let curiosos = 0, exploradores = 0, calientes = 0
+  sessions.forEach(s => {
+    const t = Array.isArray(s.trail) ? s.trail : []
+    const hasUnit    = t.some(e => e.type === 'page_view' && e.page?.startsWith('/availability/') && e.page !== '/availability')
+    const hasCompare = t.some(e => e.type === 'compare_add' || e.page === '/compare')
+    const hasConfig  = t.some(e => e.type === 'page_view' && e.page?.startsWith('/inmersion/'))
+    const hasDecision= t.some(e => e.type === 'page_view' && e.page === '/decision') || s.converted
+
+    if (hasCompare || hasConfig || hasDecision) calientes++
+    else if (hasUnit) exploradores++
+    else curiosos++
+  })
+  return { curiosos, exploradores, calientes, total: sessions.length }
+}
+
+// ─── Friction points — top weakest funnel transitions ───────
+export function computeFrictionPoints(funnel) {
+  return funnel
+    .map((step, i) => {
+      if (i === 0 || step.drop == null) return null
+      return {
+        from:   funnel[i - 1].label,
+        to:     step.label,
+        drop:   step.drop,
+        fromCount: funnel[i - 1].count,
+        toCount:   step.count,
+      }
+    })
+    .filter(x => x && x.drop > 0)
+    .sort((a, b) => b.drop - a.drop)
+    .slice(0, 3)
+}
+
 export function generateReading({ sessions, leads, funnel, unitScores }) {
   const total        = sessions.length
   const formCount    = leads.length
