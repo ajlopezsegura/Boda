@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, Cell,
+  LineChart, Line,
 } from 'recharts'
 import { computeSegments, computeFrictionPoints } from './insights'
 
@@ -565,12 +566,58 @@ function FrictionPoints({ sessions }) {
   )
 }
 
+/* ── 7. SESIONES · 30 DÍAS ────────────────────────────────── */
+function shortDate(d) {
+  return new Date(d).toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })
+}
+function SessionsTrend({ sessions }) {
+  const data = useMemo(() => {
+    const now = new Date()
+    const days = []
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(now); d.setDate(d.getDate() - i); d.setHours(0, 0, 0, 0)
+      days.push(d)
+    }
+    return days.map(d => {
+      const s = d.getTime(), e = s + 86400000
+      const count = sessions.filter(x => {
+        const t = new Date(x.started_at ?? x.updated_at).getTime()
+        return t >= s && t < e
+      }).length
+      return { date: shortDate(d), count }
+    })
+  }, [sessions])
+
+  const hasAny = data.some(d => d.count > 0)
+  if (!hasAny) return null
+
+  return (
+    <ChartCard title="SESIONES · 30 DÍAS">
+      <ResponsiveContainer width="100%" height={140}>
+        <LineChart data={data} margin={{ top: 4, right: 8, bottom: 4, left: 0 }}>
+          <CartesianGrid stroke={GRID} vertical={false} />
+          <XAxis dataKey="date" stroke={TEXT_DIM} tick={{ fontSize: 10, fill: TEXT_DIM }} tickLine={false}
+            axisLine={{ stroke: GRID }} interval={Math.max(0, Math.floor(data.length / 6) - 1)} />
+          <YAxis stroke={TEXT_DIM} tick={{ fontSize: 10, fill: TEXT_DIM }} tickLine={false}
+            axisLine={false} width={22} allowDecimals={false} />
+          <Tooltip {...tooltipProps} cursor={{ stroke: 'rgba(184,152,72,0.3)', strokeDasharray: '3 3' }} />
+          <Line type="monotone" dataKey="count" stroke={COLD} strokeWidth={1.5}
+            dot={false} activeDot={{ r: 3, fill: COLD, strokeWidth: 0 }} />
+        </LineChart>
+      </ResponsiveContainer>
+    </ChartCard>
+  )
+}
+
 /* ── Export ─────────────────────────────────────────────────── */
 export default function ActivityCharts({ sessions, mob }) {
   if (sessions.length === 0) return null
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24 }}>
+
+      {/* Tendencia 30 días */}
+      <SessionsTrend sessions={sessions} />
 
       {/* Funnel + Tiempo */}
       <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : '1fr 1fr', gap: 14 }}>

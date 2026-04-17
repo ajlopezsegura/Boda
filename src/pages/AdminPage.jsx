@@ -530,6 +530,23 @@ export default function AdminPage() {
     return d.toDateString() === t.toDateString()
   })
 
+  // ─── Leads tab extras: conversion rate + hot-lead pipeline value
+  const convRateLeads = sessions.length > 0
+    ? ((leads.length / sessions.length) * 100).toFixed(1) + '%'
+    : '0%'
+  const pipelineHot = (() => {
+    let total = 0
+    hotLeads.forEach(l => {
+      const id = l.primary_unit_id ?? l.unit_ids?.[0]
+      const u  = id ? units.find(x => x.id === id) : null
+      if (u?.price) total += u.price
+    })
+    if (total === 0) return '—'
+    if (total >= 1_000_000) return `${(total / 1_000_000).toFixed(1)}M€`
+    if (total >= 1_000)     return `${Math.round(total / 1_000)}k€`
+    return `${total}€`
+  })()
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', padding: '0 0 80px' }}>
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
@@ -685,19 +702,21 @@ export default function AdminPage() {
         <div style={{ padding: mob ? '16px 16px 0' : '24px 40px 0' }}>
 
           {/* Stats */}
-          <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr 1fr' : 'repeat(4, auto)', gap: mob ? 8 : 16, marginBottom: mob ? 16 : 28 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr 1fr' : 'repeat(6, auto)', gap: mob ? 8 : 14, marginBottom: mob ? 16 : 28 }}>
             {[
-              { label: 'TOTAL',       value: leads.length,      color: 'rgba(184,152,72,0.7)' },
-              { label: 'HOY',          value: todayLeads.length, color: 'rgba(184,152,72,0.7)' },
-              { label: 'CALIENTES',    value: hotLeads.length,   color: 'rgba(255,140,0,0.8)'  },
-              { label: 'FRÍOS',        value: leads.length - hotLeads.length, color: 'rgba(140,180,255,0.6)' },
+              { label: 'TOTAL',       value: leads.length,                    color: 'rgba(244,241,234,0.92)' },
+              { label: 'HOY',         value: todayLeads.length,               color: 'rgba(244,241,234,0.92)' },
+              { label: 'CALIENTES',   value: hotLeads.length,                 color: 'rgba(255,140,0,0.85)'   },
+              { label: 'FRÍOS',       value: leads.length - hotLeads.length,  color: 'rgba(140,180,255,0.7)'  },
+              { label: 'CONVERSIÓN',  value: convRateLeads,                   color: 'rgba(244,241,234,0.92)' },
+              { label: 'PIPELINE',    value: pipelineHot,                     color: 'rgba(255,140,0,0.85)'   },
             ].map(s => (
               <div key={s.label} style={{
                 padding: mob ? '10px 14px' : '14px 20px', border: '1px solid rgba(184,152,72,0.1)',
                 background: 'rgba(184,152,72,0.02)',
               }}>
-                <div style={{ fontSize: '0.55rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.65)', marginBottom: 6 }}>{s.label}</div>
-                <div style={{ fontSize: mob ? '1.1rem' : '1.4rem', color: s.color, fontWeight: 300 }}>{s.value}</div>
+                <div style={{ fontSize: '0.48rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.6)', marginBottom: 6 }}>{s.label}</div>
+                <div style={{ fontSize: mob ? '1.1rem' : '1.3rem', color: s.color, fontWeight: 400, letterSpacing: '-0.005em' }}>{s.value}</div>
               </div>
             ))}
           </div>

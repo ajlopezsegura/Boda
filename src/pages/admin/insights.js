@@ -112,16 +112,26 @@ export function computeUnitScores(sessions, leads) {
     .sort((a, b) => b.score - a.score)
 }
 
-// ─── Unit reason label ───────────────────────────────────────
+// ─── Unit reason label (single readable phrase) ─────────────
+function capitalize(s) {
+  if (!s) return s
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
 export function unitReasonText(r) {
-  if (!r) return 'Actividad detectada'
-  const p = []
-  if (r.leads   > 0)  p.push('formulario enviado')
-  if (r.decision > 0) p.push('llevó a decisión')
-  if (r.config  > 0)  p.push('en configurador')
-  if (r.compares > 0) p.push('comparada')
-  if (r.views   > 1)  p.push(`${r.views} vistas`)
-  return p.length ? p.join(' · ') : 'Interés detectado'
+  if (!r) return 'Interés detectado'
+  const parts = []
+  if (r.leads    > 0) parts.push('formulario')
+  if (r.decision > 0) parts.push('decisión')
+  if (r.config   > 0) parts.push('configurador')
+  if (r.compares > 0) parts.push('comparativa')
+  if (r.views    > 1) parts.push(`${r.views} visitas`)
+  else if (r.views === 1) parts.push('1 visita')
+
+  if (parts.length === 0) return 'Interés detectado'
+  if (parts.length === 1) return capitalize(parts[0])
+  const joined = parts.slice(0, -1).join(', ') + ' y ' + parts.slice(-1)
+  return capitalize(joined)
 }
 
 // ─── Traffic depth score by source ──────────────────────────
@@ -229,6 +239,97 @@ export function runRules({ sessions, leads, funnel, unitScores, sourceDepth }) {
   return rules.sort((a, b) => b.priority - a.priority)
 }
 
+// ─── Opportunity signal (deduplicated by session) ───────────
+export function computeOpportunitySignal(sessions, leads) {
+  if (sessions.length === 0) return null
+  if (leads.length > 0)       return null
+
+  const withCompare = sessions.filter(s =>
+    Array.isArray(s.trail) && s.trail.some(e => e.type === 'compare_add' || e.page === '/compare')
+  ).length
+  const withConfig = sessions.filter(s =>
+    Array.isArray(s.trail) && s.trail.some(e => e.page?.startsWith('/inmersion/'))
+  ).length
+
+  if (withCompare === 0 && withConfig === 0) return null
+
+  if (withCompare > 0 && withConfig > 0) {
+    return {
+      value: 'Interés alto sin cierre',
+      sub: `${withCompare} ${withCompare === 1 ? 'sesión comparó' : 'sesiones compararon'} y ${withConfig} entraron en configurador, pero ninguna dejó formulario.`,
+    }
+  }
+  if (withCompare > 0) {
+    return {
+      value: 'Comparaciones sin cierre',
+      sub: `${withCompare} ${withCompare === 1 ? 'sesión comparó' : 'sesiones compararon'}, pero no se convirtió en contacto.`,
+    }
+  }
+  return {
+    value: 'Configurador sin cierre',
+    sub: `${withConfig} ${withConfig === 1 ? 'sesión entró' : 'sesiones entraron'} en el configurador, pero no acabaron en formulario.`,
+  }
+}
+
+// ─── Best source (with value explanation) ───────────────────
+const SOURCE_LABELS = {
+  directo:   'Directo',
+  google:    'Google',
+  instagram: 'Instagram',
+  facebook:  'Facebook',
+  linkedin:  'LinkedIn',
+  twitter:   'Twitter',
+  whatsapp:  'WhatsApp',
+  tiktok:    'TikTok',
+}
+function prettySource(s) {
+  return SOURCE_LABELS[s] ?? (s ? capitalize(s) : 'Directo')
+}
+
+export function computeBestSource(sourceDepth) {
+  if (sourceDepth.length === 0) return null
+  const top = sourceDepth[0]
+
+  let sub
+  if (top.sessions <= 1) {
+    sub = 'Una sola sesión todavía, aún no concluyente.'
+  } else if (top.avgDepth >= 15) {
+    sub = 'Mayor profundidad y recurrencia en el recorrido.'
+  } else if (top.sessions >= 5) {
+    sub = `${top.sessions} sesiones con recorrido consistente.`
+  } else {
+    sub = 'Mayor profundidad media por sesión.'
+  }
+  return { value: prettySource(top.source), sub }
+}
+
+// ─── Biggest funnel drop (human language) ───────────────────
+export function computeBiggestDropoff(funnel) {
+  const biggest = funnel
+    .filter(f => f.drop != null && f.drop > 0)
+    .sort((a, b) => b.drop - a.drop)[0]
+  if (!biggest) return null
+  const idx = funnel.findIndex(f => f.key === biggest.key)
+  const prev = funnel[idx - 1]
+  if (!prev) return null
+
+  const transition = `${prev.label} → ${biggest.label}`
+  let sub
+  if (biggest.count === 0 && prev.count > 0) {
+    sub = `${prev.count} ${prev.count === 1 ? 'usuario llegó' : 'usuarios llegaron'}, pero ninguno continuó.`
+  } else {
+    sub = `${biggest.count} de ${prev.count} ${prev.count === 1 ? 'usuario completó' : 'usuarios completaron'} el paso.`
+  }
+  return { transition, sub, pct: biggest.drop, prevLabel: prev.label, label: biggest.label }
+}
+
+// ─── Recommended action (one concrete move) ─────────────────
+export function computeRecommendedAction(rules) {
+  if (rules.length === 0) return null
+  const top = rules[0]
+  return { action: top.action, why: top.insight }
+}
+
 // ─── Behavior segments ───────────────────────────────────────
 export function computeSegments(sessions) {
   let curiosos = 0, exploradores = 0, calientes = 0
@@ -264,7 +365,7 @@ export function computeFrictionPoints(funnel) {
     .slice(0, 3)
 }
 
-export function generateReading({ sessions, leads, funnel, unitScores }) {
+export function generateReading({ sessions, leads, funnel }) {
   const total        = sessions.length
   const formCount    = leads.length
   const compareCount = sessions.filter(s => Array.isArray(s.trail) && s.trail.some(e => e.type === 'compare_add' || e.page === '/compare')).length
@@ -272,48 +373,50 @@ export function generateReading({ sessions, leads, funnel, unitScores }) {
   const biggestDrop = funnel
     .filter(f => f.drop != null && f.drop > 0)
     .sort((a, b) => b.drop - a.drop)[0]
-  const prevOfBiggest = biggestDrop
+  const prev = biggestDrop
     ? funnel[funnel.findIndex(f => f.key === biggestDrop.key) - 1]
     : null
 
   if (total === 0) return {
-    quePasa:      'Aún no hay actividad registrada en el panel.',
-    queSignifica: 'El panel se irá completando conforme lleguen visitantes.',
+    quePasa:      'Aún no hay actividad en el panel.',
+    queSignifica: 'Faltan datos para sacar cualquier conclusión.',
     queHarias:    'Asegúrate de que el enlace al site está circulando.',
   }
 
   let quePasa
-  if (biggestDrop && biggestDrop.drop >= 50 && prevOfBiggest) {
-    quePasa = `La gente llega y explora, pero hay una caída fuerte entre "${prevOfBiggest.label}" y "${biggestDrop.label}" (−${biggestDrop.drop}%).`
+  if (biggestDrop && biggestDrop.drop >= 50 && prev) {
+    quePasa = `La gente llega y explora, pero se cae entre ${prev.label.toLowerCase()} y ${biggestDrop.label.toLowerCase()}.`
   } else if (compareCount > 0 && formCount === 0) {
-    quePasa = `Hay exploración activa — ${compareCount} comparaciones — pero ningún formulario enviado todavía.`
+    quePasa = `${compareCount} ${compareCount === 1 ? 'sesión comparó' : 'sesiones compararon'} viviendas, pero nadie dejó formulario.`
   } else if (formCount > 0) {
     const rate = total > 0 ? ((formCount / total) * 100).toFixed(1) : '0'
-    quePasa = `${formCount} ${formCount === 1 ? 'formulario recibido' : 'formularios recibidos'} sobre ${total} sesiones — tasa del ${rate}%.`
+    quePasa = `${formCount} ${formCount === 1 ? 'formulario' : 'formularios'} sobre ${total} sesiones — conversión del ${rate}%.`
   } else {
-    quePasa = `${total} sesiones con exploración activa. Sin conversiones registradas todavía.`
+    quePasa = `${total} sesiones con exploración activa, sin conversiones todavía.`
   }
 
   let queSignifica
   if (formCount > 0 && total > 0 && formCount / total > 0.05) {
-    queSignifica = 'La tasa de conversión es sólida para un producto de alta consideración. El embudo está funcionando.'
+    queSignifica = 'La conversión es sólida para un producto de alta consideración. El embudo funciona.'
   } else if (compareCount > 0 && formCount === 0) {
-    queSignifica = 'Hay intención real — comparar es un gesto de alto interés — pero el recorrido no está cerrando en el último paso.'
+    queSignifica = 'Hay interés real, pero el recorrido no está cerrando bien.'
   } else if (biggestDrop && biggestDrop.drop >= 60) {
-    queSignifica = `La experiencia entre "${prevOfBiggest?.label}" y "${biggestDrop?.label}" está rompiendo el flujo. Ahí está la mayor pérdida de oportunidad.`
+    queSignifica = 'La mayor pérdida está en un único paso del recorrido. Ahí se está yendo la oportunidad.'
+  } else if (total >= 10 && formCount === 0) {
+    queSignifica = 'Llega tráfico, pero aún sin señales claras de intención de compra.'
   } else {
-    queSignifica = 'El tráfico llega, pero todavía no hay señales fuertes de intención de compra. Es pronto para sacar conclusiones.'
+    queSignifica = 'Es pronto para sacar conclusiones — hace falta más volumen.'
   }
 
   let queHarias
   if (compareCount > 0 && formCount === 0) {
-    queHarias = 'Reforzar el CTA en la comparativa y en la ficha. ¿Es fácil llegar al formulario desde esas páginas?'
-  } else if (biggestDrop && biggestDrop.drop >= 50) {
-    queHarias = `Revisar la transición hacia "${biggestDrop.label}". Valorar si falta motivación, claridad o un empujón directo al contacto.`
+    queHarias = 'Reforzar CTA en ficha y comparativa antes de invertir en más tráfico.'
+  } else if (biggestDrop && biggestDrop.drop >= 50 && prev) {
+    queHarias = `Revisar el paso de ${prev.label.toLowerCase()} a ${biggestDrop.label.toLowerCase()} y hacerlo más directo.`
   } else if (formCount === 0 && total >= 10) {
-    queHarias = 'Revisar visibilidad del formulario y si el momento de contacto está bien ubicado en el recorrido.'
+    queHarias = 'Revisar dónde aparece el formulario en el recorrido y si invita al contacto.'
   } else {
-    queHarias = 'Esperar más datos antes de cambiar nada estructural. Dejar que el tráfico orgánico genere señal.'
+    queHarias = 'Esperar más datos antes de cambiar nada estructural.'
   }
 
   return { quePasa, queSignifica, queHarias }
