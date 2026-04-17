@@ -4,6 +4,7 @@ import { LogOut, Check, Loader2, ChevronDown, ChevronRight, Flame, Snowflake, Mo
 import { supabase } from '../lib/supabase'
 import OverviewTab from './admin/OverviewTab'
 import LeadsCharts from './admin/LeadsCharts'
+import ActivityCharts from './admin/ActivityCharts'
 
 const PROJECT_SLUG   = (import.meta.env.VITE_PROJECT_SLUG   ?? 'las-conchas').trim()
 const ADMIN_PASSWORD = (import.meta.env.VITE_ADMIN_PASSWORD ?? 'admin').trim()
@@ -778,6 +779,9 @@ export default function AdminPage() {
               ACTUALIZAR
             </button>
             </div>
+
+            {/* Charts */}
+            <ActivityCharts sessions={sessions} mob={mob} />
 
             {/* Column headers — desktop only */}
             {!mob && anon.length > 0 && (

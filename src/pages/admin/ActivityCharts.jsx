@@ -1,0 +1,413 @@
+import { useMemo } from 'react'
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  Tooltip, ResponsiveContainer, Cell,
+} from 'recharts'
+
+const ACCENT    = '#B89848'
+const ACCENT_DIM= 'rgba(184,152,72,0.35)'
+const COLD      = 'rgba(140,180,255,0.65)'
+const GREEN     = 'rgba(91,168,120,0.8)'
+const GRID      = 'rgba(184,152,72,0.06)'
+const TEXT_DIM  = 'rgba(244,241,234,0.4)'
+const ACCENT_LOW= 'rgba(184,152,72,0.08)'
+
+const tooltipProps = {
+  contentStyle: {
+    background: 'rgba(18,16,12,0.96)',
+    border: '1px solid rgba(184,152,72,0.3)',
+    fontSize: '0.65rem', letterSpacing: '0.06em',
+    color: '#F4F1EA', padding: '6px 10px', borderRadius: 0,
+  },
+  labelStyle: { color: 'rgba(184,152,72,0.85)', fontSize: '0.55rem', letterSpacing: '0.1em', marginBottom: 2 },
+  itemStyle: { color: '#F4F1EA', padding: 0 },
+  cursor: { fill: ACCENT_LOW },
+}
+
+function ChartCard({ title, children, style }) {
+  return (
+    <div style={{
+      padding: '16px 18px',
+      border: '1px solid rgba(184,152,72,0.08)',
+      background: 'rgba(184,152,72,0.015)',
+      ...style,
+    }}>
+      <div style={{ fontSize: '0.5rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.55)', marginBottom: 14 }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  )
+}
+
+function Empty() {
+  return (
+    <div style={{
+      height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      color: 'rgba(244,241,234,0.2)', fontSize: '0.58rem', letterSpacing: '0.1em',
+    }}>
+      AÚN NO HAY DATOS
+    </div>
+  )
+}
+
+/* ── 1. FUNNEL ─────────────────────────────────────────────── */
+const FUNNEL_STEPS = [
+  { key: 'llegaron',    label: 'LLEGARON',          check: () => true },
+  { key: 'proyecto',    label: 'VIO EL PROYECTO',   check: t => t.some(e => e.type === 'page_view' && e.page === '/proyecto') },
+  { key: 'unidad',      label: 'ABRIÓ UNA VIVIENDA',check: t => t.some(e => e.type === 'page_view' && e.page?.startsWith('/availability/')) },
+  { key: 'configurador',label: 'CONFIGURADOR',      check: t => t.some(e => e.type === 'page_view' && e.page?.startsWith('/inmersion/')) },
+  { key: 'comparo',     label: 'COMPARÓ',           check: t => t.some(e => e.page === '/compare' || e.type === 'compare_add') },
+  { key: 'decision',    label: 'DECISIÓN',          check: t => t.some(e => e.type === 'page_view' && e.page === '/decision') },
+  { key: 'contacto',    label: 'FORMULARIO',        check: (_, s) => s.converted },
+]
+
+function FunnelChart({ sessions }) {
+  const total = sessions.length
+  const data = useMemo(() => {
+    return FUNNEL_STEPS.map(step => {
+      const count = sessions.filter(s => {
+        const trail = Array.isArray(s.trail) ? s.trail : []
+        return step.check(trail, s)
+      }).length
+      return {
+        label:   step.label,
+        count,
+        pct:     total > 0 ? Math.round((count / total) * 100) : 0,
+        drop:    null,
+      }
+    }).map((item, i, arr) => ({
+      ...item,
+      drop: i > 0 && arr[i-1].count > 0
+        ? Math.round((1 - item.count / arr[i-1].count) * 100)
+        : null,
+    }))
+  }, [sessions, total])
+
+  if (total === 0) return <Empty />
+
+  const max = data[0]?.count ?? 1
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {data.map((step, i) => {
+        const barWidth = max > 0 ? `${(step.count / max) * 100}%` : '0%'
+        const isLast   = i === data.length - 1
+        return (
+          <div key={step.label}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+              <div style={{
+                fontSize: '0.5rem', letterSpacing: '0.12em',
+                color: isLast ? GREEN : 'rgba(244,241,234,0.45)',
+                width: 130, flexShrink: 0,
+              }}>
+                {step.label}
+              </div>
+              <div style={{
+                flex: 1, height: 18, background: 'rgba(184,152,72,0.06)',
+                position: 'relative', overflow: 'hidden',
+              }}>
+                <div style={{
+                  position: 'absolute', inset: 0, right: 'auto',
+                  width: barWidth,
+                  background: isLast
+                    ? 'rgba(91,168,120,0.45)'
+                    : i === 0
+                      ? ACCENT
+                      : `rgba(184,152,72,${0.65 - i * 0.08})`,
+                  transition: 'width 0.6s ease',
+                }} />
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  display: 'flex', alignItems: 'center',
+                  paddingLeft: 8,
+                }}>
+                  <span style={{
+                    fontSize: '0.55rem', color: 'rgba(244,241,234,0.85)',
+                    fontWeight: 500, letterSpacing: '0.04em',
+                  }}>
+                    {step.count}
+                  </span>
+                  <span style={{
+                    fontSize: '0.48rem', color: 'rgba(244,241,234,0.4)',
+                    marginLeft: 6, letterSpacing: '0.06em',
+                  }}>
+                    {step.pct}%
+                  </span>
+                </div>
+              </div>
+              {step.drop != null && step.drop > 0 && (
+                <div style={{
+                  fontSize: '0.48rem', color: 'rgba(220,100,100,0.7)',
+                  letterSpacing: '0.08em', width: 36, textAlign: 'right', flexShrink: 0,
+                }}>
+                  −{step.drop}%
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+/* ── 2. TIEMPO MEDIO POR PÁGINA ────────────────────────────── */
+const PAGE_LABELS = {
+  '/':              'Portada',
+  '/proyecto':      'El Proyecto',
+  '/availability':  'Disponibilidad',
+  '/decision':      'Decisión',
+  '/compare':       'Comparador',
+  '/contact':       'Formulario',
+}
+function pageShortLabel(page) {
+  if (!page) return '—'
+  if (page.startsWith('/availability/')) return `Vivienda ${page.split('/').pop()}`
+  if (page.startsWith('/inmersion/'))    return `Config. ${page.split('/').pop()}`
+  if (page.startsWith('/summary/'))      return `Dossier ${page.split('/').pop()}`
+  return PAGE_LABELS[page] ?? page
+}
+
+function TimePerPage({ sessions }) {
+  const data = useMemo(() => {
+    const totals = {}, counts = {}
+    sessions.forEach(s => {
+      const trail = Array.isArray(s.trail) ? s.trail : []
+      trail.filter(e => e.type === 'page_view' && e.duration_ms > 2000).forEach(e => {
+        const key = e.page
+        totals[key] = (totals[key] ?? 0) + e.duration_ms
+        counts[key] = (counts[key] ?? 0) + 1
+      })
+    })
+    return Object.entries(totals)
+      .map(([page, total]) => ({
+        name:  pageShortLabel(page),
+        avg:   Math.round(total / counts[page] / 1000),
+      }))
+      .filter(d => d.avg >= 3)
+      .sort((a, b) => b.avg - a.avg)
+      .slice(0, 8)
+  }, [sessions])
+
+  if (data.length === 0) return <Empty />
+
+  return (
+    <ResponsiveContainer width="100%" height={Math.max(160, data.length * 28)}>
+      <BarChart data={data} layout="vertical" margin={{ top: 4, right: 40, bottom: 4, left: 0 }}>
+        <CartesianGrid stroke={GRID} horizontal={false} />
+        <XAxis
+          type="number" stroke={TEXT_DIM}
+          tick={{ fontSize: 10, fill: TEXT_DIM }} tickLine={false} axisLine={false}
+          tickFormatter={v => `${v}s`}
+        />
+        <YAxis
+          type="category" dataKey="name" stroke={TEXT_DIM}
+          tick={{ fontSize: 10, fill: TEXT_DIM }} tickLine={false} axisLine={false}
+          width={110}
+        />
+        <Tooltip
+          {...tooltipProps}
+          formatter={v => [`${v}s`, 'TIEMPO MEDIO']}
+          cursor={{ fill: ACCENT_LOW }}
+        />
+        <Bar dataKey="avg" radius={[0,1,1,0]}>
+          {data.map((_, i) => (
+            <Cell key={i} fill={`rgba(184,152,72,${0.8 - i * 0.07})`} />
+          ))}
+        </Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  )
+}
+
+/* ── 3. MATERIALES ELEGIDOS ────────────────────────────────── */
+const MAT_CATS = {
+  floor:   { label: 'SUELO',    color: ACCENT },
+  walls:   { label: 'PAREDES',  color: COLD   },
+  kitchen: { label: 'COCINA',   color: 'rgba(255,180,80,0.75)' },
+}
+
+function MaterialsChart({ sessions }) {
+  const data = useMemo(() => {
+    const counts = { floor: {}, walls: {}, kitchen: {} }
+    sessions.forEach(s => {
+      const trail = Array.isArray(s.trail) ? s.trail : []
+      trail.filter(e => e.type === 'material_select').forEach(e => {
+        const cat = e.category
+        if (!counts[cat]) return
+        const key = e.label ?? e.material ?? 'Desconocido'
+        counts[cat][key] = (counts[cat][key] ?? 0) + 1
+      })
+    })
+    return counts
+  }, [sessions])
+
+  const hasAny = Object.values(data).some(c => Object.keys(c).length > 0)
+  if (!hasAny) return <Empty />
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+      {Object.entries(MAT_CATS).map(([cat, cfg]) => {
+        const items = Object.entries(data[cat])
+          .map(([name, count]) => ({ name, count }))
+          .sort((a, b) => b.count - a.count)
+
+        return (
+          <div key={cat}>
+            <div style={{
+              fontSize: '0.48rem', letterSpacing: '0.16em',
+              color: cfg.color, marginBottom: 10,
+              opacity: 0.85,
+            }}>
+              {cfg.label}
+            </div>
+            {items.length === 0 ? (
+              <div style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.2)' }}>—</div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {items.map((item, i) => {
+                  const maxCount = items[0].count
+                  return (
+                    <div key={item.name}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 3 }}>
+                        <span style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.65)' }}>
+                          {item.name}
+                        </span>
+                        <span style={{ fontSize: '0.55rem', color: cfg.color, opacity: 0.85 }}>
+                          {item.count}
+                        </span>
+                      </div>
+                      <div style={{ height: 3, background: 'rgba(184,152,72,0.08)' }}>
+                        <div style={{
+                          height: '100%',
+                          width: `${(item.count / maxCount) * 100}%`,
+                          background: cfg.color,
+                          transition: 'width 0.5s ease',
+                        }} />
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+/* ── 4. SALAS E IMÁGENES MÁS VISTAS ──────────────────────── */
+const ROOM_LABELS = {
+  salon:      'Salón',
+  cocina:     'Cocina',
+  dormitorio: 'Dormitorio',
+  bano:       'Baño',
+  terraza:    'Terraza',
+}
+
+function RoomsAndGallery({ sessions }) {
+  const rooms = useMemo(() => {
+    const counts = {}
+    sessions.forEach(s => {
+      const trail = Array.isArray(s.trail) ? s.trail : []
+      trail.filter(e => e.type === 'room_view').forEach(e => {
+        const key = ROOM_LABELS[e.room] ?? e.room ?? 'Desconocida'
+        counts[key] = (counts[key] ?? 0) + 1
+      })
+    })
+    return Object.entries(counts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+  }, [sessions])
+
+  const images = useMemo(() => {
+    const counts = {}
+    sessions.forEach(s => {
+      const trail = Array.isArray(s.trail) ? s.trail : []
+      trail.filter(e => e.type === 'gallery_open').forEach(e => {
+        const key = e.image ?? `Imagen ${e.index ?? 0}`
+        counts[key] = (counts[key] ?? 0) + 1
+      })
+    })
+    return Object.entries(counts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 8)
+  }, [sessions])
+
+  const hasRooms  = rooms.length > 0
+  const hasImages = images.length > 0
+
+  if (!hasRooms && !hasImages) return null
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: hasRooms && hasImages ? '1fr 1fr' : '1fr', gap: 14 }}>
+      {hasRooms && (
+        <ChartCard title="SALAS MÁS VISTAS EN CONFIGURADOR">
+          <ResponsiveContainer width="100%" height={Math.max(120, rooms.length * 30)}>
+            <BarChart data={rooms} layout="vertical" margin={{ top: 4, right: 24, bottom: 4, left: 0 }}>
+              <CartesianGrid stroke={GRID} horizontal={false} />
+              <XAxis type="number" stroke={TEXT_DIM} tick={{ fontSize: 10, fill: TEXT_DIM }} tickLine={false} axisLine={false} allowDecimals={false} />
+              <YAxis type="category" dataKey="name" stroke={TEXT_DIM} tick={{ fontSize: 10, fill: TEXT_DIM }} tickLine={false} axisLine={false} width={80} />
+              <Tooltip {...tooltipProps} cursor={{ fill: ACCENT_LOW }} />
+              <Bar dataKey="count">
+                {rooms.map((_, i) => (
+                  <Cell key={i} fill={`rgba(184,152,72,${0.85 - i * 0.12})`} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+      )}
+
+      {hasImages && (
+        <ChartCard title="IMÁGENES MÁS ABIERTAS EN GALERÍA">
+          <ResponsiveContainer width="100%" height={Math.max(120, images.length * 28)}>
+            <BarChart data={images} layout="vertical" margin={{ top: 4, right: 24, bottom: 4, left: 0 }}>
+              <CartesianGrid stroke={GRID} horizontal={false} />
+              <XAxis type="number" stroke={TEXT_DIM} tick={{ fontSize: 10, fill: TEXT_DIM }} tickLine={false} axisLine={false} allowDecimals={false} />
+              <YAxis type="category" dataKey="name" stroke={TEXT_DIM} tick={{ fontSize: 10, fill: TEXT_DIM }} tickLine={false} axisLine={false} width={110} />
+              <Tooltip {...tooltipProps} cursor={{ fill: ACCENT_LOW }} />
+              <Bar dataKey="count">
+                {images.map((_, i) => (
+                  <Cell key={i} fill={`rgba(140,180,255,${0.75 - i * 0.06})`} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+      )}
+    </div>
+  )
+}
+
+/* ── Export ─────────────────────────────────────────────────── */
+export default function ActivityCharts({ sessions, mob }) {
+  if (sessions.length === 0) return null
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24 }}>
+
+      {/* Funnel + Tiempo */}
+      <div style={{ display: 'grid', gridTemplateColumns: mob ? '1fr' : '1fr 1fr', gap: 14 }}>
+        <ChartCard title="EMBUDO DE CONVERSIÓN">
+          <FunnelChart sessions={sessions} />
+        </ChartCard>
+        <ChartCard title="TIEMPO MEDIO POR PÁGINA">
+          <TimePerPage sessions={sessions} />
+        </ChartCard>
+      </div>
+
+      {/* Materiales */}
+      <ChartCard title="MATERIALES MÁS ELEGIDOS EN CONFIGURADOR">
+        <MaterialsChart sessions={sessions} />
+      </ChartCard>
+
+      {/* Salas + Galería */}
+      <RoomsAndGallery sessions={sessions} />
+
+    </div>
+  )
+}

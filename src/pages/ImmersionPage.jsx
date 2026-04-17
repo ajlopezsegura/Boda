@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, Sliders, X, Check, Sun, Sunset, Moon, Sunrise } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useUnit, useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
+import { useSession } from '../context/SessionContext'
 
 // ─── Responsive hook ─────────────────────────────────────────────────────────
 function useIsMobile(bp = 640) {
@@ -77,7 +78,9 @@ export default function ImmersionPage() {
   const unit        = useUnit(unitId)
   const { project, materials } = useProject()
   const { lang, toggle } = useLang()
+  const { trackEvent }   = useSession()
   const mob = useIsMobile()
+  const firstRender = useRef(true)
 
   const [loading, setLoading]       = useState(true)
   const [panelOpen, setPanelOpen]   = useState(false)
@@ -97,8 +100,12 @@ export default function ImmersionPage() {
     return () => clearTimeout(t)
   }, [])
 
-  // Reset image index when room changes
-  useEffect(() => { setImgIndex(0) }, [activeRoom])
+  // Reset image index when room changes + track room view
+  useEffect(() => {
+    setImgIndex(0)
+    if (firstRender.current) { firstRender.current = false; return }
+    if (!loading) trackEvent('room_view', { room: activeRoom })
+  }, [activeRoom])
 
   // Auto-advance slideshow every 5s
   useEffect(() => {
@@ -414,7 +421,10 @@ export default function ImmersionPage() {
                             const isSel = selected[cat] === opt.id
                             return (
                               <button key={opt.id}
-                                onClick={() => setSelected(s => ({ ...s, [cat]: opt.id }))}
+                                onClick={() => {
+                                  setSelected(s => ({ ...s, [cat]: opt.id }))
+                                  trackEvent('material_select', { category: cat, material: opt.id, label: opt.label })
+                                }}
                                 data-cursor="hover"
                                 className="flex items-center gap-3 px-3 py-2.5 transition-all duration-200"
                                 style={{

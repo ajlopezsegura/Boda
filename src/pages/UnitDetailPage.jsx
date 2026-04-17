@@ -7,6 +7,7 @@ import { useUnit, useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { useCompare } from '../context/CompareContext'
 import { shareOrCopy, shareBase } from '../lib/share'
+import { useSession } from '../context/SessionContext'
 
 function useIsMobile(bp = 640) {
   const [m, setM] = useState(() => window.innerWidth < bp)
@@ -84,6 +85,7 @@ export default function UnitDetailPage() {
   const { lang, toggle } = useLang()
 
   const { ids: compareIds, toggle: toggleCompare, isIn, canAdd } = useCompare()
+  const { trackEvent } = useSession()
   const mob = useIsMobile()
 
   const [galleryOpen, setGalleryOpen] = useState(false)
@@ -99,7 +101,13 @@ export default function UnitDetailPage() {
     }
   }
 
-  const openGallery = (i = 0) => { setGalleryIdx(i); setGalleryOpen(true) }
+  const openGallery = (i = 0) => {
+    setGalleryIdx(i)
+    setGalleryOpen(true)
+    const imgPath = gallery[i] ?? ''
+    const imgName = imgPath.split('/').pop().replace(/\.[^.]+$/, '')
+    trackEvent('gallery_open', { unit: unit.id, image: imgName, index: i })
+  }
 
   // ── 404 ──────────────────────────────────────────────────────────────────────
   if (!unit) {
