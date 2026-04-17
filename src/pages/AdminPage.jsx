@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { LogOut, Check, Loader2, ChevronDown, ChevronRight, Flame, Snowflake, Monitor, Smartphone, Tablet, Globe, RotateCcw, BarChart3 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import OverviewTab from './admin/OverviewTab'
+import LeadsCharts from './admin/LeadsCharts'
 
 const PROJECT_SLUG   = (import.meta.env.VITE_PROJECT_SLUG   ?? 'las-conchas').trim()
 const ADMIN_PASSWORD = (import.meta.env.VITE_ADMIN_PASSWORD ?? 'admin').trim()
@@ -699,6 +700,9 @@ export default function AdminPage() {
               </div>
             ))}
           </div>
+
+          {/* Charts row */}
+          <LeadsCharts leads={leads} mob={mob} />
 
           {/* Column headers — desktop only */}
           {!mob && leads.length > 0 && (
