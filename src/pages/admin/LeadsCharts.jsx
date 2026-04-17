@@ -40,13 +40,13 @@ function ChartCard({ title, children, style }) {
   return (
     <div style={{
       padding: '16px 18px',
-      border: '1px solid rgba(184,152,72,0.08)',
-      background: 'rgba(184,152,72,0.015)',
+      border: '1px solid rgba(184,152,72,0.1)',
+      background: 'rgba(184,152,72,0.02)',
       ...style,
     }}>
       <div style={{
-        fontSize: '0.5rem', letterSpacing: '0.18em',
-        color: 'rgba(184,152,72,0.55)', marginBottom: 14,
+        fontSize: '0.48rem', letterSpacing: '0.2em',
+        color: 'rgba(184,152,72,0.6)', marginBottom: 14,
       }}>{title}</div>
       {children}
     </div>
@@ -92,8 +92,8 @@ function HotColdDonut({ hot, cold }) {
             alignItems: 'center', justifyContent: 'center',
             pointerEvents: 'none',
           }}>
-            <span style={{ fontSize: '1.1rem', color: 'var(--color-text)', fontWeight: 300, lineHeight: 1 }}>{total}</span>
-            <span style={{ fontSize: '0.45rem', letterSpacing: '0.12em', color: 'rgba(184,152,72,0.5)', marginTop: 2 }}>TOTAL</span>
+            <span style={{ fontSize: '1.3rem', color: 'rgba(244,241,234,0.95)', fontWeight: 400, lineHeight: 1, letterSpacing: '-0.01em' }}>{total}</span>
+            <span style={{ fontSize: '0.45rem', letterSpacing: '0.14em', color: 'rgba(184,152,72,0.55)', marginTop: 3 }}>TOTAL</span>
           </div>
         </div>
 
@@ -108,8 +108,8 @@ function HotColdDonut({ hot, cold }) {
               <div>
                 <div style={{ fontSize: '0.55rem', color: item.color, letterSpacing: '0.1em' }}>{item.label}</div>
                 <div style={{ display: 'flex', gap: 6, alignItems: 'baseline' }}>
-                  <span style={{ fontSize: '1rem', color: 'var(--color-text)', fontWeight: 300 }}>{item.value}</span>
-                  <span style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.35)', letterSpacing: '0.06em' }}>{item.pct}%</span>
+                  <span style={{ fontSize: '1.1rem', color: 'rgba(244,241,234,0.92)', fontWeight: 400, letterSpacing: '-0.005em' }}>{item.value}</span>
+                  <span style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.4)', letterSpacing: '0.06em' }}>{item.pct}%</span>
                 </div>
               </div>
             </div>

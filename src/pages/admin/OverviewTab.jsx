@@ -58,7 +58,7 @@ function Card({ children, style }) {
     <div style={{
       padding: '16px 18px',
       border: '1px solid rgba(184,152,72,0.1)',
-      background: 'rgba(184,152,72,0.018)',
+      background: 'rgba(184,152,72,0.02)',
       ...style,
     }}>
       {children}
@@ -68,7 +68,7 @@ function Card({ children, style }) {
 
 function SectionLabel({ children }) {
   return (
-    <div style={{ fontSize: '0.48rem', letterSpacing: '0.2em', color: 'rgba(184,152,72,0.5)', marginBottom: 14 }}>
+    <div style={{ fontSize: '0.48rem', letterSpacing: '0.2em', color: 'rgba(184,152,72,0.55)', marginBottom: 14 }}>
       {children}
     </div>
   )
@@ -79,24 +79,34 @@ function HighlightCard({ label, value, sub, accent, emptyText }) {
   const isEmpty = !value && !sub
   return (
     <Card style={{
-      borderColor: accent ? `${accent}30` : 'rgba(184,152,72,0.1)',
-      background: accent ? `${accent}08` : 'rgba(184,152,72,0.018)',
+      borderColor: accent ? `${accent}33` : 'rgba(184,152,72,0.1)',
+      background: accent ? `${accent}0D` : 'rgba(184,152,72,0.02)',
       display: 'flex', flexDirection: 'column', gap: 8,
     }}>
-      <div style={{ fontSize: '0.48rem', letterSpacing: '0.18em', color: accent ?? 'rgba(184,152,72,0.55)' }}>
+      <div style={{ fontSize: '0.48rem', letterSpacing: '0.18em', color: accent ?? 'rgba(184,152,72,0.6)' }}>
         {label}
       </div>
       {isEmpty ? (
-        <div style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.22)', lineHeight: 1.5 }}>
+        <div style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.25)', lineHeight: 1.55 }}>
           {emptyText ?? 'Sin datos suficientes aún.'}
         </div>
       ) : (
         <>
-          <div style={{ fontSize: '1.1rem', color: 'var(--color-text)', fontWeight: 300, letterSpacing: '0.04em', lineHeight: 1.1 }}>
-            {value}
-          </div>
+          {value && (
+            <div style={{
+              fontSize: '1.2rem', fontWeight: 400,
+              color: 'rgba(244,241,234,0.95)',
+              letterSpacing: '-0.005em', lineHeight: 1.15,
+            }}>
+              {value}
+            </div>
+          )}
           {sub && (
-            <div style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.5)', lineHeight: 1.55 }}>
+            <div style={{
+              fontSize: value ? '0.58rem' : '0.68rem',
+              color: value ? 'rgba(244,241,234,0.55)' : 'rgba(244,241,234,0.82)',
+              lineHeight: 1.55,
+            }}>
               {sub}
             </div>
           )}
@@ -119,13 +129,14 @@ function ReadingPanel({ reading }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0 }}>
         {blocks.map((b, i) => (
           <div key={b.label} style={{
-            padding: '0 20px 0',
-            borderLeft: i > 0 ? '1px solid rgba(184,152,72,0.1)' : 'none',
+            paddingLeft: i > 0 ? 20 : 0,
+            paddingRight: i < blocks.length - 1 ? 20 : 0,
+            borderLeft: i > 0 ? '1px solid rgba(184,152,72,0.12)' : 'none',
           }}>
-            <div style={{ fontSize: '0.48rem', letterSpacing: '0.14em', color: 'rgba(184,152,72,0.45)', marginBottom: 8 }}>
+            <div style={{ fontSize: '0.48rem', letterSpacing: '0.16em', color: 'rgba(184,152,72,0.55)', marginBottom: 10 }}>
               {b.label.toUpperCase()}
             </div>
-            <div style={{ fontSize: '0.68rem', color: b.color, lineHeight: 1.65 }}>
+            <div style={{ fontSize: '0.7rem', color: b.color, lineHeight: 1.7 }}>
               {b.text}
             </div>
           </div>
@@ -177,7 +188,9 @@ function UnitRanking({ unitScores }) {
                 </div>
               </div>
               <div style={{
-                fontSize: '0.58rem', color: 'rgba(184,152,72,0.7)',
+                fontSize: '0.68rem', fontWeight: 400,
+                color: i === 0 ? ACCENT : 'rgba(184,152,72,0.7)',
+                letterSpacing: '-0.005em',
                 flexShrink: 0, width: 28, textAlign: 'right',
               }}>
                 {u.score}
@@ -247,10 +260,16 @@ function CompactFunnel({ funnel }) {
       </div>
       {biggestDrop && (
         <div style={{
-          marginTop: 14, paddingTop: 12, borderTop: '1px solid rgba(184,152,72,0.07)',
-          fontSize: '0.58rem', color: 'rgba(210,90,90,0.75)', letterSpacing: '0.04em',
+          marginTop: 14, paddingTop: 12, borderTop: '1px solid rgba(184,152,72,0.1)',
+          fontSize: '0.6rem', letterSpacing: '0.04em', lineHeight: 1.55,
+          color: 'rgba(244,241,234,0.55)',
         }}>
-          Principal fuga: de "{funnel[biggestDropIdx - 1]?.label}" a "{biggestDrop.label}" — pierde el {biggestDrop.drop}% de usuarios.
+          Principal fuga entre{' '}
+          <span style={{ color: 'rgba(244,241,234,0.85)' }}>{funnel[biggestDropIdx - 1]?.label.toLowerCase()}</span>
+          {' '}y{' '}
+          <span style={{ color: 'rgba(244,241,234,0.85)' }}>{biggestDrop.label.toLowerCase()}</span>
+          {' '}—{' '}
+          <span style={{ color: RED }}>{biggestDrop.drop}%</span> de pérdida.
         </div>
       )}
     </Card>
@@ -341,12 +360,12 @@ export default function OverviewTab({ leads, sessions, units, mob }) {
   const pad = mob ? '16px 16px 0' : '24px 40px 0'
 
   return (
-    <div style={{ padding: pad, display: 'flex', flexDirection: 'column', gap: 14 }}>
+    <div style={{ padding: pad, display: 'flex', flexDirection: 'column', gap: 12 }}>
 
       {/* ── 5 executive cards ── */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: mob ? '1fr 1fr' : 'repeat(5, 1fr)',
+        gridTemplateColumns: mob ? '1fr' : 'repeat(5, 1fr)',
         gap: 10,
       }}>
         <HighlightCard
@@ -359,7 +378,7 @@ export default function OverviewTab({ leads, sessions, units, mob }) {
         <HighlightCard
           label="MAYOR FUGA"
           value={biggestDrop ? `−${biggestDrop.drop}%` : null}
-          sub={biggestDropPrev ? `De "${biggestDropPrev.label}" a "${biggestDrop.label}"` : null}
+          sub={biggestDropPrev ? `De ${biggestDropPrev.label.toLowerCase()} a ${biggestDrop.label.toLowerCase()}` : null}
           accent={RED}
           emptyText="Sin suficiente tráfico para detectar fugas."
         />
@@ -379,7 +398,6 @@ export default function OverviewTab({ leads, sessions, units, mob }) {
         />
         <HighlightCard
           label="ACCIÓN RECOMENDADA"
-          value={topRule ? null : null}
           sub={topRule?.action ?? null}
           accent={GREEN}
           emptyText="Sin actividad suficiente para recomendar una acción concreta."
@@ -420,16 +438,20 @@ export default function OverviewTab({ leads, sessions, units, mob }) {
         gap: 10,
       }}>
         {[
-          { label: 'LEADS TOTALES',   value: leads.length,      delta: null },
-          { label: 'ESTA SEMANA',     value: weekLeads,          delta: weekDelta },
-          { label: 'CONVERSIÓN',      value: `${conversionRate}%`, delta: null },
-          { label: 'PIPELINE CALIENTE', value: pipelineValue > 0 ? formatEuro(pipelineValue) : null, delta: null },
+          { label: 'LEADS TOTALES',     value: leads.length,          sub: null,                              delta: null },
+          { label: 'ESTA SEMANA',       value: weekLeads,             sub: null,                              delta: weekDelta },
+          { label: 'CONVERSIÓN',        value: `${conversionRate}%`,  sub: null,                              delta: null },
+          { label: 'PIPELINE CALIENTE', value: formatEuro(pipelineValue), sub: pipelineValue === 0 ? 'Sin leads calientes aún.' : null, delta: null },
         ].map(k => (
           <Card key={k.label} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <div style={{ fontSize: '0.48rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.55)' }}>{k.label}</div>
+            <div style={{ fontSize: '0.48rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.6)' }}>{k.label}</div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-              <div style={{ fontSize: '1.2rem', color: 'var(--color-text)', fontWeight: 300 }}>
-                {k.value ?? <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.2)' }}>Sin datos</span>}
+              <div style={{
+                fontSize: '1.35rem', fontWeight: 400,
+                color: 'rgba(244,241,234,0.95)',
+                letterSpacing: '-0.01em',
+              }}>
+                {k.value}
               </div>
               {k.delta != null && (
                 <span style={{
@@ -440,6 +462,11 @@ export default function OverviewTab({ leads, sessions, units, mob }) {
                 </span>
               )}
             </div>
+            {k.sub && (
+              <div style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.35)', lineHeight: 1.5 }}>
+                {k.sub}
+              </div>
+            )}
           </Card>
         ))}
       </div>

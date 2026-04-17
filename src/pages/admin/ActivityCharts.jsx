@@ -30,11 +30,11 @@ function ChartCard({ title, children, style }) {
   return (
     <div style={{
       padding: '16px 18px',
-      border: '1px solid rgba(184,152,72,0.08)',
-      background: 'rgba(184,152,72,0.015)',
+      border: '1px solid rgba(184,152,72,0.1)',
+      background: 'rgba(184,152,72,0.02)',
       ...style,
     }}>
-      <div style={{ fontSize: '0.5rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.55)', marginBottom: 14 }}>
+      <div style={{ fontSize: '0.48rem', letterSpacing: '0.2em', color: 'rgba(184,152,72,0.6)', marginBottom: 14 }}>
         {title}
       </div>
       {children}
