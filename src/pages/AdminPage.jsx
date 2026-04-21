@@ -516,6 +516,7 @@ function VisitorGroup({ visitorId, sessions, index, mob }) {
         border: `1px solid ${isConverted ? 'rgba(255,140,0,0.15)' : 'rgba(184,152,72,0.07)'}`,
         marginBottom: 6,
         background: isConverted ? 'rgba(255,140,0,0.02)' : 'rgba(184,152,72,0.01)',
+        overflow: 'hidden', width: '100%',
       }}>
 
       {/* Header */}
@@ -542,7 +543,7 @@ function VisitorGroup({ visitorId, sessions, index, mob }) {
         </div>
 
         {/* Badges */}
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap', overflow: 'hidden' }}>
           {referrer !== 'directo' && (
             <span style={{ padding: '2px 7px', fontSize: '0.5rem', letterSpacing: '0.1em', border: '1px solid rgba(140,180,255,0.3)', color: 'rgba(140,180,255,0.7)' }}>
               {referrer.toUpperCase()}
