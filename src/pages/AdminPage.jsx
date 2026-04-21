@@ -394,6 +394,183 @@ function ActivityCard({ sess, index, mob, allSessions }) {
   )
 }
 
+/* ─── Session item (dentro de un grupo de visitante) ─────── */
+function SessionItem({ sess, visitNum, mob, isLast }) {
+  const [open, setOpen] = useState(false)
+  const trail  = Array.isArray(sess.trail) ? sess.trail : []
+  const views  = trail.filter(e => e.type === 'page_view')
+  const totalMs = views.reduce((acc, e) => acc + (e.duration_ms ?? 0), 0)
+
+  return (
+    <div style={{ borderBottom: isLast ? 'none' : '1px solid rgba(184,152,72,0.05)' }}>
+      <div
+        onClick={() => views.length > 0 && setOpen(o => !o)}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 12,
+          padding: mob ? '10px 14px 10px 24px' : '10px 16px 10px 32px',
+          cursor: views.length > 0 ? 'pointer' : 'default',
+        }}>
+        <div style={{ fontSize: '0.46rem', letterSpacing: '0.1em', color: 'rgba(184,152,72,0.4)', flexShrink: 0, minWidth: 52 }}>
+          VISITA {visitNum}
+        </div>
+        <div style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.45)', flexShrink: 0, minWidth: mob ? 'auto' : 150 }}>
+          {formatDate(sess.started_at ?? sess.updated_at)}
+        </div>
+        <div style={{ flex: 1, display: 'flex', gap: 10, fontSize: '0.55rem', color: 'rgba(244,241,234,0.35)' }}>
+          <span>{views.length} págs</span>
+          {formatDuration(totalMs) && <span style={{ color: 'rgba(184,152,72,0.55)' }}>{formatDuration(totalMs)}</span>}
+          {sess.converted && <span style={{ color: 'rgba(255,140,0,0.7)', letterSpacing: '0.06em' }}>✓ FORMULARIO</span>}
+        </div>
+        {views.length > 0 && (
+          <ChevronRight size={10} style={{ color: 'rgba(184,152,72,0.3)', flexShrink: 0, transform: open ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }} />
+        )}
+      </div>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.15 }} style={{ overflow: 'hidden' }}>
+            <div style={{ padding: '0 16px 12px 56px', borderTop: '1px solid rgba(184,152,72,0.05)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5, paddingTop: 10 }}>
+                {trail.filter(ev => ['page_view','section_view','amenity_open','nearby_view','compare_add'].includes(ev.type)).map((ev, j) => {
+                  let dot = 'rgba(184,152,72,0.35)', label = '', extra = null
+                  if (ev.type === 'page_view') {
+                    label = pageLabel(ev.page); extra = formatDuration(ev.duration_ms)
+                  } else if (ev.type === 'section_view') {
+                    const n = { obra: 'Sección: OBRA', entorno: 'Sección: ENTORNO', amenities: 'Sección: AMENITIES' }
+                    label = n[ev.section] ?? `Sección: ${ev.section}`; dot = 'rgba(184,152,72,0.55)'
+                  } else if (ev.type === 'amenity_open') {
+                    const l = typeof ev.label === 'object' ? (ev.label?.es ?? '') : (ev.label ?? ev.id ?? '')
+                    label = `Amenity: ${l.toUpperCase()}`; dot = 'rgba(184,152,72,0.7)'
+                  } else if (ev.type === 'nearby_view') {
+                    const l = typeof ev.label === 'object' ? (ev.label?.es ?? '') : (ev.label ?? ev.id ?? '')
+                    label = `Entorno: ${l.toUpperCase()}`; dot = 'rgba(140,200,255,0.55)'
+                  } else if (ev.type === 'compare_add') {
+                    label = `Comparó: vivienda ${ev.unit_id ?? ''}`; dot = 'rgba(244,200,80,0.5)'
+                  }
+                  return (
+                    <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div style={{ width: 4, height: 4, borderRadius: '50%', background: dot, flexShrink: 0 }} />
+                      <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.7)' }}>{label}</span>
+                      {extra && <span style={{ fontSize: '0.55rem', color: 'rgba(184,152,72,0.7)' }}>{extra}</span>}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+/* ─── Visitor group (agrupa todas las sesiones de un mismo visitante) */
+function VisitorGroup({ visitorId, sessions, index, mob }) {
+  const [expanded, setExpanded] = useState(false)
+
+  const sorted = [...sessions].sort((a, b) =>
+    new Date(a.started_at ?? a.updated_at) - new Date(b.started_at ?? b.updated_at)
+  )
+  const latest     = sorted[sorted.length - 1]
+  const latestTrail = Array.isArray(latest.trail) ? latest.trail : []
+  const allTrails  = sessions.flatMap(s => Array.isArray(s.trail) ? s.trail : [])
+
+  const hasUnit      = allTrails.some(e => e.type === 'page_view' && e.page?.startsWith('/availability/'))
+  const hasImm       = allTrails.some(e => e.type === 'page_view' && e.page?.startsWith('/inmersion/'))
+  const hasCmp       = allTrails.some(e => e.page === '/compare' || e.type === 'compare_add')
+  const hasDec       = allTrails.some(e => e.type === 'page_view' && e.page === '/decision')
+  const isConverted  = sessions.some(s => s.converted)
+  const isMulti      = sessions.length > 1
+
+  const referrer  = latest.referrer || latestTrail.find(e => e.type === 'device_info')?.referrer || 'directo'
+  const device    = latestTrail.find(e => e.type === 'device_info')?.device ?? 'desktop'
+  const DevIcon   = device === 'mobile' ? Smartphone : device === 'tablet' ? Tablet : Monitor
+  const shortId   = visitorId ? visitorId.slice(-6).toUpperCase() : '———'
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.03 }}
+      style={{
+        border: `1px solid ${isConverted ? 'rgba(255,140,0,0.15)' : 'rgba(184,152,72,0.07)'}`,
+        marginBottom: 6,
+        background: isConverted ? 'rgba(255,140,0,0.02)' : 'rgba(184,152,72,0.01)',
+      }}>
+
+      {/* Header */}
+      <div onClick={() => setExpanded(o => !o)} style={{
+        display: 'flex', alignItems: 'center', gap: 12,
+        padding: mob ? '12px 14px' : '12px 16px', cursor: 'pointer',
+      }}>
+
+        {/* ID + visitas */}
+        <div style={{ flexShrink: 0 }}>
+          <div style={{ fontSize: '0.44rem', letterSpacing: '0.12em', color: 'rgba(184,152,72,0.4)', marginBottom: 4 }}>
+            #{shortId}
+          </div>
+          {isMulti && (
+            <span style={{
+              padding: '2px 7px', fontSize: '0.5rem', letterSpacing: '0.1em',
+              border: '1px solid rgba(255,180,60,0.4)', color: 'rgba(255,180,60,0.85)',
+              background: 'rgba(255,180,60,0.08)',
+              display: 'inline-flex', alignItems: 'center', gap: 4,
+            }}>
+              <RotateCcw size={8} /> {sessions.length} VISITAS
+            </span>
+          )}
+        </div>
+
+        {/* Badges */}
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
+          {referrer !== 'directo' && (
+            <span style={{ padding: '2px 7px', fontSize: '0.5rem', letterSpacing: '0.1em', border: '1px solid rgba(140,180,255,0.3)', color: 'rgba(140,180,255,0.7)' }}>
+              {referrer.toUpperCase()}
+            </span>
+          )}
+          {[
+            { show: hasUnit,     label: 'VIVIENDA' },
+            { show: hasCmp,      label: 'COMPARÓ' },
+            { show: hasImm,      label: 'INMERSIÓN' },
+            { show: hasDec,      label: 'DECISIÓN' },
+            { show: isConverted, label: 'FORMULARIO', color: 'rgba(255,140,0,0.85)', border: 'rgba(255,140,0,0.3)' },
+          ].filter(m => m.show).map(m => (
+            <span key={m.label} style={{
+              padding: '2px 7px', fontSize: '0.5rem', letterSpacing: '0.1em',
+              border: `1px solid ${m.border ?? 'rgba(184,152,72,0.25)'}`,
+              color: m.color ?? 'rgba(184,152,72,0.7)',
+            }}>{m.label}</span>
+          ))}
+          {!isMulti && !hasUnit && !hasCmp && !hasImm && !hasDec && !isConverted && referrer === 'directo' && (
+            <span style={{ fontSize: '0.5rem', color: 'rgba(244,241,234,0.2)' }}>Solo exploró</span>
+          )}
+        </div>
+
+        {/* Device + fecha + chevron */}
+        {!mob && <DevIcon size={11} style={{ color: 'rgba(184,152,72,0.35)', flexShrink: 0 }} />}
+        <span style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.45)', flexShrink: 0, ...(mob ? {} : { minWidth: 110, textAlign: 'right' }) }}>
+          {formatDate(latest.updated_at)}
+        </span>
+        <ChevronRight size={12} style={{ color: 'rgba(184,152,72,0.4)', flexShrink: 0, transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }} />
+      </div>
+
+      {/* Sesiones expandidas */}
+      <AnimatePresence>
+        {expanded && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} style={{ overflow: 'hidden' }}>
+            <div style={{ borderTop: '1px solid rgba(184,152,72,0.08)' }}>
+              {sorted.map((s, i) => (
+                <SessionItem key={s.id} sess={s} visitNum={i + 1} mob={mob} isLast={i === sorted.length - 1} />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
+
 /* ─── Password screen ─────────────────────────────────────── */
 function LoginScreen({ onLogin }) {
   const [pwd, setPwd]     = useState('')
@@ -805,12 +982,12 @@ export default function AdminPage() {
             {/* Column headers — desktop only */}
             {!mob && anon.length > 0 && (
               <div style={{
-                display: 'grid', gridTemplateColumns: '1fr 90px 50px 60px 60px 100px 32px',
-                gap: 16, padding: '0 16px 10px',
+                display: 'flex', justifyContent: 'space-between',
+                padding: '0 16px 10px',
                 borderBottom: '1px solid rgba(184,152,72,0.12)',
                 fontSize: '0.55rem', letterSpacing: '0.18em', color: 'rgba(184,152,72,0.65)',
               }}>
-                <span>RECORRIDO</span><span>DISPOSITIVO</span><span>IDIOMA</span><span>PÁGS</span><span>TIEMPO</span><span>ÚLTIMA VEZ</span><span></span>
+                <span>VISITANTE · ACCIONES</span><span>ÚLTIMA VEZ</span>
               </div>
             )}
 
@@ -820,7 +997,26 @@ export default function AdminPage() {
               </div>
             ) : (
               <div style={{ paddingTop: 8 }}>
-                {anon.map((sess, i) => <ActivityCard key={sess.id} sess={sess} index={i} mob={mob} allSessions={sessions} />)}
+                {(() => {
+                  const groups = []
+                  const seen = new Set()
+                  anon.forEach(s => {
+                    if (s.visitor_id) {
+                      if (seen.has(s.visitor_id)) return
+                      seen.add(s.visitor_id)
+                      groups.push({ visitorId: s.visitor_id, sessions: anon.filter(x => x.visitor_id === s.visitor_id) })
+                    } else {
+                      groups.push({ visitorId: null, sessions: [s] })
+                    }
+                  })
+                  groups.sort((a, b) => {
+                    const t = g => Math.max(...g.sessions.map(s => new Date(s.updated_at ?? s.started_at).getTime()))
+                    return t(b) - t(a)
+                  })
+                  return groups.map((g, i) => (
+                    <VisitorGroup key={g.visitorId ?? g.sessions[0].id} visitorId={g.visitorId} sessions={g.sessions} index={i} mob={mob} />
+                  ))
+                })()}
               </div>
             )}
           </div>
