@@ -39,6 +39,7 @@ function ChartCard({ title, children, style }) {
       padding: '16px 18px',
       border: '1px solid rgba(184,152,72,0.1)',
       background: 'rgba(184,152,72,0.02)',
+      minWidth: 0, overflow: 'hidden',
       ...style,
     }}>
       <div style={{ fontSize: '0.48rem', letterSpacing: '0.2em', color: 'rgba(184,152,72,0.6)', marginBottom: 14 }}>
@@ -448,7 +449,7 @@ function BehaviorSegments({ sessions }) {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
+      gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
       gap: 12,
     }}>
       {SEGMENT_META.map(s => {
@@ -693,7 +694,7 @@ function ExplorationActions({ sessions }) {
   if (data.total === 0) return null
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 12 }}>
       {EXPLORATION_META.map(s => {
         const count = data[s.key]
         const pct   = data.total > 0 ? Math.round((count / data.total) * 100) : 0
@@ -741,7 +742,7 @@ export default function ActivityCharts({ sessions, mob }) {
   if (sessions.length === 0) return null
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24, minWidth: 0, overflow: 'hidden' }}>
 
       {/* Tendencia 30 días */}
       <SessionsTrend sessions={sessions} />
