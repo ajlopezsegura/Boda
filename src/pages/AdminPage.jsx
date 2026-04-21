@@ -406,21 +406,41 @@ function SessionItem({ sess, visitNum, mob, isLast }) {
       <div
         onClick={() => views.length > 0 && setOpen(o => !o)}
         style={{
-          display: 'flex', alignItems: 'center', gap: 12,
-          padding: mob ? '10px 14px 10px 24px' : '10px 16px 10px 32px',
+          display: 'flex', alignItems: 'center', gap: 10,
+          padding: mob ? '10px 14px 10px 20px' : '10px 16px 10px 32px',
           cursor: views.length > 0 ? 'pointer' : 'default',
         }}>
-        <div style={{ fontSize: '0.46rem', letterSpacing: '0.1em', color: 'rgba(184,152,72,0.4)', flexShrink: 0, minWidth: 52 }}>
-          VISITA {visitNum}
-        </div>
-        <div style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.45)', flexShrink: 0, minWidth: mob ? 'auto' : 150 }}>
-          {formatDate(sess.started_at ?? sess.updated_at)}
-        </div>
-        <div style={{ flex: 1, display: 'flex', gap: 10, fontSize: '0.55rem', color: 'rgba(244,241,234,0.35)' }}>
-          <span>{views.length} págs</span>
-          {formatDuration(totalMs) && <span style={{ color: 'rgba(184,152,72,0.55)' }}>{formatDuration(totalMs)}</span>}
-          {sess.converted && <span style={{ color: 'rgba(255,140,0,0.7)', letterSpacing: '0.06em' }}>✓ FORMULARIO</span>}
-        </div>
+        {mob ? (
+          /* Mobile: número arriba, fecha + stats abajo */
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+              <span style={{ fontSize: '0.46rem', letterSpacing: '0.1em', color: 'rgba(184,152,72,0.4)' }}>
+                VISITA {visitNum}
+              </span>
+              {sess.converted && <span style={{ fontSize: '0.46rem', color: 'rgba(255,140,0,0.7)', letterSpacing: '0.06em' }}>✓</span>}
+            </div>
+            <div style={{ display: 'flex', gap: 8, fontSize: '0.55rem', color: 'rgba(244,241,234,0.4)', flexWrap: 'wrap' }}>
+              <span>{formatDate(sess.started_at ?? sess.updated_at).split(' · ')[0]}</span>
+              <span>{views.length} págs</span>
+              {formatDuration(totalMs) && <span style={{ color: 'rgba(184,152,72,0.5)' }}>{formatDuration(totalMs)}</span>}
+            </div>
+          </div>
+        ) : (
+          /* Desktop: en línea */
+          <>
+            <div style={{ fontSize: '0.46rem', letterSpacing: '0.1em', color: 'rgba(184,152,72,0.4)', flexShrink: 0, minWidth: 52 }}>
+              VISITA {visitNum}
+            </div>
+            <div style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.45)', flexShrink: 0, minWidth: 150 }}>
+              {formatDate(sess.started_at ?? sess.updated_at)}
+            </div>
+            <div style={{ flex: 1, display: 'flex', gap: 10, fontSize: '0.55rem', color: 'rgba(244,241,234,0.35)' }}>
+              <span>{views.length} págs</span>
+              {formatDuration(totalMs) && <span style={{ color: 'rgba(184,152,72,0.55)' }}>{formatDuration(totalMs)}</span>}
+              {sess.converted && <span style={{ color: 'rgba(255,140,0,0.7)', letterSpacing: '0.06em' }}>✓ FORMULARIO</span>}
+            </div>
+          </>
+        )}
         {views.length > 0 && (
           <ChevronRight size={10} style={{ color: 'rgba(184,152,72,0.3)', flexShrink: 0, transform: open ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }} />
         )}
@@ -430,7 +450,7 @@ function SessionItem({ sess, visitNum, mob, isLast }) {
         {open && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.15 }} style={{ overflow: 'hidden' }}>
-            <div style={{ padding: '0 16px 12px 56px', borderTop: '1px solid rgba(184,152,72,0.05)' }}>
+            <div style={{ padding: mob ? '0 12px 12px 20px' : '0 16px 12px 56px', borderTop: '1px solid rgba(184,152,72,0.05)' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 5, paddingTop: 10 }}>
                 {trail.filter(ev => ['page_view','section_view','amenity_open','nearby_view','compare_add'].includes(ev.type)).map((ev, j) => {
                   let dot = 'rgba(184,152,72,0.35)', label = '', extra = null
@@ -548,8 +568,11 @@ function VisitorGroup({ visitorId, sessions, index, mob }) {
 
         {/* Device + fecha + chevron */}
         {!mob && <DevIcon size={11} style={{ color: 'rgba(184,152,72,0.35)', flexShrink: 0 }} />}
-        <span style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.45)', flexShrink: 0, ...(mob ? {} : { minWidth: 110, textAlign: 'right' }) }}>
-          {formatDate(latest.updated_at)}
+        <span style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.4)', flexShrink: 0, ...(mob ? {} : { minWidth: 110, textAlign: 'right' }) }}>
+          {mob
+            ? formatDate(latest.updated_at).split(' · ')[0]
+            : formatDate(latest.updated_at)
+          }
         </span>
         <ChevronRight size={12} style={{ color: 'rgba(184,152,72,0.4)', flexShrink: 0, transform: expanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }} />
       </div>
