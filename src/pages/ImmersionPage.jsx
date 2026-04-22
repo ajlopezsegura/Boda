@@ -84,7 +84,7 @@ export default function ImmersionPage() {
 
   const [loading, setLoading]       = useState(true)
   const [panelOpen, setPanelOpen]   = useState(false)
-  const [psToast, setPsToast]       = useState(false)
+  const [videoOpen, setVideoOpen]   = useState(false)
   const [activeTime, setActiveTime] = useState('morning')
   const [activeRoom, setActiveRoom] = useState('salon')
   const [imgIndex, setImgIndex]     = useState(0)
@@ -338,7 +338,7 @@ export default function ImmersionPage() {
             : { display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'end', padding: '0 32px 20px 32px', gap: 16 }
           }>
           {/* PS launch button */}
-          <button onClick={() => { setPsToast(true); setTimeout(() => setPsToast(false), 3000) }}
+          <button onClick={() => { setVideoOpen(true); trackEvent('immersive_video_open', { unit: unit.id }) }}
             data-cursor="hover"
             className="flex items-center justify-center gap-2 label-luxury transition-all duration-300"
             style={{
@@ -393,19 +393,39 @@ export default function ImmersionPage() {
           )}
         </div>
 
-        {/* ── PS coming soon toast ── */}
+        {/* ── Immersive experience video modal ── */}
         <AnimatePresence>
-          {psToast && (
+          {videoOpen && (
             <motion.div
-              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 12 }}
-              transition={{ duration: 0.3 }}
-              className="absolute left-1/2 -translate-x-1/2 z-40 flex items-center gap-3"
-              style={{ bottom: mob ? 120 : 80, backgroundColor: 'rgba(26,33,48,0.95)', backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(184,152,72,0.25)', whiteSpace: 'nowrap', padding: mob ? '10px 16px' : '12px 20px' }}>
-              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-accent)' }} />
-              <p className="label-luxury" style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.8)' }}>
-                {lang === 'es' ? 'Experiencia interactiva — Próximamente' : 'Interactive experience — Coming soon'}
-              </p>
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="absolute inset-0 z-50 flex items-center justify-center"
+              style={{ backgroundColor: 'rgba(8,11,16,0.98)', backdropFilter: 'blur(12px)' }}
+              onClick={() => setVideoOpen(false)}>
+              <button onClick={() => setVideoOpen(false)} data-cursor="hover"
+                className="absolute top-5 right-5 z-10 flex items-center gap-2 label-luxury transition-colors duration-200"
+                style={{ color: 'rgba(244,241,234,0.5)', fontSize: '0.58rem', letterSpacing: '0.18em' }}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(244,241,234,0.5)'}>
+                {lang === 'es' ? 'CERRAR' : 'CLOSE'}
+                <X size={14} />
+              </button>
+              <div
+                onClick={e => e.stopPropagation()}
+                style={{
+                  width: 'min(92vw, 1600px)',
+                  aspectRatio: '16 / 9',
+                  maxHeight: '86vh',
+                  boxShadow: '0 40px 120px rgba(184,152,72,0.08)',
+                }}>
+                <iframe
+                  src="https://www.youtube.com/embed/3uOUCQOxP_o?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&color=white&playsinline=1"
+                  title="Las Conchas · Immersive Experience"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                  allowFullScreen
+                  style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+                />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
