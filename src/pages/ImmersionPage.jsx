@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Sliders, X, Check, Sun, Sunset, Moon, Sunrise } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Sliders, X, Check, Sun, Sunset, Moon, Sunrise } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useUnit, useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
@@ -100,8 +100,9 @@ export default function ImmersionPage() {
     return () => clearTimeout(t)
   }, [])
 
-  // Track room view on change (image stays at index 0 — static main image)
+  // Reset image to main when room changes + track room view
   useEffect(() => {
+    setImgIndex(0)
     if (firstRender.current) { firstRender.current = false; return }
     if (!loading) trackEvent('room_view', { room: activeRoom })
   }, [activeRoom])
@@ -163,6 +164,46 @@ export default function ImmersionPage() {
         {/* Dark vignette */}
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'linear-gradient(to bottom, rgba(13,17,23,0.65) 0%, transparent 25%, transparent 70%, rgba(13,17,23,0.75) 100%)' }} />
+
+        {/* ── Image nav (manual prev/next with counter) ── */}
+        {(() => {
+          const imgs = ROOM_IMAGES[activeRoom] ?? []
+          if (imgs.length <= 1 || loading || panelOpen) return null
+          const goPrev = () => setImgIndex(i => (i - 1 + imgs.length) % imgs.length)
+          const goNext = () => setImgIndex(i => (i + 1) % imgs.length)
+          const arrowStyle = {
+            width: 30, height: 30,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            backgroundColor: 'rgba(13,17,23,0.5)',
+            border: '1px solid rgba(184,152,72,0.18)',
+            backdropFilter: 'blur(8px)',
+            color: 'rgba(244,241,234,0.55)',
+            transition: 'all 0.25s ease',
+          }
+          return (
+            <div className="absolute flex items-center gap-3" style={{
+              left: '50%', transform: 'translateX(-50%)',
+              bottom: mob ? 72 : 82,
+              zIndex: 15,
+            }}>
+              <button onClick={goPrev} data-cursor="hover" aria-label="Previous image"
+                style={arrowStyle}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.18)'; e.currentTarget.style.color = 'rgba(244,241,234,0.55)' }}>
+                <ChevronLeft size={14} strokeWidth={1.5} />
+              </button>
+              <span className="label-luxury" style={{ fontSize: '0.48rem', color: 'rgba(184,152,72,0.6)', letterSpacing: '0.2em', minWidth: 36, textAlign: 'center' }}>
+                {String(imgIndex + 1).padStart(2, '0')} / {String(imgs.length).padStart(2, '0')}
+              </span>
+              <button onClick={goNext} data-cursor="hover" aria-label="Next image"
+                style={arrowStyle}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.18)'; e.currentTarget.style.color = 'rgba(244,241,234,0.55)' }}>
+                <ChevronRight size={14} strokeWidth={1.5} />
+              </button>
+            </div>
+          )
+        })()}
 
         {/* ── Header ── */}
         <div className="absolute top-0 left-0 right-0 z-10"
