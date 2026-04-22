@@ -213,7 +213,7 @@ export default function AvailabilityPage() {
   // ── Table view ────────────────────────────────────────────────────────────────
   function TableView() {
     const cols = {
-      gridTemplateColumns: '90px 90px 1fr 60px 60px 90px 100px 110px 44px',
+      gridTemplateColumns: '70px 90px 1fr 60px 60px 90px 100px 110px 130px',
       gap: '0 1rem',
     }
     return (
