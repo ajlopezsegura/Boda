@@ -49,7 +49,7 @@ const ROOM_IMAGES = {
   salon:      ['./assets/images/Salon 01.webp','./assets/images/salon 02.webp','./assets/images/Salon 03.jpg','./assets/images/Salon 04.jpg','./assets/images/Salon 05.jpg'],
   cocina:     ['./assets/images/Cocina (1).jpg','./assets/images/Cocina (2).jpg','./assets/images/Cocina (3).jpg'],
   dormitorio: ['./assets/images/Dormitorio (1).jpg','./assets/images/Dormitorio (2).jpg','./assets/images/Dormitorio (3).jpg'],
-  bano:       ['./assets/images/Baño (3).jpg','./assets/images/Baño (1).jpg','./assets/images/Baño (2).jpg'],
+  bano:       ['./assets/images/Baño (2).jpg','./assets/images/Baño (1).jpg','./assets/images/Baño (3).jpg'],
   terraza:    ['./assets/images/Terraza (2).jpg','./assets/images/Terraza (1).jpg'],
 }
 
