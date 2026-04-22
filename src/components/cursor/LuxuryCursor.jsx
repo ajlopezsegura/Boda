@@ -38,6 +38,14 @@ export default function LuxuryCursor() {
     }
   }, [visible])
 
+  // Toggle native cursor hiding based on whether the deluxe cursor is active
+  useEffect(() => {
+    const root = document.documentElement
+    if (visible) root.classList.add('luxury-cursor-active')
+    else         root.classList.remove('luxury-cursor-active')
+    return () => root.classList.remove('luxury-cursor-active')
+  }, [visible])
+
   if (!visible) return null
 
   return (

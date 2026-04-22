@@ -18,9 +18,10 @@
   --header-h:           56px;
 }
 
-/* Hide cursor only on true pointer devices (not touch/stylus) */
-@media (pointer: fine) and (hover: hover) {
-  *, *::before, *::after { cursor: none !important; }
+/* Cursor hiding is toggled dynamically by LuxuryCursor based on real mouse movement */
+html.luxury-cursor-active, html.luxury-cursor-active *,
+html.luxury-cursor-active *::before, html.luxury-cursor-active *::after {
+  cursor: none !important;
 }
 
 html {
