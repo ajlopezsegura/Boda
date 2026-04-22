@@ -14,10 +14,9 @@ export default function LuxuryCursor() {
 
     function onMove(e) {
       pos.current = { x: e.clientX, y: e.clientY }
-      if (dotRef.current) {
-        dotRef.current.style.transform =
-          `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`
-      }
+      const t = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`
+      if (dotRef.current)  dotRef.current.style.transform  = t
+      if (ringRef.current) ringRef.current.style.transform = t
     }
 
     function onEnter(e) {
@@ -34,26 +33,14 @@ export default function LuxuryCursor() {
       }
     }
 
-    function animate() {
-      ring.current.x += (pos.current.x - ring.current.x) * 0.22
-      ring.current.y += (pos.current.y - ring.current.y) * 0.22
-      if (ringRef.current) {
-        ringRef.current.style.transform =
-          `translate(${ring.current.x}px, ${ring.current.y}px) translate(-50%, -50%)`
-      }
-      rafId.current = requestAnimationFrame(animate)
-    }
-
     window.addEventListener('mousemove', onMove)
     window.addEventListener('mouseover', onEnter)
     window.addEventListener('mouseout',  onLeave)
-    rafId.current = requestAnimationFrame(animate)
 
     return () => {
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseover', onEnter)
       window.removeEventListener('mouseout',  onLeave)
-      cancelAnimationFrame(rafId.current)
     }
   }, [isTouch])
 
