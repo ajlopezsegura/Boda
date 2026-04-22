@@ -17,10 +17,23 @@ export default function LuxuryCursor() {
       if (ringRef.current) ringRef.current.style.transform = t
     }
 
+    function onEnter(e) {
+      if (e.target.closest('[data-cursor="hover"]'))
+        ringRef.current?.classList.add('cursor-hover')
+    }
+    function onLeave(e) {
+      if (e.target.closest('[data-cursor="hover"]'))
+        ringRef.current?.classList.remove('cursor-hover')
+    }
+
     window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseover', onEnter)
+    window.addEventListener('mouseout',  onLeave)
 
     return () => {
       window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseover', onEnter)
+      window.removeEventListener('mouseout',  onLeave)
     }
   }, [isTouch])
 
@@ -51,8 +64,10 @@ export default function LuxuryCursor() {
           pointerEvents: 'none',
           zIndex: 9998,
           willChange: 'transform',
+          transition: 'scale 0.2s ease',
         }}
       />
+      <style>{`div.cursor-hover { scale: 1.6; }`}</style>
     </>
   )
 }
