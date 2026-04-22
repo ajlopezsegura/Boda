@@ -15,5 +15,10 @@ export function useMediaQuery(query) {
   return matches
 }
 
-export const useIsTouch = () => useMediaQuery('(pointer: coarse)')
+// Touch-only: coarse primary pointer AND no fine pointer available (e.g. touchscreen laptops still get cursor)
+export const useIsTouch = () => {
+  const coarse = useMediaQuery('(pointer: coarse)')
+  const hasFine = useMediaQuery('(any-pointer: fine)')
+  return coarse && !hasFine
+}
 export const useIsMobile = () => useMediaQuery('(max-width: 767px)')
