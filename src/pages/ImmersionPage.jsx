@@ -175,11 +175,17 @@ export default function ImmersionPage() {
           style={{ background: 'linear-gradient(to bottom, rgba(13,17,23,0.65) 0%, transparent 25%, transparent 70%, rgba(13,17,23,0.75) 100%)' }} />
 
         {/* ── Header ── */}
-        <div className="absolute top-0 left-0 right-0 flex items-center justify-between z-10"
-          style={{ padding: mob ? '12px 14px' : '16px 32px' }}>
+        <div className="absolute top-0 left-0 right-0 z-10"
+          style={{
+            padding: mob ? '12px 14px' : '16px 32px',
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
+            alignItems: 'center',
+            gap: 16,
+          }}>
           <button onClick={() => navigate(`/availability/${unit.slug}`)} data-cursor="hover"
             className="flex items-center gap-1.5 label-luxury transition-all duration-300"
-            style={{ color: 'rgba(244,241,234,0.5)', fontSize: '0.58rem' }}
+            style={{ color: 'rgba(244,241,234,0.5)', fontSize: '0.58rem', justifySelf: 'start' }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
             onMouseLeave={e => e.currentTarget.style.color = 'rgba(244,241,234,0.5)'}>
             <ChevronLeft size={13} />
@@ -198,7 +204,7 @@ export default function ImmersionPage() {
             )}
           </div>
 
-          <div className="flex items-center" style={{ gap: mob ? 8 : 12 }}>
+          <div className="flex items-center" style={{ gap: mob ? 8 : 12, justifySelf: 'end' }}>
             <button onClick={toggle} data-cursor="hover"
               className="flex items-center gap-1.5 label-luxury"
               style={{ fontSize: mob ? '0.52rem' : '0.58rem', backgroundColor: 'rgba(13,17,23,0.5)', backdropFilter: 'blur(8px)', padding: mob ? '0.35rem 0.55rem' : '0.4rem 0.75rem' }}>
@@ -298,7 +304,7 @@ export default function ImmersionPage() {
         <div className="absolute bottom-0 left-0 right-0 z-10"
           style={mob
             ? { display: 'flex', flexDirection: 'row', gap: 8, padding: '0 12px 14px 12px' }
-            : { display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: '0 32px 20px 32px', gap: 16 }
+            : { display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'end', padding: '0 32px 20px 32px', gap: 16 }
           }>
           {/* PS launch button */}
           <button onClick={() => { setPsToast(true); setTimeout(() => setPsToast(false), 3000) }}
@@ -311,6 +317,7 @@ export default function ImmersionPage() {
               padding: mob ? '10px 12px' : '10px 16px',
               minHeight: mob ? 36 : 40,
               flex: mob ? 1 : 'none',
+              justifySelf: mob ? undefined : 'start',
             }}
             onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.1)'}
             onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(13,17,23,0.55)'}>
@@ -338,7 +345,7 @@ export default function ImmersionPage() {
 
           {/* Selected materials swatches (desktop only) */}
           {!mob && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3" style={{ justifySelf: 'end' }}>
               {Object.entries(selected).map(([cat, id]) => {
                 const item = materials?.[cat]?.find(m => m.id === id)
                 if (!item) return null

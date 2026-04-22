@@ -190,8 +190,8 @@ export default function DecisionPage() {
                     <Phone size={12} color="rgba(184,152,72,0.5)" style={{ flexShrink: 0, marginTop: 2 }} />
                     <p className="label-luxury leading-relaxed" style={{ fontSize: '0.56rem', color: 'rgba(244,241,234,0.5)' }}>
                       {lang === 'es'
-                        ? 'Un asesor de The Visuals Boutique se pondrá en contacto contigo en menos de 24 horas.'
-                        : 'A The Visuals Boutique advisor will contact you within 24 hours.'}
+                        ? 'Un asesor se pondrá en contacto contigo en menos de 24 horas.'
+                        : 'An advisor will contact you within 24 hours.'}
                     </p>
                   </div>
                 </motion.div>
