@@ -33,14 +33,25 @@ export default function LuxuryCursor() {
       }
     }
 
+    function onDown() {
+      ringRef.current?.classList.add('cursor-click')
+    }
+    function onUp() {
+      ringRef.current?.classList.remove('cursor-click')
+    }
+
     window.addEventListener('mousemove', onMove)
     window.addEventListener('mouseover', onEnter)
     window.addEventListener('mouseout',  onLeave)
+    window.addEventListener('mousedown', onDown)
+    window.addEventListener('mouseup',   onUp)
 
     return () => {
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseover', onEnter)
       window.removeEventListener('mouseout',  onLeave)
+      window.removeEventListener('mousedown', onDown)
+      window.removeEventListener('mouseup',   onUp)
     }
   }, [isTouch])
 
@@ -74,9 +85,14 @@ export default function LuxuryCursor() {
         }}
       />
       <style>{`
-        .cursor-hover + div { /* ring */ }
         div.cursor-hover[style*="width: 7px"] { width: 3px !important; height: 3px !important; opacity: 0.3; }
         div.cursor-hover[style*="width: 34px"] { width: 54px !important; height: 54px !important; border-color: rgba(184,152,72,0.8) !important; transition: width 0.3s ease, height 0.3s ease !important; }
+        div.cursor-click { animation: cursor-pop 0.25s ease-out forwards; }
+        @keyframes cursor-pop {
+          0%   { scale: 1;    opacity: 1;   }
+          40%  { scale: 1.5;  opacity: 0.5; }
+          100% { scale: 1;    opacity: 1;   }
+        }
       `}</style>
     </>
   )
