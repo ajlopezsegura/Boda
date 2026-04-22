@@ -100,6 +100,31 @@ function StatusSelect({ value, onChange, disabled }) {
 }
 
 /* ─── Lead card ───────────────────────────────────────────── */
+const INTENT_LABEL = {
+  info:  { label: 'INFORMACIÓN', color: 'rgba(140,180,255,0.8)', bg: 'rgba(140,180,255,0.08)' },
+  visit: { label: 'VISITA',      color: 'rgba(255,140,0,0.9)',   bg: 'rgba(255,140,0,0.08)'   },
+  call:  { label: 'LLAMADA',     color: 'rgba(184,152,72,0.9)',  bg: 'rgba(184,152,72,0.08)'  },
+}
+
+const MATERIAL_LABELS = {
+  floor:   { roble: 'Roble Natural',   caliza: 'Caliza Natural',  microcemento: 'Microcemento' },
+  walls:   { blanco: 'Blanco Roto',    caliza_p: 'Caliza Pintada', grafito: 'Grafito' },
+  kitchen: { marquina: 'Mármol Marquina', bianco: 'Mármol Bianco', laton: 'Latón Mate' },
+}
+const CAT_LABEL = { floor: 'SUELO', walls: 'PAREDES', kitchen: 'COCINA' }
+
+function matLabel(cat, id) {
+  return MATERIAL_LABELS[cat]?.[id] ?? id
+}
+
+function formatPreferredDate(d) {
+  if (!d) return null
+  try {
+    const dt = new Date(d)
+    return dt.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
+  } catch { return d }
+}
+
 function LeadCard({ lead, index, mob }) {
   const [expanded, setExpanded] = useState(false)
   const isHot  = lead.lead_temperature === 'hot'
@@ -107,6 +132,11 @@ function LeadCard({ lead, index, mob }) {
   const views  = trail.filter(e => e.type === 'page_view')
   const contact = lead.contact ?? {}
   const unit   = lead.primary_unit_id ?? lead.unit_ids?.[0] ?? null
+  const snapshot     = Array.isArray(lead.unit_snapshot) ? lead.unit_snapshot : []
+  const primarySnap  = snapshot.find(s => s.unit_id === unit) ?? snapshot[0] ?? null
+  const materials    = contact?.materials ?? null
+  const intentMeta   = INTENT_LABEL[lead.intent] ?? null
+  const preferred    = formatPreferredDate(contact?.preferred_date)
 
   return (
     <motion.div
@@ -136,6 +166,13 @@ function LeadCard({ lead, index, mob }) {
                 ? <Flame size={13} style={{ color: 'rgba(255,140,0,0.8)' }} />
                 : <Snowflake size={13} style={{ color: 'rgba(140,180,255,0.6)' }} />}
               <span style={{ fontSize: '0.75rem', color: 'rgba(244,241,234,0.85)', flex: 1 }}>{contact.name ?? '—'}</span>
+              {intentMeta && (
+                <span style={{
+                  fontSize: '0.42rem', letterSpacing: '0.14em',
+                  padding: '2px 6px', border: `1px solid ${intentMeta.color}`,
+                  color: intentMeta.color, backgroundColor: intentMeta.bg,
+                }}>{intentMeta.label}</span>
+              )}
               {trail.length > 0 && <ChevronRight size={12} style={{ color: 'rgba(184,152,72,0.4)', transform: expanded ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />}
             </div>
             <div style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)', marginBottom: 3 }}>{contact.email ?? ''}</div>
@@ -154,7 +191,16 @@ function LeadCard({ lead, index, mob }) {
                 : <Snowflake size={14} style={{ color: 'rgba(140,180,255,0.6)' }} />}
             </div>
             <div>
-              <div style={{ fontSize: '0.72rem', color: 'rgba(244,241,234,0.85)', letterSpacing: '0.04em', marginBottom: 3 }}>{contact.name ?? '—'}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+                <div style={{ fontSize: '0.72rem', color: 'rgba(244,241,234,0.85)', letterSpacing: '0.04em' }}>{contact.name ?? '—'}</div>
+                {intentMeta && (
+                  <span style={{
+                    fontSize: '0.42rem', letterSpacing: '0.14em',
+                    padding: '2px 6px', border: `1px solid ${intentMeta.color}`,
+                    color: intentMeta.color, backgroundColor: intentMeta.bg,
+                  }}>{intentMeta.label}</span>
+                )}
+              </div>
               <div style={{ fontSize: '0.62rem', color: 'rgba(244,241,234,0.68)', letterSpacing: '0.06em' }}>{contact.email ?? ''}</div>
             </div>
             <div>
@@ -184,9 +230,81 @@ function LeadCard({ lead, index, mob }) {
               padding: '0 16px 16px 60px',
               borderTop: '1px solid rgba(184,152,72,0.08)',
             }}>
+              {/* Resumen comercial: vivienda, fecha preferida, materiales */}
+              {(primarySnap || preferred || materials) && (
+                <div style={{
+                  paddingTop: 12, paddingBottom: 12,
+                  borderBottom: '1px solid rgba(184,152,72,0.08)',
+                  marginBottom: 12,
+                  display: 'grid',
+                  gridTemplateColumns: mob ? '1fr' : 'repeat(3, 1fr)',
+                  gap: 16,
+                }}>
+                  {/* Vivienda detallada */}
+                  {primarySnap && (
+                    <div>
+                      <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.45)', marginBottom: 8 }}>
+                        VIVIENDA DE INTERÉS
+                      </div>
+                      <div style={{ fontSize: '0.78rem', color: 'rgba(244,241,234,0.9)', letterSpacing: '0.04em', marginBottom: 4 }}>
+                        {primarySnap.unit_id} · {primarySnap.typology ?? ''}
+                      </div>
+                      <div style={{ fontSize: '0.55rem', color: 'rgba(244,241,234,0.55)', lineHeight: 1.6 }}>
+                        {primarySnap.surface ? `${primarySnap.surface} m²` : ''}
+                        {primarySnap.bedrooms != null ? ` · ${primarySnap.bedrooms} dorm.` : ''}
+                        {primarySnap.floor != null ? ` · planta ${primarySnap.floor}` : ''}
+                      </div>
+                      {primarySnap.price != null && (
+                        <div style={{ fontSize: '0.7rem', color: 'var(--color-accent)', marginTop: 4, letterSpacing: '0.04em' }}>
+                          {primarySnap.price.toLocaleString('es-ES')} €
+                        </div>
+                      )}
+                      {snapshot.length > 1 && (
+                        <div style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.4)', marginTop: 6 }}>
+                          + {snapshot.length - 1} vivienda{snapshot.length > 2 ? 's' : ''} comparada{snapshot.length > 2 ? 's' : ''}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Fecha preferida */}
+                  {preferred && (
+                    <div>
+                      <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.45)', marginBottom: 8 }}>
+                        {lead.intent === 'visit' ? 'VISITA SOLICITADA' : lead.intent === 'call' ? 'LLAMADA SOLICITADA' : 'FECHA PREFERIDA'}
+                      </div>
+                      <div style={{ fontSize: '0.72rem', color: 'rgba(244,241,234,0.85)', letterSpacing: '0.03em' }}>
+                        {preferred}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Materiales configurados */}
+                  {materials && Object.values(materials).some(Boolean) && (
+                    <div>
+                      <div style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.45)', marginBottom: 8 }}>
+                        MATERIALES CONFIGURADOS
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                        {['floor','walls','kitchen'].map(cat => materials[cat] && (
+                          <div key={cat} style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                            <span style={{ fontSize: '0.42rem', letterSpacing: '0.15em', color: 'rgba(184,152,72,0.5)', minWidth: 55 }}>
+                              {CAT_LABEL[cat]}
+                            </span>
+                            <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.78)' }}>
+                              {matLabel(cat, materials[cat])}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div style={{
                 fontSize: '0.42rem', letterSpacing: '0.15em',
-                color: 'rgba(184,152,72,0.4)', marginBottom: 10, paddingTop: 12,
+                color: 'rgba(184,152,72,0.4)', marginBottom: 10,
               }}>RECORRIDO DE SESIÓN</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {views.map((ev, i) => {

@@ -103,6 +103,18 @@ export default function ContactPage() {
     const sourcePage  = ctx?.source ?? 'unknown'
     const temperature = getTemperature(sourcePage)
 
+    // Pull materials selected in configurator (if any) from localStorage
+    let selectedMaterials = null
+    let configuredUnitId  = null
+    try {
+      const raw = localStorage.getItem('tvbs_selection')
+      if (raw) {
+        const sel = JSON.parse(raw)
+        selectedMaterials = sel?.materials ?? null
+        configuredUnitId  = sel?.unitId   ?? null
+      }
+    } catch {}
+
     const payload = {
       project_slug:    PROJECT_SLUG,
       source_page:     sourcePage,
@@ -120,6 +132,8 @@ export default function ContactPage() {
         phone:          fields.phone.trim(),
         preferred_date: showDate && fields.preferred_date ? fields.preferred_date : null,
         message:        fields.message.trim() || null,
+        materials:      selectedMaterials,
+        configured_unit: configuredUnitId,
       },
       session_trail:    trail,
       lead_score:       temperature === 'hot' ? 15 : 3,
