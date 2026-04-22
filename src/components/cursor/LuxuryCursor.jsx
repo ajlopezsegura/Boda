@@ -6,8 +6,6 @@ export default function LuxuryCursor() {
   const dotRef  = useRef(null)
   const ringRef = useRef(null)
   const pos     = useRef({ x: -100, y: -100 })
-  const ring    = useRef({ x: -100, y: -100 })
-  const rafId   = useRef(null)
 
   useEffect(() => {
     if (isTouch) return
@@ -19,28 +17,10 @@ export default function LuxuryCursor() {
       if (ringRef.current) ringRef.current.style.transform = t
     }
 
-    function onEnter(e) {
-      if (e.target.closest('[data-cursor="hover"]')) {
-        ringRef.current?.classList.add('cursor-hover')
-        dotRef.current?.classList.add('cursor-hover')
-      }
-    }
-
-    function onLeave(e) {
-      if (e.target.closest('[data-cursor="hover"]')) {
-        ringRef.current?.classList.remove('cursor-hover')
-        dotRef.current?.classList.remove('cursor-hover')
-      }
-    }
-
     window.addEventListener('mousemove', onMove)
-    window.addEventListener('mouseover', onEnter)
-    window.addEventListener('mouseout',  onLeave)
 
     return () => {
       window.removeEventListener('mousemove', onMove)
-      window.removeEventListener('mouseover', onEnter)
-      window.removeEventListener('mouseout',  onLeave)
     }
   }, [isTouch])
 
@@ -73,10 +53,6 @@ export default function LuxuryCursor() {
           willChange: 'transform',
         }}
       />
-      <style>{`
-        div.cursor-hover[style*="width: 7px"] { width: 3px !important; height: 3px !important; opacity: 0.3; }
-        div.cursor-hover[style*="width: 34px"] { width: 54px !important; height: 54px !important; border-color: rgba(184,152,72,0.8) !important; transition: width 0.3s ease, height 0.3s ease !important; }
-      `}</style>
     </>
   )
 }
