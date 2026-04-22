@@ -1,20 +1,20 @@
-import { useEffect, useRef } from 'react'
-import { useIsTouch } from '../../hooks/useMediaQuery'
+import { useEffect, useRef, useState } from 'react'
 
 export default function LuxuryCursor() {
-  const isTouch = useIsTouch()
-  const dotRef  = useRef(null)
-  const ringRef = useRef(null)
-  const pos     = useRef({ x: -100, y: -100 })
+  const dotRef    = useRef(null)
+  const ringRef   = useRef(null)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    if (isTouch) return
-
     function onMove(e) {
-      pos.current = { x: e.clientX, y: e.clientY }
       const t = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`
       if (dotRef.current)  dotRef.current.style.transform  = t
       if (ringRef.current) ringRef.current.style.transform = t
+      if (!visible) setVisible(true)
+    }
+
+    function onTouch() {
+      setVisible(false)
     }
 
     function onEnter(e) {
@@ -27,17 +27,19 @@ export default function LuxuryCursor() {
     }
 
     window.addEventListener('mousemove', onMove)
+    window.addEventListener('touchstart', onTouch)
     window.addEventListener('mouseover', onEnter)
     window.addEventListener('mouseout',  onLeave)
 
     return () => {
       window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('touchstart', onTouch)
       window.removeEventListener('mouseover', onEnter)
       window.removeEventListener('mouseout',  onLeave)
     }
-  }, [isTouch])
+  }, [visible])
 
-  if (isTouch) return null
+  if (!visible) return null
 
   return (
     <>
