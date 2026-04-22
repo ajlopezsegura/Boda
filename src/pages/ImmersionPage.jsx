@@ -100,21 +100,11 @@ export default function ImmersionPage() {
     return () => clearTimeout(t)
   }, [])
 
-  // Reset image index when room changes + track room view
+  // Track room view on change (image stays at index 0 — static main image)
   useEffect(() => {
-    setImgIndex(0)
     if (firstRender.current) { firstRender.current = false; return }
     if (!loading) trackEvent('room_view', { room: activeRoom })
   }, [activeRoom])
-
-  // Auto-advance slideshow every 5s
-  useEffect(() => {
-    if (loading || panelOpen) return
-    const imgs = ROOM_IMAGES[activeRoom] ?? []
-    if (imgs.length <= 1) return
-    const t = setInterval(() => setImgIndex(i => (i + 1) % imgs.length), 5000)
-    return () => clearInterval(t)
-  }, [activeRoom, loading, panelOpen])
 
 
   if (!unit) {
