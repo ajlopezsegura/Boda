@@ -34,9 +34,13 @@ export default function LuxuryCursor() {
     }
 
     function onDown() {
-      ringRef.current?.classList.add('cursor-click')
+      const el = ringRef.current
+      if (!el) return
+      el.classList.remove('cursor-click')
+      void el.offsetWidth // force reflow so animation restarts cleanly
+      el.classList.add('cursor-click')
     }
-    function onUp() {
+    function onAnimEnd() {
       ringRef.current?.classList.remove('cursor-click')
     }
 
@@ -44,14 +48,15 @@ export default function LuxuryCursor() {
     window.addEventListener('mouseover', onEnter)
     window.addEventListener('mouseout',  onLeave)
     window.addEventListener('mousedown', onDown)
-    window.addEventListener('mouseup',   onUp)
+    ringRef.current?.addEventListener('animationend', onAnimEnd)
 
+    const ring = ringRef.current
     return () => {
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseover', onEnter)
       window.removeEventListener('mouseout',  onLeave)
       window.removeEventListener('mousedown', onDown)
-      window.removeEventListener('mouseup',   onUp)
+      ring?.removeEventListener('animationend', onAnimEnd)
     }
   }, [isTouch])
 
