@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 
 export default function LuxuryCursor() {
-  const dotRef    = useRef(null)
-  const ringRef   = useRef(null)
+  const dotRef       = useRef(null)
+  const ringRef      = useRef(null)
+  const isHovering   = useRef(false)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -11,31 +12,25 @@ export default function LuxuryCursor() {
       if (dotRef.current)  dotRef.current.style.transform  = t
       if (ringRef.current) ringRef.current.style.transform = t
       if (!visible) setVisible(true)
+
+      const hovering = !!e.target.closest?.('[data-cursor="hover"]')
+      if (hovering !== isHovering.current) {
+        isHovering.current = hovering
+        if (hovering) ringRef.current?.classList.add('cursor-hover')
+        else          ringRef.current?.classList.remove('cursor-hover')
+      }
     }
 
     function onTouch() {
       setVisible(false)
     }
 
-    function onEnter(e) {
-      if (e.target.closest('[data-cursor="hover"]'))
-        ringRef.current?.classList.add('cursor-hover')
-    }
-    function onLeave(e) {
-      if (e.target.closest('[data-cursor="hover"]'))
-        ringRef.current?.classList.remove('cursor-hover')
-    }
-
     window.addEventListener('mousemove', onMove)
     window.addEventListener('touchstart', onTouch)
-    window.addEventListener('mouseover', onEnter)
-    window.addEventListener('mouseout',  onLeave)
 
     return () => {
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('touchstart', onTouch)
-      window.removeEventListener('mouseover', onEnter)
-      window.removeEventListener('mouseout',  onLeave)
     }
   }, [visible])
 
