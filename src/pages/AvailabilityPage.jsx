@@ -399,20 +399,41 @@ export default function AvailabilityPage() {
                             )}
                           </div>
 
-                          <div className="flex items-center justify-between pt-3" style={{ borderTop: '1px solid rgba(184,152,72,0.1)' }}>
+                          <div className="flex items-center justify-between gap-3 pt-3" style={{ borderTop: '1px solid rgba(184,152,72,0.1)' }}>
                             <p className="display-heading"
                               style={{ fontSize: '1rem', letterSpacing: '0.04em', color: unit.status === 'sold' ? 'rgba(244,241,234,0.2)' : 'var(--color-accent)' }}>
                               {unit.status === 'sold' ? '—' : unit.price.toLocaleString('es-ES') + ' €'}
                             </p>
-                            {canExplore && (
-                              <button onClick={() => navigate(`/availability/${unit.slug}`)} data-cursor="hover"
-                                className="label-luxury flex items-center gap-2 px-5 py-2.5 transition-all duration-300 min-h-[40px]"
-                                style={{ border: '1px solid var(--color-accent)', color: 'var(--color-accent)', fontSize: '0.55rem' }}
-                                onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.1)'}
-                                onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
-                                {lang === 'es' ? 'Ver vivienda' : 'View unit'} →
-                              </button>
-                            )}
+                            <div className="flex items-center gap-2 flex-wrap justify-end">
+                              {(canAdd(unit.id) || isIn(unit.id)) && (
+                                <button
+                                  onClick={e => { e.stopPropagation(); handleCompareToggle(unit.id) }}
+                                  data-cursor="hover"
+                                  className="label-luxury flex items-center gap-1.5 px-4 py-2.5 transition-all duration-200 min-h-[40px]"
+                                  style={{
+                                    border: `1px solid ${isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.3)'}`,
+                                    color: isIn(unit.id) ? 'var(--color-accent)' : 'rgba(244,241,234,0.5)',
+                                    fontSize: '0.52rem',
+                                    backgroundColor: isIn(unit.id) ? 'rgba(184,152,72,0.08)' : 'transparent',
+                                  }}
+                                  onMouseEnter={e => { if (!isIn(unit.id)) { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)' } }}
+                                  onMouseLeave={e => { if (!isIn(unit.id)) { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.3)'; e.currentTarget.style.color = 'rgba(244,241,234,0.5)' } }}>
+                                  {isIn(unit.id)
+                                    ? <><Check size={10} />{lang === 'es' ? 'En comparador' : 'In comparator'}</>
+                                    : (lang === 'es' ? '+ Comparar' : '+ Compare')
+                                  }
+                                </button>
+                              )}
+                              {canExplore && (
+                                <button onClick={() => navigate(`/availability/${unit.slug}`)} data-cursor="hover"
+                                  className="label-luxury flex items-center gap-2 px-5 py-2.5 transition-all duration-300 min-h-[40px]"
+                                  style={{ border: '1px solid var(--color-accent)', color: 'var(--color-accent)', fontSize: '0.55rem' }}
+                                  onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.1)'}
+                                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
+                                  {lang === 'es' ? 'Ver vivienda' : 'View unit'} →
+                                </button>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -498,13 +519,16 @@ export default function AvailabilityPage() {
                     onClick={e => { e.stopPropagation(); handleCompareToggle(unit.id) }}
                     disabled={!isIn(unit.id) && !canAdd(unit.id)}
                     data-cursor="hover"
-                    className="self-start flex items-center gap-1.5 label-luxury px-2.5 py-1.5 transition-all duration-200"
+                    className="self-start flex items-center gap-1.5 label-luxury px-3 py-2 transition-all duration-200"
                     style={{
-                      border: `1px solid ${isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.2)'}`,
-                      color: isIn(unit.id) ? 'var(--color-accent)' : 'rgba(244,241,234,0.4)',
-                      fontSize: '0.44rem',
+                      border: `1px solid ${isIn(unit.id) ? 'var(--color-accent)' : 'rgba(184,152,72,0.35)'}`,
+                      color: isIn(unit.id) ? 'var(--color-accent)' : 'rgba(244,241,234,0.6)',
+                      backgroundColor: isIn(unit.id) ? 'rgba(184,152,72,0.08)' : 'rgba(184,152,72,0.04)',
+                      fontSize: '0.48rem',
                       opacity: !isIn(unit.id) && !canAdd(unit.id) ? 0.3 : 1,
-                    }}>
+                    }}
+                    onMouseEnter={e => { if (!isIn(unit.id) && canAdd(unit.id)) { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.08)' } }}
+                    onMouseLeave={e => { if (!isIn(unit.id)) { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.35)'; e.currentTarget.style.color = 'rgba(244,241,234,0.6)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.04)' } }}>
                     {isIn(unit.id) && <Check size={9} style={{ color: 'var(--color-accent)' }} />}
                     {isIn(unit.id)
                       ? (lang === 'es' ? 'En comparador' : 'In comparator')
@@ -717,15 +741,12 @@ export default function AvailabilityPage() {
 
         {/* ── Compare floating bar ── */}
         <AnimatePresence>
-          {compareIds.length >= 2 && (
+          {compareIds.length >= 1 && (
             <motion.div
               initial={{ y: 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 60, opacity: 0 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
               className="flex-shrink-0 flex items-center justify-between gap-4 px-6 sm:px-10 py-3"
               style={{ borderTop: '1px solid rgba(184,152,72,0.3)', backgroundColor: 'rgba(13,17,23,0.97)', backdropFilter: 'blur(12px)' }}>
-              <span className="label-luxury" style={{ fontSize: '0.5rem', color: 'rgba(184,152,72,0.6)' }}>
-                {compareIds.length} {lang === 'es' ? 'unidades en comparador' : 'units in comparator'}
-              </span>
               <div className="flex items-center gap-3">
                 <button onClick={clearCompare} data-cursor="hover"
                   className="flex items-center gap-1.5 label-luxury transition-colors duration-200"
@@ -733,16 +754,30 @@ export default function AvailabilityPage() {
                   onMouseEnter={e => e.currentTarget.style.color = 'rgba(244,241,234,0.6)'}
                   onMouseLeave={e => e.currentTarget.style.color = 'rgba(184,152,72,0.45)'}>
                   <X size={10} />
-                  {lang === 'es' ? 'Limpiar' : 'Clear'}
                 </button>
-                <button onClick={() => navigate('/compare')} data-cursor="hover"
-                  className="label-luxury px-5 py-2.5 flex items-center gap-2 transition-opacity duration-200"
-                  style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.55rem', letterSpacing: '0.15em' }}
-                  onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
-                  onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-                  {lang === 'es' ? `COMPARAR (${compareIds.length}) →` : `COMPARE (${compareIds.length}) →`}
-                </button>
+                <span className="label-luxury" style={{ fontSize: '0.5rem', color: 'rgba(184,152,72,0.6)' }}>
+                  {compareIds.length === 1
+                    ? (lang === 'es' ? 'Selecciona 1 más para comparar' : 'Select 1 more to compare')
+                    : `${compareIds.length} ${lang === 'es' ? 'unidades seleccionadas' : 'units selected'}`
+                  }
+                </span>
               </div>
+              <button
+                onClick={() => navigate('/compare')}
+                disabled={compareIds.length < 2}
+                data-cursor="hover"
+                className="label-luxury px-5 py-2.5 flex items-center gap-2 transition-all duration-200"
+                style={{
+                  backgroundColor: compareIds.length >= 2 ? 'var(--color-accent)' : 'rgba(184,152,72,0.12)',
+                  color: compareIds.length >= 2 ? 'var(--color-bg)' : 'rgba(184,152,72,0.4)',
+                  fontSize: '0.55rem', letterSpacing: '0.15em',
+                  border: `1px solid ${compareIds.length >= 2 ? 'transparent' : 'rgba(184,152,72,0.2)'}`,
+                  cursor: compareIds.length >= 2 ? 'pointer' : 'default',
+                }}
+                onMouseEnter={e => { if (compareIds.length >= 2) e.currentTarget.style.opacity = '0.88' }}
+                onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+                {lang === 'es' ? `COMPARAR${compareIds.length >= 2 ? ` (${compareIds.length})` : ''} →` : `COMPARE${compareIds.length >= 2 ? ` (${compareIds.length})` : ''} →`}
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
