@@ -35,8 +35,8 @@ export default function LuxuryCursor() {
     }
 
     function animate() {
-      ring.current.x += (pos.current.x - ring.current.x) * 0.10
-      ring.current.y += (pos.current.y - ring.current.y) * 0.10
+      ring.current.x += (pos.current.x - ring.current.x) * 0.22
+      ring.current.y += (pos.current.y - ring.current.y) * 0.22
       if (ringRef.current) {
         ringRef.current.style.transform =
           `translate(${ring.current.x}px, ${ring.current.y}px) translate(-50%, -50%)`
