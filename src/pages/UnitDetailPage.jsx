@@ -351,28 +351,17 @@ export default function UnitDetailPage() {
                   </button>
                 )}
 
-                {/* Secondary CTAs */}
-                <div className="flex gap-3" style={{ flexDirection: mob ? 'column' : 'row' }}>
-                  {unit.status === 'available' && (
-                    <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
-                      className="flex-1 label-luxury py-3 flex items-center justify-center gap-2 transition-all duration-300"
-                      style={{ border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(244,241,234,0.55)', fontSize: '0.55rem' }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-text)' }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'; e.currentTarget.style.color = 'rgba(244,241,234,0.55)' }}>
-                      <Eye size={13} />
-                      {mob
-                        ? (lang === 'es' ? 'Configurador' : 'Configurator')
-                        : (lang === 'es' ? 'Configurador de vivienda' : 'Unit configurator')}
-                    </button>
-                  )}
-                  <button onClick={() => navigate(`/summary/${unit.slug}`)} data-cursor="hover"
-                    className="flex-1 label-luxury py-3 flex items-center justify-center gap-2 transition-all duration-300"
-                    style={{ border: '1px solid rgba(184,152,72,0.18)', color: 'rgba(244,241,234,0.35)', fontSize: '0.55rem' }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.4)'; e.currentTarget.style.color = 'var(--color-text)' }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.18)'; e.currentTarget.style.color = 'rgba(244,241,234,0.35)' }}>
-                    {lang === 'es' ? 'Recibir ficha' : 'Receive brochure'}
+                {/* Secondary CTA — configurator */}
+                {unit.status === 'available' && (
+                  <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
+                    className="w-full label-luxury py-3 flex items-center justify-center gap-2 transition-all duration-300"
+                    style={{ border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(244,241,234,0.55)', fontSize: '0.55rem' }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-text)' }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'; e.currentTarget.style.color = 'rgba(244,241,234,0.55)' }}>
+                    <Eye size={13} />
+                    {lang === 'es' ? 'Configurador de vivienda' : 'Unit configurator'}
                   </button>
-                </div>
+                )}
 
                 {/* Compare */}
                 <div className="flex pt-1" style={{ gap: 12, flexDirection: mob ? 'column' : 'row' }}>
