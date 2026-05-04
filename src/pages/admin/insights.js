@@ -135,6 +135,9 @@ export function unitReasonText(r) {
 }
 
 // ─── Traffic depth score by source ──────────────────────────
+// Ranks sources by TOTAL value contributed (sessions × engagement),
+// not by per-session average — a single deep visit shouldn't outrank
+// a steady stream of consistent ones.
 export function computeSourceDepth(sessions) {
   const totals = {}, counts = {}
 
@@ -161,10 +164,11 @@ export function computeSourceDepth(sessions) {
   return Object.entries(totals)
     .map(([source, total]) => ({
       source,
+      totalDepth: total,
       avgDepth: parseFloat((total / counts[source]).toFixed(1)),
       sessions: counts[source],
     }))
-    .sort((a, b) => b.avgDepth - a.avgDepth)
+    .sort((a, b) => b.totalDepth - a.totalDepth)
 }
 
 // ─── Rule engine ─────────────────────────────────────────────
@@ -290,16 +294,11 @@ export function computeBestSource(sourceDepth) {
   if (sourceDepth.length === 0) return null
   const top = sourceDepth[0]
 
-  let sub
-  if (top.sessions <= 1) {
-    sub = 'Una sola sesión todavía, aún no concluyente.'
-  } else if (top.avgDepth >= 15) {
-    sub = 'Mayor profundidad y recurrencia en el recorrido.'
-  } else if (top.sessions >= 5) {
-    sub = `${top.sessions} sesiones con recorrido consistente.`
-  } else {
-    sub = 'Mayor profundidad media por sesión.'
-  }
+  const sessionLabel = top.sessions === 1 ? '1 sesión' : `${top.sessions} sesiones`
+  const sub = top.sessions <= 1
+    ? `${sessionLabel} todavía, aún no concluyente.`
+    : `${sessionLabel} con profundidad media de ${top.avgDepth}.`
+
   return { value: prettySource(top.source), sub }
 }
 

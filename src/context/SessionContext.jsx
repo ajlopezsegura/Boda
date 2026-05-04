@@ -38,6 +38,12 @@ function getReferrerSource() {
   if (!ref) return 'directo'
   try {
     const host = new URL(ref).hostname
+    const ownHost = typeof window !== 'undefined' ? window.location.hostname : ''
+    // Filter out self-traffic (own site, deploy platforms, local dev)
+    if (host === ownHost) return 'directo'
+    if (host.endsWith('.vercel.app') || host === 'vercel.com') return 'directo'
+    if (host.endsWith('.github.io') || host === 'github.com')  return 'directo'
+    if (host === 'localhost' || host === '127.0.0.1')          return 'directo'
     if (host.includes('google'))    return 'google'
     if (host.includes('instagram')) return 'instagram'
     if (host.includes('facebook') || host.includes('fb.'))  return 'facebook'
