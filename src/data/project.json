@@ -400,22 +400,40 @@
     ],
     "kitchen": [
       {
-        "id": "marquina",
-        "label": "Mármol Marquina",
-        "labelEN": "Marquina Marble",
-        "swatch": "#2A2520"
+        "id": "keena",
+        "label": "Dekton Keena",
+        "labelEN": "Dekton Keena",
+        "collection": "Dekton",
+        "swatch": "#DDD2C0",
+        "source_url": "https://www.cosentino.com/es/colores/dekton/keena/",
+        "description": "Superficie ultracompacta de tono beige cálido con vetas suaves. Alta resistencia a manchas, rayado y temperatura. Ideal para encimeras y revestimientos de cocina.",
+        "descriptionEN": "Ultra-compact surface in warm beige with soft veining. High resistance to stains, scratches and heat. Ideal for kitchen worktops and claddings.",
+        "render_day":   "./assets/images/cosentino/keena-day.jpg",
+        "render_night": "./assets/images/cosentino/keena-night.jpg"
       },
       {
-        "id": "bianco",
-        "label": "Mármol Bianco",
-        "labelEN": "Bianco Marble",
-        "swatch": "#F0EDE8"
+        "id": "phantome",
+        "label": "Eclos Phantome",
+        "labelEN": "Eclos Phantome",
+        "collection": "Eclos",
+        "swatch": "#4A4A48",
+        "source_url": "https://www.cosentino.com/usa/colors/eclos/phantome/",
+        "description": "Superficie sostenible Eclos en gris ahumado profundo. Composición con alto contenido reciclado, acabado mate y textura sutil. Perfecta para cocinas contemporáneas.",
+        "descriptionEN": "Sustainable Eclos surface in deep smoky grey. High recycled content, matte finish and subtle texture. Perfect for contemporary kitchens.",
+        "render_day":   "./assets/images/cosentino/phantome-day.jpg",
+        "render_night": "./assets/images/cosentino/phantome-night.jpg"
       },
       {
-        "id": "laton",
-        "label": "Latón Mate",
-        "labelEN": "Matte Brass",
-        "swatch": "#B89848"
+        "id": "fantasy_brown",
+        "label": "Scalea Fantasy Brown",
+        "labelEN": "Scalea Fantasy Brown",
+        "collection": "Scalea",
+        "swatch": "#8B6F4A",
+        "source_url": "https://www.cosentino.com/es/colores/scalea/fantasy-brown/",
+        "description": "Cuarcita natural en tonos marrón cálido con vetas movidas únicas en cada pieza. Material noble de gran personalidad para cocinas de carácter.",
+        "descriptionEN": "Natural quartzite in warm brown tones with bold veining unique to each piece. Noble material with strong personality for character-led kitchens.",
+        "render_day":   "./assets/images/cosentino/fantasy-brown-day.jpg",
+        "render_night": "./assets/images/cosentino/fantasy-brown-night.jpg"
       }
     ]
   }
