@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Sliders, X, Check, Sun, Sunset, Moon, Sunrise } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Sliders, X, Check, Sun, Moon } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useUnit, useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
@@ -21,11 +21,8 @@ function useIsMobile(bp = 640) {
 
 // ─── Time of day config ───────────────────────────────────────────────────────
 const TIMES = [
-  { id: 'dawn',      icon: Sunrise, es: 'Amanecer',  en: 'Dawn',      overlay: 'rgba(255,180,100,0.18)' },
-  { id: 'morning',   icon: Sun,     es: 'Mañana',    en: 'Morning',   overlay: 'rgba(255,240,200,0.10)' },
-  { id: 'afternoon', icon: Sun,     es: 'Tarde',     en: 'Afternoon', overlay: 'rgba(255,200,120,0.14)' },
-  { id: 'sunset',    icon: Sunset,  es: 'Atardecer', en: 'Sunset',    overlay: 'rgba(255,120,60,0.20)'  },
-  { id: 'night',     icon: Moon,    es: 'Noche',     en: 'Night',     overlay: 'rgba(20,30,60,0.55)'    },
+  { id: 'day',   icon: Sun,  es: 'Día',   en: 'Day',   overlay: 'rgba(255,240,200,0.10)' },
+  { id: 'night', icon: Moon, es: 'Noche', en: 'Night', overlay: 'rgba(20,30,60,0.55)'    },
 ]
 
 // ─── Rooms ────────────────────────────────────────────────────────────────────
@@ -85,7 +82,7 @@ export default function ImmersionPage() {
   const [loading, setLoading]       = useState(true)
   const [panelOpen, setPanelOpen]   = useState(false)
   const [videoOpen, setVideoOpen]   = useState(false)
-  const [activeTime, setActiveTime] = useState('morning')
+  const [activeTime, setActiveTime] = useState('day')
   const [activeRoom, setActiveRoom] = useState('salon')
   const [imgIndex, setImgIndex]     = useState(0)
   const [selected, setSelected]   = useState({
