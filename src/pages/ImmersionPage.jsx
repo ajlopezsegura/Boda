@@ -68,7 +68,9 @@ function PixelStreamingPlaceholder({ activeRoom, imgIndex, timeOverlay, override
           transition={{ duration: 0.6 }}
           className="absolute inset-0 w-full h-full object-contain" />
       </AnimatePresence>
-      <div className="absolute inset-0 transition-all duration-700" style={{ backgroundColor: timeOverlay }} />
+      {!overrideSrc && (
+        <div className="absolute inset-0 transition-all duration-700" style={{ backgroundColor: timeOverlay }} />
+      )}
     </div>
   )
 }
@@ -475,43 +477,52 @@ export default function ImmersionPage() {
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-5 px-5 py-5">
-                  {Object.entries(MAT_LABELS).map(([cat, labels]) => {
-                    const opts = materials?.[cat] ?? []
-                    const catLabel = lang === 'es' ? labels.es : labels.en
+                <div className="flex flex-col gap-3 px-5 py-5">
+                  {(materials?.kitchen ?? []).map(opt => {
+                    const isSel = selected.kitchen === opt.id
+                    const description = lang === 'es' ? opt.description : (opt.descriptionEN ?? opt.description)
                     return (
-                      <div key={cat}>
-                        <p className="label-luxury mb-2.5" style={{ fontSize: '0.52rem', color: 'rgba(184,152,72,0.65)', letterSpacing: '0.18em' }}>
-                          {catLabel.toUpperCase()}
-                        </p>
-                        <div className="flex flex-col gap-1">
-                          {opts.map(opt => {
-                            const isSel = selected[cat] === opt.id
-                            return (
-                              <button key={opt.id}
-                                onClick={() => {
-                                  setSelected(s => ({ ...s, [cat]: opt.id }))
-                                  trackEvent('material_select', { category: cat, material: opt.id, label: opt.label })
-                                }}
-                                data-cursor="hover"
-                                className="flex items-center gap-3 px-3 py-2.5 transition-all duration-200"
-                                style={{
-                                  border: '1px solid',
-                                  borderColor: isSel ? 'rgba(184,152,72,0.45)' : 'rgba(184,152,72,0.08)',
-                                  backgroundColor: isSel ? 'rgba(184,152,72,0.06)' : 'transparent',
-                                }}>
-                                <div className="w-5 h-5 flex-shrink-0"
-                                  style={{ backgroundColor: opt.swatch, border: '1px solid rgba(244,241,234,0.12)' }} />
-                                <span className="flex-1 text-left label-luxury"
-                                  style={{ fontSize: '0.58rem', color: isSel ? 'var(--color-text)' : 'var(--color-text-muted)' }}>
-                                  {lang === 'es' ? opt.label : opt.labelEN}
-                                </span>
-                                {isSel && <Check size={11} color="var(--color-accent)" />}
-                              </button>
-                            )
-                          })}
+                      <button key={opt.id}
+                        onClick={() => {
+                          setSelected(s => ({ ...s, kitchen: opt.id }))
+                          trackEvent('material_select', { category: 'kitchen', material: opt.id, label: opt.label })
+                        }}
+                        data-cursor="hover"
+                        className="text-left transition-all duration-200"
+                        style={{
+                          border: '1px solid',
+                          borderColor: isSel ? 'rgba(184,152,72,0.45)' : 'rgba(184,152,72,0.1)',
+                          backgroundColor: isSel ? 'rgba(184,152,72,0.05)' : 'transparent',
+                          padding: '14px 14px 16px',
+                        }}>
+                        <div className="flex items-center gap-3 mb-2">
+                          <div style={{ width: 38, height: 38, flexShrink: 0, backgroundColor: opt.swatch, border: '1px solid rgba(244,241,234,0.14)' }} />
+                          <div className="flex-1 min-w-0">
+                            {opt.collection && (
+                              <p className="label-luxury" style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.7)', letterSpacing: '0.2em', marginBottom: 3 }}>
+                                {opt.collection.toUpperCase()}
+                              </p>
+                            )}
+                            <p className="label-luxury" style={{ fontSize: '0.7rem', color: isSel ? 'var(--color-text)' : 'rgba(244,241,234,0.85)', letterSpacing: '0.06em', textTransform: 'none' }}>
+                              {lang === 'es' ? opt.label : opt.labelEN}
+                            </p>
+                          </div>
+                          {isSel && <Check size={13} color="var(--color-accent)" />}
                         </div>
-                      </div>
+                        {description && (
+                          <p style={{ fontSize: '0.58rem', color: 'rgba(244,241,234,0.6)', lineHeight: 1.6, letterSpacing: '0.01em' }}>
+                            {description}
+                          </p>
+                        )}
+                        {opt.source_url && (
+                          <a href={opt.source_url} target="_blank" rel="noopener noreferrer"
+                            onClick={e => e.stopPropagation()}
+                            className="inline-block label-luxury"
+                            style={{ marginTop: 10, fontSize: '0.46rem', color: 'rgba(184,152,72,0.7)', letterSpacing: '0.18em', borderBottom: '1px solid rgba(184,152,72,0.3)', paddingBottom: 1 }}>
+                            {lang === 'es' ? 'VER FICHA TÉCNICA →' : 'TECHNICAL SHEET →'}
+                          </a>
+                        )}
+                      </button>
                     )
                   })}
                 </div>
