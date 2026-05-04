@@ -290,6 +290,15 @@ function prettySource(s) {
   return SOURCE_LABELS[s] ?? (s ? capitalize(s) : 'Directo')
 }
 
+// Qualitative label for engagement depth (max realistic depth ≈ 25)
+export function depthLabel(avg) {
+  if (avg == null) return null
+  if (avg >= 16) return 'exploración intensiva'
+  if (avg >= 9)  return 'exploración profunda'
+  if (avg >= 4)  return 'exploración media'
+  return 'exploración superficial'
+}
+
 export function computeBestSource(sourceDepth) {
   if (sourceDepth.length === 0) return null
   const top = sourceDepth[0]
@@ -297,7 +306,7 @@ export function computeBestSource(sourceDepth) {
   const sessionLabel = top.sessions === 1 ? '1 sesión' : `${top.sessions} sesiones`
   const sub = top.sessions <= 1
     ? `${sessionLabel} todavía, aún no concluyente.`
-    : `${sessionLabel} con profundidad media de ${top.avgDepth}.`
+    : `${sessionLabel} con ${depthLabel(top.avgDepth)}.`
 
   return { value: prettySource(top.source), sub }
 }
