@@ -389,7 +389,12 @@ export default function ImmersionPage() {
           {/* Selected kitchen material (desktop only) */}
           {!mob && activeKitchenMat && (
             <div className="flex items-center gap-1.5" style={{ justifySelf: 'end' }}>
-              <div className="w-3.5 h-3.5" style={{ backgroundColor: activeKitchenMat.swatch, border: '1px solid rgba(244,241,234,0.2)' }} />
+              <div className="w-3.5 h-3.5" style={{
+                backgroundColor: activeKitchenMat.swatch,
+                backgroundImage: activeKitchenMat.texture ? `url(${activeKitchenMat.texture})` : undefined,
+                backgroundSize: 'cover', backgroundPosition: 'center',
+                border: '1px solid rgba(244,241,234,0.2)',
+              }} />
               <span className="label-luxury" style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.4)' }}>
                 {lang === 'es' ? activeKitchenMat.label : activeKitchenMat.labelEN}
               </span>
@@ -488,7 +493,13 @@ export default function ImmersionPage() {
                           padding: '14px 14px 16px',
                         }}>
                         <div className="flex items-center gap-3 mb-2">
-                          <div style={{ width: 38, height: 38, flexShrink: 0, backgroundColor: opt.swatch, border: '1px solid rgba(244,241,234,0.14)' }} />
+                          <div style={{
+                            width: 38, height: 38, flexShrink: 0,
+                            backgroundColor: opt.swatch,
+                            backgroundImage: opt.texture ? `url(${opt.texture})` : undefined,
+                            backgroundSize: 'cover', backgroundPosition: 'center',
+                            border: '1px solid rgba(244,241,234,0.14)',
+                          }} />
                           <div className="flex-1 min-w-0">
                             {opt.collection && (
                               <p className="label-luxury" style={{ fontSize: '0.46rem', color: 'rgba(184,152,72,0.7)', letterSpacing: '0.2em', marginBottom: 3 }}>
