@@ -109,7 +109,15 @@ const INTENT_LABEL = {
 const MATERIAL_LABELS = {
   floor:   { roble: 'Roble Natural',   caliza: 'Caliza Natural',  microcemento: 'Microcemento' },
   walls:   { blanco: 'Blanco Roto',    caliza_p: 'Caliza Pintada', grafito: 'Grafito' },
-  kitchen: { marquina: 'Mármol Marquina', bianco: 'Mármol Bianco', laton: 'Latón Mate' },
+  kitchen: {
+    keena:         'Dekton Keena',
+    phantome:      'Eclos Phantome',
+    fantasy_brown: 'Scalea Fantasy Brown',
+    // legacy
+    marquina:      'Mármol Marquina',
+    bianco:        'Mármol Bianco',
+    laton:         'Latón Mate',
+  },
 }
 const CAT_LABEL = { floor: 'SUELO', walls: 'PAREDES', kitchen: 'COCINA' }
 

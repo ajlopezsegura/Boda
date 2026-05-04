@@ -195,7 +195,7 @@ export default function ImmersionPage() {
           return (
             <div className="absolute flex items-center gap-3" style={{
               left: '50%', transform: 'translateX(-50%)',
-              bottom: mob ? 72 : 82,
+              bottom: mob ? 132 : 82,
               zIndex: 15,
             }}>
               <button onClick={goPrev} data-cursor="hover" aria-label="Previous image"
