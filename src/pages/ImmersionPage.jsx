@@ -386,21 +386,13 @@ export default function ImmersionPage() {
             {lang === 'es' ? 'Materiales' : 'Materials'}
           </button>
 
-          {/* Selected materials swatches (desktop only) */}
-          {!mob && (
-            <div className="flex items-center gap-3" style={{ justifySelf: 'end' }}>
-              {Object.entries(selected).map(([cat, id]) => {
-                const item = materials?.[cat]?.find(m => m.id === id)
-                if (!item) return null
-                return (
-                  <div key={cat} className="flex items-center gap-1.5">
-                    <div className="w-3.5 h-3.5" style={{ backgroundColor: item.swatch, border: '1px solid rgba(244,241,234,0.2)' }} />
-                    <span className="label-luxury" style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.4)' }}>
-                      {lang === 'es' ? item.label : item.labelEN}
-                    </span>
-                  </div>
-                )
-              })}
+          {/* Selected kitchen material (desktop only) */}
+          {!mob && activeKitchenMat && (
+            <div className="flex items-center gap-1.5" style={{ justifySelf: 'end' }}>
+              <div className="w-3.5 h-3.5" style={{ backgroundColor: activeKitchenMat.swatch, border: '1px solid rgba(244,241,234,0.2)' }} />
+              <span className="label-luxury" style={{ fontSize: '0.48rem', color: 'rgba(244,241,234,0.4)' }}>
+                {lang === 'es' ? activeKitchenMat.label : activeKitchenMat.labelEN}
+              </span>
             </div>
           )}
         </div>
