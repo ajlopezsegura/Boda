@@ -36,7 +36,7 @@ function SectionLabel({ children }) {
 }
 
 // ─── Executive highlight card ────────────────────────────────
-function HighlightCard({ label, value, sub, accent, emptyText, prominent, help }) {
+function HighlightCard({ label, value, sub, accent, emptyText, prominent }) {
   const isEmpty = !value && !sub
   const borderAlpha  = prominent ? '55' : '33'
   const bgAlpha      = prominent ? '14' : '0D'
@@ -47,23 +47,8 @@ function HighlightCard({ label, value, sub, accent, emptyText, prominent, help }
       display: 'flex', flexDirection: 'column', gap: 8,
       ...(prominent ? { borderWidth: '1px', outline: `1px solid ${accent}22`, outlineOffset: -4 } : {}),
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-        <div style={{ fontSize: '0.48rem', letterSpacing: '0.18em', color: accent ?? 'rgba(184,152,72,0.6)' }}>
-          {label}
-        </div>
-        {help && (
-          <span
-            title={help}
-            style={{
-              fontSize: '0.52rem',
-              width: 12, height: 12, lineHeight: '12px', textAlign: 'center',
-              borderRadius: '50%',
-              border: `1px solid ${accent ? `${accent}55` : 'rgba(184,152,72,0.35)'}`,
-              color: accent ?? 'rgba(184,152,72,0.6)',
-              cursor: 'help', userSelect: 'none',
-            }}
-          >?</span>
-        )}
+      <div style={{ fontSize: '0.48rem', letterSpacing: '0.18em', color: accent ?? 'rgba(184,152,72,0.6)' }}>
+        {label}
       </div>
       {isEmpty ? (
         <div style={{ fontSize: '0.62rem', color: 'rgba(244,241,234,0.3)', lineHeight: 1.55 }}>
@@ -310,7 +295,6 @@ export default function OverviewTab({ leads, sessions, mob }) {
           sub={topUnit ? unitReasonText(topUnit) : null}
           accent={ACCENT}
           emptyText="Sin datos de navegación por viviendas todavía."
-          help="Vivienda con mayor interés acumulado: suma vistas de ficha, comparaciones, entradas al configurador, paso por decisión y leads recibidos. Las visitas recurrentes y las estancias largas pesan más."
         />
         <HighlightCard
           label="MAYOR FUGA"
@@ -318,7 +302,6 @@ export default function OverviewTab({ leads, sessions, mob }) {
           sub={dropoff?.sub ?? null}
           accent={RED}
           emptyText="Sin suficiente tráfico para detectar fugas."
-          help="Punto del recorrido donde más usuarios abandonan. El porcentaje indica cuántos no completaron ese paso respecto al anterior."
         />
         <HighlightCard
           label="SEÑAL DE OPORTUNIDAD"
@@ -326,7 +309,6 @@ export default function OverviewTab({ leads, sessions, mob }) {
           sub={opportunity?.sub ?? null}
           accent={AMBER}
           emptyText="Aún no hay suficiente actividad para detectar señales."
-          help="Detecta visitantes con interés alto (compararon o configuraron) que no acabaron dejando formulario. Son leads tibios que se pueden recuperar."
         />
         <HighlightCard
           label="FUENTE MÁS VALIOSA"
@@ -334,7 +316,6 @@ export default function OverviewTab({ leads, sessions, mob }) {
           sub={bestSource?.sub ?? null}
           accent={COLD}
           emptyText="Aún no hay datos de fuentes de tráfico."
-          help="Fuente que más valor aporta combinando volumen y profundidad de exploración. Niveles: superficial (1-3), media (4-8), profunda (9-15), intensiva (16+). Una sesión perfecta llega a ~25."
         />
         <HighlightCard
           label="ACCIÓN RECOMENDADA"
@@ -342,7 +323,6 @@ export default function OverviewTab({ leads, sessions, mob }) {
           accent={GREEN}
           prominent
           emptyText="Sin actividad suficiente para recomendar una acción concreta."
-          help="Sugerencia automática basada en los patrones detectados: fugas, leads sin cierre, dependencia de tráfico directo, etc. Se actualiza con cada nueva sesión."
         />
       </div>
 
