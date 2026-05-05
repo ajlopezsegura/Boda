@@ -410,7 +410,7 @@
         "descriptionEN": "Ultra-compact surface in warm beige with soft veining. High resistance to stains, scratches and heat. Ideal for kitchen worktops and claddings.",
         "render_day":   "./assets/images/Cocina (1).jpg",
         "render_night": "./assets/images/Cocina (1).jpg",
-        "texture":      "./assets/images/cosentino/keena-texture.jpg"
+        "texture":      "./assets/images/Cocina (1).jpg"
       },
       {
         "id": "phantome",
@@ -423,7 +423,7 @@
         "descriptionEN": "Sustainable Eclos surface in deep smoky grey. High recycled content, matte finish and subtle texture. Perfect for contemporary kitchens.",
         "render_day":   "./assets/images/Cocina (2).jpg",
         "render_night": "./assets/images/Cocina (2).jpg",
-        "texture":      "./assets/images/cosentino/phantome-texture.jpg"
+        "texture":      "./assets/images/Cocina (2).jpg"
       },
       {
         "id": "fantasy_brown",
@@ -436,7 +436,7 @@
         "descriptionEN": "Natural quartzite in warm brown tones with bold veining unique to each piece. Noble material with strong personality for character-led kitchens.",
         "render_day":   "./assets/images/Cocina (3).jpg",
         "render_night": "./assets/images/Cocina (3).jpg",
-        "texture":      "./assets/images/cosentino/fantasy-brown-texture.jpg"
+        "texture":      "./assets/images/Cocina (3).jpg"
       }
     ]
   }
