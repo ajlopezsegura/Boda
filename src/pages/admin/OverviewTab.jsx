@@ -266,7 +266,7 @@ function CompactFunnel({ funnel, dropoff }) {
 // ─── Main component ───────────────────────────────────────────
 export default function OverviewTab({ leads, sessions, mob }) {
 
-  const funnel       = useMemo(() => computeFunnel(sessions),                                           [sessions])
+  const funnel       = useMemo(() => computeFunnel(sessions, leads),                                    [sessions, leads])
   const unitScores   = useMemo(() => computeUnitScores(sessions, leads),                                 [sessions, leads])
   const sourceDepth  = useMemo(() => computeSourceDepth(sessions),                                       [sessions])
   const rules        = useMemo(() => runRules({ sessions, leads, funnel, unitScores, sourceDepth }),     [sessions, leads, funnel, unitScores, sourceDepth])

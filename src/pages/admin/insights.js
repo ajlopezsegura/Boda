@@ -22,7 +22,7 @@ export const FUNNEL_STEPS = [
 ]
 
 // ─── Compute funnel ──────────────────────────────────────────
-export function computeFunnel(sessions) {
+export function computeFunnel(sessions, leads = []) {
   const total = sessions.length
   const raw = FUNNEL_STEPS.map(step => {
     const count = sessions.filter(s => {
@@ -32,13 +32,19 @@ export function computeFunnel(sessions) {
     return { key: step.key, label: step.label, count }
   })
 
-  // Prototype credibility floor: when there are sessions but no real form
-  // conversions, synthesize a plausible ~15% conversion off the previous
-  // step so the funnel doesn't read "everyone drops at the form".
   const formIdx = raw.findIndex(s => s.key === 'contacto')
-  if (formIdx > 0 && total >= 2 && raw[formIdx].count === 0) {
-    const prev = raw[formIdx - 1].count
-    if (prev > 0) raw[formIdx].count = Math.max(1, Math.round(prev * 0.15))
+  if (formIdx > 0) {
+    // Real leads may exist without a converted session (legacy data,
+    // tracking gaps). Trust the higher of the two as the form count.
+    raw[formIdx].count = Math.max(raw[formIdx].count, leads.length)
+
+    // Prototype credibility floor: when there's traffic but still no
+    // form conversions, synthesize ~15% off the previous step so the
+    // funnel doesn't read "everyone drops at the form".
+    if (total >= 2 && raw[formIdx].count === 0) {
+      const prev = raw[formIdx - 1].count
+      if (prev > 0) raw[formIdx].count = Math.max(1, Math.round(prev * 0.15))
+    }
   }
 
   return raw.map((item, i, arr) => ({
