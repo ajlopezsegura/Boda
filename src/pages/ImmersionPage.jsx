@@ -51,26 +51,19 @@ const ROOM_IMAGES = {
 }
 
 // ─── Pixel Streaming placeholder ─────────────────────────────────────────────
-function PixelStreamingPlaceholder({ activeRoom, imgIndex, timeOverlay, overrideSrc }) {
+function PixelStreamingPlaceholder({ activeRoom, imgIndex, timeOverlay }) {
   const imgs = ROOM_IMAGES[activeRoom] ?? []
-  const src  = overrideSrc || imgs[imgIndex] || imgs[0]
-
-  // Fallback if material render is missing on disk yet
-  const handleErr = (e) => {
-    if (overrideSrc && imgs[0]) e.currentTarget.src = imgs[0]
-  }
+  const src  = imgs[imgIndex] || imgs[0]
 
   return (
     <div className="absolute inset-0" style={{ backgroundColor: '#0d1117' }}>
       <AnimatePresence mode="wait">
-        <motion.img key={src} src={src} alt="" onError={handleErr}
+        <motion.img key={src} src={src} alt=""
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
           className="absolute inset-0 w-full h-full object-contain" />
       </AnimatePresence>
-      {!overrideSrc && (
-        <div className="absolute inset-0 transition-all duration-700" style={{ backgroundColor: timeOverlay }} />
-      )}
+      <div className="absolute inset-0 transition-all duration-700" style={{ backgroundColor: timeOverlay }} />
     </div>
   )
 }
@@ -126,13 +119,7 @@ export default function ImmersionPage() {
   const timeData  = TIMES.find(t => t.id === activeTime) ?? TIMES[1]
   const roomData  = ROOMS.find(r => r.id === activeRoom) ?? ROOMS[0]
 
-  // Material-driven image override (kitchen only for now)
   const activeKitchenMat = materials?.kitchen?.find(m => m.id === selected.kitchen)
-  const matRender = activeKitchenMat
-    ? (activeTime === 'night' ? activeKitchenMat.render_night : activeKitchenMat.render_day)
-    : null
-  const overrideSrc = activeRoom === 'cocina' ? matRender : null
-  const hasOverride = Boolean(overrideSrc)
 
   return (
     <PageTransition>
@@ -171,7 +158,7 @@ export default function ImmersionPage() {
         </AnimatePresence>
 
         {/* ── Pixel Streaming area ── */}
-        <PixelStreamingPlaceholder activeRoom={activeRoom} imgIndex={imgIndex} timeOverlay={timeData.overlay} overrideSrc={overrideSrc} />
+        <PixelStreamingPlaceholder activeRoom={activeRoom} imgIndex={imgIndex} timeOverlay={timeData.overlay} />
 
         {/* Dark vignette */}
         <div className="absolute inset-0 pointer-events-none"
@@ -180,7 +167,7 @@ export default function ImmersionPage() {
         {/* ── Image nav (manual prev/next with counter) ── */}
         {(() => {
           const imgs = ROOM_IMAGES[activeRoom] ?? []
-          if (imgs.length <= 1 || loading || panelOpen || hasOverride) return null
+          if (imgs.length <= 1 || loading || panelOpen) return null
           const goPrev = () => setImgIndex(i => (i - 1 + imgs.length) % imgs.length)
           const goNext = () => setImgIndex(i => (i + 1) % imgs.length)
           const arrowStyle = {
