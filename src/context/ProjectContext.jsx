@@ -44,7 +44,7 @@ export function ProjectProvider({ children }) {
         amenities:     projectRow.amenities       ?? [],
         materials:     projectRow.materials       ?? {},
         construction:  projectRow.construction_data ?? null,
-        nearby:        projectRow.nearby          ?? [],
+        nearby:        projectRow.nearby          ?? projectDataFallback.nearby ?? [],
         units:     unitRows                  ?? [],
       })
       setError(null)
