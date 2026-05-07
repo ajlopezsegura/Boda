@@ -27,9 +27,9 @@ BEGIN
         "source_url": "https://www.cosentino.com/es/colores/dekton/keena/",
         "description": "Superficie ultracompacta de tono beige cálido con vetas suaves. Alta resistencia a manchas, rayado y temperatura. Ideal para encimeras y revestimientos de cocina.",
         "descriptionEN": "Ultra-compact surface in warm beige with soft veining. High resistance to stains, scratches and heat. Ideal for kitchen worktops and claddings.",
-        "render_day":   "./assets/images/keena-day.jpg",
-        "render_night": "./assets/images/keena-night.jpg",
-        "texture":      "./assets/images/keena-day.jpg"
+        "render_day":   "./assets/images/Cocina (1).jpg",
+        "render_night": "./assets/images/Cocina (1).jpg",
+        "texture":      "./assets/images/Cocina (1).jpg"
       },
       {
         "id": "phantome",
@@ -40,9 +40,9 @@ BEGIN
         "source_url": "https://www.cosentino.com/usa/colors/eclos/phantome/",
         "description": "Superficie sostenible Eclos en gris ahumado profundo. Composición con alto contenido reciclado, acabado mate y textura sutil. Perfecta para cocinas contemporáneas.",
         "descriptionEN": "Sustainable Eclos surface in deep smoky grey. High recycled content, matte finish and subtle texture. Perfect for contemporary kitchens.",
-        "render_day":   "./assets/images/Phamtome-day.jpg",
-        "render_night": "./assets/images/Phamtome-night.jpg",
-        "texture":      "./assets/images/Phamtome-day.jpg"
+        "render_day":   "./assets/images/Cocina (2).jpg",
+        "render_night": "./assets/images/Cocina (2).jpg",
+        "texture":      "./assets/images/Cocina (2).jpg"
       },
       {
         "id": "fantasy_brown",
@@ -53,9 +53,9 @@ BEGIN
         "source_url": "https://www.cosentino.com/es/colores/scalea/fantasy-brown/",
         "description": "Cuarcita natural en tonos marrón cálido con vetas movidas únicas en cada pieza. Material noble de gran personalidad para cocinas de carácter.",
         "descriptionEN": "Natural quartzite in warm brown tones with bold veining unique to each piece. Noble material with strong personality for character-led kitchens.",
-        "render_day":   "./assets/images/fantasy-brown-day.jpg",
-        "render_night": "./assets/images/fantasy-brown-night.jpg",
-        "texture":      "./assets/images/fantasy-brown-day.jpg"
+        "render_day":   "./assets/images/Cocina (3).jpg",
+        "render_night": "./assets/images/Cocina (3).jpg",
+        "texture":      "./assets/images/Cocina (3).jpg"
       }
     ]'::jsonb
   );
