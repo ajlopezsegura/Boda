@@ -12,7 +12,7 @@ SET nearby = '[
     "en": "Beach",
     "dist": "50 m",
     "description": "Primera línea de playa en la Costa del Sol. Acceso directo desde el edificio a la arena y al mar Mediterráneo, con todas las comodidades de los chiringuitos más exclusivos de Marbella.",
-    "descriptionEN": "First beach line on the Costa del Sol. Direct access from the building to the sand and Mediterranean Sea, with all the amenities of Marbella'\''s most exclusive beach clubs.",
+    "descriptionEN": "First beach line on the Costa del Sol. Direct access from the building to the sand and Mediterranean Sea, with all the amenities of Marbella''s most exclusive beach clubs.",
     "images": ["./assets/images/Piscina (1).jpg", "./assets/images/Terraza (1).jpg"]
   },
   {
@@ -32,7 +32,7 @@ SET nearby = '[
     "en": "Golf course",
     "dist": "1.2 km",
     "description": "Marbella cuenta con más de 70 campos de golf en un radio de 30 km, siendo uno de los destinos de golf más importantes de Europa. A 1,2 km del edificio, acceso inmediato a greens de primer nivel.",
-    "descriptionEN": "Marbella has over 70 golf courses within a 30 km radius, making it one of Europe'\''s premier golf destinations. Just 1.2 km from the building, with immediate access to top-level greens.",
+    "descriptionEN": "Marbella has over 70 golf courses within a 30 km radius, making it one of Europe''s premier golf destinations. Just 1.2 km from the building, with immediate access to top-level greens.",
     "images": ["./assets/images/Terraza (2).jpg"]
   },
   {
@@ -62,7 +62,7 @@ SET nearby = '[
     "en": "Restaurants",
     "dist": "200 m",
     "description": "A apenas 200 metros, una selección de restaurantes de alta cocina mediterránea, chiringuitos de playa y terrazas con vistas al mar. La gastronomía de Marbella, al alcance de la mano.",
-    "descriptionEN": "Just 200 meters away, a selection of fine Mediterranean cuisine restaurants, beach bars and sea-view terraces. Marbella'\''s gastronomy, right at your doorstep.",
+    "descriptionEN": "Just 200 meters away, a selection of fine Mediterranean cuisine restaurants, beach bars and sea-view terraces. Marbella''s gastronomy, right at your doorstep.",
     "images": ["./assets/images/Cocina (1).jpg", "./assets/images/Cocina (2).jpg"]
   }
 ]'::jsonb
