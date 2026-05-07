@@ -271,7 +271,7 @@ export default function OverviewTab({ leads, sessions, mob }) {
   const sourceDepth  = useMemo(() => computeSourceDepth(sessions),                                       [sessions])
   const rules        = useMemo(() => runRules({ sessions, leads, funnel, unitScores, sourceDepth }),     [sessions, leads, funnel, unitScores, sourceDepth])
   const reading      = useMemo(() => generateReading({ sessions, leads, funnel }),                       [sessions, leads, funnel])
-  const opportunity  = useMemo(() => computeOpportunitySignal(sessions, leads),                          [sessions, leads])
+  const opportunity  = useMemo(() => computeOpportunitySignal(sessions, leads, funnel),                  [sessions, leads, funnel])
   const bestSource   = useMemo(() => computeBestSource(sourceDepth),                                     [sourceDepth])
   const dropoff      = useMemo(() => computeBiggestDropoff(funnel),                                      [funnel])
   const action       = useMemo(() => computeRecommendedAction(rules),                                    [rules])
