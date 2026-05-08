@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PageTransition from '../components/layout/PageTransition'
+import IntroModal from '../components/ui/IntroModal'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 
@@ -20,6 +21,7 @@ export default function CoverPage() {
 
   return (
     <PageTransition>
+      <IntroModal />
       <div className="absolute inset-0 overflow-hidden">
 
         {/* Background — video or image */}
