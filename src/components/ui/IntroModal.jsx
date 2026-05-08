@@ -6,16 +6,20 @@ const STORAGE_KEY = 'tvbs_seen_intro_v1'
 
 const COPY = {
   es: {
-    eyebrow: 'BIENVENIDO',
-    title:   'UNA EXPERIENCIA,\nNO UNA WEB',
-    body:    'Las Conchas se descubre en cuatro pasos: el proyecto, las viviendas, tu decisión y la reserva. Tómate el tiempo que necesites — todo está pensado para que elijas con calma.',
-    button:  'CONTINUAR',
+    eyebrow: 'CASO DEMO',
+    title:   'LA FORMA VISIBLE\nDEL VALOR',
+    body1:   'TVBS diseña sistemas de venta visual para proyectos de alto valor: estrategia, dirección visual e inteligencia comercial reunidas en una misma experiencia.',
+    body2:   'Pensado para defender valor, alinear equipos y acelerar procesos de decisión.',
+    button:  'ENTRAR EN LA DEMO',
+    caption: 'Caso demo construido íntegramente por TVBS.',
   },
   en: {
-    eyebrow: 'WELCOME',
-    title:   'AN EXPERIENCE,\nNOT A WEBSITE',
-    body:    'Las Conchas unfolds in four steps: the project, the residences, your decision and the reservation. Take your time — everything is designed for an unhurried choice.',
-    button:  'CONTINUE',
+    eyebrow: 'DEMO CASE',
+    title:   'THE VISIBLE FORM\nOF VALUE',
+    body1:   'TVBS designs visual sales systems for high-value projects: strategy, visual direction and commercial intelligence brought together in a single experience.',
+    body2:   'Built to defend value, align teams and accelerate decision processes.',
+    button:  'ENTER THE DEMO',
+    caption: 'Demo case built entirely by TVBS.',
   },
 }
 
@@ -128,7 +132,7 @@ export default function IntroModal() {
               style={{ height: 1, backgroundColor: 'var(--color-accent)', marginBottom: 22 }}
             />
 
-            {/* body */}
+            {/* body — first paragraph */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -138,18 +142,35 @@ export default function IntroModal() {
                 lineHeight: 1.75,
                 color: 'rgba(244,241,234,0.78)',
                 letterSpacing: '0.02em',
-                maxWidth: 420,
-                marginBottom: 36,
+                maxWidth: 440,
+                marginBottom: 16,
               }}
             >
-              {t.body}
+              {t.body1}
+            </motion.p>
+
+            {/* body — second paragraph */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.82, duration: 0.8 }}
+              style={{
+                fontSize: 'clamp(0.7rem, 1.95vw, 0.78rem)',
+                lineHeight: 1.7,
+                color: 'rgba(244,241,234,0.66)',
+                letterSpacing: '0.02em',
+                maxWidth: 420,
+                marginBottom: 34,
+              }}
+            >
+              {t.body2}
             </motion.p>
 
             {/* button */}
             <motion.button
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9, duration: 0.6 }}
+              transition={{ delay: 0.95, duration: 0.6 }}
               onClick={dismiss}
               data-cursor="hover"
               className="label-luxury"
@@ -176,6 +197,22 @@ export default function IntroModal() {
               {t.button}
               <span style={{ display: 'inline-block' }}>→</span>
             </motion.button>
+
+            {/* caption */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.15, duration: 0.7 }}
+              style={{
+                marginTop: 22,
+                fontSize: '0.58rem',
+                fontStyle: 'italic',
+                letterSpacing: '0.04em',
+                color: 'rgba(244,241,234,0.4)',
+              }}
+            >
+              {t.caption}
+            </motion.div>
           </motion.div>
         </motion.div>
       )}
