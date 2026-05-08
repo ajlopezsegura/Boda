@@ -175,7 +175,25 @@ function unitDescriptor(unit, units, lang) {
     })
   }
 
-  if (traits.length === 0) return null
+  // Fallback: when this unit has no strictly distinctive trait, surface
+  // the key facts without a comparative claim so the column never reads
+  // empty next to peers that do have a descriptor.
+  if (traits.length === 0) {
+    const parts = []
+    if (unit.built_area_m2 != null) parts.push(`${unit.built_area_m2} m²`)
+    if (unit.bedrooms != null) {
+      parts.push(lang === 'es'
+        ? `${unit.bedrooms} ${unit.bedrooms === 1 ? 'dormitorio' : 'dormitorios'}`
+        : `${unit.bedrooms} ${unit.bedrooms === 1 ? 'bedroom' : 'bedrooms'}`)
+    }
+    if (unit.floor != null) {
+      parts.push(lang === 'es' ? `planta ${unit.floor}` : `floor ${unit.floor}`)
+    }
+    if (parts.length === 0) return null
+    const join = lang === 'es' ? ', ' : ', '
+    return `${parts.join(join)}.`
+  }
+
   traits.sort((a, b) => b.weight - a.weight)
 
   const setLabel = lang === 'es' ? 'del conjunto' : 'of the set'
