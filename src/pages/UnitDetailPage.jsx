@@ -92,6 +92,13 @@ export default function UnitDetailPage() {
   const [galleryIdx,  setGalleryIdx]  = useState(0)
   const [shareDone,   setShareDone]   = useState(false)
 
+  // Force the journey: a unit can only be opened after being staged in the
+  // comparator. Direct URLs land back on /availability so the flow doesn't
+  // get skipped.
+  useEffect(() => {
+    if (unit && !isIn(unit.id)) navigate('/availability', { replace: true })
+  }, [unit, isIn, navigate])
+
   async function handleShare() {
     const url = `${shareBase()}#/availability/${unit.slug}`
     const result = await shareOrCopy(url, `${unit.name} · ${project?.name ?? ''}`)
