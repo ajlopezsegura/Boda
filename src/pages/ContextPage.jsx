@@ -448,7 +448,7 @@ export default function ContextPage() {
                 style={{ borderColor: 'rgba(184,152,72,0.45)', color: 'var(--color-text)' }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'rgba(184,152,72,0.08)' }}
                 onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.45)'; e.currentTarget.style.backgroundColor = 'transparent' }}>
-                {lang === 'es' ? 'Ver viviendas disponibles →' : 'View available residences →'}
+                {lang === 'es' ? 'Explorar viviendas →' : 'Explore residences →'}
               </button>
               <button onClick={() => navigate('/map')} data-cursor="hover"
                 className="label-luxury border transition-all duration-500 min-h-[44px] px-6 flex items-center gap-2 justify-center sm:justify-start"
