@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ChevronLeft, X, Check, ArrowRight, Share2 } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
+import CompareChapterModal from '../components/ui/CompareChapterModal'
 import { useCompare } from '../context/CompareContext'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
@@ -257,6 +258,7 @@ export default function ComparePage() {
 
   return (
     <PageTransition>
+      <CompareChapterModal />
       <div className="absolute inset-0 flex flex-col overflow-hidden"
         style={{ backgroundColor: 'var(--color-bg)' }}>
 
