@@ -78,6 +78,127 @@ function getBestSet(row, units) {
   return new Set()
 }
 
+// Builds a one-sentence value descriptor that reads each unit against
+// the rest of the comparison set: only traits where this unit is
+// strictly distinctive are surfaced. No subjective copy ("frescor",
+// "luz") and no traits shared with the other units. Returns null when
+// the unit has nothing singular to say.
+function unitDescriptor(unit, units, lang) {
+  if (!unit || units.length < 2) return null
+  const others = units.filter(u => u.id !== unit.id)
+  const traits = []
+
+  const isMaxAndNotTied = (val, getter) => {
+    if (val == null) return false
+    const vals = others.map(getter).filter(v => v != null)
+    if (vals.length === 0) return false
+    return vals.every(v => v < val)
+  }
+  const isMinAndNotTied = (val, getter) => {
+    if (val == null) return false
+    const vals = others.map(getter).filter(v => v != null)
+    if (vals.length === 0) return false
+    return vals.every(v => v > val)
+  }
+
+  // Price — lower is better
+  if (unit.status !== 'sold' && isMinAndNotTied(unit.price, u => u.status === 'sold' ? null : u.price)) {
+    traits.push({
+      weight: 5,
+      headline: lang === 'es' ? 'La más asequible' : 'The most accessible',
+      data:     unit.price.toLocaleString(lang === 'es' ? 'es-ES' : 'en-US') + ' €',
+    })
+  }
+
+  // Built area — higher is better
+  if (isMaxAndNotTied(unit.built_area_m2, u => u.built_area_m2)) {
+    traits.push({
+      weight: 5,
+      headline: lang === 'es' ? 'La más amplia' : 'The largest',
+      data:     `${unit.built_area_m2} m²`,
+    })
+  }
+
+  // Terrace — higher is better, must have one
+  const terr = unit.terrace_area_m2 ?? 0
+  if (terr > 0 && isMaxAndNotTied(terr, u => u.terrace_area_m2 ?? 0)) {
+    traits.push({
+      weight: 4,
+      headline: lang === 'es' ? 'La de mayor terraza' : 'The largest terrace',
+      data:     lang === 'es' ? `terraza de ${terr} m²` : `${terr} m² terrace`,
+    })
+  }
+
+  // Floor — higher is better
+  if (isMaxAndNotTied(unit.floor, u => u.floor)) {
+    traits.push({
+      weight: 3,
+      headline: lang === 'es' ? 'La planta más alta' : 'The highest floor',
+      data:     lang === 'es' ? `planta ${unit.floor}` : `floor ${unit.floor}`,
+    })
+  }
+
+  // Bedrooms — higher is better
+  if (isMaxAndNotTied(unit.bedrooms, u => u.bedrooms)) {
+    traits.push({
+      weight: 3,
+      headline: lang === 'es' ? 'Más dormitorios' : 'More bedrooms',
+      data:     lang === 'es' ? `${unit.bedrooms} dormitorios` : `${unit.bedrooms} bedrooms`,
+    })
+  }
+
+  // Bathrooms — higher is better
+  if (isMaxAndNotTied(unit.bathrooms, u => u.bathrooms)) {
+    traits.push({
+      weight: 2,
+      headline: lang === 'es' ? 'Más baños' : 'More bathrooms',
+      data:     lang === 'es' ? `${unit.bathrooms} baños` : `${unit.bathrooms} bathrooms`,
+    })
+  }
+
+  // Parking — only if this unit has it and at least one other doesn't
+  if (unit.parking_included && others.some(u => !u.parking_included)) {
+    traits.push({
+      weight: 2,
+      headline: lang === 'es' ? 'La única con garaje' : 'The only one with parking',
+      data:     null,
+    })
+  }
+
+  // Storage — only if this unit has it and at least one other doesn't
+  if (unit.storage_included && others.some(u => !u.storage_included)) {
+    traits.push({
+      weight: 2,
+      headline: lang === 'es' ? 'La única con trastero' : 'The only one with storage',
+      data:     null,
+    })
+  }
+
+  if (traits.length === 0) return null
+  traits.sort((a, b) => b.weight - a.weight)
+
+  const setLabel = lang === 'es' ? 'del conjunto' : 'of the set'
+  const top = traits.slice(0, 2)
+
+  if (top.length === 1) {
+    const t = top[0]
+    return t.data ? `${t.headline} ${setLabel}, ${t.data}.` : `${t.headline} ${setLabel}.`
+  }
+
+  const [t1, t2] = top
+  if (t1.data && t2.data) {
+    const join = lang === 'es' ? ' y ' : ' and '
+    return `${t1.headline} ${setLabel}, con ${t1.data}${join}${t2.data}.`
+  }
+  if (t1.data && !t2.data) {
+    const also = lang === 'es' ? ' y' : ' and'
+    return `${t1.headline} ${setLabel}, ${t1.data}${also} ${t2.headline.toLowerCase()}.`
+  }
+  // Both headline-only (rare)
+  const join = lang === 'es' ? ' y ' : ' and '
+  return `${t1.headline}${join}${t2.headline.toLowerCase()} ${setLabel}.`
+}
+
 export default function ComparePage() {
   const navigate              = useNavigate()
   const { ids, toggle: toggleCompare, remove, clear } = useCompare()
@@ -247,6 +368,23 @@ export default function ComparePage() {
                           <p className="label-luxury mt-0.5" style={{ fontSize: mob ? '0.4rem' : '0.45rem', color: 'rgba(184,152,72,0.5)' }}>
                             {unit.typology}
                           </p>
+                          {(() => {
+                            const desc = unitDescriptor(unit, units, lang)
+                            if (!desc) return null
+                            return (
+                              <p style={{
+                                marginTop: mob ? 6 : 10,
+                                paddingTop: mob ? 6 : 9,
+                                borderTop: '1px solid rgba(184,152,72,0.15)',
+                                fontSize: mob ? '0.52rem' : '0.6rem',
+                                lineHeight: 1.55,
+                                color: 'rgba(244,241,234,0.78)',
+                                letterSpacing: '0.01em',
+                              }}>
+                                {desc}
+                              </p>
+                            )
+                          })()}
                         </div>
                       </motion.div>
                     )
