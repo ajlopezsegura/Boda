@@ -81,19 +81,6 @@ export default function IntroModal() {
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0,
             }}
           >
-            {/* corner ornaments */}
-            {[
-              { top: 8, left: 8, borderTop: '1px solid', borderLeft: '1px solid' },
-              { top: 8, right: 8, borderTop: '1px solid', borderRight: '1px solid' },
-              { bottom: 8, left: 8, borderBottom: '1px solid', borderLeft: '1px solid' },
-              { bottom: 8, right: 8, borderBottom: '1px solid', borderRight: '1px solid' },
-            ].map((s, i) => (
-              <span key={i} aria-hidden style={{
-                position: 'absolute', width: 14, height: 14,
-                borderColor: 'rgba(184,152,72,0.45)', ...s,
-              }} />
-            ))}
-
             {/* studio mark */}
             <div className="label-luxury" style={{
               fontSize: '0.5rem', letterSpacing: '0.28em',
