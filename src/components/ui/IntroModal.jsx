@@ -25,12 +25,9 @@ export default function IntroModal() {
   const t = COPY[lang] ?? COPY.es
 
   useEffect(() => {
-    try {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        const id = setTimeout(() => setOpen(true), 600)
-        return () => clearTimeout(id)
-      }
-    } catch { /* localStorage may be blocked */ }
+    // TODO: re-enable once-per-visitor by checking localStorage[STORAGE_KEY]
+    const id = setTimeout(() => setOpen(true), 600)
+    return () => clearTimeout(id)
   }, [])
 
   useEffect(() => {
@@ -41,7 +38,7 @@ export default function IntroModal() {
   }, [open])
 
   function dismiss() {
-    try { localStorage.setItem(STORAGE_KEY, '1') } catch {}
+    // localStorage write skipped during testing so the modal returns on reload
     setOpen(false)
   }
 
@@ -53,31 +50,33 @@ export default function IntroModal() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
+          transition={{ duration: 0.9, ease: [0.32, 0.72, 0.24, 1] }}
           onClick={dismiss}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             padding: '24px',
-            background: 'rgba(8,10,14,0.78)',
-            backdropFilter: 'blur(14px) saturate(120%)',
-            WebkitBackdropFilter: 'blur(14px) saturate(120%)',
+            background: 'rgba(8,10,14,0.42)',
+            backdropFilter: 'blur(3px) saturate(110%)',
+            WebkitBackdropFilter: 'blur(3px) saturate(110%)',
           }}
         >
           <motion.div
             key="intro-card"
-            initial={{ opacity: 0, y: 16, scale: 0.97 }}
+            initial={{ opacity: 0, y: 8, scale: 0.985 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 12, scale: 0.98 }}
-            transition={{ duration: 0.7, ease: [0.43, 0.13, 0.23, 0.96] }}
+            exit={{ opacity: 0, y: 6, scale: 0.99 }}
+            transition={{ duration: 1.05, ease: [0.32, 0.72, 0.24, 1] }}
             onClick={e => e.stopPropagation()}
             style={{
               position: 'relative',
               width: '100%', maxWidth: 540,
               padding: 'clamp(36px, 6vw, 56px) clamp(28px, 5vw, 52px)',
-              background: 'linear-gradient(180deg, rgba(18,22,32,0.96) 0%, rgba(12,15,22,0.96) 100%)',
+              background: 'linear-gradient(180deg, rgba(18,22,32,0.55) 0%, rgba(12,15,22,0.6) 100%)',
+              backdropFilter: 'blur(22px) saturate(135%)',
+              WebkitBackdropFilter: 'blur(22px) saturate(135%)',
               border: '1px solid rgba(184,152,72,0.28)',
-              boxShadow: '0 30px 80px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(184,152,72,0.04)',
+              boxShadow: '0 30px 80px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(184,152,72,0.04)',
               textAlign: 'center',
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0,
             }}
