@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, SlidersHorizontal, X, LayoutGrid, List, Check } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
+import AvailabilityChapterModal from '../components/ui/AvailabilityChapterModal'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { useCompare } from '../context/CompareContext'
@@ -561,6 +562,7 @@ export default function AvailabilityPage() {
 
   return (
     <PageTransition>
+      <AvailabilityChapterModal />
       <div className="absolute inset-0 flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--color-bg)' }}>
 
         {/* ── Header ── */}
