@@ -92,14 +92,17 @@ export default function JourneyModal({
               transition={{ delay: 0.35, duration: 0.8 }}
               className="display-heading"
               style={{
-                fontSize: 'clamp(1.4rem, 4.2vw, 2rem)',
-                letterSpacing: '0.1em',
-                lineHeight: 1.15, color: '#ffffff',
-                whiteSpace: 'pre-line',
+                fontSize: 'clamp(1.2rem, 3.8vw, 1.85rem)',
+                letterSpacing: '0.08em',
+                lineHeight: 1.2, color: '#ffffff',
                 marginBottom: 22,
               }}
             >
-              {title}
+              {String(title).split('\n').map((line, i) => (
+                <span key={i} style={{ display: 'block', whiteSpace: 'nowrap' }}>
+                  {line}
+                </span>
+              ))}
             </motion.h2>
 
             <motion.div
