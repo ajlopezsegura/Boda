@@ -1,10 +1,27 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 const CompareContext = createContext(null)
 const MAX = 3
+const STORAGE_KEY = 'tvbs_compare_ids'
+
+function readStored() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed.slice(0, MAX)
+  } catch {
+    return []
+  }
+}
 
 export function CompareProvider({ children }) {
-  const [ids, setIds] = useState([])
+  const [ids, setIds] = useState(readStored)
+
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(ids)) } catch {}
+  }, [ids])
 
   const toggle  = (id) => setIds(prev =>
     prev.includes(id) ? prev.filter(x => x !== id) : prev.length < MAX ? [...prev, id] : prev
