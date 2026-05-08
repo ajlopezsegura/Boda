@@ -13,7 +13,7 @@ const COPY = {
       'La experiencia pone en valor aquello que hace singular a cada unidad, ayudando a que las diferencias sean visibles, comprensibles y defendibles.',
       'El objetivo no es inducir una elección concreta, sino facilitar una decisión más clara, más razonada y más defendible — tanto para el comprador como para el equipo comercial.',
     ],
-    button:  'CONTINUAR',
+    button:  'ELEGIR UNA VIVIENDA',
   },
   en: {
     eyebrow: 'CHAPTER 03',
@@ -23,7 +23,7 @@ const COPY = {
       'The experience surfaces what makes each unit singular, making differences visible, comprehensible and defensible.',
       'The aim is not to push a specific choice, but to enable a clearer, more considered and more defensible decision — both for the buyer and the commercial team.',
     ],
-    button:  'CONTINUE',
+    button:  'CHOOSE A RESIDENCE',
   },
 }
 
