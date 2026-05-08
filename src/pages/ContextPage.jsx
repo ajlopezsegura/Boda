@@ -6,6 +6,7 @@ import {
   Anchor, Flag, ShoppingBag, Plane, Utensils, MapPin, Images, X, ChevronLeft, ChevronRight,
 } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
+import ProjectChapterModal from '../components/ui/ProjectChapterModal'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { useSession } from '../context/SessionContext'
@@ -275,6 +276,8 @@ export default function ContextPage() {
 
   return (
     <PageTransition>
+      <ProjectChapterModal />
+
       {/* Lightbox */}
       <AnimatePresence>
         {lightbox && (
