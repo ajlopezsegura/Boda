@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, Check, Car, Package, Eye, X, GitCompareArrows, Share2 } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
+import UnitChapterModal from '../components/ui/UnitChapterModal'
 import { useUnit, useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { useCompare } from '../context/CompareContext'
@@ -155,6 +156,7 @@ export default function UnitDetailPage() {
 
   return (
     <PageTransition>
+      <UnitChapterModal />
       <div className="absolute inset-0 flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--color-bg)' }}>
 
         {/* ── Header ── */}
