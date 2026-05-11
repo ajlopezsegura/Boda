@@ -13,7 +13,7 @@ SET nearby = '[
     "dist": "50 m",
     "description": "Primera línea de playa en la Costa del Sol. Acceso directo desde el edificio a la arena y al mar Mediterráneo, con todas las comodidades de los chiringuitos más exclusivos de Marbella.",
     "descriptionEN": "First beach line on the Costa del Sol. Direct access from the building to the sand and Mediterranean Sea, with all the amenities of Marbella''s most exclusive beach clubs.",
-    "images": ["./assets/images/Piscina (1).jpg", "./assets/images/terraza/terraza-day-02.jpg"]
+    "images": ["./assets/images/Piscina (1).jpg", "./assets/images/terraza/terraza-day-02.webp"]
   },
   {
     "id": "puerto",
@@ -23,7 +23,7 @@ SET nearby = '[
     "dist": "3 km",
     "description": "A solo 3 km, Puerto Banús es sinónimo de lujo en la Costa del Sol. Tiendas de alta gama, restaurantes con estrella Michelin y el marina más glamuroso del Mediterráneo.",
     "descriptionEN": "Just 3 km away, Puerto Banús is synonymous with luxury on the Costa del Sol. High-end boutiques, Michelin-starred restaurants and the most glamorous marina in the Mediterranean.",
-    "images": ["./assets/images/salon/salon-day.png", "./assets/images/salon/salon-day-02.webp"]
+    "images": ["./assets/images/salon/salon-day.webp", "./assets/images/salon/salon-day-02.webp"]
   },
   {
     "id": "golf",
@@ -33,7 +33,7 @@ SET nearby = '[
     "dist": "1.2 km",
     "description": "Marbella cuenta con más de 70 campos de golf en un radio de 30 km, siendo uno de los destinos de golf más importantes de Europa. A 1,2 km del edificio, acceso inmediato a greens de primer nivel.",
     "descriptionEN": "Marbella has over 70 golf courses within a 30 km radius, making it one of Europe''s premier golf destinations. Just 1.2 km from the building, with immediate access to top-level greens.",
-    "images": ["./assets/images/terraza/terraza-day.jpg"]
+    "images": ["./assets/images/terraza/terraza-day.webp"]
   },
   {
     "id": "shopping",
@@ -63,7 +63,7 @@ SET nearby = '[
     "dist": "200 m",
     "description": "A apenas 200 metros, una selección de restaurantes de alta cocina mediterránea, chiringuitos de playa y terrazas con vistas al mar. La gastronomía de Marbella, al alcance de la mano.",
     "descriptionEN": "Just 200 meters away, a selection of fine Mediterranean cuisine restaurants, beach bars and sea-view terraces. Marbella''s gastronomy, right at your doorstep.",
-    "images": ["./assets/images/cocina/cocina-day-02.jpg", "./assets/images/cocina/cocina-day.jpg"]
+    "images": ["./assets/images/cocina/cocina-day-02.webp", "./assets/images/cocina/cocina-day.webp"]
   }
 ]'::jsonb
 WHERE slug = 'las-conchas';

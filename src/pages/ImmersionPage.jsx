@@ -51,46 +51,46 @@ const MAT_LABELS = {
 const ROOM_IMAGES = {
   salon: {
     day: [
-      './assets/images/salon/salon-day.png',
+      './assets/images/salon/salon-day.webp',
       './assets/images/salon/salon-day-02.webp',
-      './assets/images/salon/salon-day-03.jpg',
-      './assets/images/salon/salon-day-04.jpg',
-      './assets/images/salon/salon-day-05.jpg',
+      './assets/images/salon/salon-day-03.webp',
+      './assets/images/salon/salon-day-04.webp',
+      './assets/images/salon/salon-day-05.webp',
     ],
-    night: ['./assets/images/salon/salon-night.png'],
+    night: ['./assets/images/salon/salon-night.webp'],
   },
   cocina: {
     day: [
-      './assets/images/cocina/cocina-day.jpg',
-      './assets/images/cocina/cocina-day-02.jpg',
-      './assets/images/cocina/cocina-day-03.jpg',
+      './assets/images/cocina/cocina-day.webp',
+      './assets/images/cocina/cocina-day-02.webp',
+      './assets/images/cocina/cocina-day-03.webp',
     ],
-    night: ['./assets/images/cocina/cocina-night.png'],
+    night: ['./assets/images/cocina/cocina-night.webp'],
   },
   dormitorio: {
     day: [
-      './assets/images/dormitorio/dormitorio-day.jpg',
-      './assets/images/dormitorio/dormitorio-day-02.jpg',
+      './assets/images/dormitorio/dormitorio-day.webp',
+      './assets/images/dormitorio/dormitorio-day-02.webp',
     ],
     night: [
-      './assets/images/dormitorio/dormitorio-night.png',
-      './assets/images/dormitorio/dormitorio-night-02.jpg',
+      './assets/images/dormitorio/dormitorio-night.webp',
+      './assets/images/dormitorio/dormitorio-night-02.webp',
     ],
   },
   bano: {
     day: [
-      './assets/images/bano/bano-day.jpg',
-      './assets/images/bano/bano-day-02.jpg',
-      './assets/images/bano/bano-day-03.jpg',
+      './assets/images/bano/bano-day.webp',
+      './assets/images/bano/bano-day-02.webp',
+      './assets/images/bano/bano-day-03.webp',
     ],
-    night: ['./assets/images/bano/bano-night.png'],
+    night: ['./assets/images/bano/bano-night.webp'],
   },
   terraza: {
     day: [
-      './assets/images/terraza/terraza-day.jpg',
-      './assets/images/terraza/terraza-day-02.jpg',
+      './assets/images/terraza/terraza-day.webp',
+      './assets/images/terraza/terraza-day-02.webp',
     ],
-    night: ['./assets/images/terraza/terraza-night.png'],
+    night: ['./assets/images/terraza/terraza-night.webp'],
   },
 }
 
