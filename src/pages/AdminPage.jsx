@@ -6,6 +6,7 @@ import OverviewTab from './admin/OverviewTab'
 import LeadsCharts from './admin/LeadsCharts'
 import ActivityCharts from './admin/ActivityCharts'
 import AdminPasswordModal from '../components/ui/AdminPasswordModal'
+import AdminEnterModal from '../components/ui/AdminEnterModal'
 
 const PROJECT_SLUG   = (import.meta.env.VITE_PROJECT_SLUG   ?? 'las-conchas').trim()
 const ADMIN_PASSWORD = (import.meta.env.VITE_ADMIN_PASSWORD ?? 'conchas2026').trim()
@@ -878,6 +879,7 @@ export default function AdminPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', padding: '0 0 80px' }}>
+      <AdminEnterModal />
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
 
       {/* Header */}
