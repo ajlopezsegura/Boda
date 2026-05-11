@@ -17,6 +17,7 @@ const SummaryPage       = lazy(() => import('./pages/SummaryPage'))
 const PrivacyPage       = lazy(() => import('./pages/PrivacyPage'))
 const MapPage           = lazy(() => import('./pages/MapPage'))
 const AdminPage         = lazy(() => import('./pages/AdminPage'))
+const OnePagerPage      = lazy(() => import('./pages/OnePagerPage'))
 
 export default function App() {
   const location        = useLocation()
@@ -70,6 +71,7 @@ export default function App() {
             <Route path="/map"                     element={<MapPage />} />
             <Route path="/privacy"                 element={<PrivacyPage />} />
             <Route path="/admin"                   element={<AdminPage />} />
+            <Route path="/tvbs"                    element={<OnePagerPage />} />
             <Route path="/seleccion"               element={<Navigate to="/availability" replace />} />
           </Routes>
         </Suspense>
