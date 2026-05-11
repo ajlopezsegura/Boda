@@ -789,7 +789,9 @@ function useIsMobile(bp = 640) {
 
 export default function AdminPage() {
   const mob = useIsMobile()
-  const [authed,      setAuthed]      = useState(() => localStorage.getItem('tvbs_admin') === ADMIN_PASSWORD)
+  // Always force login on each page load so every visitor sees the
+  // demo password modal — auth is intentionally not persisted.
+  const [authed,      setAuthed]      = useState(false)
   const [tab,         setTab]         = useState('overview')
   const [units,       setUnits]       = useState([])
   const [leads,       setLeads]       = useState([])
@@ -799,8 +801,8 @@ export default function AdminPage() {
   const [saving,      setSaving]      = useState(null)
   const [toast,       setToast]       = useState(null)
 
-  function handleLogin()  { localStorage.setItem('tvbs_admin', ADMIN_PASSWORD); setAuthed(true) }
-  function handleLogout() { localStorage.removeItem('tvbs_admin'); setAuthed(false) }
+  function handleLogin()  { setAuthed(true) }
+  function handleLogout() { setAuthed(false) }
 
   async function refreshActivity() {
     setRefreshing(true)
