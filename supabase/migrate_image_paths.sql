@@ -29,24 +29,24 @@ BEGIN
   r := REPLACE(r, './assets/images/salon/salon 02.webp',   './assets/images/salon/salon-day-02.webp');
   r := REPLACE(r, './assets/images/Salon 03.jpg',          './assets/images/salon/salon-day-03.webp');
   r := REPLACE(r, './assets/images/salon/Salon 03.jpg',    './assets/images/salon/salon-day-03.webp');
-  r := REPLACE(r, './assets/images/salon/salon-day-03.jpg',./assets/images/salon/salon-day-03.webp');
+  r := REPLACE(r, './assets/images/salon/salon-day-03.jpg', './assets/images/salon/salon-day-03.webp');
   r := REPLACE(r, './assets/images/Salon 04.jpg',          './assets/images/salon/salon-day-04.webp');
   r := REPLACE(r, './assets/images/salon/Salon 04.jpg',    './assets/images/salon/salon-day-04.webp');
-  r := REPLACE(r, './assets/images/salon/salon-day-04.jpg',./assets/images/salon/salon-day-04.webp');
+  r := REPLACE(r, './assets/images/salon/salon-day-04.jpg', './assets/images/salon/salon-day-04.webp');
   r := REPLACE(r, './assets/images/Salon 05.jpg',          './assets/images/salon/salon-day-05.webp');
   r := REPLACE(r, './assets/images/salon/Salon 05.jpg',    './assets/images/salon/salon-day-05.webp');
-  r := REPLACE(r, './assets/images/salon/salon-day-05.jpg',./assets/images/salon/salon-day-05.webp');
+  r := REPLACE(r, './assets/images/salon/salon-day-05.jpg', './assets/images/salon/salon-day-05.webp');
 
   -- ─── Cocina ───────────────────────────────────────────────────────────────
   r := REPLACE(r, './assets/images/Cocina (1).jpg',          './assets/images/cocina/cocina-day-02.webp');
   r := REPLACE(r, './assets/images/cocina/Cocina (1).jpg',   './assets/images/cocina/cocina-day-02.webp');
-  r := REPLACE(r, './assets/images/cocina/cocina-day-02.jpg',./assets/images/cocina/cocina-day-02.webp');
+  r := REPLACE(r, './assets/images/cocina/cocina-day-02.jpg', './assets/images/cocina/cocina-day-02.webp');
   r := REPLACE(r, './assets/images/Cocina (2).jpg',          './assets/images/cocina/cocina-day.webp');
   r := REPLACE(r, './assets/images/cocina/Cocina (2).jpg',   './assets/images/cocina/cocina-day.webp');
   r := REPLACE(r, './assets/images/cocina/cocina-day.jpg',   './assets/images/cocina/cocina-day.webp');
   r := REPLACE(r, './assets/images/Cocina (3).jpg',          './assets/images/cocina/cocina-day-03.webp');
   r := REPLACE(r, './assets/images/cocina/Cocina (3).jpg',   './assets/images/cocina/cocina-day-03.webp');
-  r := REPLACE(r, './assets/images/cocina/cocina-day-03.jpg',./assets/images/cocina/cocina-day-03.webp');
+  r := REPLACE(r, './assets/images/cocina/cocina-day-03.jpg', './assets/images/cocina/cocina-day-03.webp');
   r := REPLACE(r, './assets/images/cocina noche.png',        './assets/images/cocina/cocina-night.webp');
   r := REPLACE(r, './assets/images/cocina/cocina noche.png', './assets/images/cocina/cocina-night.webp');
   r := REPLACE(r, './assets/images/cocina/cocina-night.png', './assets/images/cocina/cocina-night.webp');
@@ -76,8 +76,8 @@ BEGIN
   r := REPLACE(r, './assets/images/dormitorio/Dormitorio (3).jpg',  './assets/images/dormitorio/dormitorio-day-02.webp');
   r := REPLACE(r, './assets/images/dormitorio/dormitorio-day-02.jpg', './assets/images/dormitorio/dormitorio-day-02.webp');
   r := REPLACE(r, './assets/images/Dormitorio noche.png',           './assets/images/dormitorio/dormitorio-night.webp');
-  r := REPLACE(r, './assets/images/dormitorio/Dormitorio noche.png',./assets/images/dormitorio/dormitorio-night.webp');
-  r := REPLACE(r, './assets/images/dormitorio/dormitorio-night.png',./assets/images/dormitorio/dormitorio-night.webp');
+  r := REPLACE(r, './assets/images/dormitorio/Dormitorio noche.png', './assets/images/dormitorio/dormitorio-night.webp');
+  r := REPLACE(r, './assets/images/dormitorio/dormitorio-night.png', './assets/images/dormitorio/dormitorio-night.webp');
 
   -- ─── Terraza ──────────────────────────────────────────────────────────────
   r := REPLACE(r, './assets/images/Terraza (1).jpg',             './assets/images/terraza/terraza-day-02.webp');
