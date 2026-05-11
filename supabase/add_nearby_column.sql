@@ -13,7 +13,7 @@ SET nearby = '[
     "dist": "50 m",
     "description": "Primera línea de playa en la Costa del Sol. Acceso directo desde el edificio a la arena y al mar Mediterráneo, con todas las comodidades de los chiringuitos más exclusivos de Marbella.",
     "descriptionEN": "First beach line on the Costa del Sol. Direct access from the building to the sand and Mediterranean Sea, with all the amenities of Marbella''s most exclusive beach clubs.",
-    "images": ["./assets/images/Piscina (1).jpg", "./assets/images/terraza/terraza-day-02.webp"]
+    "images": ["./assets/images/piscina-01.webp", "./assets/images/terraza/terraza-day-02.webp"]
   },
   {
     "id": "puerto",

@@ -5,7 +5,7 @@ import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { ChevronLeft } from 'lucide-react'
 
-const FALLBACK_PLAN = './assets/floorplan.svg'
+const FALLBACK_PLAN = './assets/images/plano-edificio.webp'
 
 export default function MapPage() {
   const { project } = useProject()
