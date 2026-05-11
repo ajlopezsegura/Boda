@@ -21,9 +21,11 @@ function useIsMobile(bp = 640) {
 }
 
 // ─── Time of day config ───────────────────────────────────────────────────────
+// With real day/night renders in place, the overlays only add a hint of tint —
+// the imagery carries the change itself.
 const TIMES = [
-  { id: 'day',   icon: Sun,  es: 'Día',   en: 'Day',   overlay: 'rgba(255,240,200,0.10)' },
-  { id: 'night', icon: Moon, es: 'Noche', en: 'Night', overlay: 'rgba(20,30,60,0.55)'    },
+  { id: 'day',   icon: Sun,  es: 'Día',   en: 'Day',   overlay: 'rgba(255,240,200,0.04)' },
+  { id: 'night', icon: Moon, es: 'Noche', en: 'Night', overlay: 'rgba(0,0,0,0)'          },
 ]
 
 // ─── Rooms ────────────────────────────────────────────────────────────────────
@@ -42,18 +44,59 @@ const MAT_LABELS = {
   kitchen: { es: 'Cocina',  en: 'Kitchen' },
 }
 
-// ─── Room → images ────────────────────────────────────────────────────────────
+// ─── Room → images by time of day ─────────────────────────────────────────────
+// First entry in each list is the hero render for that time. The day/night
+// pair in salon, cocina, bano, dormitorio and terraza is the same composition
+// so the toggle reads as a true lighting switch.
 const ROOM_IMAGES = {
-  salon:      ['./assets/images/salon/salon-day.png','./assets/images/salon/salon-day-02.webp','./assets/images/salon/salon-day-03.jpg','./assets/images/salon/salon-day-04.jpg','./assets/images/salon/salon-day-05.jpg'],
-  cocina:     ['./assets/images/cocina/cocina-day-02.jpg','./assets/images/cocina/cocina-day.jpg','./assets/images/cocina/cocina-day-03.jpg'],
-  dormitorio: ['./assets/images/dormitorio/dormitorio-day.jpg','./assets/images/dormitorio/dormitorio-night-02.jpg','./assets/images/dormitorio/dormitorio-day-02.jpg'],
-  bano:       ['./assets/images/bano/bano-day.jpg','./assets/images/bano/bano-day-02.jpg','./assets/images/bano/bano-day-03.jpg'],
-  terraza:    ['./assets/images/terraza/terraza-day.jpg','./assets/images/terraza/terraza-day-02.jpg'],
+  salon: {
+    day: [
+      './assets/images/salon/salon-day.png',
+      './assets/images/salon/salon-day-02.webp',
+      './assets/images/salon/salon-day-03.jpg',
+      './assets/images/salon/salon-day-04.jpg',
+      './assets/images/salon/salon-day-05.jpg',
+    ],
+    night: ['./assets/images/salon/salon-night.png'],
+  },
+  cocina: {
+    day: [
+      './assets/images/cocina/cocina-day.jpg',
+      './assets/images/cocina/cocina-day-02.jpg',
+      './assets/images/cocina/cocina-day-03.jpg',
+    ],
+    night: ['./assets/images/cocina/cocina-night.png'],
+  },
+  dormitorio: {
+    day: [
+      './assets/images/dormitorio/dormitorio-day.jpg',
+      './assets/images/dormitorio/dormitorio-day-02.jpg',
+    ],
+    night: [
+      './assets/images/dormitorio/dormitorio-night.png',
+      './assets/images/dormitorio/dormitorio-night-02.jpg',
+    ],
+  },
+  bano: {
+    day: [
+      './assets/images/bano/bano-day.jpg',
+      './assets/images/bano/bano-day-02.jpg',
+      './assets/images/bano/bano-day-03.jpg',
+    ],
+    night: ['./assets/images/bano/bano-night.png'],
+  },
+  terraza: {
+    day: [
+      './assets/images/terraza/terraza-day.jpg',
+      './assets/images/terraza/terraza-day-02.jpg',
+    ],
+    night: ['./assets/images/terraza/terraza-night.png'],
+  },
 }
 
 // ─── Pixel Streaming placeholder ─────────────────────────────────────────────
-function PixelStreamingPlaceholder({ activeRoom, imgIndex, timeOverlay }) {
-  const imgs = ROOM_IMAGES[activeRoom] ?? []
+function PixelStreamingPlaceholder({ activeRoom, activeTime, imgIndex, timeOverlay }) {
+  const imgs = ROOM_IMAGES[activeRoom]?.[activeTime] ?? []
   const src  = imgs[imgIndex] || imgs[0]
 
   return (
@@ -104,6 +147,10 @@ export default function ImmersionPage() {
     if (firstRender.current) { firstRender.current = false; return }
     if (!loading) trackEvent('room_view', { room: activeRoom })
   }, [activeRoom])
+
+  // Reset image when time of day changes so the index never exceeds the
+  // length of the new day/night image list for the current room.
+  useEffect(() => { setImgIndex(0) }, [activeTime])
 
 
   if (!unit) {
@@ -160,7 +207,7 @@ export default function ImmersionPage() {
         </AnimatePresence>
 
         {/* ── Pixel Streaming area ── */}
-        <PixelStreamingPlaceholder activeRoom={activeRoom} imgIndex={imgIndex} timeOverlay={timeData.overlay} />
+        <PixelStreamingPlaceholder activeRoom={activeRoom} activeTime={activeTime} imgIndex={imgIndex} timeOverlay={timeData.overlay} />
 
         {/* Dark vignette */}
         <div className="absolute inset-0 pointer-events-none"
@@ -168,7 +215,7 @@ export default function ImmersionPage() {
 
         {/* ── Image nav (manual prev/next with counter) ── */}
         {(() => {
-          const imgs = ROOM_IMAGES[activeRoom] ?? []
+          const imgs = ROOM_IMAGES[activeRoom]?.[activeTime] ?? []
           if (imgs.length <= 1 || loading || panelOpen) return null
           const goPrev = () => setImgIndex(i => (i - 1 + imgs.length) % imgs.length)
           const goNext = () => setImgIndex(i => (i + 1) % imgs.length)
