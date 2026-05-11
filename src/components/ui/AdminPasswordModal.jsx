@@ -20,25 +20,25 @@ export default function AdminPasswordModal({ password }) {
     <JourneyModal
       open={open}
       onClose={dismiss}
-      eyebrow="DEMO · ACCESO PROTEGIDO"
-      title="PANEL DE VENTAS"
+      eyebrow="DEMO · PERSPECTIVA COMERCIAL"
+      title="PANEL DE GESTIÓN"
       body={[
-        'En producción, este panel está restringido al promotor y a su equipo comercial. Cada cliente accede solo a sus propios leads, con credenciales propias y cumplimiento GDPR.',
-        <>
-          Para que veas qué hay dentro durante la demo, te dejamos la contraseña:{' '}
-          <span style={{
-            display: 'inline-block',
-            padding: '2px 10px',
-            margin: '0 2px',
-            border: '1px solid rgba(184,152,72,0.45)',
-            background: 'rgba(184,152,72,0.08)',
-            color: 'var(--color-accent)',
-            letterSpacing: '0.18em',
-            fontWeight: 500,
-          }}>{password}</span>
-        </>,
+        'Esta zona muestra el otro lado de la experiencia: cómo el equipo comercial recibe el recorrido, las señales de interés y el contexto de cada lead.',
+        'En producción, el acceso estaría restringido al promotor y a su equipo, con credenciales privadas y tratamiento de datos conforme a normativa.',
+        'En esta demo, puedes acceder con la contraseña:',
+        <span style={{
+          display: 'inline-block',
+          padding: '8px 22px',
+          marginTop: 4,
+          border: '1px solid rgba(184,152,72,0.5)',
+          background: 'rgba(184,152,72,0.1)',
+          color: 'var(--color-accent)',
+          letterSpacing: '0.22em',
+          fontSize: '0.95rem',
+          fontWeight: 500,
+        }}>{password}</span>,
       ]}
-      button="ACCEDER"
+      button="ENTRAR"
     />
   )
 }
