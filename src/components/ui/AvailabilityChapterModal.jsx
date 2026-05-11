@@ -33,13 +33,12 @@ export default function AvailabilityChapterModal() {
   const t = COPY[lang] ?? COPY.es
 
   useEffect(() => {
-    try { if (localStorage.getItem(STORAGE_KEY)) return } catch {}
+    // localStorage gate disabled — modal always shows on each visit
     const id = setTimeout(() => setOpen(true), 500)
     return () => clearTimeout(id)
   }, [])
 
   function dismiss() {
-    try { localStorage.setItem(STORAGE_KEY, '1') } catch {}
     setOpen(false)
   }
 

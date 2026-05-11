@@ -31,13 +31,12 @@ export default function AdminEnterModal({ lang = 'es' }) {
   const t = COPY[lang] ?? COPY.es
 
   useEffect(() => {
-    try { if (localStorage.getItem(STORAGE_KEY)) return } catch {}
+    // localStorage gate disabled — modal always shows on each visit
     const id = setTimeout(() => setOpen(true), 400)
     return () => clearTimeout(id)
   }, [])
 
   function dismiss() {
-    try { localStorage.setItem(STORAGE_KEY, '1') } catch {}
     setOpen(false)
   }
 
