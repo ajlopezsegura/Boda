@@ -31,9 +31,8 @@ export default function JourneyModal({
         <motion.div
           key="jm-backdrop"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.9, ease: EASE }}
+          animate={{ opacity: 1, transition: { duration: 0.9, ease: EASE } }}
+          exit={{ opacity: 0, transition: { duration: 0.28, ease: 'easeOut' } }}
           onClick={onClose}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
@@ -42,14 +41,14 @@ export default function JourneyModal({
             background: 'rgba(8,10,14,0.42)',
             backdropFilter: 'blur(3px) saturate(110%)',
             WebkitBackdropFilter: 'blur(3px) saturate(110%)',
+            pointerEvents: open ? 'auto' : 'none',
           }}
         >
           <motion.div
             key="jm-card"
             initial={{ opacity: 0, y: 8, scale: 0.985 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 6, scale: 0.99 }}
-            transition={{ duration: 1.05, ease: EASE }}
+            animate={{ opacity: 1, y: 0, scale: 1, transition: { duration: 1.05, ease: EASE } }}
+            exit={{ opacity: 0, y: 4, scale: 0.995, transition: { duration: 0.3, ease: 'easeOut' } }}
             onClick={e => e.stopPropagation()}
             style={{
               position: 'relative',
