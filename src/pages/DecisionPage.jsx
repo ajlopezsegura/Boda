@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Download, Mail, Phone, CalendarDays, Check, ArrowRight } from 'lucide-react'
+import { ChevronLeft, Download, Mail, Phone, CalendarDays, Check, ArrowRight, LayoutDashboard } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import DecisionChapterModal from '../components/ui/DecisionChapterModal'
 import { useProject } from '../context/ProjectContext'
@@ -104,7 +104,7 @@ export default function DecisionPage() {
                           [lang === 'es' ? 'Superficie'  : 'Surface',     `${unit.surface} m²`],
                           [lang === 'es' ? 'Orientación' : 'Orientation', unit.orientation],
                         ].map(([l, v]) => (
-                          <div key={l} className="flex gap-1.5">
+                          <div key={l} className="flex items-baseline gap-1.5">
                             <span className="label-luxury" style={{ fontSize: '0.48rem', color: 'rgba(184,152,72,0.5)' }}>{l}</span>
                             <span className="label-luxury text-text/70" style={{ fontSize: '0.56rem' }}>{v}</span>
                           </div>
@@ -195,6 +195,21 @@ export default function DecisionPage() {
                         ? 'Un asesor se pondrá en contacto contigo en menos de 24 horas.'
                         : 'An advisor will contact you within 24 hours.'}
                     </p>
+                  </div>
+
+                  {/* Demo handoff to the management panel */}
+                  <div className="flex flex-col gap-2 mt-2 pt-4" style={{ borderTop: '1px dashed rgba(184,152,72,0.2)' }}>
+                    <p className="label-luxury" style={{ fontSize: '0.45rem', letterSpacing: '0.22em', color: 'rgba(184,152,72,0.45)' }}>
+                      {lang === 'es' ? 'DEMO · OTRO LADO' : 'DEMO · OTHER SIDE'}
+                    </p>
+                    <button onClick={() => navigate('/admin')} data-cursor="hover"
+                      className="w-full label-luxury py-4 flex items-center justify-center gap-2 transition-all duration-300"
+                      style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.65rem', letterSpacing: '0.18em' }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
+                      onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+                      <LayoutDashboard size={14} />
+                      {lang === 'es' ? 'ACCEDER AL PANEL DE GESTIÓN' : 'ENTER THE MANAGEMENT PANEL'}
+                    </button>
                   </div>
                 </motion.div>
               )}
