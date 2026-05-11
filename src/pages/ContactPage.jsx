@@ -250,7 +250,7 @@ export default function ContactPage() {
                   {/* Demo handoff to the management panel */}
                   <div className="flex flex-col gap-2 mt-2 pt-4" style={{ borderTop: '1px dashed rgba(184,152,72,0.2)' }}>
                     <p className="label-luxury" style={{ fontSize: '0.45rem', letterSpacing: '0.22em', color: 'rgba(184,152,72,0.45)' }}>
-                      {lang === 'es' ? 'DEMO · OTRO LADO' : 'DEMO · OTHER SIDE'}
+                      {lang === 'es' ? 'DEMO · INTELIGENCIA COMERCIAL · PANEL DE VENTAS' : 'DEMO · COMMERCIAL INTELLIGENCE · SALES PANEL'}
                     </p>
                     <button onClick={() => navigate('/admin')} data-cursor="hover"
                       className="w-full label-luxury py-4 flex items-center justify-center gap-2 transition-opacity duration-200"
@@ -413,7 +413,7 @@ export default function ContactPage() {
                   {/* Demo handoff to the management panel */}
                   <div className="flex flex-col gap-2 pt-4 pb-2" style={{ borderTop: '1px dashed rgba(184,152,72,0.2)' }}>
                     <p className="label-luxury" style={{ fontSize: '0.45rem', letterSpacing: '0.22em', color: 'rgba(184,152,72,0.45)' }}>
-                      {lang === 'es' ? 'DEMO · OTRO LADO' : 'DEMO · OTHER SIDE'}
+                      {lang === 'es' ? 'DEMO · INTELIGENCIA COMERCIAL · PANEL DE VENTAS' : 'DEMO · COMMERCIAL INTELLIGENCE · SALES PANEL'}
                     </p>
                     <button onClick={() => navigate('/admin')} data-cursor="hover"
                       className="w-full label-luxury py-4 flex items-center justify-center gap-2 transition-opacity duration-200"
