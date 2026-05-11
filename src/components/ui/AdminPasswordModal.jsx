@@ -23,7 +23,7 @@ export default function AdminPasswordModal({ password }) {
       eyebrow="DEMO · PERSPECTIVA COMERCIAL"
       title="PANEL DE GESTIÓN"
       body={[
-        'Esta zona muestra el otro lado de la experiencia: cómo el equipo comercial recibe el recorrido, las señales de interés y el contexto de cada lead.',
+        'Esta zona muestra el otro lado de la experiencia: cómo el equipo comercial recibe el recorrido, las señales de decisión y el contexto de cada lead.',
         'En producción, el acceso estaría restringido al promotor y a su equipo, con credenciales privadas y tratamiento de datos conforme a normativa.',
         'En esta demo, puedes acceder con la contraseña:',
         <span style={{
