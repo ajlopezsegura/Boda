@@ -286,13 +286,13 @@ export default function SummaryPage() {
         {/* ── Header ── */}
         <div className="flex-shrink-0 flex items-center justify-between px-6 sm:px-10 py-4"
           style={{ borderBottom: '1px solid rgba(184,152,72,0.12)' }}>
-          <button onClick={() => navigate(`/availability/${unit.slug}`)} data-cursor="hover"
+          <button onClick={() => navigate('/decision')} data-cursor="hover"
             className="flex items-center gap-2 label-luxury transition-colors duration-300"
             style={{ color: 'rgba(244,241,234,0.45)', fontSize: '0.6rem' }}
             onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
             onMouseLeave={e => e.currentTarget.style.color = 'rgba(244,241,234,0.45)'}>
             <ChevronLeft size={14} />
-            {lang === 'es' ? 'Ficha' : 'Unit detail'}
+            {lang === 'es' ? 'Resumen' : 'Summary'}
           </button>
           <span className="label-luxury text-text/40 hidden sm:block" style={{ fontSize: '0.55rem' }}>
             {projectName?.toUpperCase()} · {unit.name} · DOSSIER
@@ -474,12 +474,12 @@ export default function SummaryPage() {
                     · {lang === 'es' ? 'PRÓXIMAMENTE' : 'COMING SOON'}
                   </span>
                 </button>
-                <button onClick={() => navigate(`/availability/${unit.slug}`)} data-cursor="hover"
+                <button onClick={() => navigate('/decision')} data-cursor="hover"
                   className="w-full label-luxury py-3 flex items-center justify-center gap-2 transition-all duration-300"
                   style={{ border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(244,241,234,0.5)', fontSize: '0.55rem' }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-text)' }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'; e.currentTarget.style.color = 'rgba(244,241,234,0.5)' }}>
-                  {lang === 'es' ? '← Volver a la ficha' : '← Back to unit detail'}
+                  {lang === 'es' ? '← Volver al resumen' : '← Back to summary'}
                 </button>
               </div>
             </motion.div>
