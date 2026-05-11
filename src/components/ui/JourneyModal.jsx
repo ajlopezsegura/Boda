@@ -6,6 +6,7 @@ const EASE = [0.32, 0.72, 0.24, 1]
 export default function JourneyModal({
   open,
   onClose,
+  onConfirm,
   studioMark = false,
   eyebrow,
   title,
@@ -13,6 +14,7 @@ export default function JourneyModal({
   button,
   caption,
 }) {
+  const handleConfirm = onConfirm ?? onClose
   useEffect(() => {
     if (!open) return
     const onKey = e => { if (e.key === 'Escape') onClose?.() }
@@ -137,7 +139,7 @@ export default function JourneyModal({
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: buttonDelay, duration: 0.6 }}
-              onClick={onClose}
+              onClick={handleConfirm}
               data-cursor="hover"
               className="label-luxury"
               style={{

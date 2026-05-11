@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, Download, Mail, Phone, CalendarDays, Check, ArrowRight } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
+import DecisionChapterModal from '../components/ui/DecisionChapterModal'
 import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 
@@ -40,6 +41,7 @@ export default function DecisionPage() {
 
   return (
     <PageTransition>
+      <DecisionChapterModal />
       <div className="absolute inset-0 flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--color-bg)' }}>
 
         {/* Header */}
