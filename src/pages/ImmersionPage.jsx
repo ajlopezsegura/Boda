@@ -44,7 +44,7 @@ const MAT_LABELS = {
 
 // ─── Room → images ────────────────────────────────────────────────────────────
 const ROOM_IMAGES = {
-  salon:      ['./assets/images/salon/Salon 01.webp','./assets/images/salon/salon 02.webp','./assets/images/salon/Salon 03.jpg','./assets/images/salon/Salon 04.jpg','./assets/images/salon/Salon 05.jpg'],
+  salon:      ['./assets/images/salon/Salon 01.png','./assets/images/salon/salon 02.webp','./assets/images/salon/Salon 03.jpg','./assets/images/salon/Salon 04.jpg','./assets/images/salon/Salon 05.jpg'],
   cocina:     ['./assets/images/cocina/Cocina (1).jpg','./assets/images/cocina/Cocina (2).jpg','./assets/images/cocina/Cocina (3).jpg'],
   dormitorio: ['./assets/images/dormitorio/Dormitorio (1).jpg','./assets/images/dormitorio/Dormitorio (2).jpg','./assets/images/dormitorio/Dormitorio (3).jpg'],
   bano:       ['./assets/images/bano/Baño (2).jpg','./assets/images/bano/Baño (1).jpg','./assets/images/bano/Baño (3).jpg'],

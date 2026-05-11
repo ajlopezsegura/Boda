@@ -23,7 +23,7 @@ SET nearby = '[
     "dist": "3 km",
     "description": "A solo 3 km, Puerto Banús es sinónimo de lujo en la Costa del Sol. Tiendas de alta gama, restaurantes con estrella Michelin y el marina más glamuroso del Mediterráneo.",
     "descriptionEN": "Just 3 km away, Puerto Banús is synonymous with luxury on the Costa del Sol. High-end boutiques, Michelin-starred restaurants and the most glamorous marina in the Mediterranean.",
-    "images": ["./assets/images/salon/Salon 01.webp", "./assets/images/salon/salon 02.webp"]
+    "images": ["./assets/images/salon/Salon 01.png", "./assets/images/salon/salon 02.webp"]
   },
   {
     "id": "golf",
