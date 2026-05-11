@@ -8,7 +8,7 @@ import ActivityCharts from './admin/ActivityCharts'
 import AdminPasswordModal from '../components/ui/AdminPasswordModal'
 
 const PROJECT_SLUG   = (import.meta.env.VITE_PROJECT_SLUG   ?? 'las-conchas').trim()
-const ADMIN_PASSWORD = (import.meta.env.VITE_ADMIN_PASSWORD ?? 'admin').trim()
+const ADMIN_PASSWORD = (import.meta.env.VITE_ADMIN_PASSWORD ?? 'conchas2026').trim()
 
 const STATUS = {
   available: { es: 'Disponible', color: 'var(--color-accent)',   bg: 'rgba(184,152,72,0.10)' },
