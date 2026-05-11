@@ -18,30 +18,30 @@
       "./assets/images/Piscina (1).jpg",
       "./assets/images/Piscina (2).jpg",
       "./assets/images/Piscina (3).jpg",
-      "./assets/images/terraza/Terraza (1).jpg",
-      "./assets/images/terraza/Terraza (2).jpg"
+      "./assets/images/terraza/terraza-day-02.jpg",
+      "./assets/images/terraza/terraza-day.jpg"
     ],
     "gallery": [
       "./assets/images/las-conchas-aerea.jpg",
-      "./assets/images/salon/Salon 01.png",
-      "./assets/images/salon/salon 02.webp",
-      "./assets/images/salon/Salon 03.jpg",
-      "./assets/images/salon/Salon 04.jpg",
-      "./assets/images/salon/Salon 05.jpg",
-      "./assets/images/cocina/Cocina (1).jpg",
-      "./assets/images/cocina/Cocina (2).jpg",
-      "./assets/images/cocina/Cocina (3).jpg",
-      "./assets/images/dormitorio/Dormitorio (1).jpg",
-      "./assets/images/dormitorio/Dormitorio (2).jpg",
-      "./assets/images/dormitorio/Dormitorio (3).jpg",
-      "./assets/images/bano/Baño (1).jpg",
-      "./assets/images/bano/Baño (2).jpg",
-      "./assets/images/bano/Baño (3).jpg",
+      "./assets/images/salon/salon-day.png",
+      "./assets/images/salon/salon-day-02.webp",
+      "./assets/images/salon/salon-day-03.jpg",
+      "./assets/images/salon/salon-day-04.jpg",
+      "./assets/images/salon/salon-day-05.jpg",
+      "./assets/images/cocina/cocina-day-02.jpg",
+      "./assets/images/cocina/cocina-day.jpg",
+      "./assets/images/cocina/cocina-day-03.jpg",
+      "./assets/images/dormitorio/dormitorio-day.jpg",
+      "./assets/images/dormitorio/dormitorio-night-02.jpg",
+      "./assets/images/dormitorio/dormitorio-day-02.jpg",
+      "./assets/images/bano/bano-day-02.jpg",
+      "./assets/images/bano/bano-day.jpg",
+      "./assets/images/bano/bano-day-03.jpg",
       "./assets/images/Piscina (1).jpg",
       "./assets/images/Piscina (2).jpg",
       "./assets/images/Piscina (3).jpg",
-      "./assets/images/terraza/Terraza (1).jpg",
-      "./assets/images/terraza/Terraza (2).jpg"
+      "./assets/images/terraza/terraza-day-02.jpg",
+      "./assets/images/terraza/terraza-day.jpg"
     ]
   },
   "building": {
@@ -71,19 +71,19 @@
       "id": "beach", "icon": "Waves", "es": "Playa", "en": "Beach", "dist": "50 m",
       "description": "Primera línea de playa en la Costa del Sol. Acceso directo desde el edificio a la arena y al mar Mediterráneo, con todas las comodidades de los chiringuitos más exclusivos de Marbella.",
       "descriptionEN": "First beach line on the Costa del Sol. Direct access from the building to the sand and Mediterranean Sea, with all the amenities of Marbella's most exclusive beach clubs.",
-      "images": ["./assets/images/Piscina (1).jpg", "./assets/images/terraza/Terraza (1).jpg"]
+      "images": ["./assets/images/Piscina (1).jpg", "./assets/images/terraza/terraza-day-02.jpg"]
     },
     {
       "id": "puerto", "icon": "Anchor", "es": "Puerto Banús", "en": "Puerto Banús", "dist": "3 km",
       "description": "A solo 3 km, Puerto Banús es sinónimo de lujo en la Costa del Sol. Tiendas de alta gama, restaurantes con estrella Michelin y el marina más glamuroso del Mediterráneo.",
       "descriptionEN": "Just 3 km away, Puerto Banús is synonymous with luxury on the Costa del Sol. High-end boutiques, Michelin-starred restaurants and the most glamorous marina in the Mediterranean.",
-      "images": ["./assets/images/salon/Salon 01.png", "./assets/images/salon/salon 02.webp"]
+      "images": ["./assets/images/salon/salon-day.png", "./assets/images/salon/salon-day-02.webp"]
     },
     {
       "id": "golf", "icon": "Flag", "es": "Campo de golf", "en": "Golf course", "dist": "1.2 km",
       "description": "Marbella cuenta con más de 70 campos de golf en un radio de 30 km, siendo uno de los destinos de golf más importantes de Europa. A 1,2 km del edificio, acceso inmediato a greens de primer nivel.",
       "descriptionEN": "Marbella has over 70 golf courses within a 30 km radius, making it one of Europe's premier golf destinations. Just 1.2 km from the building, with immediate access to top-level greens.",
-      "images": ["./assets/images/terraza/Terraza (2).jpg"]
+      "images": ["./assets/images/terraza/terraza-day.jpg"]
     },
     {
       "id": "shopping", "icon": "ShoppingBag", "es": "Centro comercial", "en": "Shopping centre", "dist": "1.5 km",
@@ -101,7 +101,7 @@
       "id": "restaurants", "icon": "Utensils", "es": "Restaurantes", "en": "Restaurants", "dist": "200 m",
       "description": "A apenas 200 metros, una selección de restaurantes de alta cocina mediterránea, chiringuitos de playa y terrazas con vistas al mar. La gastronomía de Marbella, al alcance de la mano.",
       "descriptionEN": "Just 200 meters away, a selection of fine Mediterranean cuisine restaurants, beach bars and sea-view terraces. Marbella's gastronomy, right at your doorstep.",
-      "images": ["./assets/images/cocina/Cocina (1).jpg", "./assets/images/cocina/Cocina (2).jpg"]
+      "images": ["./assets/images/cocina/cocina-day-02.jpg", "./assets/images/cocina/cocina-day.jpg"]
     }
   ],
   "amenities": [
@@ -137,8 +137,8 @@
       "description": "Jardines mediterráneos diseñados por el estudio de paisajismo Amate con especies autóctonas y zonas de descanso privadas.",
       "descriptionEN": "Mediterranean gardens designed by landscape studio Amate with native species and private rest areas.",
       "images": [
-        "./assets/images/terraza/Terraza (1).jpg",
-        "./assets/images/terraza/Terraza (2).jpg"
+        "./assets/images/terraza/terraza-day-02.jpg",
+        "./assets/images/terraza/terraza-day.jpg"
       ]
     },
     {
@@ -188,8 +188,8 @@
       "view_label": "Sea View",
       "short_description": "Apartamento sur con terraza privada y vistas al Mediterráneo. Luminosidad natural todo el día.",
       "highlights": ["Orientación sur", "Terraza privada 16 m²", "Vistas al Mediterráneo", "Plaza de garaje incluida"],
-      "hero_image": "./assets/images/salon/Salon 01.png", "thumbnail": "./assets/images/salon/Salon 01.png", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/Salon 01.png", "./assets/images/dormitorio/Dormitorio (1).jpg", "./assets/images/bano/Baño (1).jpg", "./assets/images/terraza/Terraza (1).jpg"]
+      "hero_image": "./assets/images/salon/salon-day.png", "thumbnail": "./assets/images/salon/salon-day.png", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day.png", "./assets/images/dormitorio/dormitorio-day.jpg", "./assets/images/bano/bano-day-02.jpg", "./assets/images/terraza/terraza-day-02.jpg"]
     },
     {
       "id": "1B", "slug": "1b", "name": "1B",
@@ -203,8 +203,8 @@
       "view_label": "Garden View",
       "short_description": "Amplio apartamento de 3 dormitorios con acceso directo al jardín privado y zona de día diferenciada.",
       "highlights": ["3 dormitorios", "Acceso directo al jardín", "Zona de día amplia", "Acabados de primera calidad"],
-      "hero_image": "./assets/images/dormitorio/Dormitorio (1).jpg", "thumbnail": "./assets/images/dormitorio/Dormitorio (1).jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/salon 02.webp", "./assets/images/dormitorio/Dormitorio (2).jpg", "./assets/images/cocina/Cocina (1).jpg", "./assets/images/bano/Baño (2).jpg"]
+      "hero_image": "./assets/images/dormitorio/dormitorio-day.jpg", "thumbnail": "./assets/images/dormitorio/dormitorio-day.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day-02.webp", "./assets/images/dormitorio/dormitorio-night-02.jpg", "./assets/images/cocina/cocina-day-02.jpg", "./assets/images/bano/bano-day.jpg"]
     },
     {
       "id": "1C", "slug": "1c", "name": "1C",
@@ -218,8 +218,8 @@
       "view_label": "Pool View",
       "short_description": "Apartamento orientado al este con luminosidad natural en las mañanas y terraza con vistas a la piscina.",
       "highlights": ["Terraza 13 m²", "Vistas a la piscina", "Luz matinal natural", "Acceso directo a jardines"],
-      "hero_image": "./assets/images/salon/Salon 03.jpg", "thumbnail": "./assets/images/salon/Salon 03.jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/Salon 03.jpg", "./assets/images/cocina/Cocina (2).jpg", "./assets/images/terraza/Terraza (1).jpg", "./assets/images/Piscina (1).jpg"]
+      "hero_image": "./assets/images/salon/salon-day-03.jpg", "thumbnail": "./assets/images/salon/salon-day-03.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day-03.jpg", "./assets/images/cocina/cocina-day.jpg", "./assets/images/terraza/terraza-day-02.jpg", "./assets/images/Piscina (1).jpg"]
     },
     {
       "id": "2A", "slug": "2a", "name": "2A",
@@ -233,8 +233,8 @@
       "view_label": "Sea View",
       "short_description": "Apartamento de 2 dormitorios con terraza sur y vistas directas al Mediterráneo desde la segunda planta.",
       "highlights": ["Vistas al mar desde terraza", "Orientación sur", "2 baños completos", "Plaza de garaje incluida"],
-      "hero_image": "./assets/images/salon/Salon 04.jpg", "thumbnail": "./assets/images/cocina/Cocina (1).jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/Salon 04.jpg", "./assets/images/cocina/Cocina (1).jpg", "./assets/images/Piscina (2).jpg", "./assets/images/terraza/Terraza (2).jpg"]
+      "hero_image": "./assets/images/salon/salon-day-04.jpg", "thumbnail": "./assets/images/cocina/cocina-day-02.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day-04.jpg", "./assets/images/cocina/cocina-day-02.jpg", "./assets/images/Piscina (2).jpg", "./assets/images/terraza/terraza-day.jpg"]
     },
     {
       "id": "2B", "slug": "2b", "name": "2B",
@@ -248,8 +248,8 @@
       "view_label": "Garden View",
       "short_description": "3 dormitorios con zona de estar diferenciada, cocina independiente y acabados de primera calidad.",
       "highlights": ["3 dormitorios amplios", "Cocina independiente", "Vistas al jardín", "Trastero incluido"],
-      "hero_image": "./assets/images/salon/Salon 05.jpg", "thumbnail": "./assets/images/salon/Salon 04.jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/Salon 05.jpg", "./assets/images/dormitorio/Dormitorio (3).jpg", "./assets/images/bano/Baño (2).jpg", "./assets/images/cocina/Cocina (3).jpg"]
+      "hero_image": "./assets/images/salon/salon-day-05.jpg", "thumbnail": "./assets/images/salon/salon-day-04.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day-05.jpg", "./assets/images/dormitorio/dormitorio-day-02.jpg", "./assets/images/bano/bano-day.jpg", "./assets/images/cocina/cocina-day-03.jpg"]
     },
     {
       "id": "2C", "slug": "2c", "name": "2C",
@@ -263,8 +263,8 @@
       "view_label": "Pool View",
       "short_description": "Apartamento compacto de 1 dormitorio con terraza oeste y vistas a la piscina. Perfecto como inversión.",
       "highlights": ["Terraza privada 8 m²", "Vistas a la piscina", "Planta alta", "Excelente relación calidad-precio"],
-      "hero_image": "./assets/images/dormitorio/Dormitorio (2).jpg", "thumbnail": "./assets/images/dormitorio/Dormitorio (2).jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/salon 02.webp", "./assets/images/dormitorio/Dormitorio (2).jpg", "./assets/images/bano/Baño (3).jpg"]
+      "hero_image": "./assets/images/dormitorio/dormitorio-night-02.jpg", "thumbnail": "./assets/images/dormitorio/dormitorio-night-02.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day-02.webp", "./assets/images/dormitorio/dormitorio-night-02.jpg", "./assets/images/bano/bano-day-03.jpg"]
     },
     {
       "id": "3A", "slug": "3a", "name": "3A",
@@ -278,8 +278,8 @@
       "view_label": "Sea View",
       "short_description": "Unidad destacada. 3 dormitorios con gran terraza sur, vistas panorámicas al Mediterráneo y acabados premium.",
       "highlights": ["Gran terraza sur 20 m²", "Vistas panorámicas al mar", "3 dormitorios + 2 baños", "Garaje y trastero incluidos"],
-      "hero_image": "./assets/images/salon/Salon 05.jpg", "thumbnail": "./assets/images/salon/Salon 05.jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/Salon 01.png", "./assets/images/salon/Salon 03.jpg", "./assets/images/terraza/Terraza (1).jpg", "./assets/images/Piscina (2).jpg", "./assets/images/cocina/Cocina (1).jpg"]
+      "hero_image": "./assets/images/salon/salon-day-05.jpg", "thumbnail": "./assets/images/salon/salon-day-05.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day.png", "./assets/images/salon/salon-day-03.jpg", "./assets/images/terraza/terraza-day-02.jpg", "./assets/images/Piscina (2).jpg", "./assets/images/cocina/cocina-day-02.jpg"]
     },
     {
       "id": "3B", "slug": "3b", "name": "3B",
@@ -293,8 +293,8 @@
       "view_label": "Sea View",
       "short_description": "2 dormitorios con terraza sur, muy luminoso y tranquilo. Una de las mejores relaciones precio-calidad del edificio.",
       "highlights": ["Terraza sur 17 m²", "Vistas al Mediterráneo", "Planta alta", "Muy luminoso"],
-      "hero_image": "./assets/images/terraza/Terraza (1).jpg", "thumbnail": "./assets/images/terraza/Terraza (1).jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/Salon 04.jpg", "./assets/images/terraza/Terraza (2).jpg", "./assets/images/Piscina (1).jpg", "./assets/images/dormitorio/Dormitorio (1).jpg"]
+      "hero_image": "./assets/images/terraza/terraza-day-02.jpg", "thumbnail": "./assets/images/terraza/terraza-day-02.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day-04.jpg", "./assets/images/terraza/terraza-day.jpg", "./assets/images/Piscina (1).jpg", "./assets/images/dormitorio/dormitorio-day.jpg"]
     },
     {
       "id": "3C", "slug": "3c", "name": "3C",
@@ -308,8 +308,8 @@
       "view_label": "Sea View",
       "short_description": "4 dormitorios con gran terraza sur ideal para familias. Máxima amplitud y vistas directas al mar.",
       "highlights": ["4 dormitorios", "Gran terraza 27 m²", "3 baños completos", "Garaje y trastero incluidos"],
-      "hero_image": "./assets/images/dormitorio/Dormitorio (3).jpg", "thumbnail": "./assets/images/dormitorio/Dormitorio (3).jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/Salon 05.jpg", "./assets/images/dormitorio/Dormitorio (1).jpg", "./assets/images/dormitorio/Dormitorio (2).jpg", "./assets/images/cocina/Cocina (2).jpg", "./assets/images/terraza/Terraza (2).jpg"]
+      "hero_image": "./assets/images/dormitorio/dormitorio-day-02.jpg", "thumbnail": "./assets/images/dormitorio/dormitorio-day-02.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day-05.jpg", "./assets/images/dormitorio/dormitorio-day.jpg", "./assets/images/dormitorio/dormitorio-night-02.jpg", "./assets/images/cocina/cocina-day.jpg", "./assets/images/terraza/terraza-day.jpg"]
     },
     {
       "id": "4A", "slug": "4a", "name": "4A",
@@ -323,8 +323,8 @@
       "view_label": "Sea View",
       "short_description": "4 dormitorios con terraza de 30 m² y una de las mejores orientaciones del edificio. Vistas al mar desde todas las estancias principales.",
       "highlights": ["Terraza sur 30 m²", "Vistas al mar en todas las estancias", "4 dormitorios + 3 baños", "Garaje doble disponible"],
-      "hero_image": "./assets/images/terraza/Terraza (2).jpg", "thumbnail": "./assets/images/terraza/Terraza (2).jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/Salon 01.png", "./assets/images/salon/Salon 03.jpg", "./assets/images/cocina/Cocina (3).jpg", "./assets/images/terraza/Terraza (1).jpg", "./assets/images/Piscina (3).jpg"]
+      "hero_image": "./assets/images/terraza/terraza-day.jpg", "thumbnail": "./assets/images/terraza/terraza-day.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day.png", "./assets/images/salon/salon-day-03.jpg", "./assets/images/cocina/cocina-day-03.jpg", "./assets/images/terraza/terraza-day-02.jpg", "./assets/images/Piscina (3).jpg"]
     },
     {
       "id": "4B", "slug": "4b", "name": "4B",
@@ -338,8 +338,8 @@
       "view_label": "Pool View",
       "short_description": "3 dormitorios con terraza este y espléndidas vistas a la piscina y los jardines desde la cuarta planta.",
       "highlights": ["Terraza este 21 m²", "Vistas a piscina y jardines", "Planta 4", "Trastero incluido"],
-      "hero_image": "./assets/images/cocina/Cocina (2).jpg", "thumbnail": "./assets/images/cocina/Cocina (2).jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/Salon 03.jpg", "./assets/images/cocina/Cocina (3).jpg", "./assets/images/Piscina (1).jpg", "./assets/images/bano/Baño (1).jpg", "./assets/images/terraza/Terraza (2).jpg"]
+      "hero_image": "./assets/images/cocina/cocina-day.jpg", "thumbnail": "./assets/images/cocina/cocina-day.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day-03.jpg", "./assets/images/cocina/cocina-day-03.jpg", "./assets/images/Piscina (1).jpg", "./assets/images/bano/bano-day-02.jpg", "./assets/images/terraza/terraza-day.jpg"]
     },
     {
       "id": "AT1", "slug": "at1", "name": "ÁTICO 1",
@@ -353,8 +353,8 @@
       "view_label": "Panoramic View",
       "short_description": "Ático exclusivo con terraza de 70 m² y vistas panorámicas a 360º al Mediterráneo. La pieza más singular del edificio.",
       "highlights": ["Terraza panorámica 70 m²", "Vistas 360° al Mediterráneo", "4 dormitorios + 4 baños", "Doble garaje + trastero"],
-      "hero_image": "./assets/images/salon/Salon 05.jpg", "thumbnail": "./assets/images/salon/Salon 05.jpg", "plan_image": "./assets/floorplan.svg",
-      "gallery_images": ["./assets/images/salon/Salon 04.jpg", "./assets/images/salon/Salon 05.jpg", "./assets/images/terraza/Terraza (1).jpg", "./assets/images/terraza/Terraza (2).jpg", "./assets/images/Piscina (1).jpg", "./assets/images/Piscina (2).jpg"]
+      "hero_image": "./assets/images/salon/salon-day-05.jpg", "thumbnail": "./assets/images/salon/salon-day-05.jpg", "plan_image": "./assets/floorplan.svg",
+      "gallery_images": ["./assets/images/salon/salon-day-04.jpg", "./assets/images/salon/salon-day-05.jpg", "./assets/images/terraza/terraza-day-02.jpg", "./assets/images/terraza/terraza-day.jpg", "./assets/images/Piscina (1).jpg", "./assets/images/Piscina (2).jpg"]
     }
   ],
   "materials": {
@@ -408,9 +408,9 @@
         "source_url": "https://www.cosentino.com/es/colores/dekton/keena/",
         "description": "Superficie ultracompacta de tono beige cálido con vetas suaves. Alta resistencia a manchas, rayado y temperatura. Ideal para encimeras y revestimientos de cocina.",
         "descriptionEN": "Ultra-compact surface in warm beige with soft veining. High resistance to stains, scratches and heat. Ideal for kitchen worktops and claddings.",
-        "render_day":   "./assets/images/cocina/Cocina (1).jpg",
-        "render_night": "./assets/images/cocina/Cocina (1).jpg",
-        "texture":      "./assets/images/cocina/Cocina (1).jpg"
+        "render_day":   "./assets/images/cocina/cocina-day-02.jpg",
+        "render_night": "./assets/images/cocina/cocina-day-02.jpg",
+        "texture":      "./assets/images/cocina/cocina-day-02.jpg"
       },
       {
         "id": "phantome",
@@ -421,9 +421,9 @@
         "source_url": "https://www.cosentino.com/usa/colors/eclos/phantome/",
         "description": "Superficie sostenible Eclos en gris ahumado profundo. Composición con alto contenido reciclado, acabado mate y textura sutil. Perfecta para cocinas contemporáneas.",
         "descriptionEN": "Sustainable Eclos surface in deep smoky grey. High recycled content, matte finish and subtle texture. Perfect for contemporary kitchens.",
-        "render_day":   "./assets/images/cocina/Cocina (2).jpg",
-        "render_night": "./assets/images/cocina/Cocina (2).jpg",
-        "texture":      "./assets/images/cocina/Cocina (2).jpg"
+        "render_day":   "./assets/images/cocina/cocina-day.jpg",
+        "render_night": "./assets/images/cocina/cocina-day.jpg",
+        "texture":      "./assets/images/cocina/cocina-day.jpg"
       },
       {
         "id": "fantasy_brown",
@@ -434,9 +434,9 @@
         "source_url": "https://www.cosentino.com/es/colores/scalea/fantasy-brown/",
         "description": "Cuarcita natural en tonos marrón cálido con vetas movidas únicas en cada pieza. Material noble de gran personalidad para cocinas de carácter.",
         "descriptionEN": "Natural quartzite in warm brown tones with bold veining unique to each piece. Noble material with strong personality for character-led kitchens.",
-        "render_day":   "./assets/images/cocina/Cocina (3).jpg",
-        "render_night": "./assets/images/cocina/Cocina (3).jpg",
-        "texture":      "./assets/images/cocina/Cocina (3).jpg"
+        "render_day":   "./assets/images/cocina/cocina-day-03.jpg",
+        "render_night": "./assets/images/cocina/cocina-day-03.jpg",
+        "texture":      "./assets/images/cocina/cocina-day-03.jpg"
       }
     ]
   }
