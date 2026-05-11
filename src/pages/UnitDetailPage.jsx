@@ -91,6 +91,7 @@ export default function UnitDetailPage() {
 
   const [galleryOpen, setGalleryOpen] = useState(false)
   const [galleryIdx,  setGalleryIdx]  = useState(0)
+  const [planOpen,    setPlanOpen]    = useState(false)
   const [shareDone,   setShareDone]   = useState(false)
 
   // Force the journey: a unit can only be opened after being staged in the
@@ -433,7 +434,12 @@ export default function UnitDetailPage() {
                   style={{ height: 260, border: '1px solid rgba(184,152,72,0.12)', backgroundColor: 'rgba(184,152,72,0.02)' }}>
                   {unit.plan_image ? (
                     <img src={unit.plan_image} alt={`Plano ${unit.name}`}
-                      className="w-full h-full object-contain p-4" style={{ opacity: 0.85 }} />
+                      onClick={() => setPlanOpen(true)}
+                      data-cursor="hover"
+                      className="w-full h-full object-contain p-4 transition-opacity duration-300"
+                      style={{ opacity: 0.85, cursor: 'zoom-in' }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+                      onMouseLeave={e => e.currentTarget.style.opacity = '0.85'} />
                   ) : (
                     <div className="flex flex-col items-center gap-3 text-center px-8">
                       <div className="grid grid-cols-3 gap-1 opacity-15">
@@ -489,6 +495,36 @@ export default function UnitDetailPage() {
         <AnimatePresence>
           {galleryOpen && (
             <GalleryModal images={gallery} startIndex={galleryIdx} onClose={() => setGalleryOpen(false)} />
+          )}
+        </AnimatePresence>
+
+        {/* ── Floor-plan lightbox ── */}
+        <AnimatePresence>
+          {planOpen && unit.plan_image && (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-50 flex items-center justify-center"
+              style={{ backgroundColor: 'rgba(13,17,23,0.96)', backdropFilter: 'blur(12px)' }}
+              onClick={() => setPlanOpen(false)}>
+              <button onClick={() => setPlanOpen(false)} className="absolute top-5 right-5 z-10"
+                style={{ color: 'rgba(244,241,234,0.4)' }}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'rgba(244,241,234,0.4)'}>
+                <X size={20} />
+              </button>
+              <motion.img
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.97, opacity: 0 }}
+                transition={{ duration: 0.4, ease: [0.32, 0.72, 0.24, 1] }}
+                src={unit.plan_image}
+                alt={`Plano ${unit.name}`}
+                onClick={e => e.stopPropagation()}
+                className="select-none"
+                style={{ maxWidth: '92vw', maxHeight: '88vh', objectFit: 'contain' }}
+                draggable={false} />
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
