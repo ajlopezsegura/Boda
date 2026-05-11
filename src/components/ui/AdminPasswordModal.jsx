@@ -7,12 +7,13 @@ export default function AdminPasswordModal({ password }) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    // TODO: re-enable once-per-visitor by checking localStorage[STORAGE_KEY]
+    try { if (localStorage.getItem(STORAGE_KEY)) return } catch {}
     const id = setTimeout(() => setOpen(true), 350)
     return () => clearTimeout(id)
   }, [])
 
   function dismiss() {
+    try { localStorage.setItem(STORAGE_KEY, '1') } catch {}
     setOpen(false)
   }
 
@@ -21,7 +22,7 @@ export default function AdminPasswordModal({ password }) {
       open={open}
       onClose={dismiss}
       eyebrow="DEMO · PERSPECTIVA COMERCIAL"
-      title="PANEL DE GESTIÓN"
+      title="PANEL DE VENTAS"
       body={[
         'Esta zona muestra el otro lado de la experiencia: cómo el equipo comercial recibe el recorrido, las señales de decisión y el contexto de cada lead.',
         'En producción, el acceso estaría restringido al promotor y a su equipo, con credenciales privadas y tratamiento de datos conforme a normativa.',

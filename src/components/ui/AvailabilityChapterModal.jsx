@@ -13,7 +13,7 @@ const COPY = {
       'La disponibilidad se convierte así en una lectura clara del proyecto: qué opciones existen, qué ritmo tiene la comercialización y qué opciones merece la pena comparar.',
       'El objetivo no es mostrar más información, sino ordenar la decisión: reducir ruido, hacer visibles las diferencias reales y preparar una elección con más criterio.',
     ],
-    button:  'EXPLORAR VIVIENDAS',
+    button:  'COMPARAR VIVIENDAS',
   },
   en: {
     eyebrow: 'CHAPTER 02',
@@ -23,7 +23,7 @@ const COPY = {
       'Availability becomes a clear reading of the project: what options exist, the pace of sales, and which ones are worth comparing.',
       'The goal is not to show more information, but to order the decision: reduce noise, surface real differences and prepare a more considered choice.',
     ],
-    button:  'EXPLORE RESIDENCES',
+    button:  'COMPARE RESIDENCES',
   },
 }
 
@@ -33,13 +33,13 @@ export default function AvailabilityChapterModal() {
   const t = COPY[lang] ?? COPY.es
 
   useEffect(() => {
-    // TODO: re-enable once-per-visitor by checking localStorage[STORAGE_KEY]
+    try { if (localStorage.getItem(STORAGE_KEY)) return } catch {}
     const id = setTimeout(() => setOpen(true), 500)
     return () => clearTimeout(id)
   }, [])
 
   function dismiss() {
-    // localStorage write skipped during testing so the modal returns on reload
+    try { localStorage.setItem(STORAGE_KEY, '1') } catch {}
     setOpen(false)
   }
 

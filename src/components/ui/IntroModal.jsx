@@ -33,13 +33,13 @@ export default function IntroModal() {
   const t = COPY[lang] ?? COPY.es
 
   useEffect(() => {
-    // TODO: re-enable once-per-visitor by checking localStorage[STORAGE_KEY]
+    try { if (localStorage.getItem(STORAGE_KEY)) return } catch {}
     const id = setTimeout(() => setOpen(true), 600)
     return () => clearTimeout(id)
   }, [])
 
   function dismiss() {
-    // localStorage write skipped during testing so the modal returns on reload
+    try { localStorage.setItem(STORAGE_KEY, '1') } catch {}
     setOpen(false)
   }
 

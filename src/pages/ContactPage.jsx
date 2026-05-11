@@ -258,7 +258,7 @@ export default function ContactPage() {
                       onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
                       onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
                       <LayoutDashboard size={14} />
-                      {lang === 'es' ? 'ACCEDER AL PANEL DE GESTIÓN' : 'ENTER THE MANAGEMENT PANEL'}
+                      {lang === 'es' ? 'ACCEDER AL PANEL DE VENTAS' : 'ENTER THE SALES PANEL'}
                     </button>
                   </div>
                 </motion.div>
@@ -421,7 +421,7 @@ export default function ContactPage() {
                       onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
                       onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
                       <LayoutDashboard size={14} />
-                      {lang === 'es' ? 'ACCEDER AL PANEL DE GESTIÓN' : 'ENTER THE MANAGEMENT PANEL'}
+                      {lang === 'es' ? 'ACCEDER AL PANEL DE VENTAS' : 'ENTER THE SALES PANEL'}
                     </button>
                   </div>
 

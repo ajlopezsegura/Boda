@@ -743,7 +743,7 @@ function LoginScreen({ onLogin }) {
             THE VISUALS BOUTIQUE STUDIO
           </div>
           <div style={{ fontSize: '1rem', letterSpacing: '0.18em', color: 'var(--color-text)', fontWeight: 300 }}>
-            PANEL DE GESTIÓN
+            PANEL DE VENTAS
           </div>
         </div>
         <form onSubmit={submit}>
@@ -878,7 +878,7 @@ export default function AdminPage() {
   })()
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', padding: '0 0 80px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)', padding: '0 0 80px', overflowX: 'hidden' }}>
       <AdminEnterModal />
       <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
 
@@ -892,7 +892,7 @@ export default function AdminPage() {
             THE VISUALS BOUTIQUE STUDIO
           </div>}
           <div style={{ fontSize: mob ? '0.75rem' : '0.85rem', letterSpacing: '0.15em', color: 'var(--color-text)', fontWeight: 300 }}>
-            PANEL DE GESTIÓN
+            PANEL DE VENTAS
           </div>
         </div>
         <button onClick={handleLogout} style={{

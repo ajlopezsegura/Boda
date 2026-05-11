@@ -55,7 +55,7 @@ export default function JourneyModal({
             style={{
               position: 'relative',
               width: '100%', maxWidth: 540,
-              padding: 'clamp(36px, 6vw, 56px) clamp(28px, 5vw, 52px)',
+              padding: 'clamp(28px, 6vw, 56px) clamp(20px, 5vw, 52px)',
               background: 'linear-gradient(180deg, rgba(18,22,32,0.55) 0%, rgba(12,15,22,0.6) 100%)',
               backdropFilter: 'blur(22px) saturate(135%)',
               WebkitBackdropFilter: 'blur(22px) saturate(135%)',
@@ -93,14 +93,15 @@ export default function JourneyModal({
               transition={{ delay: 0.35, duration: 0.8 }}
               className="display-heading"
               style={{
-                fontSize: 'clamp(1.2rem, 3.8vw, 1.85rem)',
-                letterSpacing: '0.08em',
-                lineHeight: 1.2, color: '#ffffff',
+                fontSize: 'clamp(0.95rem, 4vw, 1.75rem)',
+                letterSpacing: '0.06em',
+                lineHeight: 1.25, color: '#ffffff',
                 marginBottom: 22,
+                maxWidth: '100%',
               }}
             >
               {String(title).split('\n').map((line, i) => (
-                <span key={i} style={{ display: 'block', whiteSpace: 'nowrap' }}>
+                <span key={i} style={{ display: 'block' }}>
                   {line}
                 </span>
               ))}
