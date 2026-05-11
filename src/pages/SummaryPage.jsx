@@ -459,13 +459,20 @@ export default function SummaryPage() {
                 <p className="label-luxury mb-1" style={{ fontSize: '0.5rem', letterSpacing: '0.2em', color: 'rgba(184,152,72,0.5)' }}>
                   DOSSIER
                 </p>
-                <button onClick={handlePrint} data-cursor="hover"
-                  className="w-full label-luxury py-4 flex items-center justify-center gap-2 transition-opacity duration-200"
-                  style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.6rem', letterSpacing: '0.18em' }}
-                  onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
-                  onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+                <button disabled aria-disabled="true"
+                  className="w-full label-luxury py-4 flex items-center justify-center gap-2"
+                  style={{
+                    border: '1px solid rgba(184,152,72,0.18)',
+                    color: 'rgba(244,241,234,0.28)',
+                    fontSize: '0.6rem', letterSpacing: '0.18em',
+                    cursor: 'not-allowed',
+                    background: 'transparent',
+                  }}>
                   <Download size={14} />
                   {lang === 'es' ? 'DESCARGAR PDF' : 'DOWNLOAD PDF'}
+                  <span style={{ fontSize: '0.44rem', letterSpacing: '0.2em', color: 'rgba(184,152,72,0.5)', marginLeft: 4 }}>
+                    · {lang === 'es' ? 'PRÓXIMAMENTE' : 'COMING SOON'}
+                  </span>
                 </button>
                 <button onClick={() => navigate(`/availability/${unit.slug}`)} data-cursor="hover"
                   className="w-full label-luxury py-3 flex items-center justify-center gap-2 transition-all duration-300"
