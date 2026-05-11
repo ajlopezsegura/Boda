@@ -44,11 +44,11 @@ const MAT_LABELS = {
 
 // ─── Room → images ────────────────────────────────────────────────────────────
 const ROOM_IMAGES = {
-  salon:      ['./assets/images/Salon 01.webp','./assets/images/salon 02.webp','./assets/images/Salon 03.jpg','./assets/images/Salon 04.jpg','./assets/images/Salon 05.jpg'],
-  cocina:     ['./assets/images/Cocina (1).jpg','./assets/images/Cocina (2).jpg','./assets/images/Cocina (3).jpg'],
-  dormitorio: ['./assets/images/Dormitorio (1).jpg','./assets/images/Dormitorio (2).jpg','./assets/images/Dormitorio (3).jpg'],
-  bano:       ['./assets/images/Baño (2).jpg','./assets/images/Baño (1).jpg','./assets/images/Baño (3).jpg'],
-  terraza:    ['./assets/images/Terraza (2).jpg','./assets/images/Terraza (1).jpg'],
+  salon:      ['./assets/images/salon/Salon 01.webp','./assets/images/salon/salon 02.webp','./assets/images/salon/Salon 03.jpg','./assets/images/salon/Salon 04.jpg','./assets/images/salon/Salon 05.jpg'],
+  cocina:     ['./assets/images/cocina/Cocina (1).jpg','./assets/images/cocina/Cocina (2).jpg','./assets/images/cocina/Cocina (3).jpg'],
+  dormitorio: ['./assets/images/dormitorio/Dormitorio (1).jpg','./assets/images/dormitorio/Dormitorio (2).jpg','./assets/images/dormitorio/Dormitorio (3).jpg'],
+  bano:       ['./assets/images/bano/Baño (2).jpg','./assets/images/bano/Baño (1).jpg','./assets/images/bano/Baño (3).jpg'],
+  terraza:    ['./assets/images/terraza/Terraza (2).jpg','./assets/images/terraza/Terraza (1).jpg'],
 }
 
 // ─── Pixel Streaming placeholder ─────────────────────────────────────────────
