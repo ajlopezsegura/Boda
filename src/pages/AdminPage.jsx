@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 import OverviewTab from './admin/OverviewTab'
 import LeadsCharts from './admin/LeadsCharts'
 import ActivityCharts from './admin/ActivityCharts'
+import AdminPasswordModal from '../components/ui/AdminPasswordModal'
 
 const PROJECT_SLUG   = (import.meta.env.VITE_PROJECT_SLUG   ?? 'las-conchas').trim()
 const ADMIN_PASSWORD = (import.meta.env.VITE_ADMIN_PASSWORD ?? 'admin').trim()
@@ -733,6 +734,7 @@ function LoginScreen({ onLogin }) {
   }
   return (
     <div className="fixed inset-0 flex items-center justify-center" style={{ backgroundColor: 'var(--color-bg)' }}>
+      <AdminPasswordModal password={ADMIN_PASSWORD} />
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
         style={{ width: '100%', maxWidth: 360, padding: '0 24px' }}>
         <div style={{ marginBottom: 40, textAlign: 'center' }}>
