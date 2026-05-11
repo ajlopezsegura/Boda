@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Sliders, X, Check, Sun, Moon } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
+import ImmersionChapterModal from '../components/ui/ImmersionChapterModal'
 import { useUnit, useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { useSession } from '../context/SessionContext'
@@ -123,6 +124,7 @@ export default function ImmersionPage() {
 
   return (
     <PageTransition>
+      <ImmersionChapterModal />
       <div className="absolute inset-0 overflow-hidden" style={{ backgroundColor: '#0d1117' }}>
 
         {/* ── Loading screen ── */}
