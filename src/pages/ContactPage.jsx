@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, Check, MessageCircle } from 'lucide-react'
+import { ChevronLeft, Check, MessageCircle, LayoutDashboard } from 'lucide-react'
 import PageTransition from '../components/layout/PageTransition'
 import { useLang } from '../context/LangContext'
 import { useSession } from '../context/SessionContext'
@@ -246,6 +246,21 @@ export default function ContactPage() {
                       {lang === 'es' ? 'Ver más viviendas →' : 'Browse more units →'}
                     </button>
                   </div>
+
+                  {/* Demo handoff to the management panel */}
+                  <div className="flex flex-col gap-2 mt-2 pt-4" style={{ borderTop: '1px dashed rgba(184,152,72,0.2)' }}>
+                    <p className="label-luxury" style={{ fontSize: '0.45rem', letterSpacing: '0.22em', color: 'rgba(184,152,72,0.45)' }}>
+                      {lang === 'es' ? 'DEMO · OTRO LADO' : 'DEMO · OTHER SIDE'}
+                    </p>
+                    <button onClick={() => navigate('/admin')} data-cursor="hover"
+                      className="w-full label-luxury py-4 flex items-center justify-center gap-2 transition-opacity duration-200"
+                      style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.6rem', letterSpacing: '0.18em' }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
+                      onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+                      <LayoutDashboard size={14} />
+                      {lang === 'es' ? 'ACCEDER AL PANEL DE GESTIÓN' : 'ENTER THE MANAGEMENT PANEL'}
+                    </button>
+                  </div>
                 </motion.div>
 
               ) : (
@@ -394,6 +409,21 @@ export default function ContactPage() {
                       : 'Our team will contact you within 24 hours.'
                     }
                   </p>
+
+                  {/* Demo handoff to the management panel */}
+                  <div className="flex flex-col gap-2 pt-4 pb-2" style={{ borderTop: '1px dashed rgba(184,152,72,0.2)' }}>
+                    <p className="label-luxury" style={{ fontSize: '0.45rem', letterSpacing: '0.22em', color: 'rgba(184,152,72,0.45)' }}>
+                      {lang === 'es' ? 'DEMO · OTRO LADO' : 'DEMO · OTHER SIDE'}
+                    </p>
+                    <button onClick={() => navigate('/admin')} data-cursor="hover"
+                      className="w-full label-luxury py-4 flex items-center justify-center gap-2 transition-opacity duration-200"
+                      style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.6rem', letterSpacing: '0.18em' }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
+                      onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+                      <LayoutDashboard size={14} />
+                      {lang === 'es' ? 'ACCEDER AL PANEL DE GESTIÓN' : 'ENTER THE MANAGEMENT PANEL'}
+                    </button>
+                  </div>
 
                 </motion.div>
               )}
