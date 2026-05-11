@@ -330,7 +330,16 @@ export default function UnitDetailPage() {
                 </p>
 
                 {/* Primary CTA */}
-                {canAct ? (
+                {unit.status === 'available' ? (
+                  <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
+                    className="w-full label-luxury py-4 flex items-center justify-center gap-2 transition-opacity duration-200"
+                    style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.6rem', letterSpacing: '0.18em' }}
+                    onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
+                    onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+                    <Eye size={14} />
+                    {lang === 'es' ? 'CONFIGURADOR DE VIVIENDA' : 'UNIT CONFIGURATOR'}
+                  </button>
+                ) : canAct ? (
                   <button
                     onClick={() => {
                       localStorage.setItem('tvbs_lead_context', JSON.stringify({
@@ -346,9 +355,7 @@ export default function UnitDetailPage() {
                     style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-bg)', fontSize: '0.6rem', letterSpacing: '0.18em' }}
                     onMouseEnter={e => e.currentTarget.style.opacity = '0.88'}
                     onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-                    {unit.status === 'reserved'
-                      ? (lang === 'es' ? 'CONSULTAR DISPONIBILIDAD' : 'ENQUIRE AVAILABILITY')
-                      : (lang === 'es' ? 'SOLICITAR INFORMACIÓN' : 'REQUEST INFORMATION')}
+                    {lang === 'es' ? 'CONSULTAR DISPONIBILIDAD' : 'ENQUIRE AVAILABILITY'}
                   </button>
                 ) : (
                   <button onClick={() => navigate('/availability')} data-cursor="hover"
@@ -360,15 +367,24 @@ export default function UnitDetailPage() {
                   </button>
                 )}
 
-                {/* Secondary CTA — configurator */}
+                {/* Secondary CTA — request info (only when available, since reserved units already use it as primary) */}
                 {unit.status === 'available' && (
-                  <button onClick={() => navigate(`/inmersion/${unit.slug}`)} data-cursor="hover"
+                  <button
+                    onClick={() => {
+                      localStorage.setItem('tvbs_lead_context', JSON.stringify({
+                        source: 'unit_detail',
+                        back_path: `/availability/${unit.slug}`,
+                        unit_ids: [unit.id],
+                        primary_unit_id: unit.id,
+                      }))
+                      navigate('/contact')
+                    }}
+                    data-cursor="hover"
                     className="w-full label-luxury py-3 flex items-center justify-center gap-2 transition-all duration-300"
                     style={{ border: '1px solid rgba(184,152,72,0.25)', color: 'rgba(244,241,234,0.55)', fontSize: '0.55rem' }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-text)' }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(184,152,72,0.25)'; e.currentTarget.style.color = 'rgba(244,241,234,0.55)' }}>
-                    <Eye size={13} />
-                    {lang === 'es' ? 'Configurador de vivienda' : 'Unit configurator'}
+                    {lang === 'es' ? 'Solicitar información' : 'Request information'}
                   </button>
                 )}
 
