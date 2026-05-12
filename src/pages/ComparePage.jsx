@@ -439,8 +439,8 @@ export default function ComparePage() {
 
                         return (
                           <div key={unit.id} className="flex items-center"
-                            style={{ padding: mob ? '8px 6px' : '12px 16px' }}
                             style={{
+                              padding: mob ? '8px 6px' : '12px 16px',
                               borderRight: uIdx < nCols - 1 ? '1px solid rgba(184,152,72,0.06)' : 'none',
                               backgroundColor: isBest ? 'rgba(184,152,72,0.07)' : 'transparent',
                             }}>
