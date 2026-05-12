@@ -171,6 +171,21 @@ export default function CoverPage() {
             >
               {lang === 'es' ? 'CONTACTAR' : 'CONTACT'}
             </button>
+
+            <button
+              onClick={() => navigate('/admin')}
+              data-cursor="hover"
+              className="label-luxury transition-all duration-300 mt-2"
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0',
+                fontSize: '0.48rem', letterSpacing: '0.28em',
+                color: 'rgba(184,152,72,0.55)',
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(184,152,72,0.55)'}
+            >
+              {lang === 'es' ? 'VER PANEL DE VENTAS →' : 'VIEW SALES PANEL →'}
+            </button>
           </motion.div>
         </div>
       </div>

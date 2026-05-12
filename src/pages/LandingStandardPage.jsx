@@ -501,18 +501,48 @@ export default function LandingStandardPage() {
       </footer>
 
       {/* ── Compare toggle ──────────────────────────────────────── */}
-      <a href="/#/" style={{
-        position: 'fixed', bottom: 28, right: 28,
-        background: GOLD, color: '#fff', padding: '14px 24px',
-        textDecoration: 'none', fontFamily: SANS, fontSize: '0.62rem',
-        letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 500,
-        boxShadow: '0 12px 30px rgba(0,0,0,0.25)', zIndex: 100,
-        transition: 'all 0.3s',
-      }}
-      onMouseEnter={e => e.currentTarget.style.background = GOLD_HI}
-      onMouseLeave={e => e.currentTarget.style.background = GOLD}>
-        Ver versión TVBS →
-      </a>
+      <div style={{
+        position: 'fixed', bottom: 28, right: 28, zIndex: 100,
+        maxWidth: 320, padding: '20px 22px',
+        background: 'rgba(20,16,12,0.94)', color: '#fff',
+        backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+        boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
+        border: '1px solid rgba(169,136,80,0.3)',
+      }}>
+        <div style={{
+          fontFamily: SANS, fontSize: '0.5rem', letterSpacing: '0.3em',
+          textTransform: 'uppercase', color: GOLD, marginBottom: 14, fontWeight: 600,
+        }}>
+          Lo que esta versión NO hace
+        </div>
+        <ul style={{
+          listStyle: 'none', margin: 0, padding: 0,
+          fontFamily: SANS, fontSize: '0.78rem', lineHeight: 1.55,
+          color: 'rgba(255,255,255,0.78)', fontWeight: 300,
+        }}>
+          {[
+            'Ordenar la decisión del comprador',
+            'Comparar viviendas con lectura comercial',
+            'Devolver inteligencia al equipo de ventas',
+          ].map(t => (
+            <li key={t} style={{ display: 'flex', gap: 10, marginBottom: 8 }}>
+              <span style={{ color: 'rgba(169,136,80,0.55)', flexShrink: 0 }}>✕</span>
+              <span>{t}</span>
+            </li>
+          ))}
+        </ul>
+        <a href="/#/" style={{
+          display: 'inline-block', marginTop: 16,
+          padding: '10px 18px', background: GOLD, color: '#fff',
+          textDecoration: 'none', fontFamily: SANS, fontSize: '0.58rem',
+          letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: 600,
+          transition: 'background 0.3s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.background = GOLD_HI}
+        onMouseLeave={e => e.currentTarget.style.background = GOLD}>
+          Ver versión TVBS →
+        </a>
+      </div>
     </div>
   )
 }
