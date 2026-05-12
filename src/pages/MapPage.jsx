@@ -5,7 +5,8 @@ import { useProject } from '../context/ProjectContext'
 import { useLang } from '../context/LangContext'
 import { ChevronLeft } from 'lucide-react'
 
-const FALLBACK_PLAN = './assets/images/plano-edificio.webp'
+// Cache-bust query so stale CDN copies of the previous svg can't win.
+const FALLBACK_PLAN = './assets/images/plano-edificio.webp?v=2'
 
 export default function MapPage() {
   const { project } = useProject()
