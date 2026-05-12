@@ -1,7 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const EASE = [0.32, 0.72, 0.24, 1]
+
+// Block dismiss during the first ~280ms of the entrance so a fast
+// click doesn't interrupt the modal mid-fly and leave it stuck.
+const DISMISS_LOCK_MS = 280
 
 export default function JourneyModal({
   open,
@@ -14,18 +18,34 @@ export default function JourneyModal({
   button,
   caption,
 }) {
-  const handleConfirm = onConfirm ?? onClose
+  const [ready, setReady] = useState(false)
+
+  // Unlock dismiss once the entrance has been visible long enough.
+  useEffect(() => {
+    if (!open) { setReady(false); return }
+    const id = setTimeout(() => setReady(true), DISMISS_LOCK_MS)
+    return () => clearTimeout(id)
+  }, [open])
+
+  const handleClose   = () => { if (ready) onClose?.() }
+  const handleConfirm = () => { if (ready) (onConfirm ?? onClose)?.() }
+
   useEffect(() => {
     if (!open) return
-    const onKey = e => { if (e.key === 'Escape') onClose?.() }
+    const onKey = e => { if (e.key === 'Escape') handleClose() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, ready])
 
   // Stagger body paragraphs after the rule (0.7) with 0.12s gap.
-  const bodyDelay = i => 0.7 + i * 0.12
+  const bodyDelay    = i => 0.7 + i * 0.12
   const buttonDelay  = 0.7 + body.length * 0.12 + 0.13
   const captionDelay = buttonDelay + 0.2
+
+  // Single source of truth for exit on children: short, no delay, easeOut.
+  // Prevents stagger delays from leaking into the dismissal.
+  const childExit = { opacity: 0, transition: { duration: 0.18, ease: 'easeOut' } }
 
   return (
     <AnimatePresence>
@@ -35,7 +55,7 @@ export default function JourneyModal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, transition: { duration: 0.9, ease: EASE } }}
           exit={{ opacity: 0, transition: { duration: 0.28, ease: 'easeOut' } }}
-          onClick={onClose}
+          onClick={handleClose}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -76,8 +96,8 @@ export default function JourneyModal({
 
             <motion.div
               initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.7 }}
+              animate={{ opacity: 1, y: 0, transition: { delay: 0.25, duration: 0.7 } }}
+              exit={childExit}
               className="label-luxury"
               style={{
                 fontSize: '0.58rem', letterSpacing: '0.32em',
@@ -89,8 +109,8 @@ export default function JourneyModal({
 
             <motion.h2
               initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35, duration: 0.8 }}
+              animate={{ opacity: 1, y: 0, transition: { delay: 0.35, duration: 0.8 } }}
+              exit={childExit}
               className="display-heading"
               style={{
                 fontSize: 'clamp(0.95rem, 4vw, 1.75rem)',
@@ -109,8 +129,8 @@ export default function JourneyModal({
 
             <motion.div
               initial={{ width: 0 }}
-              animate={{ width: 36 }}
-              transition={{ delay: 0.55, duration: 0.7 }}
+              animate={{ width: 36, transition: { delay: 0.55, duration: 0.7 } }}
+              exit={{ opacity: 0, transition: { duration: 0.18 } }}
               style={{ height: 1, backgroundColor: 'var(--color-accent)', marginBottom: 22 }}
             />
 
@@ -120,8 +140,8 @@ export default function JourneyModal({
                 <motion.p
                   key={i}
                   initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: bodyDelay(i), duration: 0.8 }}
+                  animate={{ opacity: 1, transition: { delay: bodyDelay(i), duration: 0.8 } }}
+                  exit={childExit}
                   style={{
                     fontSize: i === 0 ? 'clamp(0.72rem, 2vw, 0.82rem)' : 'clamp(0.7rem, 1.95vw, 0.78rem)',
                     lineHeight: i === 0 ? 1.75 : 1.7,
@@ -138,8 +158,8 @@ export default function JourneyModal({
 
             <motion.button
               initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: buttonDelay, duration: 0.6 }}
+              animate={{ opacity: 1, y: 0, transition: { delay: buttonDelay, duration: 0.6 } }}
+              exit={childExit}
               onClick={handleConfirm}
               data-cursor="hover"
               className="label-luxury"
@@ -170,8 +190,8 @@ export default function JourneyModal({
             {caption && (
               <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: captionDelay, duration: 0.7 }}
+                animate={{ opacity: 1, transition: { delay: captionDelay, duration: 0.7 } }}
+                exit={childExit}
                 style={{
                   marginTop: 22,
                   fontSize: '0.58rem',
