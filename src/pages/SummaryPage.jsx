@@ -100,9 +100,9 @@ function PrintLayout({ unit, project, lang, selMats, matConfig, today }) {
           <p style={{ fontSize: 6.5, letterSpacing: '0.2em', color: '#B89848', textTransform: 'uppercase', margin: '0 0 8px 0' }}>
             {t('PLANO', 'FLOOR PLAN')}
           </p>
-          {unit.plan_image ? (
+          {planSrc ? (
             <div style={{ border: '1px solid #e8e0d0', height: 160, overflow: 'hidden' }}>
-              <img src={unit.plan_image} alt="Plano"
+              <img src={planSrc} alt="Plano"
                 style={{ width: '100%', height: '100%', objectFit: 'contain', padding: 8 }} />
             </div>
           ) : (
@@ -187,6 +187,9 @@ export default function SummaryPage() {
   const unit        = useUnit(slug)
   const { project, materials: matConfig } = useProject()
   const { lang, toggle } = useLang()
+
+  // Default per-unit floor plan when the unit doesn't have its own.
+  const planSrc = unit?.plan_image ?? './assets/images/plano-vivienda.webp'
 
   const selMats = useMemo(() => {
     try {
@@ -443,8 +446,8 @@ export default function SummaryPage() {
                 </p>
                 <div className="flex items-center justify-center"
                   style={{ height: 220, border: '1px solid rgba(184,152,72,0.12)', backgroundColor: 'rgba(184,152,72,0.02)' }}>
-                  {unit.plan_image ? (
-                    <img src={unit.plan_image} alt={`Plano ${unit.name}`}
+                  {planSrc ? (
+                    <img src={planSrc} alt={`Plano ${unit.name}`}
                       className="w-full h-full object-contain p-4" style={{ opacity: 0.85 }} />
                   ) : (
                     <p className="label-luxury" style={{ fontSize: '0.52rem', color: 'rgba(184,152,72,0.35)' }}>

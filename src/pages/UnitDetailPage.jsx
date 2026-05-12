@@ -94,6 +94,10 @@ export default function UnitDetailPage() {
   const [planOpen,    setPlanOpen]    = useState(false)
   const [shareDone,   setShareDone]   = useState(false)
 
+  // Default per-unit floor plan when the unit doesn't have its own.
+  // Each project can override at unit level via Supabase.plan_image.
+  const planSrc = unit?.plan_image ?? './assets/images/plano-vivienda.webp'
+
   // Force the journey: a unit can only be opened after being staged in the
   // comparator. Direct URLs land back on /availability so the flow doesn't
   // get skipped.
@@ -432,8 +436,8 @@ export default function UnitDetailPage() {
                 </p>
                 <div className="flex items-center justify-center"
                   style={{ height: 260, border: '1px solid rgba(184,152,72,0.12)', backgroundColor: 'rgba(184,152,72,0.02)' }}>
-                  {unit.plan_image ? (
-                    <img src={unit.plan_image} alt={`Plano ${unit.name}`}
+                  {planSrc ? (
+                    <img src={planSrc} alt={`Plano ${unit.name}`}
                       onClick={() => setPlanOpen(true)}
                       data-cursor="hover"
                       className="w-full h-full object-contain p-4 transition-opacity duration-300"
@@ -500,7 +504,7 @@ export default function UnitDetailPage() {
 
         {/* ── Floor-plan lightbox ── */}
         <AnimatePresence>
-          {planOpen && unit.plan_image && (
+          {planOpen && planSrc && (
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
@@ -518,7 +522,7 @@ export default function UnitDetailPage() {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.97, opacity: 0 }}
                 transition={{ duration: 0.4, ease: [0.32, 0.72, 0.24, 1] }}
-                src={unit.plan_image}
+                src={planSrc}
                 alt={`Plano ${unit.name}`}
                 onClick={e => e.stopPropagation()}
                 className="select-none"
