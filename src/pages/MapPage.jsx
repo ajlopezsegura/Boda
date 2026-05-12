@@ -1,21 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import PageTransition from '../components/layout/PageTransition'
-import { useProject } from '../context/ProjectContext'
-import { useLang } from '../context/LangContext'
 import { ChevronLeft } from 'lucide-react'
+import PageTransition from '../components/layout/PageTransition'
+import { useLang } from '../context/LangContext'
 
-const FALLBACK_PLAN = '/assets/images/plano-edificio.webp'
+const PLAN_IMAGE = '/assets/images/plano-edificio.webp'
 
 export default function MapPage() {
-  const { project } = useProject()
-  const { lang } = useLang()
   const navigate = useNavigate()
-
-  if (!project) return null
-
-  const name     = lang === 'es' ? project.name : project.nameEN
-  const planSrc  = project.floorPlan?.src ?? FALLBACK_PLAN
+  const { lang } = useLang()
 
   return (
     <PageTransition>
@@ -34,21 +27,21 @@ export default function MapPage() {
             {lang === 'es' ? 'Volver' : 'Back'}
           </button>
           <span className="label-luxury text-text/40 hidden sm:block" style={{ fontSize: '0.55rem' }}>
-            {name?.toUpperCase()} · {lang === 'es' ? 'PLANO GENERAL' : 'FLOOR PLAN'}
+            {lang === 'es' ? 'LAS CONCHAS · PLANO GENERAL' : 'LAS CONCHAS · FLOOR PLAN'}
           </span>
           <div style={{ width: 60 }} />
         </div>
 
-        {/* Floor plan image */}
+        {/* Floor plan */}
         <motion.div
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="flex-1 min-h-0 flex items-center justify-center px-4 sm:px-10 py-6">
           <img
-            src={planSrc}
+            src={PLAN_IMAGE}
             alt={lang === 'es' ? 'Plano general' : 'Floor plan'}
-            className="w-full h-full object-contain select-none"
-            style={{ maxHeight: '100%', maxWidth: '100%' }}
+            className="select-none"
+            style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
             draggable={false}
           />
         </motion.div>
