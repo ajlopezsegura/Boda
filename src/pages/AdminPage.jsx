@@ -376,6 +376,7 @@ function ActivityCard({ sess, index, mob, allSessions }) {
   const referrer      = sess.referrer || trail.find(e => e.type === 'device_info')?.referrer || 'directo'
   const userLang      = sess.user_lang || trail.find(e => e.type === 'device_info')?.lang || null
   const screenSize    = sess.screen_size || trail.find(e => e.type === 'device_info')?.screen || null
+  const cityLine = [sess.city, sess.country].filter(Boolean).join(', ') || null
 
   return (
     <motion.div
@@ -437,6 +438,9 @@ function ActivityCard({ sess, index, mob, allSessions }) {
             {userLang && <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
               <Globe size={9} style={{ color: 'rgba(184,152,72,0.35)' }} />{userLang.toUpperCase().slice(0, 2)}
             </span>}
+            {cityLine && (
+              <span style={{ color: 'rgba(184,152,72,0.7)' }}>{cityLine}</span>
+            )}
             <span style={{ marginLeft: 'auto' }}>{formatDate(sess.updated_at)}</span>
           </div>
         ) : (
@@ -451,7 +455,10 @@ function ActivityCard({ sess, index, mob, allSessions }) {
             </div>
             <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{views.length}</span>
             <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.72)' }}>{formatDuration(totalMs) ?? '—'}</span>
-            <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)' }}>{formatDate(sess.updated_at)}</span>
+            <span style={{ fontSize: '0.6rem', color: 'rgba(244,241,234,0.65)', display: 'flex', flexDirection: 'column', lineHeight: 1.35 }}>
+              {cityLine && <span style={{ color: 'rgba(184,152,72,0.75)', fontSize: '0.55rem' }}>{cityLine}</span>}
+              <span>{formatDate(sess.updated_at)}</span>
+            </span>
             <ChevronRight size={12} style={{ color: 'rgba(184,152,72,0.4)', transform: expanded ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
           </>
         )}

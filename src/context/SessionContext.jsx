@@ -71,6 +71,26 @@ export function SessionProvider({ children }) {
   const [referrer]    = useState(getReferrerSource)
   const [userLang]    = useState(() => navigator.language || 'unknown')
   const [screenSize]  = useState(() => `${screen.width}x${screen.height}`)
+  const [geo, setGeo] = useState(() => {
+    try { return JSON.parse(sessionStorage.getItem('tvbs_geo') || 'null') } catch { return null }
+  })
+
+  // Resolve approximate visitor location via free IP geolocation (ipapi.co).
+  // Cached in sessionStorage so we only hit the API once per tab/session.
+  useEffect(() => {
+    if (geo) return
+    let cancelled = false
+    fetch('https://ipapi.co/json/')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (cancelled || !d) return
+        const next = { city: d.city ?? null, country: d.country_name ?? null }
+        sessionStorage.setItem('tvbs_geo', JSON.stringify(next))
+        setGeo(next)
+      })
+      .catch(() => { /* analytics must never break the app */ })
+    return () => { cancelled = true }
+  }, [geo])
 
   // trailRef is always current (updated synchronously on every mutation)
   // trail state is derived — only used to expose trail to consumers (ContactPage)
@@ -97,6 +117,8 @@ export function SessionProvider({ children }) {
         referrer,
         user_lang:     userLang,
         screen_size:   screenSize,
+        city:          geo?.city ?? null,
+        country:       geo?.country ?? null,
         project_slug:  PROJECT_SLUG,
         trail:         t,
         pages_count:   t.filter(e => e.type === 'page_view').length,
@@ -104,7 +126,7 @@ export function SessionProvider({ children }) {
         updated_at:    new Date().toISOString(),
       }, { onConflict: 'session_id' })
     } catch { /* silent — analytics must never break the app */ }
-  }, [sessionId, visitorId, visitNumber, referrer, userLang, screenSize])
+  }, [sessionId, visitorId, visitNumber, referrer, userLang, screenSize, geo])
 
   // ── Auto-track page views ─────────────────────────────────────────────────
   useEffect(() => {
