@@ -814,7 +814,7 @@ export default function AdminPage() {
     setRefreshing(true)
     const [{ data: l }, { data: s }] = await Promise.all([
       supabase.from('leads').select('*').eq('project_slug', PROJECT_SLUG).order('created_at', { ascending: false }),
-      supabase.from('page_sessions').select('*').eq('project_slug', PROJECT_SLUG).order('updated_at', { ascending: false }).limit(200),
+      supabase.from('page_sessions').select('*').eq('project_slug', PROJECT_SLUG).order('updated_at', { ascending: false }).limit(2000),
     ])
     if (l) setLeads(l)
     if (s) setSessions(s)
@@ -827,7 +827,7 @@ export default function AdminPage() {
     Promise.all([
       supabase.from('units').select('id,typology,floor,bedrooms,surface,price,status').eq('project_slug', PROJECT_SLUG).order('id'),
       supabase.from('leads').select('*').eq('project_slug', PROJECT_SLUG).order('created_at', { ascending: false }),
-      supabase.from('page_sessions').select('*').eq('project_slug', PROJECT_SLUG).order('updated_at', { ascending: false }).limit(200),
+      supabase.from('page_sessions').select('*').eq('project_slug', PROJECT_SLUG).order('updated_at', { ascending: false }).limit(2000),
     ]).then(([{ data: u }, { data: l }, { data: s }]) => {
       if (u) setUnits(u)
       if (l) setLeads(l)
