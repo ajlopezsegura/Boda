@@ -109,23 +109,37 @@ export function SessionProvider({ children }) {
   const saveSession = useCallback(async (converted = false) => {
     const t = trailRef.current
     if (t.length === 0) return
+
+    const base = {
+      session_id:    sessionId,
+      visitor_id:    visitorId,
+      visit_number:  visitNumber,
+      referrer,
+      user_lang:     userLang,
+      screen_size:   screenSize,
+      project_slug:  PROJECT_SLUG,
+      trail:         t,
+      pages_count:   t.filter(e => e.type === 'page_view').length,
+      converted,
+      updated_at:    new Date().toISOString(),
+    }
+    const withGeo = { ...base, city: geo?.city ?? null, country: geo?.country ?? null }
+
     try {
-      await supabase.from('page_sessions').upsert({
-        session_id:    sessionId,
-        visitor_id:    visitorId,
-        visit_number:  visitNumber,
-        referrer,
-        user_lang:     userLang,
-        screen_size:   screenSize,
-        city:          geo?.city ?? null,
-        country:       geo?.country ?? null,
-        project_slug:  PROJECT_SLUG,
-        trail:         t,
-        pages_count:   t.filter(e => e.type === 'page_view').length,
-        converted,
-        updated_at:    new Date().toISOString(),
-      }, { onConflict: 'session_id' })
-    } catch { /* silent — analytics must never break the app */ }
+      // Try with location columns first; if they don't exist yet (migration
+      // not run), Supabase returns an error — fall back to the base payload
+      // so a session is never lost over an optional field.
+      const { error } = await supabase
+        .from('page_sessions')
+        .upsert(withGeo, { onConflict: 'session_id' })
+      if (error) {
+        await supabase.from('page_sessions').upsert(base, { onConflict: 'session_id' })
+      }
+    } catch {
+      try {
+        await supabase.from('page_sessions').upsert(base, { onConflict: 'session_id' })
+      } catch { /* silent — analytics must never break the app */ }
+    }
   }, [sessionId, visitorId, visitNumber, referrer, userLang, screenSize, geo])
 
   // ── Auto-track page views ─────────────────────────────────────────────────
