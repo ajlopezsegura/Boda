@@ -2,17 +2,12 @@ import { useState } from 'react'
 import Lightbox from 'yet-another-react-lightbox'
 import 'yet-another-react-lightbox/styles.css'
 import GalleryThumb from './GalleryThumb'
-import { useLang } from '../../context/LangContext'
 
 export default function ImageGallery({ images }) {
   const [open, setOpen] = useState(false)
   const [index, setIndex] = useState(0)
-  const { lang } = useLang()
 
-  const slides = images.map(img => ({
-    src: img.src,
-    alt: lang === 'es' ? img.caption : (img.captionEN ?? img.caption),
-  }))
+  const slides = images.map(img => ({ src: img.src, alt: img.caption }))
 
   function openAt(i) { setIndex(i); setOpen(true) }
 
@@ -25,7 +20,7 @@ export default function ImageGallery({ images }) {
         {images.map((img, i) => (
           <GalleryThumb
             key={img.src}
-            image={{ ...img, caption: lang === 'es' ? img.caption : (img.captionEN ?? img.caption) }}
+            image={img}
             index={i}
             onClick={() => openAt(i)}
           />

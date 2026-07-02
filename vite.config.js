@@ -3,10 +3,6 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/Prueba-01/',
-  build: {
-    rollupOptions: {
-      external: [/^@epicgames-ps\//],
-    },
-  },
+  // Relative base: works on Vercel (root) and on GitHub Pages / subpaths.
+  base: './',
 })

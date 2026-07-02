@@ -22,7 +22,7 @@ export default {
       },
       fontFamily: {
         sans:  ['Montserrat', 'system-ui', 'sans-serif'],
-        serif: ['Montserrat', 'system-ui', 'sans-serif'],
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
       },
       letterSpacing: {
         luxury: '0.18em',
