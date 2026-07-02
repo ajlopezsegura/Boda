@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import Monogram from '../brand/Monogram'
 import wedding from '../../data/wedding'
 
 const LINKS = [
@@ -18,46 +19,39 @@ export default function WeddingNav() {
   const [open, setOpen] = useState(false)
 
   const onCover = location.pathname === '/'
+  // Sobre la portada (marino) → tinta clara; sobre papel → tinta marino.
+  const ink      = onCover ? 'rgba(244,240,231,0.72)' : 'var(--ink-muted)'
+  const inkStrong= onCover ? '#F4F0E7' : 'var(--navy)'
+  const gold     = onCover ? 'var(--gold-soft)' : 'var(--gold)'
 
   return (
     <>
       <motion.header
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-8 py-3 sm:py-4"
+        transition={{ duration: 0.9, ease: [0.43, 0.13, 0.23, 0.96] }}
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 sm:px-9 py-3"
         style={{
-          backgroundColor: onCover ? 'transparent' : 'rgba(37,45,58,0.90)',
-          backdropFilter: onCover ? 'none' : 'blur(16px)',
-          borderBottom: onCover ? 'none' : '1px solid rgba(184,152,72,0.15)',
+          backgroundColor: onCover ? 'transparent' : 'rgba(244,240,231,0.88)',
+          backdropFilter: onCover ? 'none' : 'blur(14px)',
+          borderBottom: onCover ? 'none' : '1px solid var(--hairline)',
           minHeight: 'var(--header-h)',
         }}
       >
-        {/* Monogram */}
-        <Link to="/" data-cursor="hover" className="no-underline flex items-center gap-2.5">
-          <span
-            className="flex items-center justify-center"
-            style={{
-              width: 34, height: 34, borderRadius: '50%',
-              border: '1px solid rgba(184,152,72,0.6)',
-              color: 'var(--color-accent)',
-              fontFamily: '"Cormorant Garamond", serif',
-              fontSize: '0.85rem', letterSpacing: '0.04em', fontWeight: 500,
-            }}
-          >
-            {wedding.couple.monogram}
-          </span>
-          <span className="hidden sm:flex flex-col gap-0.5">
-            <span className="text-text" style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '0.95rem', letterSpacing: '0.08em', lineHeight: 1 }}>
+        {/* Monograma + nombres */}
+        <Link to="/" data-cursor="hover" className="no-underline flex items-center gap-3">
+          <Monogram size={38} color={inkStrong} />
+          <span className="hidden sm:flex flex-col" style={{ gap: 2 }}>
+            <span className="display" style={{ color: inkStrong, fontSize: '1.05rem', letterSpacing: '0.1em', lineHeight: 1 }}>
               {wedding.couple.bride} &amp; {wedding.couple.groom}
             </span>
-            <span className="label-luxury text-accent" style={{ fontSize: '0.42rem', letterSpacing: '0.22em' }}>
+            <span className="eyebrow" style={{ color: gold, fontSize: '0.44rem', letterSpacing: '0.24em' }}>
               {wedding.dateShort}
             </span>
           </span>
         </Link>
 
-        {/* Desktop nav */}
+        {/* Nav escritorio */}
         <nav className="hidden md:flex items-center gap-7">
           {LINKS.map(l => {
             const active = location.pathname === l.to
@@ -66,10 +60,10 @@ export default function WeddingNav() {
                 key={l.to}
                 to={l.to}
                 data-cursor="hover"
-                className="label-luxury no-underline transition-colors duration-500"
-                style={{ fontSize: '0.6rem', color: active ? 'var(--color-accent)' : 'rgba(244,241,234,0.6)' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'var(--color-accent)')}
-                onMouseLeave={e => (e.currentTarget.style.color = active ? 'var(--color-accent)' : 'rgba(244,241,234,0.6)')}
+                className="eyebrow no-underline transition-colors duration-500"
+                style={{ fontSize: '0.58rem', color: active ? gold : ink }}
+                onMouseEnter={e => (e.currentTarget.style.color = gold)}
+                onMouseLeave={e => (e.currentTarget.style.color = active ? gold : ink)}
               >
                 {l.label}
               </Link>
@@ -77,19 +71,19 @@ export default function WeddingNav() {
           })}
         </nav>
 
-        {/* Mobile toggle */}
+        {/* Botón móvil */}
         <button
           onClick={() => setOpen(true)}
           data-cursor="hover"
           className="md:hidden flex items-center justify-center min-h-[44px] min-w-[44px]"
-          style={{ color: 'var(--color-accent)' }}
+          style={{ color: gold }}
           aria-label="Abrir menú"
         >
           <Menu size={22} strokeWidth={1.2} />
         </button>
       </motion.header>
 
-      {/* Mobile overlay menu */}
+      {/* Menú móvil */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -97,22 +91,20 @@ export default function WeddingNav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-7 md:hidden"
-            style={{ backgroundColor: 'rgba(26,33,48,0.98)', backdropFilter: 'blur(8px)' }}
+            className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-8 md:hidden"
+            style={{ backgroundColor: 'var(--navy)' }}
           >
             <button
               onClick={() => setOpen(false)}
               data-cursor="hover"
               className="absolute top-4 right-4 flex items-center justify-center min-h-[44px] min-w-[44px]"
-              style={{ color: 'var(--color-accent)' }}
+              style={{ color: 'var(--gold-soft)' }}
               aria-label="Cerrar menú"
             >
               <X size={24} strokeWidth={1.2} />
             </button>
 
-            <span style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: '2rem', color: 'var(--color-accent)', letterSpacing: '0.06em' }}>
-              {wedding.couple.monogram}
-            </span>
+            <Monogram size={72} color="var(--gold-soft)" />
 
             {LINKS.map((l, i) => (
               <motion.div
@@ -125,11 +117,11 @@ export default function WeddingNav() {
                   to={l.to}
                   onClick={() => setOpen(false)}
                   data-cursor="hover"
-                  className="label-luxury no-underline"
+                  className="display no-underline"
                   style={{
-                    fontSize: '0.9rem',
-                    letterSpacing: '0.14em',
-                    color: location.pathname === l.to ? 'var(--color-accent)' : 'var(--color-text)',
+                    fontSize: '1.7rem',
+                    letterSpacing: '0.06em',
+                    color: location.pathname === l.to ? 'var(--gold-soft)' : '#F4F0E7',
                   }}
                 >
                   {l.label}

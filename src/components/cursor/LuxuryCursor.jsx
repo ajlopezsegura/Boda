@@ -67,7 +67,7 @@ export default function LuxuryCursor() {
           position: 'fixed', top: 0, left: 0,
           width: 7, height: 7,
           borderRadius: '50%',
-          backgroundColor: 'var(--color-accent)',
+          backgroundColor: 'var(--gold)',
           pointerEvents: 'none',
           zIndex: 9999,
           willChange: 'transform',
@@ -80,7 +80,7 @@ export default function LuxuryCursor() {
           position: 'fixed', top: 0, left: 0,
           width: 34, height: 34,
           borderRadius: '50%',
-          border: '1px solid rgba(184,152,72,0.6)',
+          border: '1px solid rgba(166,129,60,0.6)',
           pointerEvents: 'none',
           zIndex: 9998,
           willChange: 'transform',
@@ -89,7 +89,7 @@ export default function LuxuryCursor() {
       <style>{`
         .cursor-hover + div { /* ring */ }
         div.cursor-hover[style*="width: 7px"] { width: 3px !important; height: 3px !important; opacity: 0.3; }
-        div.cursor-hover[style*="width: 34px"] { width: 54px !important; height: 54px !important; border-color: rgba(184,152,72,0.8) !important; transition: width 0.3s ease, height 0.3s ease !important; }
+        div.cursor-hover[style*="width: 34px"] { width: 54px !important; height: 54px !important; border-color: rgba(166,129,60,0.85) !important; transition: width 0.3s ease, height 0.3s ease !important; }
       `}</style>
     </>
   )

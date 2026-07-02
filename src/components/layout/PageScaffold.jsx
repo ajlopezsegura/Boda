@@ -1,51 +1,54 @@
 import { motion } from 'framer-motion'
 import PageTransition from './PageTransition'
+import { GoldRule } from '../brand/decor'
+import Monogram from '../brand/Monogram'
 
 const ease = [0.43, 0.13, 0.23, 0.96]
 
 /**
- * Shared scaffold for interior wedding pages.
- * Full-screen fixed layer with an internal scroll area, a passport-style
- * heading (kicker + serif title + gold rule) and a centered content column.
+ * Scaffold editorial de las páginas interiores (papel marfil, tinta marino).
+ * Encabezado con rótulo espaciado + titular serif + filete de oro, y un cierre
+ * con el monograma-firma.
  */
-export default function PageScaffold({ kicker, title, subtitle, maxWidth = 860, children }) {
+export default function PageScaffold({ eyebrow, title, subtitle, maxWidth = 860, children, closing = true }) {
   return (
     <PageTransition>
-      <div className="absolute inset-0 overflow-y-auto" style={{ backgroundColor: 'var(--color-bg)' }}>
+      <div className="absolute inset-0 overflow-y-auto" style={{ backgroundColor: 'var(--paper)' }}>
         <div
           className="mx-auto px-6 sm:px-8"
-          style={{ maxWidth, paddingTop: 'calc(var(--header-h) + 3.5rem)', paddingBottom: '5rem' }}
+          style={{ maxWidth, paddingTop: 'calc(var(--header-h) + 4rem)', paddingBottom: '4.5rem' }}
         >
-          {/* Heading */}
+          {/* Encabezado */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease }}
-            className="flex flex-col items-center text-center mb-10 sm:mb-14"
+            transition={{ duration: 0.8, ease }}
+            className="flex flex-col items-center text-center mb-12 sm:mb-16"
           >
-            {kicker && (
-              <span className="label-luxury text-accent mb-4" style={{ fontSize: '0.6rem', letterSpacing: '0.28em' }}>
-                {kicker}
+            {eyebrow && (
+              <span className="eyebrow mb-5" style={{ color: 'var(--gold)' }}>
+                {eyebrow}
               </span>
             )}
-            <h1
-              className="text-text"
-              style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 'clamp(2rem, 7vw, 3.4rem)', letterSpacing: '0.02em', lineHeight: 1.1, fontWeight: 500 }}
-            >
+            <h1 className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(2.2rem, 7vw, 3.6rem)', letterSpacing: '0.03em' }}>
               {title}
             </h1>
-            <div className="h-px my-6" style={{ width: 48, backgroundColor: 'var(--color-accent)' }} />
+            <GoldRule className="my-6" width={52} animate={false} />
             {subtitle && (
-              <p
-                className="font-sans font-light"
-                style={{ fontSize: 'clamp(0.9rem, 2vw, 1.02rem)', lineHeight: 1.9, color: 'var(--color-text-muted)', maxWidth: 620 }}
-              >
+              <p style={{ fontSize: 'clamp(1rem, 2.2vw, 1.18rem)', lineHeight: 1.85, color: 'var(--ink-muted)', maxWidth: 640 }}>
                 {subtitle}
               </p>
             )}
           </motion.div>
 
           {children}
+
+          {/* Cierre */}
+          {closing && (
+            <div className="flex justify-center mt-16 sm:mt-20">
+              <Monogram size={54} color="var(--gold)" />
+            </div>
+          )}
         </div>
       </div>
     </PageTransition>

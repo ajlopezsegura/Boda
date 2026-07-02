@@ -1,50 +1,46 @@
 import { motion } from 'framer-motion'
 import { MapPin } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
+import { Stamp } from '../components/brand/decor'
 import wedding from '../data/wedding'
 
 const ease = [0.43, 0.13, 0.23, 0.96]
 
-function Stamp({ stamp, index }) {
+function DataCell({ label, value }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.42rem', letterSpacing: '0.2em' }}>{label}</span>
+      <span className="data" style={{ color: 'var(--navy)', fontSize: '0.8rem' }}>{value}</span>
+    </div>
+  )
+}
+
+function Stamp2({ s, index }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.6, ease }}
-      className="relative flex gap-5 sm:gap-8 pb-10 sm:pb-12"
+      className="relative flex gap-5 sm:gap-8 pb-11"
     >
-      {/* Rail */}
-      <div className="flex flex-col items-center flex-shrink-0" style={{ width: 64 }}>
+      <div className="flex flex-col items-center flex-shrink-0" style={{ width: 62 }}>
         <div
-          className="flex items-center justify-center"
-          style={{
-            width: 60, height: 60, borderRadius: '50%',
-            border: '1px dashed rgba(184,152,72,0.55)',
-            color: 'var(--color-accent)',
-            transform: 'rotate(-8deg)',
-            fontFamily: '"Cormorant Garamond", serif',
-          }}
+          className="flex items-center justify-center display"
+          style={{ width: 60, height: 60, borderRadius: '50%', border: '1px solid var(--gold)', color: 'var(--navy)', fontSize: '1rem', transform: 'rotate(-7deg)' }}
         >
-          <span style={{ fontSize: '1rem', fontWeight: 600 }}>{stamp.year}</span>
+          {s.year}
         </div>
-        <div className="flex-1 w-px mt-3" style={{ backgroundColor: 'rgba(184,152,72,0.2)', minHeight: 40 }} />
+        <div className="flex-1 w-px mt-3" style={{ backgroundColor: 'var(--hairline)', minHeight: 34 }} />
       </div>
 
-      {/* Content */}
-      <div className="flex-1 pt-1">
+      <div className="flex-1 pt-1.5">
         <div className="flex items-center gap-1.5 mb-2">
-          <MapPin size={11} style={{ color: 'var(--color-accent)' }} />
-          <span className="label-luxury text-accent" style={{ fontSize: '0.55rem', letterSpacing: '0.2em' }}>
-            {stamp.place}
-          </span>
+          <MapPin size={11} style={{ color: 'var(--gold)' }} />
+          <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem', letterSpacing: '0.18em' }}>{s.place}</span>
         </div>
-        <h3 className="text-text mb-2" style={{ fontFamily: '"Cormorant Garamond", serif', fontSize: 'clamp(1.3rem, 4vw, 1.7rem)', fontWeight: 500 }}>
-          {stamp.title}
-        </h3>
-        <p className="font-sans font-light" style={{ fontSize: '0.92rem', lineHeight: 1.85, color: 'var(--color-text-muted)' }}>
-          {stamp.text}
-        </p>
+        <h3 className="display mb-2" style={{ color: 'var(--navy)', fontSize: 'clamp(1.4rem, 4vw, 1.8rem)' }}>{s.title}</h3>
+        <p style={{ fontSize: '1.05rem', lineHeight: 1.75, color: 'var(--ink-muted)' }}>{s.text}</p>
       </div>
     </motion.div>
   )
@@ -52,11 +48,23 @@ function Stamp({ stamp, index }) {
 
 export default function HistoriaPage() {
   const { story } = wedding
+  const p = story.passport
   return (
-    <PageScaffold kicker="Nuestro pasaporte" title="Nuestra historia" subtitle={story.intro} maxWidth={720}>
-      <div className="mt-4">
+    <PageScaffold eyebrow="El diario de a bordo" title="Nuestra historia" subtitle={story.intro} maxWidth={720}>
+      {/* Franja de datos tipo pasaporte */}
+      <div className="relative mb-14 p-6 overflow-hidden" style={{ border: '1px solid var(--hairline)', backgroundColor: 'var(--paper-deep)' }}>
+        <Stamp label={wedding.city} sub="2026" size={130} rotate={-14} className="absolute" style={{ top: -18, right: -14 }} opacity={0.16} />
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 relative">
+          <DataCell label="Tipo" value={p.type} />
+          <DataCell label="Código" value={p.code} />
+          <DataCell label="Nº" value={p.number} />
+          <DataCell label="Expedido en" value={p.authority} />
+        </div>
+      </div>
+
+      <div>
         {story.stamps.map((s, i) => (
-          <Stamp key={s.year + s.title} stamp={s} index={i} />
+          <Stamp2 key={s.year + s.title} s={s} index={i} />
         ))}
       </div>
     </PageScaffold>
