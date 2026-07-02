@@ -29,7 +29,7 @@ export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth
               <span
                 aria-hidden="true"
                 className="display absolute select-none"
-                style={{ top: '-1.6rem', right: 0, fontSize: 'clamp(4rem, 14vw, 9rem)', lineHeight: 1, color: 'var(--navy)', opacity: 0.06 }}
+                style={{ top: '-1.6rem', right: 0, fontSize: 'clamp(4rem, 14vw, 9rem)', lineHeight: 1, color: 'var(--navy)', opacity: 0.06, pointerEvents: 'none' }}
               >
                 {index}
               </span>
