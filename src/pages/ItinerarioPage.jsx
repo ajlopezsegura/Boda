@@ -51,10 +51,11 @@ export default function ItinerarioPage() {
   const { events, program, dateShort } = wedding
   return (
     <PageScaffold
-      eyebrow="El itinerario"
-      title="El gran día"
-      subtitle="Dos escalas, un mismo destino. Del «sí, quiero» en Jaén al claustro de Baeza."
-      maxWidth={720}
+      index="02"
+      eyebrow="Itinerario"
+      title={<>El gran <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>día</span></>}
+      subtitle="Dos escalas, un mismo destino: del «sí, quiero» en Jaén al claustro de Baeza."
+      maxWidth={760}
     >
       <div className="flex items-center justify-center gap-3 mb-10">
         <span className="data" style={{ color: 'var(--gold)', fontSize: '0.62rem' }}>{dateShort}</span>

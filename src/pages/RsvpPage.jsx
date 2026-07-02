@@ -89,9 +89,10 @@ export default function RsvpPage() {
 
   return (
     <PageScaffold
-      eyebrow="Tarjeta de embarque"
-      title="Confirma tu asistencia"
-      subtitle={`Necesitamos saber si nos acompañas para reservarte plaza. Por favor, confírmanos antes del ${rsvp.deadline}.`}
+      index="06"
+      eyebrow="Boarding pass"
+      title={<>Confirma tu <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>asistencia</span></>}
+      subtitle={`Necesitamos saber si nos acompañas para reservarte plaza. Confírmanos, por favor, antes del ${rsvp.deadline}.`}
       maxWidth={620}
     >
       <motion.form

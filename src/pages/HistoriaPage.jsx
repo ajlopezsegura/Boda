@@ -50,7 +50,7 @@ export default function HistoriaPage() {
   const { story } = wedding
   const p = story.passport
   return (
-    <PageScaffold eyebrow="El diario de a bordo" title="Nuestra historia" subtitle={story.intro} maxWidth={720}>
+    <PageScaffold index="01" eyebrow="Diario" title={<>Nuestra <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>historia</span></>} subtitle={story.intro} maxWidth={760}>
       {/* Franja de datos tipo pasaporte */}
       <div className="relative mb-14 p-6 overflow-hidden" style={{ border: '1px solid var(--hairline)', backgroundColor: 'var(--paper-deep)' }}>
         <Stamp label={wedding.city} sub="2026" size={130} rotate={-14} className="absolute" style={{ top: -18, right: -14 }} opacity={0.16} />

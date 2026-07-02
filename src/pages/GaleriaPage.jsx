@@ -5,7 +5,8 @@ import wedding from '../data/wedding'
 export default function GaleriaPage() {
   return (
     <PageScaffold
-      eyebrow="Álbum de a bordo"
+      index="04"
+      eyebrow="Álbum"
       title="Galería"
       subtitle="Un puñado de destinos, estaciones y atardeceres que nos han traído hasta aquí."
       maxWidth={1040}
