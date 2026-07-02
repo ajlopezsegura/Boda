@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import PageTransition from './PageTransition'
 import { GoldRule } from '../brand/decor'
-import Monogram from '../brand/Monogram'
+import SectionNav from './SectionNav'
 
 const ease = [0.43, 0.13, 0.23, 0.96]
 
@@ -43,12 +43,8 @@ export default function PageScaffold({ eyebrow, title, subtitle, maxWidth = 860,
 
           {children}
 
-          {/* Cierre */}
-          {closing && (
-            <div className="flex justify-center mt-16 sm:mt-20">
-              <Monogram size={54} color="var(--gold)" />
-            </div>
-          )}
+          {/* Cierre + navegación a la siguiente parada */}
+          {closing && <SectionNav />}
         </div>
       </div>
     </PageTransition>

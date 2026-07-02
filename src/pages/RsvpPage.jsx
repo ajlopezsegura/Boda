@@ -93,7 +93,6 @@ export default function RsvpPage() {
       title="Confirma tu asistencia"
       subtitle={`Necesitamos saber si nos acompañas para reservarte plaza. Por favor, confírmanos antes del ${rsvp.deadline}.`}
       maxWidth={620}
-      closing={false}
     >
       <motion.form
         initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
