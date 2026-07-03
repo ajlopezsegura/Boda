@@ -9,7 +9,6 @@ const LINKS = [
   { to: '/historia', label: 'Historia' },
   { to: '/dia',      label: 'El día' },
   { to: '/viaje',    label: 'Viaje' },
-  { to: '/galeria',  label: 'Galería' },
   { to: '/info',     label: 'Info' },
   { to: '/rsvp',     label: 'Confirmar' },
 ]

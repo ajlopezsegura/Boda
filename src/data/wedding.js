@@ -102,22 +102,6 @@ const wedding = {
       'Vandelvira (Baeza) y de vuelta al final de la fiesta. Reserva tu plaza al confirmar.',
   },
 
-  // ── Galería (sustituir por fotos vuestras en public/assets/images/) ───────
-  gallery: [
-    { src: './assets/images/Salon 01.webp', caption: 'Nuestro primer viaje' },
-    { src: './assets/images/salon 02.webp', caption: 'Escapadas' },
-    { src: './assets/images/Salon 03.jpg',  caption: 'Los Alpes' },
-    { src: './assets/images/Terraza (1).jpg', caption: 'Verano en el sur' },
-    { src: './assets/images/Terraza (2).jpg', caption: 'Atardeceres' },
-    { src: './assets/images/Salon 04.jpg',  caption: 'Ciudades' },
-    { src: './assets/images/Salon 05.jpg',  caption: 'Aventuras' },
-    { src: './assets/images/Cocina (1).jpg', caption: 'En casa' },
-    { src: './assets/images/Dormitorio (1).jpg', caption: 'Momentos' },
-    { src: './assets/images/Piscina (1).jpg', caption: 'Descansos' },
-    { src: './assets/images/Piscina (2).jpg', caption: 'Planes' },
-    { src: './assets/images/Cocina (2).jpg', caption: 'Recuerdos' },
-  ],
-
   // ── Información práctica ───────────────────────────────────────────────────
   info: {
     dressCode: {

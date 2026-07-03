@@ -17,11 +17,6 @@
   --header-h:     60px;
 }
 
-/* Ocultar cursor solo en dispositivos con puntero real (no táctil) */
-@media (pointer: fine) and (hover: hover) {
-  *, *::before, *::after { cursor: none !important; }
-}
-
 html {
   background-color: var(--paper);
   color: var(--ink);

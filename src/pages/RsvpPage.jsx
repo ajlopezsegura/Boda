@@ -89,7 +89,7 @@ export default function RsvpPage() {
 
   return (
     <PageScaffold
-      index="06"
+      index="05"
       eyebrow="Boarding pass"
       title={<>Confirma tu <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>asistencia</span></>}
       subtitle={`Necesitamos saber si nos acompañas para reservarte plaza. Confírmanos, por favor, antes del ${rsvp.deadline}.`}

@@ -8,7 +8,6 @@ const JOURNEY = [
   { to: '/historia', label: 'Nuestra historia' },
   { to: '/dia',      label: 'El gran día' },
   { to: '/viaje',    label: 'El viaje' },
-  { to: '/galeria',  label: 'Galería' },
   { to: '/info',     label: 'Buen viaje' },
   { to: '/rsvp',     label: 'Confirmar asistencia' },
 ]

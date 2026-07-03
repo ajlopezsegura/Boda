@@ -38,7 +38,7 @@ export default function InfoPage() {
 
   return (
     <PageScaffold
-      index="05"
+      index="04"
       eyebrow="Antes de volar"
       title={<>Buen <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>viaje</span></>}
       subtitle="Los detalles que te ayudarán a disfrutar del día sin sorpresas."
