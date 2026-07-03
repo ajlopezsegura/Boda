@@ -17,23 +17,6 @@ export default function CoverPage() {
       <div className="absolute inset-0 overflow-hidden" style={{ backgroundColor: 'var(--navy)' }}>
         <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 36%, rgba(198,166,89,0.10), transparent 62%)' }} />
 
-        {/* Marco de hilo dorado */}
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.4, delay: 0.4 }}
-          className="absolute pointer-events-none"
-          style={{ inset: 'clamp(14px, 3vw, 30px)', border: '1px solid rgba(198,166,89,0.32)' }}
-        />
-
-        {/* Microtexto de esquina (motivo pasaporte) */}
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 1.6 }}
-          className="absolute hidden sm:flex items-center justify-between"
-          style={{ left: 'clamp(28px, 4vw, 52px)', right: 'clamp(28px, 4vw, 52px)', top: 'clamp(28px, 4vw, 48px)' }}
-        >
-          <span className="data" style={{ color: 'rgba(198,166,89,0.5)', fontSize: '0.5rem' }}>ESP · {city.toUpperCase()}</span>
-          <span className="data" style={{ color: 'rgba(198,166,89,0.5)', fontSize: '0.5rem' }}>Nº&nbsp;12·12·MMXXVI</span>
-        </motion.div>
-
         {/* Contenido */}
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
 

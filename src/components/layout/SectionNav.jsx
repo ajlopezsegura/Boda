@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
 import { ArrowRight, RotateCcw } from 'lucide-react'
-import Monogram from '../brand/Monogram'
 
 // Orden del recorrido (la "ruta" del pasaporte)
 const JOURNEY = [
@@ -22,11 +21,6 @@ export default function SectionNav() {
 
   return (
     <div className="mt-16 sm:mt-20">
-      {/* Monograma-firma como cierre/divisor */}
-      <div className="flex justify-center mb-8">
-        <Monogram size={50} color="var(--gold)" />
-      </div>
-
       <Link
         to={next.to}
         data-cursor="hover"
