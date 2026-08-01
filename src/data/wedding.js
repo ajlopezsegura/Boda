@@ -15,15 +15,9 @@ const wedding = {
     hashtag: '#PilarYPablo2026',
   },
 
-  // Padres (como en la invitación). Deja los nombres vacíos para ocultar el bloque.
-  parents: {
-    groom: ['D. Padre de Pablo', 'Dña. Madre de Pablo'],           // REVISAR
-    bride: ['D. Francisco José López Muñoz', 'Dña. María Alicia Segura García'],
-    line: 'Tienen el honor de comunicar el enlace matrimonial de sus hijos',
-  },
 
   // Fecha y hora de inicio (para la cuenta atrás). Formato: AAAA-MM-DDTHH:MM
-  date: '2026-12-12T13:00:00',
+  date: '2026-12-12T12:00:00',
   dateLabel: 'Sábado, 12 de Diciembre de 2026',
   dateShort: '12 · 12 · 2026',
   city: 'Jaén',
@@ -47,21 +41,21 @@ const wedding = {
   events: [
     {
       code: 'CER',
-      time: '13:00',
+      time: '12:00',
       title: 'Ceremonia',
-      place: 'Iglesia de San Andrés Apóstol',
-      location: 'Jaén',
-      map: 'https://maps.google.com/?q=Iglesia+de+San+Andrés+Apóstol+Jaén',
+      place: 'Iglesia de San Bartolomé',
+      location: 'Jaén Capital',
+      map: 'https://maps.google.com/?q=Iglesia+de+San+Bartolomé+Jaén',
       note: 'El embarque comienza puntual. Os esperamos para dar el «sí, quiero».',
     },
     {
       code: 'CEL',
-      time: 'A continuación',
+      time: '14:00',
       title: 'Celebración',
-      place: 'Hacienda La Concepción',
-      location: 'Úbeda (Jaén)',
-      map: 'https://maps.google.com/?q=Hacienda+La+Concepción+Úbeda+Jaén',
-      note: 'Cóctel, banquete y baile. Que empiece el viaje.',
+      place: 'Claustro de Vandelvira',
+      location: 'Baeza (Jaén)',
+      map: 'https://maps.google.com/?q=Claustro+de+Vandelvira+Baeza',
+      note: 'Cóctel, banquete y baile en un claustro renacentista. Que empiece el viaje.',
     },
   ],
 
@@ -94,27 +88,27 @@ const wedding = {
       { label: 'Pablo', from: 'de Málaga', now: 'Zúrich', code: 'ZRH' },
       { label: 'Pilar', from: 'de Jaén',   now: 'Madrid', code: 'MAD' },
     ],
-    destination: { place: 'Jaén · Úbeda', code: 'JAE', label: 'Nuestro mejor día' },
+    destination: { place: 'Jaén · Baeza', code: 'JAE', label: 'Nuestro mejor día' },
     getting: [
       { icon: 'Plane',      title: 'En avión', text: 'Aeropuerto Federico García Lorca Granada-Jaén (GRX) a ~1h. Desde Zúrich, vuelos directos a Madrid y Málaga.' },
-      { icon: 'TrainFront', title: 'En tren',  text: 'AVE hasta Jaén o Linares-Baeza desde Madrid. Desde la estación, coche o bus hasta Úbeda (~40 min).' },
-      { icon: 'Car',        title: 'En coche', text: 'Úbeda está a 57 km de Jaén capital por la A-316. Hay parking en la propia Hacienda La Concepción.' },
+      { icon: 'TrainFront', title: 'En tren',  text: 'AVE hasta Jaén o Linares-Baeza desde Madrid. Desde la estación, coche o bus hasta Baeza (~35 min).' },
+      { icon: 'Car',        title: 'En coche', text: 'Baeza está a 48 km de Jaén capital por la A-316. Parking gratuito junto al Claustro de Vandelvira.' },
     ],
     hotels: [
-      { name: 'Parador de Úbeda',        area: 'Úbeda — centro histórico', note: 'Palacio renacentista, junto a la celebración. Recomendado.', url: '' },
-      { name: 'Hotel Las Casas del Cónsul', area: 'Úbeda',                 note: 'Boutique, con encanto y muy céntrico.',        url: '' },
-      { name: 'Hotel Puerta de la Luna',  area: 'Baeza — a 10 min en coche', note: 'Opción cómoda si preferís Baeza.',            url: '' },
+      { name: 'Hotel Puerta de la Luna', area: 'Baeza — centro histórico', note: 'A 5 min andando de la celebración. Recomendado.', url: '' },
+      { name: 'Parador de Úbeda',        area: 'Úbeda — a 10 min en coche', note: 'Palacio renacentista con encanto.',            url: '' },
+      { name: 'Hotel TRH Baeza',         area: 'Baeza',                     note: 'Opción cómoda y céntrica.',                    url: '' },
     ],
     shuttle:
-      'Habrá autobús desde la Iglesia de San Andrés Apóstol (Jaén) hasta la Hacienda ' +
-      'La Concepción (Úbeda) y de vuelta al final de la fiesta. Reserva tu plaza al confirmar.',
+      'Habrá autobús desde la Iglesia de San Bartolomé (Jaén) hasta el Claustro de ' +
+      'Vandelvira (Baeza) y de vuelta al final de la fiesta. Reserva tu plaza al confirmar.',
   },
 
   // ── Información práctica ───────────────────────────────────────────────────
   info: {
     dressCode: {
       value: 'Formal',
-      note: 'Ellas, largo o midi; ellos, traje. La hacienda tiene zonas de jardín y empedrado: tacón cómodo o cuña recomendado.',
+      note: 'Ellas, largo o midi; ellos, traje. El claustro tiene zonas de tierra y adoquín: tacón cómodo o cuña recomendado.',
     },
     gift: {
       note: 'Vuestra presencia es nuestro mejor regalo. Si además queréis tener un detalle y ayudarnos a llenar la maleta de nuestra luna de miel, aquí os dejamos nuestra cuenta.',
@@ -123,8 +117,8 @@ const wedding = {
     },
     faq: [
       { q: '¿Puedo llevar a mis hijos?', a: 'Será una celebración pensada para adultos. Si necesitas ayuda con canguro en la zona, dínoslo y te echamos una mano.' },
-      { q: '¿Hay servicio de autobús?', a: 'Sí, entre la ceremonia (Jaén) y la celebración (Úbeda), y de vuelta al final de la noche. Resérvalo al confirmar.' },
-      { q: '¿Dónde aparco?', a: 'Hay parking en la propia Hacienda La Concepción, en Úbeda.' },
+      { q: '¿Hay servicio de autobús?', a: 'Sí, entre la ceremonia (Jaén) y la celebración (Baeza), y de vuelta al final de la noche. Resérvalo al confirmar.' },
+      { q: '¿Dónde aparco?', a: 'Hay parking gratuito junto al Claustro de Vandelvira, en Baeza.' },
       { q: '¿Hasta cuándo confirmo?', a: 'Te agradecemos que confirmes antes del 30 de septiembre de 2026 para organizarlo todo con cariño.' },
     ],
   },
