@@ -26,8 +26,8 @@
 
   /* &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; 1 &#183; PANEL DE SALIDAS &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
   .board-wrap{min-height:100dvh;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:clamp(1.8rem,5vh,3rem);
-    padding:clamp(2rem,7vw,4rem);background:var(--navy);position:relative;overflow:hidden}
+    align-items:center;justify-content:center;gap:clamp(1.6rem,4.5vh,2.6rem);
+    padding:clamp(1.1rem,3.5vw,2.2rem);background:var(--navy);position:relative;overflow:hidden}
   .board-wrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .board-wrap .veil{position:absolute;inset:0;
     background:linear-gradient(180deg,rgba(14,22,40,.72)0%,rgba(14,22,40,.5)34%,rgba(14,22,40,.62)66%,rgba(14,22,40,.86)100%)}
@@ -46,12 +46,12 @@
     .names-stack{flex-direction:row;gap:.7rem}
   }
 
-  .board{position:relative;width:100%;max-width:44rem;display:flex;flex-direction:column;gap:.5rem}
+  .board{position:relative;width:100%;display:flex;flex-direction:column;gap:.42rem}
   .row{display:grid;grid-template-columns:5.2rem 1fr;gap:.7rem;align-items:center}
   .row .k{font-family:"Montserrat",system-ui,sans-serif;font-size:.5rem;
     letter-spacing:.18em;text-transform:uppercase;color:rgba(247,243,234,.42);text-align:right}
-  .flaps{display:flex;gap:3px;flex-wrap:wrap}
-  .flap{position:relative;width:clamp(1.15rem,4.4vw,1.9rem);height:clamp(1.7rem,6.4vw,2.7rem);
+  .flaps{display:grid;grid-template-columns:repeat(var(--n,12),1fr);gap:2px;width:100%}
+  .flap{position:relative;width:auto;height:clamp(1.6rem,5.6vw,2.6rem);
     background:#0E1628;border-top:1px solid rgba(247,243,234,.09);
     display:flex;align-items:center;justify-content:center;overflow:hidden}
   .flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.55)}
@@ -145,7 +145,10 @@
     .pass .stub{border-left:none;border-top:1px dashed rgba(22,32,58,.28);flex-direction:row;gap:1.4rem}
     .pass::before,.pass::after{display:none}
     .code{writing-mode:horizontal-tb}
-    .row{grid-template-columns:3.6rem 1fr}
+    /* La etiqueta pasa arriba para que las casillas ocupen todo el ancho */
+    .row{grid-template-columns:1fr;gap:.3rem}
+    .row .k{text-align:left;padding-left:2px}
+    .board{gap:.9rem}
   }
   @media(prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
@@ -165,13 +168,10 @@
     <span class="label">Vuelo PP-1212 &#183; Embarque abierto</span>
   </div>
 
-  <div class="names-stack">
-    <div class="flaps names" data-word="PILAR &" data-row="0"></div>
-    <div class="flaps names" data-word="PABLO" data-row="0"></div>
-  </div>
 
   <div class="board" id="board">
-    <div class="row"><span class="k">Destino</span><div class="flaps" data-word="JAEN  ESPANA" data-row="1"></div></div>
+    <div class="row"><span class="k">Boda</span><div class="flaps" data-word="PILAR & PABLO" data-row="0"></div></div>
+    <div class="row"><span class="k">Destino</span><div class="flaps" data-word="JAEN ESPANA" data-row="1"></div></div>
     <div class="row"><span class="k">Fecha</span><div class="flaps" data-word="12 DIC 2026" data-row="2"></div></div>
     <div class="row"><span class="k">Faltan</span><div class="flaps" id="cd" data-lit="1" data-row="3"></div></div>
   </div>
@@ -254,17 +254,31 @@
   function faltan() {
     const ms = Math.max(0, BODA - Date.now());
     const d = Math.floor(ms / 86400000);
-    if (d > 1) return String(d) + " DIAS";
-    if (d === 1) return "1 DIA";
-    return "ES HOY";
+    const h = Math.floor((ms % 86400000) / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    const p2 = n => String(n).padStart(2, "0");
+    // ancho fijo para que las casillas no bailen
+    return String(d).padStart(3, " ") + "D " + p2(h) + "H " + p2(m) + "M " + p2(s) + "S";
   }
   const cd = document.getElementById("cd");
   cd.dataset.word = faltan();
 
-  document.querySelectorAll(".flaps").forEach((box) => {
-    const word = box.dataset.word;
+  /* Todas las filas comparten el mismo número de casillas para que las
+     columnas queden alineadas de arriba abajo, como un tablero real. */
+  const cajas = [...document.querySelectorAll(".flaps")];
+  const N = Math.max(...cajas.map(b => b.dataset.word.length));
+  const centrar = w => {
+    const hueco = N - w.length;
+    const izq = Math.floor(hueco / 2);
+    return " ".repeat(izq) + w + " ".repeat(hueco - izq);
+  };
+
+  cajas.forEach((box) => {
+    const word = centrar(box.dataset.word);
     const row  = Number(box.dataset.row || 0);
     const lit  = box.dataset.lit === "1";
+    box.style.setProperty("--n", N);
     [...word].forEach((target, i) => {
       const cell = document.createElement("div");
       cell.className = "flap" + (lit ? " lit" : "") + (target === "&" ? " amp" : "");
@@ -296,7 +310,7 @@
 
   /* La cuenta atr&#225;s se refresca sola: las casillas que cambian vuelven a girar */
   setInterval(() => {
-    const nuevo = faltan();
+    const nuevo = centrar(faltan());
     const celdas = [...cd.children];
     [...nuevo].forEach((ch, i) => {
       const cell = celdas[i];
@@ -308,10 +322,10 @@
         s.textContent = CHARS[Math.floor(Math.random() * CHARS.length)];
         cell.classList.add("turning");
         setTimeout(() => cell.classList.remove("turning"), 70);
-        if (++n > 6) { clearInterval(spin); s.textContent = ch; }
-      }, 55);
+        if (++n > 3) { clearInterval(spin); s.textContent = ch; }
+      }, 45);
     });
-  }, 60000);
+  }, 1000);
 
   /* &#9472;&#9472; La ruta: el trazo se dibuja y el avi&#243;n lo recorre al hacer scroll &#9472;&#9472; */
   const routes = [
