@@ -16,22 +16,28 @@ export default function CoverPage() {
   const videoRef = useRef(null)
 
   const showVideo = cover.video && !videoFailed
+  const ambientRef = useRef(null)
 
   // React no siempre fija la propiedad DOM `muted` a tiempo para que el
   // navegador permita el autoplay (bug conocido, sobre todo en Safari/iOS).
   // Se fuerza de forma imperativa antes de llamar a play().
   useEffect(() => {
-    const v = videoRef.current
-    if (!v) return
-    v.muted = true
-    v.defaultMuted = true
-    const playPromise = v.play()
-    if (playPromise?.catch) {
-      playPromise.catch(() => {
-        // Autoplay bloqueado por el navegador: se deja el fallback visual
-        // (fondo marino) y no se interrumpe la experiencia.
-        setVideoFailed(true)
-      })
+    if (!showVideo) return
+    for (const ref of [videoRef, ambientRef]) {
+      const v = ref.current
+      if (!v) continue
+      v.muted = true
+      v.defaultMuted = true
+      const playPromise = v.play()
+      if (playPromise?.catch) {
+        playPromise.catch(() => {
+          if (ref === videoRef) {
+            // Autoplay bloqueado por el navegador: se deja el fallback
+            // visual (fondo marino) y no se interrumpe la experiencia.
+            setVideoFailed(true)
+          }
+        })
+      }
     }
   }, [showVideo])
 
@@ -41,31 +47,45 @@ export default function CoverPage() {
 
         {/* Fondo — vídeo.
             Es un clip vertical (formato retrato). En móvil cubre toda la
-            pantalla a sangre; en escritorio, en vez de estirarlo y recortarlo
-            en exceso, se enmarca como una foto de pasaporte: nítido, centrado,
-            con filo dorado, flotando sobre el marino. */}
+            pantalla a sangre. En escritorio, para evitar tanto el recorte
+            extremo de estirarlo a lo ancho como el efecto "tarjeta" de
+            enmarcarlo con un borde duro, se usa el mismo tratamiento que
+            Instagram/TikTok en web: una copia del vídeo, muy desenfocada y
+            oscurecida, llena todo el fondo a modo ambiental (sin negro/marino
+            vacío a los lados), y el vídeo nítido flota centrado por encima en
+            su proporción real, sin borde — se funde con el ambiente. */}
         {showVideo && (
-          <div className="absolute inset-0 md:flex md:items-center md:justify-center md:p-10 lg:p-16" style={{ zIndex: 0 }}>
-            <div
-              className="absolute inset-0 md:relative md:inset-auto md:h-[74vh] md:max-h-[640px] md:aspect-[41/64] md:border overflow-hidden md:shadow-[0_35px_90px_rgba(10,14,26,0.55)]"
-              style={{ borderColor: 'rgba(198,166,89,0.4)' }}
-            >
-              <video
-                ref={videoRef}
-                src={cover.video}
-                poster={cover.image || undefined}
-                autoPlay
-                muted
-                defaultMuted
-                loop
-                playsInline
-                webkit-playsinline="true"
-                preload="auto"
-                onError={() => setVideoFailed(true)}
-                className="w-full h-full object-cover"
-              />
+          <>
+            {/* Ambiente — solo visible en escritorio (en móvil el vídeo nítido ya cubre todo) */}
+            <video
+              ref={ambientRef}
+              src={cover.video}
+              aria-hidden="true"
+              autoPlay muted defaultMuted loop playsInline webkit-playsinline="true" preload="auto"
+              className="hidden md:block absolute inset-0 w-full h-full object-cover"
+              style={{ zIndex: 0, filter: 'blur(60px) saturate(1.15) brightness(0.55)', transform: 'scale(1.2)' }}
+            />
+
+            {/* Nítido — a sangre en móvil, centrado en su proporción real en escritorio */}
+            <div className="absolute inset-0 md:flex md:items-center md:justify-center md:py-12" style={{ zIndex: 0 }}>
+              <div className="absolute inset-0 md:relative md:inset-auto md:h-[82vh] md:max-h-[760px] md:aspect-[41/64] overflow-hidden md:shadow-[0_40px_100px_rgba(6,9,18,0.6)]">
+                <video
+                  ref={videoRef}
+                  src={cover.video}
+                  poster={cover.image || undefined}
+                  autoPlay
+                  muted
+                  defaultMuted
+                  loop
+                  playsInline
+                  webkit-playsinline="true"
+                  preload="auto"
+                  onError={() => setVideoFailed(true)}
+                  className="w-full h-full object-cover"
+                />
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* Velo cinematográfico (marino) para legibilidad */}
