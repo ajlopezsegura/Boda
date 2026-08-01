@@ -29,12 +29,15 @@ export default function WeddingNav() {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.43, 0.13, 0.23, 0.96] }}
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 sm:px-9 py-3"
-        style={{
-          backgroundColor: 'var(--paper)',
-          borderBottom: '1px solid var(--hairline)',
-          minHeight: 'var(--header-h)',
-        }}
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 sm:px-9 py-3
+          ${onCover
+            /* En la portada el vídeo va a pantalla completa en móvil: el
+               encabezado se vuelve transparente para no cortarlo. En escritorio
+               recupera el papel para que los enlaces se lean sobre él. */
+            ? 'bg-transparent border-transparent md:bg-[#F4F0E7] md:border-[color:var(--hairline)]'
+            : 'bg-[#F4F0E7] border-[color:var(--hairline)]'}
+          border-b`}
+        style={{ minHeight: 'var(--header-h)' }}
       >
         {/* Nombres + fecha. En la portada se omiten: el titular ya lleva la
             identidad a gran escala y repetirla aquí ensucia la jerarquía. */}
@@ -75,8 +78,8 @@ export default function WeddingNav() {
         <button
           onClick={() => setOpen(true)}
           data-cursor="hover"
-          className="md:hidden flex items-center justify-center min-h-[44px] min-w-[44px]"
-          style={{ color: gold }}
+          className={`md:hidden flex items-center justify-center min-h-[44px] min-w-[44px]
+            ${onCover ? 'text-[#E4CE93]' : 'text-[color:var(--gold)]'}`}
           aria-label="Abrir menú"
         >
           <Menu size={22} strokeWidth={1.2} />

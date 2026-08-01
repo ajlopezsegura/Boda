@@ -26,17 +26,17 @@ export default function CoverPage() {
 
   return (
     <PageTransition>
+      {/* Móvil: vídeo a pantalla completa con el texto encima.
+          Escritorio: papel a la izquierda con el texto, vídeo a sangre a la derecha. */}
       <div className="absolute inset-0 overflow-hidden" style={{ backgroundColor: 'var(--paper)' }}>
 
-        {/* Retrato — a sangre en el borde derecho (escritorio) / abajo (móvil) */}
         {showVideo && (
           <motion.div
             initial={{ opacity: 0, scale: 1.04 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.6, ease }}
-            className="absolute overflow-hidden
-                       left-0 right-0 bottom-0 h-[48vh]
-                       md:left-auto md:top-[var(--header-h)] md:bottom-0 md:h-auto md:w-[42vw] lg:w-[38vw]"
+            className="absolute inset-0 overflow-hidden
+                       md:inset-auto md:right-0 md:top-[var(--header-h)] md:bottom-0 md:w-[42vw] lg:w-[38vw]"
           >
             <video
               ref={videoRef}
@@ -46,31 +46,37 @@ export default function CoverPage() {
               onError={() => setVideoFailed(true)}
               className="w-full h-full object-cover"
             />
-            {/* Fundido del papel hacia la imagen — evita el corte seco en móvil */}
-            <div
-              className="md:hidden absolute inset-x-0 top-0 pointer-events-none"
-              style={{ height: 64, background: 'linear-gradient(to bottom, var(--paper) 0%, rgba(244,240,231,0.55) 45%, transparent 100%)' }}
-            />
           </motion.div>
         )}
 
-        {/* Texto — centrado en móvil, alineado a la izquierda en escritorio */}
+        {/* Velo para legibilidad — solo en móvil, donde el texto va sobre el vídeo */}
+        {showVideo && (
+          <div
+            className="absolute inset-0 md:hidden pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(18,26,44,0.60) 0%, rgba(18,26,44,0.46) 26%, rgba(18,26,44,0.62) 52%, rgba(18,26,44,0.58) 74%, rgba(18,26,44,0.82) 100%)',
+            }}
+          />
+        )}
+
+        {/* Texto */}
         <div
-          className="absolute inset-0 flex flex-col items-center text-center justify-end
-                     md:items-start md:text-left md:justify-center
+          className="absolute inset-0 flex flex-col items-center text-center justify-center
                      px-8 sm:px-12 md:px-16 lg:px-24
-                     pb-[calc(48vh+2.25rem)] md:pb-0 md:pr-[46vw] lg:md:pr-[42vw]"
+                     pt-[var(--header-h)] md:pt-0
+                     md:items-start md:text-left md:pr-[46vw] lg:pr-[42vw]"
         >
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.3, ease }}
+            className="text-[#D9BE7A] md:text-[#A6813C]"
             style={{
               fontFamily: 'Montserrat, sans-serif',
               fontSize: 'clamp(0.58rem, 1.6vw, 0.66rem)',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
-              color: 'var(--gold)',
               marginBottom: 'clamp(1.4rem, 3vh, 2.2rem)',
               maxWidth: '30ch',
               lineHeight: 1.9,
@@ -84,17 +90,18 @@ export default function CoverPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.45, ease }}
+            className="text-[#F7F3EA] md:text-[#1E2A44]"
             style={{
               fontFamily: '"EB Garamond", Georgia, serif',
               fontWeight: 400,
-              color: 'var(--navy)',
               fontSize: 'clamp(3rem, 7.5vw, 6.4rem)',
               lineHeight: 1.04,
               letterSpacing: '-0.005em',
+              textShadow: '0 2px 24px rgba(14,20,36,0.32)',
             }}
           >
             {couple.bride}
-            <span style={{ color: 'var(--gold)', fontStyle: 'italic', padding: '0 0.12em' }}>&amp;</span>
+            <span className="text-[#D9BE7A] md:text-[#A6813C]" style={{ fontStyle: 'italic', padding: '0 0.12em' }}>&amp;</span>
             {couple.groom}
           </motion.h1>
 
@@ -102,9 +109,9 @@ export default function CoverPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.65, ease }}
+            className="text-[#D9BE7A] md:text-[#A6813C]"
             style={{
               fontFamily: '"EB Garamond", Georgia, serif',
-              color: 'var(--gold)',
               fontSize: 'clamp(1.15rem, 2vw, 1.5rem)',
               letterSpacing: '0.06em',
               marginTop: 'clamp(1.6rem, 4vh, 2.4rem)',
@@ -113,14 +120,14 @@ export default function CoverPage() {
             {dateShort.replace(/\s/g, '')}
           </motion.p>
 
-          {/* Ruta de vuelo: nodo · línea de puntos · nodo — la firma del viaje */}
+          {/* Ruta de vuelo: nodo · filete · nodo — la firma del viaje */}
           <motion.div
             initial={{ opacity: 0, scaleX: 0.4 }}
             animate={{ opacity: 1, scaleX: 1 }}
             transition={{ duration: 1.1, delay: 0.9, ease }}
             aria-hidden="true"
-            className="flex items-center gap-2"
-            style={{ marginTop: '1.1rem', color: 'var(--gold)', transformOrigin: 'center' }}
+            className="flex items-center gap-2 text-[#D9BE7A] md:text-[#A6813C]"
+            style={{ marginTop: '1.1rem', transformOrigin: 'center' }}
           >
             <span style={{ width: 5, height: 5, borderRadius: '50%', border: '1px solid currentColor' }} />
             <span style={{ width: 88, height: 1, backgroundColor: 'currentColor', opacity: 0.55 }} />
@@ -131,12 +138,12 @@ export default function CoverPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 1.0, ease }}
+            className="text-[rgba(247,243,234,0.8)] md:text-[rgba(30,42,68,0.6)]"
             style={{
               fontFamily: 'Montserrat, sans-serif',
               fontSize: '0.62rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              color: 'var(--ink-muted)',
               marginTop: '1.1rem',
             }}
           >
@@ -148,21 +155,21 @@ export default function CoverPage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.9, delay: 1.25 }}
             onClick={() => navigate('/historia')}
-            className="group self-center md:self-start flex items-center gap-3"
+            className="group self-center md:self-start flex items-center gap-3
+                       text-[#F7F3EA] md:text-[#1E2A44]
+                       border-b border-[#D9BE7A] md:border-[#A6813C]"
             style={{
               marginTop: 'clamp(2.2rem, 5vh, 3.4rem)',
               fontFamily: 'Montserrat, sans-serif',
               fontSize: '0.62rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              color: 'var(--navy)',
               paddingBottom: 6,
-              borderBottom: '1px solid var(--gold)',
               minHeight: 44,
             }}
           >
             {cover.cta}
-            <span className="transition-transform duration-500 group-hover:translate-x-1" style={{ color: 'var(--gold)' }}>→</span>
+            <span className="transition-transform duration-500 group-hover:translate-x-1 text-[#D9BE7A] md:text-[#A6813C]">→</span>
           </motion.button>
         </div>
       </div>
