@@ -132,7 +132,7 @@ export default function CoverPage() {
               fontSize: '0.62rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              marginTop: '0.9rem',
+              marginTop: '0.45rem',
             }}
           >
             {city}
@@ -143,24 +143,22 @@ export default function CoverPage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.9, delay: 1.25 }}
             onClick={() => navigate('/historia')}
-            className="group self-center md:self-start flex items-center gap-3
-                       text-[#F7F3EA] md:text-[#1E2A44]"
+            className="group self-center md:self-start inline-flex items-center justify-center gap-3
+                       text-[#F7F3EA] md:text-[#1E2A44]
+                       border border-[rgba(217,190,122,0.75)] md:border-[rgba(166,129,60,0.75)]
+                       transition-colors duration-500
+                       hover:bg-[rgba(217,190,122,0.14)] md:hover:bg-[rgba(166,129,60,0.10)]"
             style={{
               marginTop: 'clamp(2.2rem, 5vh, 3.4rem)',
               fontFamily: 'Montserrat, sans-serif',
               fontSize: '0.62rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              minHeight: 44,
+              minHeight: 48,
+              padding: '0 2.1rem',
             }}
           >
-            {/* El filete subraya solo la palabra, no la flecha */}
-            <span
-              className="border-b border-[#D9BE7A] md:border-[#A6813C]"
-              style={{ paddingBottom: 7 }}
-            >
-              {cover.cta}
-            </span>
+            {cover.cta}
             <span className="transition-transform duration-500 group-hover:translate-x-1 text-[#D9BE7A] md:text-[#A6813C]">→</span>
           </motion.button>
         </div>
