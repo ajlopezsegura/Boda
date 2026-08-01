@@ -9,7 +9,7 @@ function fieldStyle(hasError) {
     width: '100%', backgroundColor: 'transparent', border: 'none',
     borderBottom: `1px solid ${hasError ? 'rgba(160,50,40,0.7)' : 'var(--hairline)'}`,
     color: 'var(--navy)', fontSize: '1rem', padding: '9px 0 7px',
-    outline: 'none', fontFamily: '"Cormorant Garamond", Georgia, serif', transition: 'border-color 0.2s',
+    outline: 'none', fontFamily: '"EB Garamond", Georgia, serif', transition: 'border-color 0.2s',
   }
 }
 
@@ -127,7 +127,7 @@ export default function RsvpPage() {
 
         <Field label="Mensaje para los novios (opcional)">
           <textarea value={f.message} onChange={e => set('message', e.target.value)} rows={3} placeholder="Escríbeles algo bonito…"
-            style={{ width: '100%', backgroundColor: 'var(--paper)', resize: 'none', outline: 'none', border: '1px solid var(--hairline)', color: 'var(--navy)', fontSize: '0.95rem', padding: '11px', lineHeight: 1.7, fontFamily: '"Cormorant Garamond", Georgia, serif' }} />
+            style={{ width: '100%', backgroundColor: 'var(--paper)', resize: 'none', outline: 'none', border: '1px solid var(--hairline)', color: 'var(--navy)', fontSize: '0.95rem', padding: '11px', lineHeight: 1.7, fontFamily: '"EB Garamond", Georgia, serif' }} />
         </Field>
 
         <div className="flex flex-col sm:flex-row gap-3 pt-1">

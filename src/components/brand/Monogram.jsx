@@ -25,14 +25,14 @@ export default function Monogram({ size = 64, color = 'var(--navy)' }) {
       {/* Inicial izquierda (arriba) */}
       <text
         x="33" y="49" textAnchor="middle"
-        fontFamily='"Cormorant Garamond", Georgia, serif'
+        fontFamily='"EB Garamond", Georgia, serif'
         fontSize="46" fontWeight="500" fill={color}
       >{a}</text>
 
       {/* Inicial derecha (abajo) */}
       <text
         x="67" y="77" textAnchor="middle"
-        fontFamily='"Cormorant Garamond", Georgia, serif'
+        fontFamily='"EB Garamond", Georgia, serif'
         fontSize="46" fontWeight="500" fill={color}
       >{b}</text>
 

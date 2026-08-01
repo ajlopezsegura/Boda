@@ -13,7 +13,7 @@ export default {
         'gold-soft':  '#C6A659',  // Oro claro (sobre marino)
       },
       fontFamily: {
-        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        serif: ['"EB Garamond"', 'Georgia', 'serif'],
         sans:  ['Montserrat', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
