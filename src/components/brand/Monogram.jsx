@@ -1,62 +1,45 @@
 import wedding from '../../data/wedding'
 
 /**
- * Monograma-firma P · P.
- * La pieza de marca que se repite en toda la web (código couture: una sola firma).
+ * Monograma-firma: dos iniciales serif enlazadas por una "ruta de vuelo"
+ * (línea diagonal con dos nodos), igual que la invitación. Es la marca que
+ * se repite en toda la web (código couture: una sola firma).
  *
  * props:
- *   size   — diámetro en px (por defecto 64)
- *   color  — color de trazo/tinta (por defecto marino)
- *   ring   — mostrar el aro exterior (por defecto true)
+ *   size  — lado en px (por defecto 64)
+ *   color — color de tinta (por defecto marino)
  */
-export default function Monogram({ size = 64, color = 'var(--navy)', ring = true }) {
+export default function Monogram({ size = 64, color = 'var(--navy)' }) {
   const [a, b] = wedding.couple.initials
-  const glyph = Math.round(size * 0.34)
-  const gap = Math.round(size * 0.05)
 
   return (
-    <span
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      role="img"
       aria-label={`${a} y ${b}`}
-      style={{
-        width: size,
-        height: size,
-        borderRadius: '50%',
-        border: ring ? `1px solid ${color}` : 'none',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color,
-        flexShrink: 0,
-        position: 'relative',
-      }}
+      style={{ display: 'block', overflow: 'visible' }}
     >
-      {/* segundo aro fino interior */}
-      {ring && (
-        <span
-          style={{
-            position: 'absolute',
-            inset: Math.max(3, Math.round(size * 0.07)),
-            borderRadius: '50%',
-            border: `1px solid ${color}`,
-            opacity: 0.35,
-          }}
-        />
-      )}
-      <span
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap,
-          fontFamily: '"Cormorant Garamond", Georgia, serif',
-          fontWeight: 500,
-          fontSize: glyph,
-          lineHeight: 1,
-        }}
-      >
-        <span>{a}</span>
-        <span style={{ width: 1, height: glyph * 0.9, backgroundColor: color, opacity: 0.7 }} />
-        <span>{b}</span>
-      </span>
-    </span>
+      {/* Inicial izquierda (arriba) */}
+      <text
+        x="33" y="49" textAnchor="middle"
+        fontFamily='"Cormorant Garamond", Georgia, serif'
+        fontSize="46" fontWeight="500" fill={color}
+      >{a}</text>
+
+      {/* Inicial derecha (abajo) */}
+      <text
+        x="67" y="77" textAnchor="middle"
+        fontFamily='"Cormorant Garamond", Georgia, serif'
+        fontSize="46" fontWeight="500" fill={color}
+      >{b}</text>
+
+      {/* Ruta de vuelo: nodo → línea → nodo */}
+      <line x1="41" y1="74" x2="63" y2="36" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="41" cy="74" r="2.8" fill="none" stroke={color} strokeWidth="1.5" />
+      <circle cx="63" cy="36" r="2.8" fill="none" stroke={color} strokeWidth="1.5" />
+    </svg>
   )
 }
