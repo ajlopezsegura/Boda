@@ -18,10 +18,10 @@ export default function WeddingNav() {
   const [open, setOpen] = useState(false)
 
   const onCover = location.pathname === '/'
-  // Sobre la portada (marino) → tinta clara; sobre papel → tinta marino.
-  const ink      = onCover ? 'rgba(244,240,231,0.72)' : 'var(--ink-muted)'
-  const inkStrong= onCover ? '#F4F0E7' : 'var(--navy)'
-  const gold     = onCover ? 'var(--gold-soft)' : 'var(--gold)'
+  // Todo el sitio va sobre papel marfil: tinta marino y acento oro.
+  const ink       = 'var(--ink-muted)'
+  const inkStrong = 'var(--navy)'
+  const gold      = 'var(--gold)'
 
   return (
     <>
@@ -31,9 +31,8 @@ export default function WeddingNav() {
         transition={{ duration: 0.9, ease: [0.43, 0.13, 0.23, 0.96] }}
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 sm:px-9 py-3"
         style={{
-          backgroundColor: onCover ? 'transparent' : 'rgba(244,240,231,0.88)',
-          backdropFilter: onCover ? 'none' : 'blur(14px)',
-          borderBottom: onCover ? 'none' : '1px solid var(--hairline)',
+          backgroundColor: 'var(--paper)',
+          borderBottom: '1px solid var(--hairline)',
           minHeight: 'var(--header-h)',
         }}
       >
