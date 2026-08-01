@@ -76,11 +76,14 @@ const wedding = {
       'Lo nuestro empezó a kilómetros de distancia y no ha parado de sumar destinos. ' +
       'Él desde Zúrich, ella desde Madrid; él de Málaga, ella de Jaén. Aviones, trenes ' +
       'y estaciones que siempre nos llevaban al mismo sitio: el uno al otro.',
+    // `photo`: imagen a pantalla completa de cada momento. Sustituye los
+    // archivos de public/assets/images/ por vuestras fotos (mismo nombre) o
+    // cambia aquí la ruta. Vertical funciona mejor en móvil.
     stamps: [
-      { year: '2019', place: 'Málaga',           title: 'El primer sello', text: 'Nos conocimos un verano en el sur. Una conversación que se alargó hasta el amanecer.' },
-      { year: '2020', place: 'Zúrich ✈ Madrid',  title: 'Larga distancia', text: 'Vuelos de última hora, videollamadas con husos horarios y maletas que nunca se deshacían del todo.' },
-      { year: '2023', place: 'Jaén',             title: 'Entre olivos',    text: 'Volvimos a su tierra, entre olivares infinitos, y supimos que el próximo billete sería solo de ida.' },
-      { year: '2025', place: 'Los Alpes',        title: 'La pedida',       text: 'En una escapada a la montaña llegó el «sí». El mejor destino no estaba en ningún mapa.' },
+      { year: '2019', place: 'Málaga',           title: 'El primer sello', text: 'Nos conocimos un verano en el sur. Una conversación que se alargó hasta el amanecer.', photo: './assets/images/historia-1.jpg' },
+      { year: '2020', place: 'Zúrich ✈ Madrid',  title: 'Larga distancia', text: 'Vuelos de última hora, videollamadas con husos horarios y maletas que nunca se deshacían del todo.', photo: './assets/images/historia-2.jpg' },
+      { year: '2023', place: 'Jaén',             title: 'Entre olivos',    text: 'Volvimos a su tierra, entre olivares infinitos, y supimos que el próximo billete sería solo de ida.', photo: './assets/images/historia-3.jpg' },
+      { year: '2025', place: 'Los Alpes',        title: 'La pedida',       text: 'En una escapada a la montaña llegó el «sí». El mejor destino no estaba en ningún mapa.', photo: './assets/images/historia-4.jpg' },
     ],
   },
 
