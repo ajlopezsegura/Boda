@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PageTransition from '../components/layout/PageTransition'
@@ -13,8 +13,27 @@ export default function CoverPage() {
   const { couple, cover, dateLabel, city, country } = wedding
   const { days } = useCountdown(wedding.date)
   const [videoFailed, setVideoFailed] = useState(false)
+  const videoRef = useRef(null)
 
   const showVideo = cover.video && !videoFailed
+
+  // React no siempre fija la propiedad DOM `muted` a tiempo para que el
+  // navegador permita el autoplay (bug conocido, sobre todo en Safari/iOS).
+  // Se fuerza de forma imperativa antes de llamar a play().
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    v.muted = true
+    v.defaultMuted = true
+    const playPromise = v.play()
+    if (playPromise?.catch) {
+      playPromise.catch(() => {
+        // Autoplay bloqueado por el navegador: se deja el fallback visual
+        // (fondo marino) y no se interrumpe la experiencia.
+        setVideoFailed(true)
+      })
+    }
+  }, [showVideo])
 
   return (
     <PageTransition>
@@ -23,9 +42,16 @@ export default function CoverPage() {
         {/* Fondo — vídeo */}
         {showVideo && (
           <video
+            ref={videoRef}
             src={cover.video}
             poster={cover.image || undefined}
-            autoPlay muted loop playsInline preload="auto"
+            autoPlay
+            muted
+            defaultMuted
+            loop
+            playsInline
+            webkit-playsinline="true"
+            preload="auto"
             onError={() => setVideoFailed(true)}
             className="absolute inset-0 w-full h-full object-cover"
             style={{ zIndex: 0 }}
