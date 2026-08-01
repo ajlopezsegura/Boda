@@ -122,31 +122,17 @@ export default function CoverPage() {
             {dateShort.replace(/\s/g, '')}
           </motion.p>
 
-          {/* Ruta de vuelo: nodo · filete · nodo — la firma del viaje */}
-          <motion.div
-            initial={{ opacity: 0, scaleX: 0.4 }}
-            animate={{ opacity: 1, scaleX: 1 }}
-            transition={{ duration: 1.1, delay: 0.9, ease }}
-            aria-hidden="true"
-            className="flex items-center gap-2 text-[#D9BE7A] md:text-[#A6813C]"
-            style={{ marginTop: '1.1rem', transformOrigin: 'center' }}
-          >
-            <span style={{ width: 5, height: 5, borderRadius: '50%', border: '1px solid currentColor' }} />
-            <span style={{ width: 88, height: 1, backgroundColor: 'currentColor', opacity: 0.55 }} />
-            <span style={{ width: 5, height: 5, borderRadius: '50%', border: '1px solid currentColor' }} />
-          </motion.div>
-
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 1.0, ease }}
+            transition={{ duration: 0.9, delay: 0.85, ease }}
             className="text-[rgba(247,243,234,0.8)] md:text-[rgba(30,42,68,0.6)]"
             style={{
               fontFamily: 'Montserrat, sans-serif',
               fontSize: '0.62rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              marginTop: '1.1rem',
+              marginTop: '0.9rem',
             }}
           >
             {city}
