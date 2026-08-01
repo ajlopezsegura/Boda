@@ -101,7 +101,9 @@ export default function CoverPage() {
             }}
           >
             {couple.bride}
-            <span className="text-[#D9BE7A] md:text-[#A6813C]" style={{ fontStyle: 'italic', padding: '0 0.12em' }}>&amp;</span>
+            {/* Ampersand en redonda: la cursiva de EB Garamond usa un glifo
+                caligráfico antiguo que desentona a este tamaño. */}
+            <span className="text-[#D9BE7A] md:text-[#A6813C]" style={{ padding: '0 0.14em' }}>&amp;</span>
             {couple.groom}
           </motion.h1>
 
@@ -156,19 +158,23 @@ export default function CoverPage() {
             transition={{ duration: 0.9, delay: 1.25 }}
             onClick={() => navigate('/historia')}
             className="group self-center md:self-start flex items-center gap-3
-                       text-[#F7F3EA] md:text-[#1E2A44]
-                       border-b border-[#D9BE7A] md:border-[#A6813C]"
+                       text-[#F7F3EA] md:text-[#1E2A44]"
             style={{
               marginTop: 'clamp(2.2rem, 5vh, 3.4rem)',
               fontFamily: 'Montserrat, sans-serif',
               fontSize: '0.62rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              paddingBottom: 6,
               minHeight: 44,
             }}
           >
-            {cover.cta}
+            {/* El filete subraya solo la palabra, no la flecha */}
+            <span
+              className="border-b border-[#D9BE7A] md:border-[#A6813C]"
+              style={{ paddingBottom: 7 }}
+            >
+              {cover.cta}
+            </span>
             <span className="transition-transform duration-500 group-hover:translate-x-1 text-[#D9BE7A] md:text-[#A6813C]">→</span>
           </motion.button>
         </div>
