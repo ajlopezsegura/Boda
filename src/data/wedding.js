@@ -25,9 +25,11 @@ const wedding = {
 
   // ── Portada (cubierta del pasaporte) ──────────────────────────────────────
   cover: {
-    passportLabel: 'Pasaporte',
-    passportSub: 'A nuestro gran día',
-    // Vídeo de fondo de la portada (déjalo vacío para cubierta lisa marino)
+    // Rótulo pequeño sobre los nombres
+    welcome: 'Bienvenidos a nuestro gran viaje',
+    // Texto del botón que entra en la web
+    cta: 'Embarcar',
+    // Vídeo de fondo de la portada (déjalo vacío para cubierta lisa)
     video: './assets/videos/portada.mp4',
     image: '',
   },

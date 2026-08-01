@@ -36,15 +36,20 @@ export default function WeddingNav() {
           minHeight: 'var(--header-h)',
         }}
       >
-        {/* Nombres + fecha */}
-        <Link to="/" data-cursor="hover" className="no-underline flex flex-col justify-center" style={{ gap: 2, minHeight: 44 }}>
-          <span className="display" style={{ color: inkStrong, fontSize: 'clamp(0.94rem, 3.3vw, 1.16rem)', letterSpacing: '0.08em', lineHeight: 1 }}>
-            {wedding.couple.bride} &amp; {wedding.couple.groom}
-          </span>
-          <span className="eyebrow" style={{ color: gold, fontSize: '0.44rem', letterSpacing: '0.22em' }}>
-            {wedding.dateShort}
-          </span>
-        </Link>
+        {/* Nombres + fecha. En la portada se omiten: el titular ya lleva la
+            identidad a gran escala y repetirla aquí ensucia la jerarquía. */}
+        {onCover ? (
+          <span aria-hidden="true" />
+        ) : (
+          <Link to="/" data-cursor="hover" className="no-underline flex flex-col justify-center" style={{ gap: 2, minHeight: 44 }}>
+            <span className="display" style={{ color: inkStrong, fontSize: 'clamp(0.94rem, 3.3vw, 1.16rem)', letterSpacing: '0.08em', lineHeight: 1 }}>
+              {wedding.couple.bride} &amp; {wedding.couple.groom}
+            </span>
+            <span className="eyebrow" style={{ color: gold, fontSize: '0.44rem', letterSpacing: '0.22em' }}>
+              {wedding.dateShort}
+            </span>
+          </Link>
+        )}
 
         {/* Nav escritorio */}
         <nav className="hidden md:flex items-center gap-7">

@@ -35,7 +35,7 @@ export default function CoverPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.6, ease }}
             className="absolute overflow-hidden
-                       left-0 right-0 bottom-0 h-[46vh]
+                       left-0 right-0 bottom-0 h-[48vh]
                        md:left-auto md:top-[var(--header-h)] md:bottom-0 md:h-auto md:w-[42vw] lg:w-[38vw]"
           >
             <video
@@ -46,14 +46,20 @@ export default function CoverPage() {
               onError={() => setVideoFailed(true)}
               className="w-full h-full object-cover"
             />
+            {/* Fundido del papel hacia la imagen — evita el corte seco en móvil */}
+            <div
+              className="md:hidden absolute inset-x-0 top-0 pointer-events-none"
+              style={{ height: 64, background: 'linear-gradient(to bottom, var(--paper) 0%, rgba(244,240,231,0.55) 45%, transparent 100%)' }}
+            />
           </motion.div>
         )}
 
-        {/* Texto — alineado a la izquierda, con aire generoso */}
+        {/* Texto — centrado en móvil, alineado a la izquierda en escritorio */}
         <div
-          className="absolute inset-0 flex flex-col justify-center
+          className="absolute inset-0 flex flex-col items-center text-center justify-end
+                     md:items-start md:text-left md:justify-center
                      px-8 sm:px-12 md:px-16 lg:px-24
-                     pb-[46vh] md:pb-0 md:pr-[46vw] lg:md:pr-[42vw]"
+                     pb-[calc(48vh+2.25rem)] md:pb-0 md:pr-[46vw] lg:md:pr-[42vw]"
         >
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -61,14 +67,17 @@ export default function CoverPage() {
             transition={{ duration: 0.9, delay: 0.3, ease }}
             style={{
               fontFamily: 'Montserrat, sans-serif',
-              fontSize: '0.66rem',
-              letterSpacing: '0.2em',
+              fontSize: 'clamp(0.58rem, 1.6vw, 0.66rem)',
+              letterSpacing: '0.15em',
               textTransform: 'uppercase',
               color: 'var(--gold)',
-              marginBottom: 'clamp(1.6rem, 4vh, 2.6rem)',
+              marginBottom: 'clamp(1.4rem, 3vh, 2.2rem)',
+              maxWidth: '30ch',
+              lineHeight: 1.9,
+              textWrap: 'balance',
             }}
           >
-            {cover.passportSub}
+            {cover.welcome}
           </motion.p>
 
           <motion.h1
@@ -104,17 +113,31 @@ export default function CoverPage() {
             {dateShort.replace(/\s/g, '')}
           </motion.p>
 
+          {/* Ruta de vuelo: nodo · línea de puntos · nodo — la firma del viaje */}
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0.4 }}
+            animate={{ opacity: 1, scaleX: 1 }}
+            transition={{ duration: 1.1, delay: 0.9, ease }}
+            aria-hidden="true"
+            className="flex items-center gap-2"
+            style={{ marginTop: '1.1rem', color: 'var(--gold)', transformOrigin: 'center' }}
+          >
+            <span style={{ width: 5, height: 5, borderRadius: '50%', border: '1px solid currentColor' }} />
+            <span style={{ width: 88, height: 1, backgroundColor: 'currentColor', opacity: 0.55 }} />
+            <span style={{ width: 5, height: 5, borderRadius: '50%', border: '1px solid currentColor' }} />
+          </motion.div>
+
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.78, ease }}
+            transition={{ duration: 0.9, delay: 1.0, ease }}
             style={{
               fontFamily: 'Montserrat, sans-serif',
               fontSize: '0.62rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
               color: 'var(--ink-muted)',
-              marginTop: '0.85rem',
+              marginTop: '1.1rem',
             }}
           >
             {city}
@@ -123,11 +146,11 @@ export default function CoverPage() {
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, delay: 1.05 }}
+            transition={{ duration: 0.9, delay: 1.25 }}
             onClick={() => navigate('/historia')}
-            className="group self-start flex items-center gap-3"
+            className="group self-center md:self-start flex items-center gap-3"
             style={{
-              marginTop: 'clamp(2.4rem, 6vh, 3.6rem)',
+              marginTop: 'clamp(2.2rem, 5vh, 3.4rem)',
               fontFamily: 'Montserrat, sans-serif',
               fontSize: '0.62rem',
               letterSpacing: '0.2em',
@@ -138,7 +161,7 @@ export default function CoverPage() {
               minHeight: 44,
             }}
           >
-            Ver la invitación
+            {cover.cta}
             <span className="transition-transform duration-500 group-hover:translate-x-1" style={{ color: 'var(--gold)' }}>→</span>
           </motion.button>
         </div>
