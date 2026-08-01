@@ -26,16 +26,25 @@
 
   /* &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; 1 &#183; PANEL DE SALIDAS &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; */
   .board-wrap{min-height:100dvh;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:clamp(2rem,6vh,3.4rem);
+    align-items:center;justify-content:center;gap:clamp(1.8rem,5vh,3rem);
     padding:clamp(2rem,7vw,4rem);background:var(--navy);position:relative;overflow:hidden}
-  .board-wrap::before{content:"";position:absolute;inset:0;
-    background:radial-gradient(ellipse at 50% 35%,rgba(217,190,122,.12),transparent 62%)}
+  .board-wrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .board-wrap .veil{position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(14,22,40,.72)0%,rgba(14,22,40,.5)34%,rgba(14,22,40,.62)66%,rgba(14,22,40,.86)100%)}
 
   .airline{position:relative;text-align:center}
-  .airline .label{color:var(--gold-soft);opacity:.85}
-  .airline h1{font-weight:400;color:var(--cream);line-height:1;
-    font-size:clamp(2.6rem,9vw,5.4rem);margin-top:1rem;letter-spacing:.01em}
-  .airline h1 em{font-style:normal;color:var(--gold-soft)}
+  .airline .label{color:var(--gold-soft);opacity:.9}
+
+  /* Nombres en casillas grandes: dos filas en m&#243;vil, una sola en escritorio */
+  .names-stack{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .names{justify-content:center;flex-wrap:nowrap}
+  .names .flap{width:clamp(1.35rem,6vw,2.7rem);height:clamp(2rem,8.4vw,3.8rem);
+    background:rgba(9,15,28,.8)}
+  .names .flap span{font-size:clamp(.8rem,3.2vw,1.5rem);letter-spacing:.02em}
+  .names .flap.amp span{color:var(--gold-soft)}
+  @media(min-width:720px){
+    .names-stack{flex-direction:row;gap:.7rem}
+  }
 
   .board{position:relative;width:100%;max-width:44rem;display:flex;flex-direction:column;gap:.5rem}
   .row{display:grid;grid-template-columns:5.2rem 1fr;gap:.7rem;align-items:center}
@@ -149,15 +158,22 @@
 
 <!-- 1 &#183; PANEL DE SALIDAS -->
 <section class="board-wrap">
+  <video src="./assets/videos/portada.mp4" autoplay muted loop playsinline preload="auto"></video>
+  <div class="veil"></div>
+
   <div class="airline">
     <span class="label">Vuelo PP-1212 &#183; Embarque abierto</span>
-    <h1>Pilar <em>&amp;</em> Pablo</h1>
+  </div>
+
+  <div class="names-stack">
+    <div class="flaps names" data-word="PILAR &" data-row="0"></div>
+    <div class="flaps names" data-word="PABLO" data-row="0"></div>
   </div>
 
   <div class="board" id="board">
-    <div class="row"><span class="k">Destino</span><div class="flaps" data-word="JAEN  ESPANA"></div></div>
-    <div class="row"><span class="k">Fecha</span><div class="flaps" data-word="12 DIC 2026"></div></div>
-    <div class="row"><span class="k">Estado</span><div class="flaps" data-word="A TIEMPO" data-lit="1"></div></div>
+    <div class="row"><span class="k">Destino</span><div class="flaps" data-word="JAEN  ESPANA" data-row="1"></div></div>
+    <div class="row"><span class="k">Fecha</span><div class="flaps" data-word="12 DIC 2026" data-row="2"></div></div>
+    <div class="row"><span class="k">Faltan</span><div class="flaps" id="cd" data-lit="1" data-row="3"></div></div>
   </div>
 
   <span class="gate"><i></i>Puerta 12 &#183; Desliza para embarcar</span>
@@ -231,13 +247,27 @@
 
 <script>
   /* &#9472;&#9472; Panel de salidas: cada casilla gira hasta su letra &#9472;&#9472; */
-  const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
-  document.querySelectorAll(".flaps").forEach((box, row) => {
+  const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&";
+
+  /* La fila de estado es la cuenta atr&#225;s hasta el gran d&#237;a */
+  const BODA = new Date("2026-12-12T12:00:00");
+  function faltan() {
+    const ms = Math.max(0, BODA - Date.now());
+    const d = Math.floor(ms / 86400000);
+    if (d > 1) return String(d) + " DIAS";
+    if (d === 1) return "1 DIA";
+    return "ES HOY";
+  }
+  const cd = document.getElementById("cd");
+  cd.dataset.word = faltan();
+
+  document.querySelectorAll(".flaps").forEach((box) => {
     const word = box.dataset.word;
+    const row  = Number(box.dataset.row || 0);
     const lit  = box.dataset.lit === "1";
     [...word].forEach((target, i) => {
       const cell = document.createElement("div");
-      cell.className = "flap" + (lit ? " lit" : "");
+      cell.className = "flap" + (lit ? " lit" : "") + (target === "&" ? " amp" : "");
       const s = document.createElement("span");
       s.textContent = " ";
       cell.appendChild(s);
@@ -263,6 +293,25 @@
       raf = requestAnimationFrame(tick);
     });
   });
+
+  /* La cuenta atr&#225;s se refresca sola: las casillas que cambian vuelven a girar */
+  setInterval(() => {
+    const nuevo = faltan();
+    const celdas = [...cd.children];
+    [...nuevo].forEach((ch, i) => {
+      const cell = celdas[i];
+      if (!cell) return;
+      const s = cell.firstChild;
+      if (s.textContent === ch) return;
+      let n = 0;
+      const spin = setInterval(() => {
+        s.textContent = CHARS[Math.floor(Math.random() * CHARS.length)];
+        cell.classList.add("turning");
+        setTimeout(() => cell.classList.remove("turning"), 70);
+        if (++n > 6) { clearInterval(spin); s.textContent = ch; }
+      }, 55);
+    });
+  }, 60000);
 
   /* &#9472;&#9472; La ruta: el trazo se dibuja y el avi&#243;n lo recorre al hacer scroll &#9472;&#9472; */
   const routes = [
