@@ -51,11 +51,11 @@
   .row .k{font-family:"Montserrat",system-ui,sans-serif;font-size:.5rem;
     letter-spacing:.18em;text-transform:uppercase;color:rgba(247,243,234,.42);text-align:right}
   .flaps{display:grid;grid-template-columns:repeat(var(--n,12),1fr);gap:2px;width:100%}
-  .flap{position:relative;width:auto;height:clamp(1.6rem,5.6vw,2.6rem);
+  .flap{position:relative;width:auto;height:clamp(2.05rem,7.4vw,2.7rem);
     background:#0E1628;border-top:1px solid rgba(247,243,234,.09);
     display:flex;align-items:center;justify-content:center;overflow:hidden}
   .flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.55)}
-  .flap span{font-family:"Montserrat",system-ui,sans-serif;font-size:clamp(.62rem,2.3vw,.94rem);
+  .flap span{font-family:"Montserrat",system-ui,sans-serif;font-size:clamp(.72rem,3.3vw,.98rem);
     font-weight:400;color:var(--cream);line-height:1;transform-origin:center;
     animation:none}
   .flap.turning span{animation:flip .085s linear}
@@ -146,7 +146,9 @@
     .pass::before,.pass::after{display:none}
     .code{writing-mode:horizontal-tb}
     /* La etiqueta pasa arriba para que las casillas ocupen todo el ancho */
-    .row{grid-template-columns:1fr;gap:.3rem}
+    .board-wrap{padding:.55rem}
+    .flaps{gap:1.5px}
+    .row{grid-template-columns:1fr;gap:.28rem}
     .row .k{text-align:left;padding-left:2px}
     .board{gap:.9rem}
   }
