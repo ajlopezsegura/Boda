@@ -24,8 +24,8 @@ const wedding = {
   cover: {
     passportLabel: 'Pasaporte',
     passportSub: 'A nuestro gran día',
-    // Vídeo/imagen opcional detrás de la cubierta (déjalo vacío para cubierta lisa)
-    video: '',
+    // Vídeo de fondo de la portada (déjalo vacío para cubierta lisa marino)
+    video: './assets/videos/portada.mp4',
     image: '',
   },
 
