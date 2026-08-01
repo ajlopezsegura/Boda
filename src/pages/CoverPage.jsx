@@ -39,23 +39,33 @@ export default function CoverPage() {
     <PageTransition>
       <div className="absolute inset-0 overflow-hidden" style={{ backgroundColor: 'var(--navy)' }}>
 
-        {/* Fondo — vídeo */}
+        {/* Fondo — vídeo.
+            Es un clip vertical (formato retrato). En móvil cubre toda la
+            pantalla a sangre; en escritorio, en vez de estirarlo y recortarlo
+            en exceso, se enmarca como una foto de pasaporte: nítido, centrado,
+            con filo dorado, flotando sobre el marino. */}
         {showVideo && (
-          <video
-            ref={videoRef}
-            src={cover.video}
-            poster={cover.image || undefined}
-            autoPlay
-            muted
-            defaultMuted
-            loop
-            playsInline
-            webkit-playsinline="true"
-            preload="auto"
-            onError={() => setVideoFailed(true)}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ zIndex: 0 }}
-          />
+          <div className="absolute inset-0 md:flex md:items-center md:justify-center md:p-10 lg:p-16" style={{ zIndex: 0 }}>
+            <div
+              className="absolute inset-0 md:relative md:inset-auto md:h-[74vh] md:max-h-[640px] md:aspect-[41/64] md:border overflow-hidden md:shadow-[0_35px_90px_rgba(10,14,26,0.55)]"
+              style={{ borderColor: 'rgba(198,166,89,0.4)' }}
+            >
+              <video
+                ref={videoRef}
+                src={cover.video}
+                poster={cover.image || undefined}
+                autoPlay
+                muted
+                defaultMuted
+                loop
+                playsInline
+                webkit-playsinline="true"
+                preload="auto"
+                onError={() => setVideoFailed(true)}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
         )}
 
         {/* Velo cinematográfico (marino) para legibilidad */}

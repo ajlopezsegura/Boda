@@ -37,16 +37,13 @@ export default function WeddingNav() {
           minHeight: 'var(--header-h)',
         }}
       >
-        {/* Monograma + nombres */}
-        <Link to="/" data-cursor="hover" className="no-underline flex items-center gap-3">
-          <Monogram size={38} color={inkStrong} />
-          <span className="hidden sm:flex flex-col" style={{ gap: 2 }}>
-            <span className="display" style={{ color: inkStrong, fontSize: '1.05rem', letterSpacing: '0.1em', lineHeight: 1 }}>
-              {wedding.couple.bride} &amp; {wedding.couple.groom}
-            </span>
-            <span className="eyebrow" style={{ color: gold, fontSize: '0.44rem', letterSpacing: '0.24em' }}>
-              {wedding.dateShort}
-            </span>
+        {/* Nombres + fecha */}
+        <Link to="/" data-cursor="hover" className="no-underline flex flex-col justify-center" style={{ gap: 2, minHeight: 44 }}>
+          <span className="display" style={{ color: inkStrong, fontSize: 'clamp(0.85rem, 3vw, 1.05rem)', letterSpacing: '0.08em', lineHeight: 1 }}>
+            {wedding.couple.bride} &amp; {wedding.couple.groom}
+          </span>
+          <span className="eyebrow" style={{ color: gold, fontSize: '0.4rem', letterSpacing: '0.22em' }}>
+            {wedding.dateShort}
           </span>
         </Link>
 
