@@ -147,15 +147,27 @@ const wedding = {
     highlights: [
       {
         title: 'The cathedral',
-        text: 'A masterpiece of the Spanish Renaissance, designed by Andrés de Vandelvira — the same architect who gives his name to the cloister where we celebrate.',
+        text: 'Andrés de Vandelvira designed it as the perfect temple and worked on it until the end of his life. He is the same architect who gives his name to the cloister where we celebrate, so now you know who to thank.',
       },
       {
         title: 'Santa Catalina castle',
-        text: 'On the hill above the city. The views over the sea of olive trees at sunset are the highlight of any visit.',
+        text: 'It crowns the hill that watches over the city. At sunset, from the ramparts, the sea of olive trees runs on as far as you can see.',
       },
       {
         title: 'Arab baths',
-        text: 'From the 11th century, hidden beneath the Villardompardo Palace. You walk through them underneath the city, and nobody sees them coming.',
+        text: 'They spent centuries underground, forgotten beneath a Renaissance palace. You walk under vaults pierced with stars, where the light once fell on the steam.',
+      },
+      {
+        title: 'Íbero Museum',
+        text: 'Jaén was the heart of the Iberian world, and this museum was built to gather the greatest collection of its art. Stone warriors from twenty-five centuries ago, looking straight at you.',
+      },
+      {
+        title: 'La Magdalena quarter',
+        text: 'The oldest corner of the city. Its church was raised over a mosque and still keeps the ablutions courtyard and the minaret, now a bell tower. And in the fountain on the square lived, so they say, the lizard that terrorised Jaén.',
+      },
+      {
+        title: 'Úbeda and Baeza',
+        text: 'Half an hour away, two Renaissance towns listed as World Heritage Sites. Baeza is where we celebrate, so half your excuse is already in place.',
       },
     ],
   },

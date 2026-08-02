@@ -87,6 +87,9 @@ body {
   .fondo-pagina { background-position: var(--fondo-encuadre, center); }
 }
 
+/* La tira de estampas de Jaén se desliza a mano: la barra sobra */
+.tira-jaen::-webkit-scrollbar { display: none; }
+
 /* Lightbox oscuro elegante */
 .yarl__root { --yarl__color_backdrop: rgba(30, 42, 68, 0.94); }
 

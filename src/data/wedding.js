@@ -186,15 +186,27 @@ const wedding = {
     highlights: [
       {
         title: 'La catedral',
-        text: 'Obra maestra del Renacimiento español, proyectada por Andrés de Vandelvira. Sí: el mismo arquitecto que da nombre al claustro donde celebramos.',
+        text: 'Andrés de Vandelvira la proyectó como el templo perfecto y trabajó en ella hasta el final de sus días. Es el mismo arquitecto que da nombre al claustro donde celebramos, así que ya sabéis a quién darle las gracias.',
       },
       {
         title: 'Castillo de Santa Catalina',
-        text: 'Sobre el cerro que domina la ciudad. Las vistas del mar de olivos al atardecer son el mejor plan de la visita.',
+        text: 'Corona el cerro que vigila la ciudad. Al atardecer, desde la muralla, el mar de olivos se pierde hasta donde alcanza la vista.',
       },
       {
         title: 'Baños árabes',
-        text: 'Del siglo XI, escondidos bajo el Palacio de Villardompardo. Se recorren por debajo de la ciudad y son la sorpresa que nadie se espera.',
+        text: 'Pasaron siglos bajo tierra, olvidados debajo de un palacio renacentista. Se recorren entre bóvedas perforadas con estrellas, por donde entraba la luz sobre el vapor.',
+      },
+      {
+        title: 'Museo Íbero',
+        text: 'Jaén fue el corazón del mundo íbero, y este museo se levantó para reunir la mayor colección de su arte. Guerreros de piedra de hace veinticinco siglos, mirándote de frente.',
+      },
+      {
+        title: 'Barrio de la Magdalena',
+        text: 'El rincón más antiguo de la ciudad. Su iglesia se alzó sobre una mezquita y conserva el patio de abluciones y el alminar, hoy campanario. Y en la fuente de la plaza vivía, dicen, el lagarto que aterrorizó a Jaén.',
+      },
+      {
+        title: 'Úbeda y Baeza',
+        text: 'A media hora, dos ciudades renacentistas declaradas Patrimonio de la Humanidad. En Baeza es donde celebramos, así que media excusa ya la tenéis puesta.',
       },
     ],
   },

@@ -37,7 +37,7 @@ const UI = {
     titles: {
       dia:   ['El gran ', 'día'],
       viaje: ['El ', 'viaje'],
-      info:  ['Buen ', 'viaje'],
+      info:  ['Instrucciones de ', 'vuelo'],
       rsvp:  ['Confirma tu ', 'asistencia'],
     },
     subtitles: {
@@ -92,7 +92,7 @@ const UI = {
     titles: {
       dia:   ['The big ', 'day'],
       viaje: ['The ', 'stay'],
-      info:  ['Safe ', 'travels'],
+      info:  ['Flight ', 'instructions'],
       rsvp:  ['Confirm your ', 'attendance'],
     },
     subtitles: {

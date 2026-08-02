@@ -179,13 +179,38 @@ export default function ViajePage() {
             {jaen.intro}
           </p>
 
-          <div className="mt-8" style={{ borderBottom: '1px solid var(--hairline)' }}>
-            {jaen.highlights.map((h, i) => (
-              <Row key={h.title} i={String(i + 1).padStart(2, '0')} title={h.title} verLabel={t.view}>
-                {h.text}
-              </Row>
+          {/* En horizontal y sin numerar: así se leen como estampas sueltas que
+              apetece ir pasando, y no como una lista de tareas pendientes */}
+          <div
+            className="tira-jaen mt-10 -mx-6 sm:-mx-10 px-6 sm:px-10 flex gap-6 sm:gap-8 overflow-x-auto"
+            style={{ scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}
+          >
+            {jaen.highlights.map(h => (
+              <motion.article
+                key={h.title}
+                initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                transition={{ duration: 0.5, ease }}
+                className="shrink-0 text-left"
+                style={{
+                  width: 'min(76vw, 268px)',
+                  scrollSnapAlign: 'center',
+                  borderTop: '1px solid var(--gold)',
+                  paddingTop: '1.15rem',
+                }}
+              >
+                <h3 className="display" style={{ color: 'var(--navy)', fontSize: '1.5rem', lineHeight: 1.15 }}>
+                  {h.title}
+                </h3>
+                <p className="mt-3" style={{ fontSize: '0.98rem', lineHeight: 1.75, color: 'var(--ink-muted)' }}>
+                  {h.text}
+                </p>
+              </motion.article>
             ))}
           </div>
+
+          <span className="eyebrow block text-center mt-6 md:hidden" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.2em' }}>
+            {t.swipe}
+          </span>
         </>
       )}
     </PageScaffold>
