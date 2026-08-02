@@ -75,7 +75,7 @@ const wedding = {
     { time: '13:30', title: 'Autobús',             detail: 'Recogida cerca de la iglesia' },
     { time: '14:30', title: 'Cóctel',              detail: 'Hasta las 16:00' },
     { time: '16:00', title: 'Almuerzo',            detail: 'Hasta las 18:00' },
-    { time: '18:00', title: 'Hora de desmelenarse', detail: 'Hasta las 00:00' },
+    { time: '18:00', title: '¡Hora de bailar!', detail: 'Hasta las 00:00' },
     { time: '00:00', title: 'Último autobús',      detail: 'Vuelta a Jaén' },
   ],
 
@@ -120,6 +120,8 @@ const wedding = {
     hotels: [
       {
         name: 'Parador de Jaén',
+        // Oculto hasta saber cómo se reserva; los datos se quedan aquí esperando
+        oculto: true,
         stars: 4,
         area: 'Castillo de Santa Catalina',
         note: 'Uno de los iconos de la ciudad.',
@@ -149,6 +151,8 @@ const wedding = {
       },
       {
         name: 'Hotel Infanta Cristina',
+        // Oculto hasta saber cómo se reserva; los datos se quedan aquí esperando
+        oculto: true,
         stars: 4,
         area: 'Avenida de Madrid, s/n',
         note: 'En una de las avenidas principales.',
@@ -172,7 +176,7 @@ const wedding = {
     shuttlePickup: '13:30',
     shuttle: 'Recogida cerca de la iglesia, con salida hacia Baeza.',
     // Horarios de vuelta a Jaén
-    shuttleReturns: ['21:00', '00:00'],
+    shuttleReturns: ['20:30', '00:00'],
   },
 
   // ── Descubrir Jaén (edita o amplía a vuestro gusto) ───────────────────────

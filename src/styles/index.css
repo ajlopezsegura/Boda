@@ -24,6 +24,13 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* En el móvil toda la tipografía sube un 8%. Se hace desde aquí, subiendo la
+   medida base, y no tocando tamaño por tamaño: así todo crece en la misma
+   proporción y las jerarquías y los espaciados se mantienen intactos. */
+@media (max-width: 767px) {
+  html { font-size: 108%; }
+}
+
 body {
   margin: 0;
   padding: 0;

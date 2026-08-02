@@ -94,7 +94,7 @@ export default function ViajePage() {
       </p>
 
       <div className="mt-8" style={{ borderBottom: '1px solid var(--hairline)' }}>
-        {travel.hotels.map(h => (
+        {travel.hotels.filter(h => !h.oculto).map(h => (
           <Row key={h.name} title={h.name} href={h.url || undefined} verLabel={t.view}>
             <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
               {h.stars && (

@@ -8,8 +8,6 @@ import Countdown from '../components/brand/Countdown'
 import { useLang } from '../i18n'
 import { textoTel, enlaceTel } from '../lib/phone'
 
-const MAX_ACOMPANANTES = 10
-
 function fieldStyle(hasError) {
   return {
     width: '100%', backgroundColor: 'transparent', border: 'none',
@@ -54,8 +52,10 @@ function Choice({ options, value, onChange, columnas = 2 }) {
 export default function RsvpPage() {
   const { wedding, t, lang } = useLang()
   const { rsvp } = wedding
+  const regresos = wedding.travel?.shuttleReturns || []
   const [f, setF] = useState({
-    name: '', attending: 'yes', acompanantes: 0, nombres: [], shuttle: 'both', diet: '', message: '',
+    name: '', attending: 'yes', acompanante: 'no', nombreAcompanante: '',
+    shuttle: 'both', regreso: regresos[0] || '', diet: '', message: '',
   })
   const [errors, setErrors] = useState({})
   const [estado, setEstado] = useState('quieto')   // quieto · enviando · error
@@ -77,32 +77,21 @@ export default function RsvpPage() {
     limpiarAviso()
   }
 
-  /* El número de acompañantes decide cuántas casillas de nombre aparecen. Se
-     conservan los nombres ya escritos al subir o bajar la cifra. */
-  function setAcompanantes(valor) {
-    const n = Math.max(0, Math.min(MAX_ACOMPANANTES, Number(valor) || 0))
-    limpiarAviso()
-    setF(p => {
-      const nombres = Array.from({ length: n }, (_, i) => p.nombres[i] ?? '')
-      return { ...p, acompanantes: n, nombres }
-    })
-  }
-
-  function setNombre(i, valor) {
-    limpiarAviso()
-    setF(p => {
-      const nombres = [...p.nombres]
-      nombres[i] = valor
-      return { ...p, nombres }
-    })
-  }
-
   const autobus = {
     both: t.form.busBoth,
     out: t.form.busOut,
     back: t.form.busBack,
     none: t.form.busNone,
   }
+
+  // Solo quien vuelve en autobús tiene que elegir salida
+  const eligeRegreso = f.shuttle === 'both' || f.shuttle === 'back'
+
+  /* El horario de vuelta viaja pegado a la respuesta del autobús para no tener
+     que añadir otra columna en la hoja de cálculo. */
+  const autobusCompleto = () => (eligeRegreso && f.regreso)
+    ? `${autobus[f.shuttle]} (vuelta ${f.regreso})`
+    : autobus[f.shuttle]
 
   function buildMessage() {
     const yes = f.attending === 'yes'
@@ -113,11 +102,12 @@ export default function RsvpPage() {
       `¿Asisto?: ${yes ? 'Sí, allí estaré ✈️' : 'No podré ir'}`,
     ]
     if (yes) {
-      lines.push(`Acompañantes: ${f.acompanantes}`)
-      f.nombres.forEach((n, i) => {
-        if (n.trim()) lines.push(`  ${i + 1}. ${n.trim()}`)
-      })
-      lines.push(`Autobús: ${autobus[f.shuttle]}`)
+      const conAcompanante = f.acompanante === 'si'
+      lines.push(`¿Acompañante?: ${conAcompanante ? 'Sí' : 'No'}`)
+      if (conAcompanante && f.nombreAcompanante.trim()) {
+        lines.push(`Acompañante: ${f.nombreAcompanante.trim()}`)
+      }
+      lines.push(`Autobús: ${autobusCompleto()}`)
       if (f.diet.trim()) lines.push(`Alergias o intolerancias: ${f.diet.trim()}`)
     }
     if (f.message.trim()) lines.push(`Mensaje: ${f.message.trim()}`)
@@ -150,9 +140,10 @@ export default function RsvpPage() {
           web: trampa,
           nombre: f.name.trim(),
           asiste: f.attending,
-          acompanantes: f.attending === 'yes' ? f.acompanantes : 0,
-          nombres: f.attending === 'yes' ? f.nombres.map(n => n.trim()).filter(Boolean) : [],
-          autobus: f.attending === 'yes' ? autobus[f.shuttle] : '',
+          acompanantes: f.attending === 'yes' && f.acompanante === 'si' ? 1 : 0,
+          nombres: f.attending === 'yes' && f.acompanante === 'si' && f.nombreAcompanante.trim()
+            ? [f.nombreAcompanante.trim()] : [],
+          autobus: f.attending === 'yes' ? autobusCompleto() : '',
           alergias: f.attending === 'yes' ? f.diet.trim() : '',
           mensaje: f.message.trim(),
           idioma: lang,
@@ -249,17 +240,22 @@ export default function RsvpPage() {
 
         {attending && (
           <>
-            <Field label={t.form.guests}>
-              <input type="number" inputMode="numeric" min="0" max={MAX_ACOMPANANTES}
-                     value={f.acompanantes} onChange={e => setAcompanantes(e.target.value)} style={fieldStyle(false)} />
-            </Field>
+            <div className="flex flex-col gap-2">
+              <span className="eyebrow" style={{ fontSize: '0.46rem', color: 'var(--gold)' }}>{t.form.companionQ}</span>
+              <Choice
+                options={[{ v: 'si', l: t.form.simpleYes }, { v: 'no', l: t.form.simpleNo }]}
+                value={f.acompanante}
+                onChange={v => set('acompanante', v)}
+              />
+            </div>
 
-            {f.nombres.map((nombre, i) => (
-              <Field key={i} label={t.form.companion(i + 1)}>
-                <input type="text" value={nombre} onChange={e => setNombre(i, e.target.value)}
+            {f.acompanante === 'si' && (
+              <Field label={t.form.companionName}>
+                <input type="text" value={f.nombreAcompanante}
+                       onChange={e => set('nombreAcompanante', e.target.value)}
                        placeholder={t.form.companionPh} style={fieldStyle(false)} />
               </Field>
-            ))}
+            )}
 
             <div className="flex flex-col gap-2">
               <span className="eyebrow" style={{ fontSize: '0.46rem', color: 'var(--gold)' }}>{t.form.busQ}</span>
@@ -274,6 +270,18 @@ export default function RsvpPage() {
                 onChange={v => set('shuttle', v)}
               />
             </div>
+
+            {/* Hay dos autobuses de vuelta: quien la coja tiene que decir cuál */}
+            {eligeRegreso && regresos.length > 1 && (
+              <div className="flex flex-col gap-2">
+                <span className="eyebrow" style={{ fontSize: '0.46rem', color: 'var(--gold)' }}>{t.form.returnQ}</span>
+                <Choice
+                  options={regresos.map(h => ({ v: h, l: h }))}
+                  value={f.regreso}
+                  onChange={v => set('regreso', v)}
+                />
+              </div>
+            )}
 
             <Field label={t.form.diet}>
               <input type="text" value={f.diet} onChange={e => set('diet', e.target.value)} placeholder={t.form.dietPh} style={fieldStyle(false)} />

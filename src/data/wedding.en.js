@@ -59,7 +59,7 @@ const wedding = {
     { time: '13:30', title: 'Coach',           detail: 'Pick-up near the church' },
     { time: '14:30', title: 'Drinks reception', detail: 'Until 16:00' },
     { time: '16:00', title: 'Lunch',           detail: 'Until 18:00' },
-    { time: '18:00', title: 'Time to let loose', detail: 'Until midnight' },
+    { time: '18:00', title: 'Time to dance!', detail: 'Until midnight' },
     { time: '00:00', title: 'Last coach',      detail: 'Back to Jaén' },
   ],
 
@@ -85,6 +85,7 @@ const wedding = {
     hotels: [
       {
         name: 'Parador de Jaén',
+        oculto: hotel('Parador de Jaén').oculto,
         stars: 4,
         area: 'Santa Catalina castle',
         note: 'One of the city’s landmarks.',
@@ -114,6 +115,7 @@ const wedding = {
       },
       {
         name: 'Hotel Infanta Cristina',
+        oculto: hotel('Hotel Infanta Cristina').oculto,
         stars: 4,
         area: 'Avenida de Madrid',
         note: 'On one of the main avenues.',
