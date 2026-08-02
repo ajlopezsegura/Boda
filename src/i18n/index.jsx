@@ -5,7 +5,7 @@ import weddingEN from '../data/wedding.en'
 /* Textos de interfaz. El contenido de la boda vive en data/wedding(.en).js */
 const UI = {
   es: {
-    nav:        { historia: 'Historia', dia: 'El día', viaje: 'Viaje', info: 'Info', rsvp: 'Confirmar' },
+    nav:        { historia: 'Historia', dia: 'El día', viaje: 'Viaje', info: 'Tasas', rsvp: 'Confirmar' },
     openMenu:   'Abrir menú',
     closeMenu:  'Cerrar menú',
     nextStop:   'Siguiente parada',
@@ -38,13 +38,13 @@ const UI = {
     titles: {
       dia:   ['El gran ', 'día'],
       viaje: ['El ', 'viaje'],
-      info:  ['Instrucciones de ', 'vuelo'],
+      info:  ['Tasas de ', 'vuelo'],
       rsvp:  ['Confirma tu ', 'asistencia'],
     },
     subtitles: {
       dia:   'Dos escalas, un mismo destino: de la iglesia de San Bartolomé al Claustro de Vandelvira.',
       viaje: 'Dónde dormir, cómo moverte por Jaén y qué ver si te quedas unos días.',
-      info:  'Los detalles que te ayudarán a disfrutar del día sin sorpresas.',
+      info:  '',
       rsvp:  'Nos encantaría contar con vuestra presencia ese día. Decidnos si podéis acompañarnos: saberlo con tiempo nos ayuda a organizarlo todo con cariño.',
     },
     hotelsIntro: 'Estos hoteles de Jaén nos ofrecen condiciones especiales. Las plazas son limitadas y pueden agotarse, así que mejor no dejarlo para el final.',
@@ -56,14 +56,13 @@ const UI = {
       busQ: '¿Necesitas autobús?',
       busBoth: 'Ida y vuelta', busOut: 'Solo ida', busBack: 'Solo vuelta', busNone: 'No lo necesito',
       diet: 'Alergias o intolerancias', dietPh: 'Vegetariano, celíaco, frutos secos…',
-      message: 'Mensaje para los novios (opcional)', messagePh: 'Escríbeles algo bonito…',
+      message: 'Mensaje para los novios', messagePh: 'Escríbeles algo bonito…',
       send: 'Enviar',
-      hint: 'Se abrirá tu app de correo con el mensaje ya escrito · solo tienes que enviarlo',
       doubts: '¿Dudas? Llámanos:',
     },
   },
   en: {
-    nav:        { historia: 'Our story', dia: 'The day', viaje: 'Stay', info: 'Info', rsvp: 'RSVP' },
+    nav:        { historia: 'Our story', dia: 'The day', viaje: 'Stay', info: 'Fees', rsvp: 'RSVP' },
     openMenu:   'Open menu',
     closeMenu:  'Close menu',
     nextStop:   'Next stop',
@@ -96,13 +95,13 @@ const UI = {
     titles: {
       dia:   ['The big ', 'day'],
       viaje: ['The ', 'stay'],
-      info:  ['Flight ', 'instructions'],
+      info:  ['Flight ', 'fees'],
       rsvp:  ['Confirm your ', 'attendance'],
     },
     subtitles: {
       dia:   'Two stops, one destination: from the Church of San Bartolomé to the Claustro de Vandelvira.',
       viaje: 'Where to stay, how to get around Jaén and what to see if you stay a few days.',
-      info:  'The details that will help you enjoy the day without surprises.',
+      info:  '',
       rsvp:  'We would love to have you with us that day. Let us know whether you can join us — hearing early helps us get everything ready properly.',
     },
     hotelsIntro: 'These hotels in Jaén are offering us special rates. Availability is limited and may run out, so it is best not to leave it too late.',
@@ -114,9 +113,8 @@ const UI = {
       busQ: 'Do you need the coach?',
       busBoth: 'Both ways', busOut: 'Outbound only', busBack: 'Return only', busNone: 'I don’t need it',
       diet: 'Allergies or intolerances', dietPh: 'Vegetarian, coeliac, nuts…',
-      message: 'A message for the couple (optional)', messagePh: 'Write them something nice…',
+      message: 'A message for the couple', messagePh: 'Write them something nice…',
       send: 'Send',
-      hint: 'Your mail app will open with the message ready · you only have to send it',
       doubts: 'Any questions? Call us:',
     },
   },

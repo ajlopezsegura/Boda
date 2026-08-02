@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Plane, Send } from 'lucide-react'
+import { Plane } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
 import { useLang } from '../i18n'
 import { textoTel, enlaceTel } from '../lib/phone'
@@ -177,15 +177,8 @@ export default function RsvpPage() {
           className="eyebrow py-4 flex items-center justify-center gap-2 transition-opacity duration-200 mt-1"
           style={{ backgroundColor: 'var(--navy)', color: 'var(--gold-soft)', fontSize: '0.56rem' }}
           onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')} onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-          <Send size={14} /> {t.form.send}
+          <Plane size={14} /> {t.form.send}
         </button>
-
-        <div className="flex items-center gap-2 justify-center">
-          <Plane size={11} style={{ color: 'var(--ink-faint)' }} />
-          <p className="eyebrow text-center" style={{ fontSize: '0.42rem', color: 'var(--ink-faint)', lineHeight: 1.8 }}>
-            {t.form.hint}
-          </p>
-        </div>
       </motion.form>
 
       <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8">
