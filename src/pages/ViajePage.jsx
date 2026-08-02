@@ -64,6 +64,14 @@ export default function ViajePage() {
                 </span>
               )}
               <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.46rem', letterSpacing: '0.14em' }}>{h.area}</span>
+              {h.recommended && (
+                <span className="eyebrow" style={{
+                  color: 'var(--gold)', fontSize: '0.42rem', letterSpacing: '0.16em',
+                  border: '1px solid var(--gold)', padding: '3px 7px', lineHeight: 1,
+                }}>
+                  {t.recommended}
+                </span>
+              )}
             </span>
 
             {h.note && <span className="block mt-2">{h.note}</span>}
