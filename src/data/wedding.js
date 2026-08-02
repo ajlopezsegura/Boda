@@ -146,7 +146,7 @@ const wedding = {
     shuttlePickup: '13:30',
     shuttle: 'Recogida cerca de la iglesia, con salida hacia Baeza.',
     // Horarios de vuelta a Jaén
-    shuttleReturns: ['20:30', '00:00'],
+    shuttleReturns: ['21:00', '00:00'],
   },
 
   // ── Descubrir Jaén (edita o amplía a vuestro gusto) ───────────────────────
@@ -188,7 +188,7 @@ const wedding = {
     },
     faq: [
       { q: '¿Puedo llevar a mis hijos?', a: 'Será una celebración pensada para adultos. Si necesitas ayuda con canguro en la zona, dínoslo y te echamos una mano.' },
-      { q: '¿Hay servicio de autobús?', a: 'Sí, entre la ceremonia (Jaén) y la celebración (Baeza). Para la vuelta a Jaén hay dos salidas: a las 20:30 y a las 00:00. Resérvalo al confirmar.' },
+      { q: '¿Hay servicio de autobús?', a: 'Sí, entre la ceremonia (Jaén) y la celebración (Baeza). Para la vuelta a Jaén hay dos salidas: a las 21:00 y a las 00:00. Resérvalo al confirmar.' },
       { q: '¿Dónde aparco?', a: 'Hay parking gratuito junto al Claustro de Vandelvira, en Baeza.' },
       { q: '¿Hasta cuándo confirmo?', a: 'Te agradecemos que confirmes antes del 30 de septiembre de 2026 para organizarlo todo con cariño.' },
     ],
