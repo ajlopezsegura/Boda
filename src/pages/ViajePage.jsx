@@ -138,22 +138,34 @@ export default function ViajePage() {
             {travel.taxi}
           </p>
 
+          {/* Los números van en la tipografía de dato, pequeños: son una
+              referencia que se busca, no un titular */}
           {travel.taxis?.length > 0 && (
-            <div className="mt-7 flex flex-col items-center" style={{ gap: '0.6rem' }}>
-              {travel.taxis.map(taxi => (
-                <span key={taxi.phone} className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
-                  <a href={enlaceTel(taxi.phone)} data-cursor="hover"
-                     className="no-underline" style={{ color: 'var(--navy)', fontSize: '1.05rem' }}>
-                    {textoTel(taxi.phone)}
-                  </a>
-                  {taxi.whatsapp && (
-                    <a href={enlaceWhatsapp(taxi.phone)} target="_blank" rel="noreferrer" data-cursor="hover"
-                       className="eyebrow no-underline" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em', borderBottom: '1px solid var(--gold)', paddingBottom: 2 }}>
-                      {t.whatsapp}
+            <div className="mt-7 flex flex-col items-center">
+              <span className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+                {travel.taxis.map((taxi, i) => (
+                  <span key={taxi.phone} className="flex items-center gap-x-5">
+                    {i > 0 && (
+                      <span aria-hidden="true" style={{ width: 1, height: 11, backgroundColor: 'var(--hairline)' }} />
+                    )}
+                    <a href={enlaceTel(taxi.phone)} data-cursor="hover"
+                       className="data no-underline" style={{ color: 'var(--navy)', fontSize: '0.74rem' }}>
+                      {textoTel(taxi.phone)}
                     </a>
-                  )}
-                </span>
-              ))}
+                  </span>
+                ))}
+              </span>
+
+              {travel.taxis.some(taxi => taxi.whatsapp) && (
+                <a
+                  href={enlaceWhatsapp(travel.taxis.find(taxi => taxi.whatsapp).phone)}
+                  target="_blank" rel="noreferrer" data-cursor="hover"
+                  className="eyebrow no-underline mt-4"
+                  style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.18em', borderBottom: '1px solid var(--gold)', paddingBottom: 3 }}
+                >
+                  {t.whatsapp}
+                </a>
+              )}
             </div>
           )}
         </motion.div>
