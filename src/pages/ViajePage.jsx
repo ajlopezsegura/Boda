@@ -77,22 +77,32 @@ export default function ViajePage() {
 
             {/* Cómo reservar: solo lo llevan los hoteles que piden un trámite
                 concreto, y por eso se despega del resto con un filete */}
-            {h.bookingEmail && (
+            {(h.bookingEmail || h.bookingPhone) && (
               <span className="block mt-4 pl-4" style={{ borderLeft: '1px solid var(--gold)' }}>
                 <span className="eyebrow block" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
                   {t.howToBook}
                 </span>
-                <a href={`mailto:${h.bookingEmail}`} data-cursor="hover"
-                   className="no-underline block mt-2" style={{ color: 'var(--navy)', fontSize: '0.98rem', wordBreak: 'break-word' }}>
-                  {h.bookingEmail}
-                </a>
+                {h.bookingPhone && (
+                  <a href={`tel:${h.bookingPhone.replace(/\s/g, '')}`} data-cursor="hover"
+                     className="no-underline block mt-2" style={{ color: 'var(--navy)', fontSize: '0.98rem' }}>
+                    {h.bookingPhone}
+                  </a>
+                )}
+                {h.bookingEmail && (
+                  <a href={`mailto:${h.bookingEmail}`} data-cursor="hover"
+                     className="no-underline block mt-2" style={{ color: 'var(--navy)', fontSize: '0.98rem', wordBreak: 'break-word' }}>
+                    {h.bookingEmail}
+                  </a>
+                )}
                 {h.bookingNote && (
                   <span className="block mt-1.5" style={{ fontSize: '0.98rem', lineHeight: 1.7 }}>{h.bookingNote}</span>
                 )}
               </span>
             )}
 
-            {(h.bookingUrl || h.phone || h.email) && (
+            {/* Si la reserva ya tiene su propio teléfono, el general se calla:
+                dos números distintos del mismo hotel solo despistan */}
+            {(h.bookingUrl || (h.phone && !h.bookingPhone) || h.email) && (
               <span className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-2.5">
                 {h.bookingUrl && (
                   <a href={h.bookingUrl} target="_blank" rel="noreferrer" data-cursor="hover"
@@ -100,7 +110,7 @@ export default function ViajePage() {
                     {t.book}
                   </a>
                 )}
-                {h.phone && (
+                {h.phone && !h.bookingPhone && (
                   <a href={`tel:${h.phone.replace(/\s/g, '')}`} data-cursor="hover"
                      className="no-underline" style={{ color: 'var(--ink-muted)', fontSize: '0.9rem' }}>
                     {h.phone}
