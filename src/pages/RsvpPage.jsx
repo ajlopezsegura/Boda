@@ -132,7 +132,7 @@ export default function RsvpPage() {
 
     try {
       // text/plain evita la petición previa de CORS, que Apps Script no atiende
-      await fetch(rsvp.endpoint, {
+      const respuesta = await fetch(rsvp.endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
@@ -149,6 +149,14 @@ export default function RsvpPage() {
         }),
         signal: corta.signal,
       })
+
+      /* Que la petición llegue no basta: el script puede rechazarla (token
+         equivocado, error dentro). Si la respuesta se puede leer, se hace caso;
+         si el navegador no la deja leer, se da por buena, que entregada está. */
+      let veredicto = null
+      try { veredicto = JSON.parse(await respuesta.text()) } catch { /* ilegible */ }
+      if (veredicto && veredicto.ok === false) throw new Error('rechazada')
+
       setEnviado(true)
       setEstado('quieto')
     } catch {
