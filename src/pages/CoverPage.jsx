@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PageTransition from '../components/layout/PageTransition'
+import Countdown from '../components/brand/Countdown'
 import wedding from '../data/wedding'
 
 const ease = [0.22, 0.61, 0.36, 1]
@@ -138,10 +139,21 @@ export default function CoverPage() {
             {city}
           </motion.p>
 
+          {/* Cuenta atrás — justo encima del botón */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 1.05, ease }}
+            className="self-center md:self-start"
+            style={{ marginTop: 'clamp(2rem, 4.5vh, 3rem)' }}
+          >
+            <Countdown tone="cover" />
+          </motion.div>
+
           <motion.button
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, delay: 1.25 }}
+            transition={{ duration: 0.9, delay: 1.3 }}
             onClick={() => navigate('/historia')}
             className="group self-center md:self-start inline-flex items-center justify-center gap-3
                        text-[#F7F3EA] md:text-[#1E2A44]
@@ -149,7 +161,7 @@ export default function CoverPage() {
                        transition-colors duration-500
                        hover:bg-[rgba(217,190,122,0.14)] md:hover:bg-[rgba(166,129,60,0.10)]"
             style={{
-              marginTop: 'clamp(2.2rem, 5vh, 3.4rem)',
+              marginTop: 'clamp(1.6rem, 3.5vh, 2.4rem)',
               fontFamily: 'Montserrat, sans-serif',
               fontSize: '0.62rem',
               letterSpacing: '0.2em',
