@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Plane } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
@@ -56,7 +57,12 @@ export default function RsvpPage() {
     name: '', attending: 'yes', acompanantes: 0, nombres: [], shuttle: 'both', diet: '', message: '',
   })
   const [errors, setErrors] = useState({})
-  const [enviado, setEnviado] = useState(false)
+
+  /* La tarjeta de embarque no es una página aparte, es el estado del formulario
+     una vez enviado. Con ?ok en la dirección se abre directamente, para poder
+     enseñarla sin rellenar nada. */
+  const { search } = useLocation()
+  const [enviado, setEnviado] = useState(() => new URLSearchParams(search).has('ok'))
 
   const set = (k, v) => { setF(p => ({ ...p, [k]: v })); if (errors[k]) setErrors(e => ({ ...e, [k]: null })) }
 
