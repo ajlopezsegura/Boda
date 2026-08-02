@@ -52,12 +52,14 @@ function Choice({ options, value, onChange, columnas = 2 }) {
 }
 
 export default function RsvpPage() {
-  const { wedding, t } = useLang()
+  const { wedding, t, lang } = useLang()
   const { rsvp } = wedding
   const [f, setF] = useState({
     name: '', attending: 'yes', acompanantes: 0, nombres: [], shuttle: 'both', diet: '', message: '',
   })
   const [errors, setErrors] = useState({})
+  const [estado, setEstado] = useState('quieto')   // quieto · enviando · error
+  const [trampa, setTrampa] = useState('')          // campo señuelo para bots
 
   /* La tarjeta de embarque no es una página aparte, es el estado del formulario
      una vez enviado. Con ?ok en la dirección se abre directamente, para poder
@@ -112,12 +114,48 @@ export default function RsvpPage() {
     return lines.join('\n')
   }
 
-  function enviar() {
-    if (!f.name.trim()) { setErrors({ name: t.form.nameErr }); return }
+  function enlaceCorreo() {
     const asunto = `Confirmación boda ${wedding.couple.bride} & ${wedding.couple.groom} — ${f.name}`
-    window.location.href =
-      `mailto:${rsvp.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(buildMessage())}`
-    setEnviado(true)
+    return `mailto:${rsvp.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(buildMessage())}`
+  }
+
+  async function enviar() {
+    if (!f.name.trim()) { setErrors({ name: t.form.nameErr }); return }
+    if (estado === 'enviando') return
+
+    // Sin buzón configurado se recurre al correo de siempre
+    if (!rsvp.endpoint) { window.location.href = enlaceCorreo(); setEnviado(true); return }
+
+    setEstado('enviando')
+    const corta = new AbortController()
+    const plazo = setTimeout(() => corta.abort(), 12000)
+
+    try {
+      // text/plain evita la petición previa de CORS, que Apps Script no atiende
+      await fetch(rsvp.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          token: rsvp.token,
+          web: trampa,
+          nombre: f.name.trim(),
+          asiste: f.attending,
+          acompanantes: f.attending === 'yes' ? f.acompanantes : 0,
+          nombres: f.attending === 'yes' ? f.nombres.map(n => n.trim()).filter(Boolean) : [],
+          autobus: f.attending === 'yes' ? autobus[f.shuttle] : '',
+          alergias: f.attending === 'yes' ? f.diet.trim() : '',
+          mensaje: f.message.trim(),
+          idioma: lang,
+        }),
+        signal: corta.signal,
+      })
+      setEnviado(true)
+      setEstado('quieto')
+    } catch {
+      setEstado('error')
+    } finally {
+      clearTimeout(plazo)
+    }
   }
 
   const attending = f.attending === 'yes'
@@ -230,12 +268,33 @@ export default function RsvpPage() {
             style={{ width: '100%', backgroundColor: 'var(--paper)', resize: 'none', outline: 'none', border: '1px solid var(--hairline)', color: 'var(--navy)', fontSize: '0.95rem', padding: '11px', lineHeight: 1.7, fontFamily: '"EB Garamond", Georgia, serif' }} />
         </Field>
 
-        <button type="submit" data-cursor="hover"
+        {/* Señuelo: una persona no puede rellenar lo que no ve, un bot sí */}
+        <input
+          type="text" name="web" tabIndex={-1} autoComplete="off" aria-hidden="true"
+          value={trampa} onChange={e => setTrampa(e.target.value)}
+          style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
+        />
+
+        <button type="submit" data-cursor="hover" disabled={estado === 'enviando'}
           className="eyebrow py-4 flex items-center justify-center gap-2 transition-opacity duration-200 mt-1"
-          style={{ backgroundColor: 'var(--navy)', color: 'var(--gold-soft)', fontSize: '0.56rem' }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')} onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-          <Plane size={14} /> {t.form.send}
+          style={{ backgroundColor: 'var(--navy)', color: 'var(--gold-soft)', fontSize: '0.56rem', opacity: estado === 'enviando' ? 0.65 : 1 }}
+          onMouseEnter={e => { if (estado !== 'enviando') e.currentTarget.style.opacity = '0.9' }}
+          onMouseLeave={e => { e.currentTarget.style.opacity = estado === 'enviando' ? '0.65' : '1' }}>
+          <Plane size={14} /> {estado === 'enviando' ? t.form.sending : t.form.send}
         </button>
+
+        {estado === 'error' && (
+          <div className="text-center" style={{ marginTop: '-0.6rem' }}>
+            <p style={{ fontSize: '0.92rem', lineHeight: 1.7, color: 'rgba(160,50,40,0.9)' }}>
+              {t.form.errorText}
+            </p>
+            <a href={enlaceCorreo()} data-cursor="hover"
+               className="eyebrow no-underline inline-block mt-3"
+               style={{ color: 'var(--gold)', fontSize: '0.46rem', letterSpacing: '0.18em', borderBottom: '1px solid var(--gold)', paddingBottom: 3 }}>
+              {t.form.errorMail}
+            </a>
+          </div>
+        )}
       </motion.form>
 
       <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8">

@@ -75,7 +75,7 @@ const wedding = {
     { time: '13:30', title: 'Autobús',             detail: 'Recogida cerca de la iglesia' },
     { time: '14:30', title: 'Cóctel',              detail: 'Hasta las 16:00' },
     { time: '16:00', title: 'Almuerzo',            detail: 'Hasta las 18:00' },
-    { time: '18:00', title: 'Hora de desmelenarse', detail: 'DJ hasta las 00:00' },
+    { time: '18:00', title: 'Hora de desmelenarse', detail: 'Hasta las 00:00' },
     { time: '00:00', title: 'Último autobús',      detail: 'Vuelta a Jaén' },
   ],
 
@@ -105,10 +105,9 @@ const wedding = {
   travel: {
     // Consejo para moverse por Jaén el día de la ceremonia
     taxi:
-      'Aunque el mapa diga que se llega andando en cuatro minutos, no te fíes: ' +
-      'Jaén es una cuesta y el casco antiguo tiene las calles estrechas. ' +
-      'Te recomendamos subir a la iglesia en taxi, y pedirlo con antelación, ' +
-      'porque ese día habrá mucha demanda.',
+      'Aunque el mapa diga que se llega andando en diez minutos, no te fíes: ' +
+      'Jaén está en cuesta. Te recomendamos subir a la iglesia en taxi, y ' +
+      'pedirlo con antelación, porque ese día habrá mucha demanda.',
     // Radioteléfonos de taxi de Jaén
     taxis: [
       { phone: '953 27 10 10' },
@@ -178,12 +177,17 @@ const wedding = {
 
   // ── Descubrir Jaén (edita o amplía a vuestro gusto) ───────────────────────
   jaen: {
-    intro:
-      'No existe en el mundo un olivar más grande que el que rodea esta ciudad. ' +
-      'La Catedral se copió en México, en Lima, en La Habana. Y bajo un palacio ' +
-      'renacentista duermen los baños árabes más grandes que se pueden visitar ' +
-      'en España. Todo eso, en una ciudad por la que casi nadie para. ' +
-      'Merece la pena hacer una visita.',
+    // Va por párrafos: el texto respira mejor y el remate cae solo
+    intro: [
+      'No existe en el mundo un mar de olivos tan inmenso como el que rodea esta ' +
+      'ciudad. Se alza una de las catedrales más impresionantes del Renacimiento ' +
+      'español, se conservan los baños árabes visitables más grandes de España y ' +
+      'cada rincón guarda siglos de historia.',
+      'Hay ciudades que todo el mundo conoce y otras que se descubren. Jaén ' +
+      'pertenece a estas últimas.',
+      'Os animamos a recorrer la ciudad y sus alrededores. Estamos seguros de que ' +
+      'os sorprenderá.',
+    ],
     highlights: [
       {
         title: 'La Catedral',
@@ -219,7 +223,7 @@ const wedding = {
       note: '',
     },
     gift: {
-      note: 'Empezamos vida nueva juntos en Suiza, un país precioso donde un café cuesta lo que aquí un menú. Si queréis echarnos una mano con el aterrizaje, esta es nuestra cuenta. Y si no, con que vengáis a la boda —y luego a vernos allí— nos sobra.',
+      note: 'Empezamos una nueva vida juntos en Suiza, un país precioso donde un café cuesta lo que aquí un menú. Si queréis echarnos una mano con el aterrizaje, esta es nuestra cuenta. Y si no, con que vengáis a la boda —y luego a vernos allí— nos basta.',
       account: 'ES19 2100 6490 7013 0040 1953',
       concept: 'Boda Pilar y Pablo 12/12/2026',
     },
@@ -227,6 +231,11 @@ const wedding = {
 
   // ── Confirmación de asistencia ────────────────────────────────────────────
   rsvp: {
+    // Buzón en Google Sheets. La hoja es privada; esta dirección solo sabe
+    // añadir filas —no leer, ni editar, ni borrar— y exige el token.
+    endpoint: 'https://script.google.com/macros/s/AKfycbw2BUAbIk-O-NmTa5tOfFnbuBwh4coW1mMESiW28GiQLoMHT6ASj1KheETOFvrJGzE7Cg/exec',
+    token: 'pilarypablo-12122026',
+    // Correo de reserva por si el envío falla
     email: 'pilarypablo2026@gmail.com', // REVISAR
     contacts: [
       { name: 'Pilar', phone: '(+34) 633 468 172' },

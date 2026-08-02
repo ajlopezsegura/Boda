@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { motion } from 'framer-motion'
 import { MapPin, Bus, ArrowUpRight } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
@@ -108,14 +109,23 @@ export default function ItinerarioPage() {
                   <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem', letterSpacing: '0.2em' }}>{t.busBack}</span>
                 </div>
 
-                <div className="flex items-start justify-center gap-9 mt-4">
-                  {travel.shuttleReturns.map((t, n) => (
-                    <div key={t} className="flex flex-col items-center gap-1.5">
-                      <span className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.4rem, 4.5vw, 1.8rem)', lineHeight: 1 }}>{t}</span>
-                      <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
-                        {n === 0 ? t.firstBus : t.lastBus}
-                      </span>
-                    </div>
+                {/* La conjunción entre las dos horas evita leerlas como un
+                    rango: son dos salidas, y cada uno coge la que quiera */}
+                <div className="flex items-start justify-center gap-6 sm:gap-8 mt-4">
+                  {travel.shuttleReturns.map((hora, n) => (
+                    <Fragment key={hora}>
+                      {n > 0 && (
+                        <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem', letterSpacing: '0.16em', marginTop: '0.45rem' }}>
+                          {t.or}
+                        </span>
+                      )}
+                      <div className="flex flex-col items-center gap-1.5">
+                        <span className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.4rem, 4.5vw, 1.8rem)', lineHeight: 1 }}>{hora}</span>
+                        <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
+                          {n === 0 ? t.firstBus : t.lastBus}
+                        </span>
+                      </div>
+                    </Fragment>
                   ))}
                 </div>
               </motion.div>

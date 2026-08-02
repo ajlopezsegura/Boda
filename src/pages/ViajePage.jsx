@@ -211,9 +211,13 @@ export default function ViajePage() {
       {jaen && (
         <>
           <div className="mt-16"><SectionLabel>{t.discover}</SectionLabel></div>
-          <p className="mt-6 mx-auto text-center" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
-            {jaen.intro}
-          </p>
+          <div className="mt-6 mx-auto text-center" style={{ maxWidth: 560 }}>
+            {(Array.isArray(jaen.intro) ? jaen.intro : [jaen.intro]).map((parrafo, i) => (
+              <p key={i} className={i > 0 ? 'mt-5' : ''} style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)' }}>
+                {parrafo}
+              </p>
+            ))}
+          </div>
 
           {/* En horizontal y sin numerar: así se leen como estampas sueltas que
               apetece ir pasando, y no como una lista de tareas pendientes */}

@@ -59,7 +59,7 @@ const wedding = {
     { time: '13:30', title: 'Coach',           detail: 'Pick-up near the church' },
     { time: '14:30', title: 'Drinks reception', detail: 'Until 16:00' },
     { time: '16:00', title: 'Lunch',           detail: 'Until 18:00' },
-    { time: '18:00', title: 'Time to let loose', detail: 'DJ until midnight' },
+    { time: '18:00', title: 'Time to let loose', detail: 'Until midnight' },
     { time: '00:00', title: 'Last coach',      detail: 'Back to Jaén' },
   ],
 
@@ -78,9 +78,9 @@ const wedding = {
 
   travel: {
     taxi:
-      'The map may tell you it is a four-minute walk. Do not believe it: Jaén is ' +
-      'one long hill and the old town is narrow. We recommend taking a taxi up to ' +
-      'the church, and booking it in advance, because demand will be high that day.',
+      'The map may tell you it is a ten-minute walk. Do not believe it: Jaén is ' +
+      'one long hill. We recommend taking a taxi up to the church, and booking it ' +
+      'in advance, because demand will be high that day.',
     taxis: es.travel.taxis,
     hotels: [
       {
@@ -139,11 +139,16 @@ const wedding = {
   },
 
   jaen: {
-    intro:
-      'There is no larger olive grove on earth than the one that surrounds this ' +
-      'city. The Cathedral was copied in Mexico City, in Lima, in Havana. And ' +
-      'beneath a Renaissance palace lie the largest Arab baths you can visit in ' +
-      'Spain. All of it in a city almost nobody stops in. It is worth the visit.',
+    intro: [
+      'Nowhere in the world is there a sea of olive trees as vast as the one that ' +
+      'surrounds this city. One of the most striking cathedrals of the Spanish ' +
+      'Renaissance rises here, the largest Arab baths open to visitors in Spain ' +
+      'have survived beneath it, and every corner holds centuries of history.',
+      'There are cities everybody knows, and cities you discover. Jaén belongs to ' +
+      'the second kind.',
+      'We hope you take the time to walk the city and the country around it. We are ' +
+      'certain it will surprise you.',
+    ],
     highlights: [
       {
         title: 'The Cathedral',
@@ -185,6 +190,8 @@ const wedding = {
   },
 
   rsvp: {
+    endpoint: es.rsvp.endpoint,
+    token: es.rsvp.token,
     email: es.rsvp.email,
     contacts: es.rsvp.contacts,
   },
