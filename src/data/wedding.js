@@ -104,14 +104,35 @@ const wedding = {
       'Jaén es una ciudad de cuestas y el casco antiguo tiene las calles ' +
       'estrechas. Te recomendamos reservar taxi con antelación para subir a la ' +
       'iglesia: ese día habrá mucha demanda y no siempre es fácil encontrar uno.',
-    // Hoteles con acuerdo. Rellena `url` (web del hotel), `bookingUrl` (enlace
-    // directo de reserva) y `email` cuando los tengas; si están vacíos, la web
-    // no muestra el enlace. El código de reserva es común a los tres.
-    bookingCode: 'XXX', // PENDIENTE — código que hay que dar al reservar
+    // Hoteles con acuerdo. Cada uno tiene SU PROPIO código de reserva.
+    // Rellena `code`, `url` (web), `bookingUrl` (reserva directa), `phone` y
+    // `email`: lo que quede vacío sencillamente no se muestra.
+    // PENDIENTE: códigos, enlaces, teléfonos y correos reales.
     hotels: [
-      { name: 'Hotel Infanta Cristina',    area: 'Jaén', note: '', url: '', bookingUrl: '', email: '' },
-      { name: 'Hotel Condestable Iranzo',  area: 'Jaén', note: '', url: '', bookingUrl: '', email: '' },
-      { name: 'Hotel Europa',              area: 'Jaén', note: '', url: '', bookingUrl: '', email: '' },
+      {
+        name: 'Hotel Infanta Cristina',
+        stars: 4,
+        area: 'Avenida de Madrid · Jaén',
+        note: 'A las afueras del centro, con parking propio. Cómodo si vienes en coche.',
+        code: 'XXX',
+        url: '', bookingUrl: '', phone: '', email: '',
+      },
+      {
+        name: 'Hotel Condestable Iranzo',
+        stars: 3,
+        area: 'Paseo de la Estación · Jaén',
+        note: 'Céntrico y bien comunicado, a un paseo del casco antiguo.',
+        code: 'XXX',
+        url: '', bookingUrl: '', phone: '', email: '',
+      },
+      {
+        name: 'Hotel Europa',
+        stars: 3,
+        area: 'Plaza de Belén · Jaén',
+        note: 'En pleno centro, junto a la zona de tapeo.',
+        code: 'XXX',
+        url: '', bookingUrl: '', phone: '', email: '',
+      },
     ],
     shuttle:
       'Habrá autobús desde la Iglesia de San Bartolomé (Jaén) hasta el Claustro de ' +

@@ -44,24 +44,44 @@ export default function ViajePage() {
       {/* Alojamiento — lo primero */}
       <div><SectionLabel>Dónde dormir</SectionLabel></div>
 
-      {travel.bookingCode && (
-        <p className="mt-6 mx-auto text-center" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
-          Tenemos habitaciones reservadas en estos hoteles de Jaén. Al reservar, indica el código{' '}
-          <span className="data" style={{ color: 'var(--gold)', fontSize: '0.95rem' }}>{travel.bookingCode}</span>.
-        </p>
-      )}
+      <p className="mt-6 mx-auto text-center" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
+        Tenemos habitaciones reservadas en estos hoteles de Jaén. Cada uno tiene
+        su propio código: indícalo al hacer la reserva.
+      </p>
 
       <div className="mt-8" style={{ borderBottom: '1px solid var(--hairline)' }}>
         {travel.hotels.map((h, i) => (
           <Row key={h.name} i={String(i + 1).padStart(2, '0')} title={h.name} href={h.url || undefined}>
-            <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.46rem', letterSpacing: '0.14em' }}>{h.area}</span>
-            {h.note && <span className="block mt-1.5">{h.note}</span>}
-            {(h.bookingUrl || h.email) && (
-              <span className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-2">
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              {h.stars && (
+                <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.46rem', letterSpacing: '0.14em' }}>
+                  {'★'.repeat(h.stars)}
+                </span>
+              )}
+              <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.46rem', letterSpacing: '0.14em' }}>{h.area}</span>
+            </span>
+
+            {h.note && <span className="block mt-2">{h.note}</span>}
+
+            {h.code && (
+              <span className="block mt-3">
+                <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>Código de reserva </span>
+                <span className="data" style={{ color: 'var(--gold)', fontSize: '0.92rem' }}>{h.code}</span>
+              </span>
+            )}
+
+            {(h.bookingUrl || h.phone || h.email) && (
+              <span className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-2.5">
                 {h.bookingUrl && (
                   <a href={h.bookingUrl} target="_blank" rel="noreferrer" data-cursor="hover"
                      className="eyebrow no-underline" style={{ color: 'var(--gold)', fontSize: '0.46rem', letterSpacing: '0.14em', borderBottom: '1px solid var(--gold)' }}>
                     Reservar
+                  </a>
+                )}
+                {h.phone && (
+                  <a href={`tel:${h.phone.replace(/\s/g, '')}`} data-cursor="hover"
+                     className="no-underline" style={{ color: 'var(--ink-muted)', fontSize: '0.9rem' }}>
+                    {h.phone}
                   </a>
                 )}
                 {h.email && (
