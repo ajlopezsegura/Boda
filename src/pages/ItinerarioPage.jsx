@@ -53,7 +53,7 @@ export default function ItinerarioPage() {
     <PageScaffold
       align="center"
       title={<>El gran <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>día</span></>}
-      subtitle="Dos escalas, un mismo destino: del «sí, quiero» en Jaén al claustro de Baeza."
+      subtitle="Dos escalas, un mismo destino: de la iglesia de San Bartolomé al Claustro de Vandelvira."
       maxWidth={760}
       backdrop={wedding.backdrop}
     >
