@@ -239,9 +239,9 @@ const wedding = {
     // añadir filas —no leer, ni editar, ni borrar— y exige el token.
     endpoint: 'https://script.google.com/macros/s/AKfycbw2BUAbIk-O-NmTa5tOfFnbuBwh4coW1mMESiW28GiQLoMHT6ASj1KheETOFvrJGzE7Cg/exec',
     token: 'pilarypablo-12122026',
-    // Correo de reserva por si el envío falla. Es una redirección de OVH: no
-    // tiene buzón propio, reenvía a la dirección personal.
-    email: 'hola@bodapilarypablo.es',
+    // Correo de reserva por si el envío falla. Va directo, sin pasar por la
+    // redirección del dominio: un salto menos donde algo pueda perderse.
+    email: 'info@thevisualsboutique.com',
     contacts: [
       { name: 'Pilar', phone: '(+34) 633 468 172' },
       { name: 'Pablo', phone: '(+41) 788 937 771' },
