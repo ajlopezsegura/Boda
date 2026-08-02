@@ -11,20 +11,42 @@ export default function CoverPage() {
   const navigate = useNavigate()
   const { wedding } = useLang()
   const { couple, cover, dateShort, city } = wedding
-  const [videoFailed, setVideoFailed] = useState(false)
+  // El fondo de la portada tiene tres estados: el vídeo, la imagen animada de
+  // recambio y, si tampoco carga, el papel liso.
+  const [usarAnimada, setUsarAnimada] = useState(false)
+  const [sinFondo, setSinFondo] = useState(false)
+
   const videoRef = useRef(null)
+  const hayFondo = Boolean(cover.video) && !sinFondo
+  const mostrarVideo = hayFondo && !usarAnimada
 
-  const showVideo = cover.video && !videoFailed
-
-  // React no siempre fija la propiedad DOM `muted` a tiempo para que el
-  // navegador permita el autoplay (bug conocido, sobre todo en Safari/iOS).
   useEffect(() => {
     const v = videoRef.current
-    if (!v) return
+    if (!v || !mostrarVideo) return
+
+    // React no siempre fija la propiedad DOM `muted` a tiempo para que el
+    // navegador permita el autoplay (bug conocido, sobre todo en Safari/iOS).
     v.muted = true
     v.defaultMuted = true
-    v.play?.()?.catch(() => setVideoFailed(true))
-  }, [showVideo])
+
+    let cancelado = false
+    const rendirse = () => {
+      if (cancelado) return
+      if (cover.videoAnimado) setUsarAnimada(true)
+      else setSinFondo(true)
+    }
+
+    v.play?.()?.catch(rendirse)
+
+    // El modo de bajo consumo de iOS no siempre rechaza la promesa: a veces la
+    // resuelve y deja el vídeo congelado en el primer fotograma. Por eso, además
+    // de escuchar el rechazo, se comprueba que de verdad haya echado a andar.
+    const vigilante = setTimeout(() => {
+      if (v.paused || (v.readyState >= 2 && v.currentTime === 0)) rendirse()
+    }, 1200)
+
+    return () => { cancelado = true; clearTimeout(vigilante) }
+  }, [mostrarVideo, cover.videoAnimado])
 
   return (
     <PageTransition>
@@ -32,7 +54,7 @@ export default function CoverPage() {
           Escritorio: papel a la izquierda con el texto, vídeo a sangre a la derecha. */}
       <div className="absolute inset-0 overflow-hidden" style={{ backgroundColor: 'var(--paper)' }}>
 
-        {showVideo && (
+        {hayFondo && (
           <motion.div
             initial={{ opacity: 0, scale: 1.04 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -40,19 +62,29 @@ export default function CoverPage() {
             className="absolute inset-0 overflow-hidden
                        md:inset-auto md:right-0 md:top-[var(--header-h)] md:bottom-0 md:w-[42vw] lg:w-[38vw]"
           >
-            <video
-              ref={videoRef}
-              src={cover.video}
-              poster={cover.image || undefined}
-              autoPlay muted defaultMuted loop playsInline webkit-playsinline="true" preload="auto"
-              onError={() => setVideoFailed(true)}
-              className="w-full h-full object-cover"
-            />
+            {mostrarVideo ? (
+              <video
+                ref={videoRef}
+                src={cover.video}
+                poster={cover.image || undefined}
+                autoPlay muted defaultMuted loop playsInline webkit-playsinline="true" preload="auto"
+                onError={() => (cover.videoAnimado ? setUsarAnimada(true) : setSinFondo(true))}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <img
+                src={cover.videoAnimado}
+                alt=""
+                aria-hidden="true"
+                onError={() => setSinFondo(true)}
+                className="w-full h-full object-cover"
+              />
+            )}
           </motion.div>
         )}
 
-        {/* Velo para legibilidad — solo en móvil, donde el texto va sobre el vídeo */}
-        {showVideo && (
+        {/* Velo para legibilidad — solo en móvil, donde el texto va sobre el fondo */}
+        {hayFondo && (
           <div
             className="absolute inset-0 md:hidden pointer-events-none"
             style={{

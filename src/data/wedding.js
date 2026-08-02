@@ -35,6 +35,10 @@ const wedding = {
     cta: 'Embarcar',
     // Vídeo de fondo de la portada (déjalo vacío para cubierta lisa)
     video: './assets/videos/portada.mp4',
+    // Mismo plano en WebP animado. iOS en modo de bajo consumo prohíbe que un
+    // <video> arranque solo, pero una imagen animada sí se mueve: es el recambio
+    // cuando el vídeo se niega a reproducirse. Solo se descarga si hace falta.
+    videoAnimado: './assets/videos/portada-animada.webp',
     image: '',
   },
 
@@ -101,9 +105,15 @@ const wedding = {
   travel: {
     // Consejo para moverse por Jaén el día de la ceremonia
     taxi:
-      'Jaén es una ciudad de cuestas y el casco antiguo tiene las calles ' +
-      'estrechas. Te recomendamos reservar taxi con antelación para subir a la ' +
-      'iglesia: ese día habrá mucha demanda y no siempre es fácil encontrar uno.',
+      'Aunque el mapa diga que se llega andando en cuatro minutos, no te fíes: ' +
+      'Jaén es una cuesta y el casco antiguo tiene las calles estrechas. ' +
+      'Te recomendamos subir a la iglesia en taxi, y pedirlo con antelación, ' +
+      'porque ese día habrá mucha demanda.',
+    // Radioteléfonos de taxi de Jaén
+    taxis: [
+      { phone: '953 27 10 10' },
+      { phone: '953 22 22 22', whatsapp: true },
+    ],
     // Hoteles con acuerdo. Cada uno tiene SU PROPIO código de reserva.
     // Rellena `code`, `url` (web), `bookingUrl` (reserva directa), `phone` y
     // `email`: lo que quede vacío sencillamente no se muestra.
@@ -155,7 +165,7 @@ const wedding = {
         code: '',
         url: 'https://grupoolivencia.com/ho-ciudad-de-jaen/home/', phone: '953 28 48 00', email: '',
         bookingUrl: 'https://direct-book.com/properties/HOCiudadDeJaenDirect',
-        bookingLabel: 'Hotel HO',
+        bookingLabel: 'Hotel HO (reserva aquí)',
         bookingNote: 'Reserva en su web indicando el código OLIVENCIA2026.',
       },
     ],
@@ -169,9 +179,10 @@ const wedding = {
   // ── Descubrir Jaén (edita o amplía a vuestro gusto) ───────────────────────
   jaen: {
     intro:
-      'Si vienes de fuera y te quedas un par de días, Jaén merece que le des ' +
-      'una vuelta. Es una provincia de olivares infinitos y ciudades ' +
-      'renacentistas, con mucho más de lo que suele contarse.',
+      'Jaén no se ve de paso. La ciudad se levanta a los pies de un castillo, ' +
+      'rodeada por el mayor mar de olivos del mundo, y guarda una catedral que ' +
+      'sirvió de modelo a las de media Latinoamérica y los baños árabes más ' +
+      'grandes que se pueden visitar en España. Merece la pena hacer una visita.',
     highlights: [
       {
         title: 'La catedral',
@@ -183,11 +194,7 @@ const wedding = {
       },
       {
         title: 'Baños árabes',
-        text: 'Bajo el Palacio de Villardompardo, de los mayores conservados de España. Una parada breve y sorprendente.',
-      },
-      {
-        title: 'Úbeda y Baeza',
-        text: 'A media hora, las dos ciudades renacentistas declaradas Patrimonio de la Humanidad. Baeza es donde celebramos.',
+        text: 'Del siglo XI, escondidos bajo el Palacio de Villardompardo. Se recorren por debajo de la ciudad y son la sorpresa que nadie se espera.',
       },
     ],
   },

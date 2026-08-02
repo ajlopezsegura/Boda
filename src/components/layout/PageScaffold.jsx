@@ -9,7 +9,7 @@ const ease = [0.43, 0.13, 0.23, 0.96]
  * Cabecera asimétrica con número de página tipo pasaporte y titular a la
  * izquierda; cierre con navegación a la siguiente parada.
  */
-export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth = 880, backdrop, backdropOpacity = 0.07, align = 'left', children }) {
+export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth = 880, backdrop, backdropOpacity = 0.07, backdropFocus, align = 'left', children }) {
   const centrada = align === 'center'
   return (
     <PageTransition>
@@ -19,14 +19,13 @@ export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth
         {backdrop && (
           <div
             aria-hidden="true"
-            className="fixed inset-0 pointer-events-none"
+            className="fondo-pagina fixed inset-0 pointer-events-none"
             style={{
               backgroundImage: `url(${backdrop})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
               opacity: backdropOpacity,
               filter: 'grayscale(0.4) sepia(0.18)',
               zIndex: 0,
+              ...(backdropFocus ? { '--fondo-encuadre': backdropFocus } : null),
             }}
           />
         )}

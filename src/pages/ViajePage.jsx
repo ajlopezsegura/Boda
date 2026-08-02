@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
 import { SectionLabel } from '../components/brand/decor'
 import { useLang } from '../i18n'
+import { textoTel, enlaceTel, enlaceWhatsapp } from '../lib/phone'
 
 const ease = [0.43, 0.13, 0.23, 0.96]
 
@@ -45,7 +46,9 @@ export default function ViajePage() {
       backdrop={wedding.backdropViaje}
       /* Esta foto tiene mucho más contraste que la de la catedral (el rojo del
          vestido canta), así que se baja para que siga siendo solo una textura */
-      backdropOpacity={0.05}
+      /* En escritorio la foto se amplía tanto que las caras se salen por arriba:
+         se baja el encuadre para que queden dentro */
+      backdropFocus="center 25%"
     >
       {/* Alojamiento — lo primero */}
       <div><SectionLabel>{t.whereSleep}</SectionLabel></div>
@@ -76,9 +79,9 @@ export default function ViajePage() {
                   {t.howToBook}
                 </span>
                 {h.bookingPhone && (
-                  <a href={`tel:${h.bookingPhone.replace(/\s/g, '')}`} data-cursor="hover"
+                  <a href={enlaceTel(h.bookingPhone)} data-cursor="hover"
                      className="no-underline block mt-2" style={{ color: 'var(--navy)', fontSize: '0.98rem' }}>
-                    {h.bookingPhone}
+                    {textoTel(h.bookingPhone)}
                   </a>
                 )}
                 {h.bookingEmail && (
@@ -107,9 +110,9 @@ export default function ViajePage() {
             {((h.phone && !h.bookingPhone) || h.email) && (
               <span className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-2.5">
                 {h.phone && !h.bookingPhone && (
-                  <a href={`tel:${h.phone.replace(/\s/g, '')}`} data-cursor="hover"
+                  <a href={enlaceTel(h.phone)} data-cursor="hover"
                      className="no-underline" style={{ color: 'var(--ink-muted)', fontSize: '0.9rem' }}>
-                    {h.phone}
+                    {textoTel(h.phone)}
                   </a>
                 )}
                 {h.email && (
@@ -134,6 +137,25 @@ export default function ViajePage() {
           <p className="mt-6 mx-auto" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
             {travel.taxi}
           </p>
+
+          {travel.taxis?.length > 0 && (
+            <div className="mt-7 flex flex-col items-center" style={{ gap: '0.6rem' }}>
+              {travel.taxis.map(taxi => (
+                <span key={taxi.phone} className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+                  <a href={enlaceTel(taxi.phone)} data-cursor="hover"
+                     className="no-underline" style={{ color: 'var(--navy)', fontSize: '1.05rem' }}>
+                    {textoTel(taxi.phone)}
+                  </a>
+                  {taxi.whatsapp && (
+                    <a href={enlaceWhatsapp(taxi.phone)} target="_blank" rel="noreferrer" data-cursor="hover"
+                       className="eyebrow no-underline" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em', borderBottom: '1px solid var(--gold)', paddingBottom: 2 }}>
+                      {t.whatsapp}
+                    </a>
+                  )}
+                </span>
+              ))}
+            </div>
+          )}
         </motion.div>
       )}
 

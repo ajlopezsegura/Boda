@@ -25,6 +25,7 @@ const wedding = {
     welcome: 'Welcome to our great journey',
     cta: 'Board now',
     video: es.cover.video,
+    videoAnimado: es.cover.videoAnimado,
     image: es.cover.image,
   },
 
@@ -77,9 +78,10 @@ const wedding = {
 
   travel: {
     taxi:
-      'Jaén is a city of steep streets and the old town is narrow. We recommend ' +
-      'booking a taxi in advance to get up to the church: demand will be high ' +
-      'that day and they are not always easy to find.',
+      'The map may tell you it is a four-minute walk. Do not believe it: Jaén is ' +
+      'one long hill and the old town is narrow. We recommend taking a taxi up to ' +
+      'the church, and booking it in advance, because demand will be high that day.',
+    taxis: es.travel.taxis,
     hotels: [
       {
         name: 'Parador de Jaén',
@@ -127,7 +129,7 @@ const wedding = {
         code: '',
         url: hotel('HO Ciudad de Jaén').url, phone: hotel('HO Ciudad de Jaén').phone, email: '',
         bookingUrl: hotel('HO Ciudad de Jaén').bookingUrl,
-        bookingLabel: hotel('HO Ciudad de Jaén').bookingLabel,
+        bookingLabel: 'Hotel HO (book here)',
         bookingNote: 'Book on their website quoting the code OLIVENCIA2026.',
       },
     ],
@@ -138,9 +140,10 @@ const wedding = {
 
   jaen: {
     intro:
-      'If you are coming from abroad and can stay a couple of days, Jaén is worth ' +
-      'exploring. It is a province of endless olive groves and Renaissance towns, ' +
-      'with far more to it than usually gets told.',
+      'Jaén is not a city you see in passing. It rises at the foot of a castle, ' +
+      'surrounded by the largest sea of olive trees on earth, and it holds a ' +
+      'cathedral that became the model for those of half of Latin America, and ' +
+      'the largest Arab baths you can visit in Spain. It is well worth the visit.',
     highlights: [
       {
         title: 'The cathedral',
@@ -152,11 +155,7 @@ const wedding = {
       },
       {
         title: 'Arab baths',
-        text: 'Beneath the Villardompardo Palace, among the largest preserved in Spain. A short and surprising stop.',
-      },
-      {
-        title: 'Úbeda and Baeza',
-        text: 'Half an hour away, two Renaissance towns listed as World Heritage Sites. Baeza is where we celebrate.',
+        text: 'From the 11th century, hidden beneath the Villardompardo Palace. You walk through them underneath the city, and nobody sees them coming.',
       },
     ],
   },

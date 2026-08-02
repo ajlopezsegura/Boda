@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { MessageCircle, Mail, Plane } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
 import { useLang } from '../i18n'
+import { textoTel, enlaceTel, enlaceWhatsapp } from '../lib/phone'
 
 function fieldStyle(hasError) {
   return {
@@ -78,7 +79,7 @@ export default function RsvpPage() {
 
   function submitWhatsApp() {
     const e = validate(); if (Object.keys(e).length) { setErrors(e); return }
-    window.open(`https://wa.me/${rsvp.whatsapp}?text=${encodeURIComponent(buildMessage())}`, '_blank')
+    window.open(enlaceWhatsapp(rsvp.whatsapp, buildMessage()), '_blank')
   }
   function submitEmail() {
     const e = validate(); if (Object.keys(e).length) { setErrors(e); return }
@@ -157,7 +158,10 @@ export default function RsvpPage() {
       <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8">
         <span className="eyebrow" style={{ fontSize: '0.5rem', color: 'var(--ink-muted)' }}>{t.form.doubts}</span>
         {rsvp.contacts.map(c => (
-          <span key={c.name} className="data" style={{ fontSize: '0.6rem', color: 'var(--gold)' }}>{c.name} · {c.phone}</span>
+          <a key={c.name} href={enlaceTel(c.phone)} data-cursor="hover"
+             className="data no-underline" style={{ fontSize: '0.6rem', color: 'var(--gold)' }}>
+            {c.name} · {textoTel(c.phone)}
+          </a>
         ))}
       </div>
     </PageScaffold>

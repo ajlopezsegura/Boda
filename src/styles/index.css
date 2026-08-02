@@ -75,6 +75,18 @@ body {
   background: linear-gradient(to right, transparent, var(--hairline), transparent);
 }
 
+/* Fondo fotográfico de las páginas interiores.
+   Las fotos son verticales: en el móvil encajan solas, pero en una pantalla
+   apaisada `cover` las amplía tanto que se lleva por delante las caras. Por eso
+   el encuadre de escritorio se puede recolocar página a página. */
+.fondo-pagina {
+  background-size: cover;
+  background-position: center;
+}
+@media (min-width: 768px) {
+  .fondo-pagina { background-position: var(--fondo-encuadre, center); }
+}
+
 /* Lightbox oscuro elegante */
 .yarl__root { --yarl__color_backdrop: rgba(30, 42, 68, 0.94); }
 
