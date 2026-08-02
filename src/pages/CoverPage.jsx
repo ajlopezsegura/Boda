@@ -159,7 +159,7 @@ export default function CoverPage() {
             className="text-[#D9BE7A] md:text-[#A6813C]"
             style={{
               fontFamily: 'Montserrat, sans-serif',
-              fontSize: 'clamp(0.58rem, 1.6vw, 0.66rem)',
+              fontSize: 'clamp(0.64rem, 1.76vw, 0.73rem)',
               letterSpacing: '0.15em',
               textTransform: 'uppercase',
               marginBottom: 'clamp(1.4rem, 3vh, 2.2rem)',
@@ -179,7 +179,7 @@ export default function CoverPage() {
             style={{
               fontFamily: '"EB Garamond", Georgia, serif',
               fontWeight: 400,
-              fontSize: 'clamp(3rem, 7.5vw, 6.4rem)',
+              fontSize: 'clamp(3.3rem, 8.25vw, 7.05rem)',
               lineHeight: 1.04,
               letterSpacing: '-0.005em',
               textShadow: '0 2px 24px rgba(14,20,36,0.32)',
@@ -199,7 +199,7 @@ export default function CoverPage() {
             className="text-[#D9BE7A] md:text-[#A6813C]"
             style={{
               fontFamily: '"EB Garamond", Georgia, serif',
-              fontSize: 'clamp(1.15rem, 2vw, 1.5rem)',
+              fontSize: 'clamp(1.27rem, 2.2vw, 1.65rem)',
               letterSpacing: '0.06em',
               marginTop: 'clamp(1.6rem, 4vh, 2.4rem)',
             }}
@@ -214,7 +214,7 @@ export default function CoverPage() {
             className="text-[rgba(247,243,234,0.8)] md:text-[rgba(30,42,68,0.6)]"
             style={{
               fontFamily: 'Montserrat, sans-serif',
-              fontSize: '0.62rem',
+              fontSize: '0.68rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
               marginTop: '0.45rem',
@@ -243,7 +243,7 @@ export default function CoverPage() {
               style={{
                 marginTop: 'clamp(1rem, 2.4vh, 1.5rem)',
                 fontFamily: 'Montserrat, sans-serif',
-                fontSize: '0.62rem',
+                fontSize: '0.68rem',
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
                 minHeight: 48,
