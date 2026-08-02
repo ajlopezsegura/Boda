@@ -25,8 +25,8 @@ function Plate({ children, delay = 0 }) {
 function Stop({ s }) {
   return (
     <section
-      className="relative w-full shrink-0 overflow-hidden flex items-center justify-center px-8 sm:px-12"
-      style={{ height: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+      className="relative w-full shrink-0 overflow-hidden flex items-start justify-center px-8 sm:px-12"
+      style={{ height: '100%', scrollSnapAlign: 'start', scrollSnapStop: 'always', paddingTop: 'clamp(2rem, 6vh, 3.5rem)' }}
     >
       {s.photo && (
         <motion.img
@@ -46,7 +46,7 @@ function Stop({ s }) {
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            'linear-gradient(180deg, rgba(20,28,44,0.62) 0%, rgba(20,28,44,0.32) 32%, rgba(20,28,44,0.48) 62%, rgba(20,28,44,0.84) 100%)',
+            'linear-gradient(180deg, rgba(18,26,42,0.80) 0%, rgba(18,26,42,0.68) 26%, rgba(18,26,42,0.28) 48%, rgba(18,26,42,0.14) 68%, rgba(18,26,42,0.42) 100%)',
         }}
       />
 
