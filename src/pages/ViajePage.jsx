@@ -84,15 +84,52 @@ export default function ViajePage() {
         className="mt-12 text-center">
         <SectionLabel>Autobús</SectionLabel>
         <p className="mt-6 mx-auto" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>{travel.shuttle}</p>
+
+        {travel.shuttleReturns?.length > 0 && (
+          <div className="flex items-center justify-center gap-8 mt-6">
+            {travel.shuttleReturns.map((t, i) => (
+              <div key={t} className="flex flex-col items-center gap-1">
+                <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
+                  {i === 0 ? 'Primera salida' : 'Última salida'}
+                </span>
+                <span className="data" style={{ color: 'var(--navy)', fontSize: '1.1rem' }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </motion.div>
 
       {/* Alojamiento — listado */}
       <div className="mt-16"><SectionLabel>Dónde dormir</SectionLabel></div>
-      <div className="mt-4" style={{ borderBottom: '1px solid var(--hairline)' }}>
+
+      {travel.bookingCode && (
+        <p className="mt-6 mx-auto text-center" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
+          Tenemos habitaciones reservadas en estos hoteles de Jaén. Al reservar, indica el código{' '}
+          <span className="data" style={{ color: 'var(--gold)', fontSize: '0.95rem' }}>{travel.bookingCode}</span>.
+        </p>
+      )}
+
+      <div className="mt-8" style={{ borderBottom: '1px solid var(--hairline)' }}>
         {travel.hotels.map((h, i) => (
           <Row key={h.name} i={String(i + 1).padStart(2, '0')} title={h.name} href={h.url || undefined}>
             <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.46rem', letterSpacing: '0.14em' }}>{h.area}</span>
-            <span className="block mt-1.5">{h.note}</span>
+            {h.note && <span className="block mt-1.5">{h.note}</span>}
+            {(h.bookingUrl || h.email) && (
+              <span className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-2">
+                {h.bookingUrl && (
+                  <a href={h.bookingUrl} target="_blank" rel="noreferrer" data-cursor="hover"
+                     className="eyebrow no-underline" style={{ color: 'var(--gold)', fontSize: '0.46rem', letterSpacing: '0.14em', borderBottom: '1px solid var(--gold)' }}>
+                    Reservar
+                  </a>
+                )}
+                {h.email && (
+                  <a href={`mailto:${h.email}`} data-cursor="hover"
+                     className="no-underline" style={{ color: 'var(--ink-muted)', fontSize: '0.9rem' }}>
+                    {h.email}
+                  </a>
+                )}
+              </span>
+            )}
           </Row>
         ))}
       </div>

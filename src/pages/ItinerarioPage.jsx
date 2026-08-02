@@ -79,11 +79,23 @@ export default function ItinerarioPage() {
       {/* Programa de la celebración */}
       <div className="mt-16">
         <SectionLabel>El programa de la celebración</SectionLabel>
-        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-3 mt-7">
+        <div className="flex flex-col mt-7" style={{ maxWidth: 460, marginInline: 'auto' }}>
           {program.map((item, i) => (
-            <div key={item} className="flex items-center gap-4">
-              <span className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.05rem, 3vw, 1.3rem)' }}>{item}</span>
-              {i < program.length - 1 && <span style={{ width: 4, height: 4, borderRadius: '50%', backgroundColor: 'var(--gold)' }} />}
+            <div
+              key={item.time + item.title}
+              className="grid items-baseline gap-4 py-4"
+              style={{
+                gridTemplateColumns: '4.2rem 1fr',
+                borderTop: i === 0 ? 'none' : '1px solid var(--hairline)',
+              }}
+            >
+              <span className="data" style={{ color: 'var(--gold)', fontSize: '0.82rem' }}>{item.time}</span>
+              <div className="text-left">
+                <span className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.05rem, 3vw, 1.3rem)' }}>{item.title}</span>
+                {item.detail && (
+                  <p style={{ color: 'var(--ink-muted)', fontSize: '0.95rem', lineHeight: 1.6, marginTop: 2 }}>{item.detail}</p>
+                )}
+              </div>
             </div>
           ))}
         </div>

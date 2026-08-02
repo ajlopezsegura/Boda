@@ -52,7 +52,7 @@ const wedding = {
     },
     {
       code: 'CEL',
-      time: '14:00',
+      time: '14:30',
       title: 'Celebración',
       place: 'Claustro de Vandelvira',
       location: 'Baeza (Jaén)',
@@ -62,7 +62,13 @@ const wedding = {
   ],
 
   // Programa aproximado de la celebración (sin horas fijas — edítalo a tu gusto)
-  program: ['Cóctel de bienvenida', 'Banquete', 'Barra libre y baile', 'Recena'],
+  // Horarios facilitados por la wedding planner
+  program: [
+    { time: '14:30', title: 'Cóctel',      detail: 'Hasta las 16:00' },
+    { time: '16:00', title: 'Menú',        detail: 'Hasta las 18:00' },
+    { time: '18:00', title: 'Barra libre', detail: 'Grupo en directo hasta las 19:00' },
+    { time: '19:00', title: 'Fiesta',      detail: 'DJ hasta las 00:00' },
+  ],
 
   // ── Nuestra historia (página de datos del pasaporte) ──────────────────────
   story: {
@@ -99,14 +105,20 @@ const wedding = {
       { icon: 'TrainFront', title: 'En tren',  text: 'AVE hasta Jaén o Linares-Baeza desde Madrid. Desde la estación, coche o bus hasta Baeza (~35 min).' },
       { icon: 'Car',        title: 'En coche', text: 'Baeza está a 48 km de Jaén capital por la A-316. Parking gratuito junto al Claustro de Vandelvira.' },
     ],
+    // Hoteles con acuerdo. Rellena `url` (web del hotel), `bookingUrl` (enlace
+    // directo de reserva) y `email` cuando los tengas; si están vacíos, la web
+    // no muestra el enlace. El código de reserva es común a los tres.
+    bookingCode: 'XXX', // PENDIENTE — código que hay que dar al reservar
     hotels: [
-      { name: 'Hotel Puerta de la Luna', area: 'Baeza — centro histórico', note: 'A 5 min andando de la celebración. Recomendado.', url: '' },
-      { name: 'Parador de Úbeda',        area: 'Úbeda — a 10 min en coche', note: 'Palacio renacentista con encanto.',            url: '' },
-      { name: 'Hotel TRH Baeza',         area: 'Baeza',                     note: 'Opción cómoda y céntrica.',                    url: '' },
+      { name: 'Hotel Infanta Cristina',    area: 'Jaén', note: '', url: '', bookingUrl: '', email: '' },
+      { name: 'Hotel Condestable Iranzo',  area: 'Jaén', note: '', url: '', bookingUrl: '', email: '' },
+      { name: 'Hotel Europa',              area: 'Jaén', note: '', url: '', bookingUrl: '', email: '' },
     ],
     shuttle:
       'Habrá autobús desde la Iglesia de San Bartolomé (Jaén) hasta el Claustro de ' +
-      'Vandelvira (Baeza) y de vuelta al final de la fiesta. Reserva tu plaza al confirmar.',
+      'Vandelvira (Baeza). Para la vuelta a Jaén habrá dos salidas.',
+    // Horarios de vuelta a Jaén
+    shuttleReturns: ['20:30', '00:00'],
   },
 
   // ── Información práctica ───────────────────────────────────────────────────
@@ -122,7 +134,7 @@ const wedding = {
     },
     faq: [
       { q: '¿Puedo llevar a mis hijos?', a: 'Será una celebración pensada para adultos. Si necesitas ayuda con canguro en la zona, dínoslo y te echamos una mano.' },
-      { q: '¿Hay servicio de autobús?', a: 'Sí, entre la ceremonia (Jaén) y la celebración (Baeza), y de vuelta al final de la noche. Resérvalo al confirmar.' },
+      { q: '¿Hay servicio de autobús?', a: 'Sí, entre la ceremonia (Jaén) y la celebración (Baeza). Para la vuelta a Jaén hay dos salidas: a las 20:30 y a las 00:00. Resérvalo al confirmar.' },
       { q: '¿Dónde aparco?', a: 'Hay parking gratuito junto al Claustro de Vandelvira, en Baeza.' },
       { q: '¿Hasta cuándo confirmo?', a: 'Te agradecemos que confirmes antes del 30 de septiembre de 2026 para organizarlo todo con cariño.' },
     ],
