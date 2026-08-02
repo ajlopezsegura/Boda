@@ -17,8 +17,29 @@ export default function CoverPage() {
   const [sinFondo, setSinFondo] = useState(false)
 
   const videoRef = useRef(null)
+  const imgRef = useRef(null)
   const hayFondo = Boolean(cover.video) && !sinFondo
   const mostrarVideo = hayFondo && !usarAnimada
+
+  /* El fondo no se muestra hasta que está listo de verdad: si no, la imagen
+     animada arranca a trompicones mientras se descodifica. Mientras tanto gira
+     un anillo, que solo asoma si la espera pasa de un suspiro. */
+  const [listo, setListo] = useState(false)
+  const [mostrarEspera, setMostrarEspera] = useState(false)
+
+  useEffect(() => { setListo(false) }, [mostrarVideo])
+
+  useEffect(() => {
+    if (listo) { setMostrarEspera(false); return }
+    const reloj = setTimeout(() => setMostrarEspera(true), 220)
+    return () => clearTimeout(reloj)
+  }, [listo])
+
+  async function imagenCargada() {
+    // decode() espera a tener los fotogramas descodificados, no solo bajados
+    try { await imgRef.current?.decode?.() } catch { /* da igual: se muestra */ }
+    setListo(true)
+  }
 
   useEffect(() => {
     const v = videoRef.current
@@ -55,37 +76,63 @@ export default function CoverPage() {
       <div className="absolute inset-0 overflow-hidden" style={{ backgroundColor: 'var(--paper)' }}>
 
         {hayFondo && (
-          <motion.div
-            initial={{ opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.6, ease }}
+          <div
             className="absolute inset-0 overflow-hidden
                        md:inset-auto md:right-0 md:top-[var(--header-h)] md:bottom-0 md:w-[42vw] lg:w-[38vw]"
           >
-            {mostrarVideo ? (
-              <video
-                ref={videoRef}
-                src={cover.video}
-                poster={cover.image || undefined}
-                autoPlay muted defaultMuted loop playsInline webkit-playsinline="true" preload="auto"
-                onError={() => (cover.videoAnimado ? setUsarAnimada(true) : setSinFondo(true))}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <img
-                src={cover.videoAnimado}
-                alt=""
+            <motion.div
+              initial={{ opacity: 0, scale: 1.04 }}
+              animate={{ opacity: listo ? 1 : 0, scale: listo ? 1 : 1.04 }}
+              transition={{ duration: 1.3, ease }}
+              className="w-full h-full"
+            >
+              {mostrarVideo ? (
+                <video
+                  ref={videoRef}
+                  src={cover.video}
+                  poster={cover.image || undefined}
+                  autoPlay muted defaultMuted loop playsInline webkit-playsinline="true" preload="auto"
+                  onPlaying={() => setListo(true)}
+                  onError={() => (cover.videoAnimado ? setUsarAnimada(true) : setSinFondo(true))}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <img
+                  ref={imgRef}
+                  src={cover.videoAnimado}
+                  alt=""
+                  aria-hidden="true"
+                  onLoad={imagenCargada}
+                  onError={() => setSinFondo(true)}
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </motion.div>
+
+            {!listo && mostrarEspera && (
+              <span
                 aria-hidden="true"
-                onError={() => setSinFondo(true)}
-                className="w-full h-full object-cover"
-              />
+                className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              >
+                <i
+                  className="giro block"
+                  style={{
+                    width: 26, height: 26, borderRadius: '50%',
+                    border: '1px solid rgba(166,129,60,0.22)',
+                    borderTopColor: 'var(--gold)',
+                  }}
+                />
+              </span>
             )}
-          </motion.div>
+          </div>
         )}
 
         {/* Velo para legibilidad — solo en móvil, donde el texto va sobre el fondo */}
         {hayFondo && (
-          <div
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: listo ? 1 : 0 }}
+            transition={{ duration: 1.3, ease }}
             className="absolute inset-0 md:hidden pointer-events-none"
             style={{
               background:
@@ -94,8 +141,12 @@ export default function CoverPage() {
           />
         )}
 
-        {/* Texto */}
-        <div
+        {/* Texto. En móvil va en claro sobre el vídeo, así que espera al fondo:
+            sobre el papel desnudo no se leería. */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: !hayFondo || listo ? 1 : 0 }}
+          transition={{ duration: 0.7, ease }}
           className="absolute inset-0 flex flex-col items-center text-center justify-center
                      px-8 sm:px-12 md:px-16 lg:px-24
                      pt-[var(--header-h)] md:pt-0
@@ -203,7 +254,7 @@ export default function CoverPage() {
               <span className="transition-transform duration-500 group-hover:translate-x-1 text-[#D9BE7A] md:text-[#A6813C]">→</span>
             </button>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </PageTransition>
   )

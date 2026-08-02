@@ -104,6 +104,10 @@ body {
   .tira-jaen { scroll-snap-type: none; }
 }
 
+/* Anillo de espera de la portada */
+@keyframes giro { to { transform: rotate(360deg); } }
+.giro { animation: giro 0.85s linear infinite; }
+
 /* Lightbox oscuro elegante */
 .yarl__root { --yarl__color_backdrop: rgba(30, 42, 68, 0.94); }
 

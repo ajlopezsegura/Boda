@@ -38,7 +38,7 @@ const wedding = {
     // Mismo plano en WebP animado. iOS en modo de bajo consumo prohíbe que un
     // <video> arranque solo, pero una imagen animada sí se mueve: es el recambio
     // cuando el vídeo se niega a reproducirse. Solo se descarga si hace falta.
-    videoAnimado: './assets/videos/portada-animada.webp',
+    videoAnimado: './assets/videos/portada-animada-v2.webp',
     image: '',
   },
 
