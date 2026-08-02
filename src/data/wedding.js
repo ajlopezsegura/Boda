@@ -219,7 +219,7 @@ const wedding = {
       note: '',
     },
     gift: {
-      note: 'Empezamos vida nueva juntos en Suiza, un país precioso donde un café cuesta lo que aquí un menú del día. Si queréis echarnos una mano con el aterrizaje, esta es nuestra cuenta. Y si no, con que vengáis a la boda —y luego a vernos allí— nos sobra.',
+      note: 'Empezamos vida nueva juntos en Suiza, un país precioso donde un café cuesta lo que aquí un menú. Si queréis echarnos una mano con el aterrizaje, esta es nuestra cuenta. Y si no, con que vengáis a la boda —y luego a vernos allí— nos sobra.',
       account: 'ES19 2100 6490 7013 0040 1953',
       concept: 'Boda Pilar y Pablo 12/12/2026',
     },
