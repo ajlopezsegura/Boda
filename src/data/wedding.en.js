@@ -182,12 +182,6 @@ const wedding = {
       account: es.info.gift.account,
       concept: 'Pilar and Pablo wedding 12/12/2026',
     },
-    faq: [
-      { q: 'Can I bring my children?', a: 'It will be an adults-only celebration. If you need help finding a babysitter nearby, let us know and we will lend a hand.' },
-      { q: 'Is there a coach service?',  a: 'Yes, between the ceremony (Jaén) and the celebration (Baeza). There are two departures back to Jaén: at 21:00 and at midnight. Book your seat when you RSVP.' },
-      { q: 'Where can I park?',          a: 'There is free parking next to the Claustro de Vandelvira, in Baeza.' },
-      { q: 'When should I RSVP by?',     a: 'We would be grateful if you could confirm before 30 September 2026 so we can organise everything properly.' },
-    ],
   },
 
   rsvp: {

@@ -32,7 +32,6 @@ const UI = {
     next:       'Siguiente',
     dressCode:  'Dress code',
     gift:       'El aterrizaje',
-    faq:        'Preguntas frecuentes',
     copyAccount:'Copiar cuenta',
     copied:     'Copiado',
     countdown:  { days: 'días', day: 'día', hours: 'horas', min: 'min', sec: 'seg', today: '¡Hoy es el día!' },
@@ -46,7 +45,7 @@ const UI = {
       dia:   'Dos escalas, un mismo destino: de la iglesia de San Bartolomé al Claustro de Vandelvira.',
       viaje: 'Dónde dormir, cómo moverte por Jaén y qué ver si te quedas unos días.',
       info:  'Los detalles que te ayudarán a disfrutar del día sin sorpresas.',
-      rsvp:  fecha => `Necesitamos saber si nos acompañas para reservarte plaza. Confírmanos, por favor, antes del ${fecha}.`,
+      rsvp:  'Nos encantaría contar con vuestra presencia ese día. Decidnos si podéis acompañarnos: saberlo con tiempo nos ayuda a organizarlo todo con cariño.',
     },
     hotelsIntro: 'Estos hoteles de Jaén nos ofrecen condiciones especiales. Las plazas son limitadas y pueden agotarse, así que mejor no dejarlo para el final.',
     form: {
@@ -89,7 +88,6 @@ const UI = {
     next:       'Next',
     dressCode:  'Dress code',
     gift:       'The landing',
-    faq:        'Frequently asked questions',
     copyAccount:'Copy account number',
     copied:     'Copied',
     countdown:  { days: 'days', day: 'day', hours: 'hours', min: 'min', sec: 'sec', today: 'Today is the day!' },
@@ -103,7 +101,7 @@ const UI = {
       dia:   'Two stops, one destination: from the Church of San Bartolomé to the Claustro de Vandelvira.',
       viaje: 'Where to stay, how to get around Jaén and what to see if you stay a few days.',
       info:  'The details that will help you enjoy the day without surprises.',
-      rsvp:  fecha => `We need to know whether you are joining us so we can save you a seat. Please confirm before ${fecha}.`,
+      rsvp:  'We would love to have you with us that day. Let us know whether you can join us — hearing early helps us get everything ready properly.',
     },
     hotelsIntro: 'These hotels in Jaén are offering us special rates. Availability is limited and may run out, so it is best not to leave it too late.',
     form: {

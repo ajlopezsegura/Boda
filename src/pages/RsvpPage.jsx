@@ -93,7 +93,7 @@ export default function RsvpPage() {
     <PageScaffold
       align="center"
       title={<>{t.titles.rsvp[0]}<span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>{t.titles.rsvp[1]}</span></>}
-      subtitle={t.subtitles.rsvp(rsvp.deadline)}
+      subtitle={t.subtitles.rsvp}
       maxWidth={620}
     >
       <motion.form

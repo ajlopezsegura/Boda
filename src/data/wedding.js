@@ -223,12 +223,6 @@ const wedding = {
       account: 'ES50 3067 0109 3832 2957 6123', // REVISAR
       concept: 'Boda Pilar y Pablo 12/12/2026',
     },
-    faq: [
-      { q: '¿Puedo llevar a mis hijos?', a: 'Será una celebración pensada para adultos. Si necesitas ayuda con canguro en la zona, dínoslo y te echamos una mano.' },
-      { q: '¿Hay servicio de autobús?', a: 'Sí, entre la ceremonia (Jaén) y la celebración (Baeza). Para la vuelta a Jaén hay dos salidas: a las 21:00 y a las 00:00. Resérvalo al confirmar.' },
-      { q: '¿Dónde aparco?', a: 'Hay parking gratuito junto al Claustro de Vandelvira, en Baeza.' },
-      { q: '¿Hasta cuándo confirmo?', a: 'Te agradecemos que confirmes antes del 30 de septiembre de 2026 para organizarlo todo con cariño.' },
-    ],
   },
 
   // ── RSVP (sin backend: envía por WhatsApp o email) ────────────────────────
