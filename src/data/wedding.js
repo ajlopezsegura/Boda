@@ -65,13 +65,14 @@ const wedding = {
     },
   ],
 
-  // Programa aproximado de la celebración (sin horas fijas — edítalo a tu gusto)
-  // Horarios facilitados por la wedding planner
+  // Cronología completa del día, de la ceremonia al último autobús
   program: [
-    { time: '14:30', title: 'Cóctel',      detail: 'Hasta las 16:00' },
-    { time: '16:00', title: 'Menú',        detail: 'Hasta las 18:00' },
-    { time: '18:00', title: 'Barra libre', detail: 'Grupo en directo hasta las 19:00' },
-    { time: '19:00', title: 'Fiesta',      detail: 'DJ hasta las 00:00' },
+    { time: '12:00', title: 'Ceremonia',           detail: 'Iglesia de San Bartolomé, Jaén' },
+    { time: '13:30', title: 'Autobús',             detail: 'Recogida cerca de la iglesia' },
+    { time: '14:30', title: 'Cóctel',              detail: 'Hasta las 16:00' },
+    { time: '16:00', title: 'Almuerzo',            detail: 'Hasta las 18:00' },
+    { time: '18:00', title: 'Barra libre y baile', detail: 'DJ hasta las 00:00' },
+    { time: '00:00', title: 'Último autobús',      detail: 'Vuelta a Jaén' },
   ],
 
   // ── Nuestra historia (página de datos del pasaporte) ──────────────────────

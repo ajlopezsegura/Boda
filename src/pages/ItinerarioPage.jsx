@@ -125,7 +125,7 @@ export default function ItinerarioPage() {
 
       {/* Programa de la celebración */}
       <div className="mt-16">
-        <SectionLabel>El programa de la celebración</SectionLabel>
+        <SectionLabel>Timing del evento</SectionLabel>
         <div className="flex flex-col mt-7" style={{ maxWidth: 460, marginInline: 'auto' }}>
           {program.map((item, i) => (
             <div
