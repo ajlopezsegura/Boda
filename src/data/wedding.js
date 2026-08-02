@@ -92,7 +92,7 @@ const wedding = {
     stamps: [
       { place: 'Málaga',          title: 'El primer sello', text: 'Nos conocimos un verano en el sur. Una conversación que se alargó hasta el amanecer.', photo: './assets/images/historia-01.jpg' },
       { place: 'Zúrich ✈ Madrid', title: 'Larga distancia', text: 'Vuelos de última hora, videollamadas con husos horarios y maletas que nunca se deshacían del todo.', photo: './assets/images/historia-02.jpg' },
-      { place: 'Madrid',          title: 'La pedida',       text: 'Llegó el «sí» y, con él, la mejor noticia: el próximo viaje sería juntos y para siempre.', photo: './assets/images/historia-03.jpg' },
+      { place: 'Jaén',            title: 'Entre olivos',    text: 'Volvimos a su tierra, entre olivares infinitos, y llegó el «sí». El mejor destino no estaba en ningún mapa.', photo: './assets/images/historia-03.jpg' },
     ],
   },
 
