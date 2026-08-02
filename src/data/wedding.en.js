@@ -109,7 +109,7 @@ const wedding = {
         note: 'The most central one.',
         code: '',
         bookingPhone: hotel('Hotel Europa').bookingPhone,
-        bookingNote: 'Call and mention that there is a block of rooms held for Pilar and Pablo’s wedding. It is held until 1 November 2026.',
+        bookingNote: 'Call and quote the block code 141565, for Pilar and Pablo’s wedding. It is held until 1 November 2026.',
         url: hotel('Hotel Europa').url, bookingUrl: '', phone: hotel('Hotel Europa').phone, email: '',
       },
       {

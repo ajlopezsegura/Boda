@@ -145,7 +145,7 @@ const wedding = {
         note: 'El más céntrico.',
         code: '',
         bookingPhone: '953 22 27 00',
-        bookingNote: 'Llama indicando que hay un bloqueo de habitaciones para la boda de Pilar y Pablo. Está activo hasta el 1 de noviembre de 2026.',
+        bookingNote: 'Llama indicando el código de bloqueo 141565, para la boda de Pilar y Pablo. Está activo hasta el 1 de noviembre de 2026.',
         url: 'https://www.hoteleuropajaen.es', bookingUrl: '', phone: '953 22 27 04', email: '',
       },
       {
