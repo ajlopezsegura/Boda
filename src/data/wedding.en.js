@@ -86,8 +86,9 @@ const wedding = {
         stars: 4,
         area: 'Paseo de la Estación, 32',
         note: 'Right in the centre, on the main avenue. This is the one we recommend, for how close and well placed it is.',
-        recommended: true,
         code: '',
+        bookingEmail: hotel('Hotel Condestable Iranzo').bookingEmail,
+        bookingNote: 'Write to them saying that you are attending Pablo and Pilar’s wedding.',
         url: hotel('Hotel Condestable Iranzo').url, bookingUrl: '', phone: hotel('Hotel Condestable Iranzo').phone, email: '',
       },
       {

@@ -114,8 +114,9 @@ const wedding = {
         stars: 4,
         area: 'Paseo de la Estación, 32',
         note: 'En pleno centro, sobre el paseo principal. Es el que recomendamos por cercanía y ubicación.',
-        recommended: true,
         code: '',
+        bookingEmail: 'comercial@hotelcondestableiranzo.com',
+        bookingNote: 'Escríbeles indicando que asistís a la boda de Pablo y Pilar.',
         url: 'https://www.hotelcondestableiranzo.com', bookingUrl: '', phone: '953 22 28 00', email: '',
       },
       {

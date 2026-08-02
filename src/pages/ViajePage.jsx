@@ -64,14 +64,6 @@ export default function ViajePage() {
                 </span>
               )}
               <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.46rem', letterSpacing: '0.14em' }}>{h.area}</span>
-              {h.recommended && (
-                <span className="eyebrow" style={{
-                  color: 'var(--gold)', fontSize: '0.42rem', letterSpacing: '0.16em',
-                  border: '1px solid var(--gold)', padding: '3px 7px', lineHeight: 1,
-                }}>
-                  {t.recommended}
-                </span>
-              )}
             </span>
 
             {h.note && <span className="block mt-2">{h.note}</span>}
@@ -80,6 +72,23 @@ export default function ViajePage() {
               <span className="block mt-3">
                 <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>{t.bookingCode} </span>
                 <span className="data" style={{ color: 'var(--gold)', fontSize: '0.92rem' }}>{h.code}</span>
+              </span>
+            )}
+
+            {/* Cómo reservar: solo lo llevan los hoteles que piden un trámite
+                concreto, y por eso se despega del resto con un filete */}
+            {h.bookingEmail && (
+              <span className="block mt-4 pl-4" style={{ borderLeft: '1px solid var(--gold)' }}>
+                <span className="eyebrow block" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
+                  {t.howToBook}
+                </span>
+                <a href={`mailto:${h.bookingEmail}`} data-cursor="hover"
+                   className="no-underline block mt-2" style={{ color: 'var(--navy)', fontSize: '0.98rem', wordBreak: 'break-word' }}>
+                  {h.bookingEmail}
+                </a>
+                {h.bookingNote && (
+                  <span className="block mt-1.5" style={{ fontSize: '0.98rem', lineHeight: 1.7 }}>{h.bookingNote}</span>
+                )}
               </span>
             )}
 
