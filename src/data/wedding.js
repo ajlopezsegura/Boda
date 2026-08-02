@@ -229,7 +229,7 @@ const wedding = {
   rsvp: {
     email: 'pilarypablo2026@gmail.com', // REVISAR
     contacts: [
-      { name: 'Pilar', phone: '(+34) 633 46 81 72' },
+      { name: 'Pilar', phone: '(+34) 633 468 172' },
       { name: 'Pablo', phone: '(+41) 788 937 771' },
     ],
   },
