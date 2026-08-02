@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion'
 import PageTransition from './PageTransition'
 import SectionNav from './SectionNav'
-import Countdown from '../brand/Countdown'
 
 const ease = [0.43, 0.13, 0.23, 0.96]
 
@@ -75,8 +74,6 @@ export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth
 
             <div className="rule-gold mt-9" style={{ width: '100%', opacity: 0.5 }} />
 
-            {/* Cuenta atrás — justo debajo del filete que cierra la cabecera */}
-            <Countdown tone="ink" align="start" className="mt-8" />
           </motion.header>
 
           {children}

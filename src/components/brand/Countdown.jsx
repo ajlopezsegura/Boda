@@ -20,7 +20,7 @@ const TONES = {
   },
 }
 
-export default function Countdown({ tone = 'ink', align = 'center', className = '', style }) {
+export default function Countdown({ tone = 'ink', align = 'center', compact = false, className = '', style }) {
   const { days, hours, minutes, seconds, done } = useCountdown(wedding.date)
   const t = TONES[tone] || TONES.ink
 
@@ -47,21 +47,28 @@ export default function Countdown({ tone = 'ink', align = 'center', className = 
     { v: seconds, l: 'seg' },
   ]
 
+  const justify = compact
+    ? 'justify-between'
+    : align === 'start' ? 'justify-start' : 'justify-center'
+
   return (
     <div
-      className={`flex items-start ${align === 'start' ? 'justify-start' : 'justify-center'} ${className}`}
+      className={`flex items-start ${justify} ${className}`}
       style={style}
       role="timer"
       aria-label={`Faltan ${days} días, ${hours} horas, ${minutes} minutos y ${seconds} segundos`}
     >
       {units.map((u, i) => (
-        <div key={u.l} className="flex items-start">
-          <div className="flex flex-col items-center" style={{ minWidth: 'clamp(3.1rem, 12vw, 4.2rem)' }}>
+        <div key={u.l} className={`flex items-start ${compact ? '' : ''}`}>
+          <div
+            className="flex flex-col items-center"
+            style={{ minWidth: compact ? '2.3rem' : 'clamp(3.1rem, 12vw, 4.2rem)' }}
+          >
             <span
               className={t.num}
               style={{
                 fontFamily: '"EB Garamond", Georgia, serif',
-                fontSize: 'clamp(1.7rem, 6vw, 2.5rem)',
+                fontSize: compact ? 'clamp(1.05rem, 3.4vw, 1.3rem)' : 'clamp(1.7rem, 6vw, 2.5rem)',
                 lineHeight: 1,
                 fontVariantNumeric: 'tabular-nums',
                 letterSpacing: '0.01em',
@@ -73,10 +80,10 @@ export default function Countdown({ tone = 'ink', align = 'center', className = 
               className={t.lbl}
               style={{
                 fontFamily: 'Montserrat, sans-serif',
-                fontSize: '0.44rem',
-                letterSpacing: '0.18em',
+                fontSize: compact ? '0.38rem' : '0.44rem',
+                letterSpacing: '0.16em',
                 textTransform: 'uppercase',
-                marginTop: '0.55rem',
+                marginTop: compact ? '0.4rem' : '0.55rem',
               }}
             >
               {u.l}
@@ -87,7 +94,13 @@ export default function Countdown({ tone = 'ink', align = 'center', className = 
             <span
               aria-hidden="true"
               className={t.sep}
-              style={{ width: 1, height: 'clamp(1.5rem, 5vw, 2.1rem)', marginTop: 2 }}
+              style={{
+                width: 1,
+                height: compact ? '0.95rem' : 'clamp(1.5rem, 5vw, 2.1rem)',
+                marginTop: 2,
+                marginLeft: compact ? '0.35rem' : 0,
+                marginRight: compact ? '0.35rem' : 0,
+              }}
             />
           )}
         </div>

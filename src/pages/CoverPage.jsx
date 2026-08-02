@@ -139,40 +139,37 @@ export default function CoverPage() {
             {city}
           </motion.p>
 
-          {/* Cuenta atrás — justo encima del botón */}
+          {/* Cuenta atrás y botón: mismo ancho, el que marque el botón */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 1.05, ease }}
-            className="self-center md:self-start"
-            style={{ marginTop: 'clamp(2rem, 4.5vh, 3rem)' }}
+            className="flex flex-col self-center md:self-start"
+            style={{ width: 'fit-content', marginTop: 'clamp(2rem, 4.5vh, 3rem)' }}
           >
-            <Countdown tone="cover" />
-          </motion.div>
+            <Countdown tone="cover" compact className="w-full" />
 
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, delay: 1.3 }}
-            onClick={() => navigate('/historia')}
-            className="group self-center md:self-start inline-flex items-center justify-center gap-3
-                       text-[#F7F3EA] md:text-[#1E2A44]
-                       border border-[rgba(217,190,122,0.75)] md:border-[rgba(166,129,60,0.75)]
-                       transition-colors duration-500
-                       hover:bg-[rgba(217,190,122,0.14)] md:hover:bg-[rgba(166,129,60,0.10)]"
-            style={{
-              marginTop: 'clamp(1.6rem, 3.5vh, 2.4rem)',
-              fontFamily: 'Montserrat, sans-serif',
-              fontSize: '0.62rem',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              minHeight: 48,
-              padding: '0 2.1rem',
-            }}
-          >
-            {cover.cta}
-            <span className="transition-transform duration-500 group-hover:translate-x-1 text-[#D9BE7A] md:text-[#A6813C]">→</span>
-          </motion.button>
+            <button
+              onClick={() => navigate('/historia')}
+              className="group inline-flex items-center justify-center gap-3
+                         text-[#F7F3EA] md:text-[#1E2A44]
+                         border border-[rgba(217,190,122,0.75)] md:border-[rgba(166,129,60,0.75)]
+                         transition-colors duration-500
+                         hover:bg-[rgba(217,190,122,0.14)] md:hover:bg-[rgba(166,129,60,0.10)]"
+              style={{
+                marginTop: 'clamp(1rem, 2.4vh, 1.5rem)',
+                fontFamily: 'Montserrat, sans-serif',
+                fontSize: '0.62rem',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                minHeight: 48,
+                padding: '0 2.1rem',
+              }}
+            >
+              {cover.cta}
+              <span className="transition-transform duration-500 group-hover:translate-x-1 text-[#D9BE7A] md:text-[#A6813C]">→</span>
+            </button>
+          </motion.div>
         </div>
       </div>
     </PageTransition>
