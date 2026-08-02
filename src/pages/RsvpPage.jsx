@@ -67,12 +67,21 @@ export default function RsvpPage() {
   const { search } = useLocation()
   const [enviado, setEnviado] = useState(() => new URLSearchParams(search).has('ok'))
 
-  const set = (k, v) => { setF(p => ({ ...p, [k]: v })); if (errors[k]) setErrors(e => ({ ...e, [k]: null })) }
+  /* En cuanto se vuelve a tocar algo, el aviso de error desaparece: si sigue en
+     pantalla mientras alguien corrige, parece que el fallo es lo que escribe. */
+  const limpiarAviso = () => setEstado(e => (e === 'error' ? 'quieto' : e))
+
+  const set = (k, v) => {
+    setF(p => ({ ...p, [k]: v }))
+    if (errors[k]) setErrors(e => ({ ...e, [k]: null }))
+    limpiarAviso()
+  }
 
   /* El número de acompañantes decide cuántas casillas de nombre aparecen. Se
      conservan los nombres ya escritos al subir o bajar la cifra. */
   function setAcompanantes(valor) {
     const n = Math.max(0, Math.min(MAX_ACOMPANANTES, Number(valor) || 0))
+    limpiarAviso()
     setF(p => {
       const nombres = Array.from({ length: n }, (_, i) => p.nombres[i] ?? '')
       return { ...p, acompanantes: n, nombres }
@@ -80,6 +89,7 @@ export default function RsvpPage() {
   }
 
   function setNombre(i, valor) {
+    limpiarAviso()
     setF(p => {
       const nombres = [...p.nombres]
       nombres[i] = valor
