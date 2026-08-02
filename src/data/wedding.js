@@ -179,10 +179,10 @@ const wedding = {
   // ── Descubrir Jaén (edita o amplía a vuestro gusto) ───────────────────────
   jaen: {
     intro:
-      'Jaén no se ve de paso. La ciudad se levanta a los pies de un castillo, ' +
-      'rodeada por el mayor mar de olivos del mundo, y guarda una catedral que ' +
-      'sirvió de modelo a las de media Latinoamérica y los baños árabes más ' +
-      'grandes que se pueden visitar en España. Merece la pena hacer una visita.',
+      'Jaén está a los pies de un castillo y rodeada del mayor mar de olivos ' +
+      'del mundo. Su catedral se copió en media Latinoamérica y sus baños ' +
+      'árabes son los más grandes que se pueden visitar en España. ' +
+      'Merece la pena hacer una visita.',
     highlights: [
       {
         title: 'La catedral',

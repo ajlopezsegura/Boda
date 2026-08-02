@@ -140,10 +140,10 @@ const wedding = {
 
   jaen: {
     intro:
-      'Jaén is not a city you see in passing. It rises at the foot of a castle, ' +
-      'surrounded by the largest sea of olive trees on earth, and it holds a ' +
-      'cathedral that became the model for those of half of Latin America, and ' +
-      'the largest Arab baths you can visit in Spain. It is well worth the visit.',
+      'Jaén sits at the foot of a castle, surrounded by the largest sea of olive ' +
+      'trees in the world. Its cathedral was copied across half of Latin America, ' +
+      'and its Arab baths are the largest you can visit in Spain. ' +
+      'It is worth the visit.',
     highlights: [
       {
         title: 'The cathedral',
