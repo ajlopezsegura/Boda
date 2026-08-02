@@ -90,7 +90,7 @@ const wedding = {
     // archivos de public/assets/images/ por vuestras fotos (mismo nombre) o
     // cambia aquí la ruta. Vertical funciona mejor en móvil.
     stamps: [
-      { place: 'Málaga',          title: 'El primer sello', text: 'Nos conocimos un verano en el sur. Una conversación que se alargó hasta el amanecer.', photo: './assets/images/momento-malaga.jpg' },
+      { place: 'Málaga',          title: 'El primer sello', text: 'Nos conocimos un verano en el sur. Una conversación que se alargó hasta el amanecer.', photo: './assets/images/momento-mar.jpg' },
       { place: 'Zúrich ✈ Madrid', title: 'Larga distancia', text: 'Vuelos de última hora, videollamadas con husos horarios y maletas que nunca se deshacían del todo.', photo: './assets/images/momento-zurich.jpg' },
       { place: 'Jaén',            title: 'Entre olivos',    text: 'Volvimos a su tierra, entre olivares infinitos, y llegó el «sí». El mejor destino no estaba en ningún mapa.', photo: './assets/images/momento-jaen.jpg' },
     ],
