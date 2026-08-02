@@ -48,13 +48,13 @@ function EventCard({ ev, index }) {
 }
 
 export default function ItinerarioPage() {
-  const { events, program, dateShort } = wedding
+  const { events, program, dateShort, travel } = wedding
   return (
     <PageScaffold
       index="02"
       eyebrow="Itinerario"
       title={<>El gran <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>día</span></>}
-      subtitle="Dos escalas, un mismo destino: del «sí, quiero» en Jaén a la hacienda de Úbeda."
+      subtitle="Dos escalas, un mismo destino: del «sí, quiero» en Jaén al claustro de Baeza."
       maxWidth={760}
     >
       <div className="flex items-center justify-center gap-3 mb-10">
@@ -100,6 +100,32 @@ export default function ItinerarioPage() {
           ))}
         </div>
       </div>
+
+      {/* Autobús — entre la ceremonia y la celebración */}
+      {travel?.shuttle && (
+        <motion.div
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+          className="mt-16 text-center"
+        >
+          <SectionLabel>Autobús</SectionLabel>
+          <p className="mt-6 mx-auto" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
+            {travel.shuttle}
+          </p>
+
+          {travel.shuttleReturns?.length > 0 && (
+            <div className="flex items-center justify-center gap-8 mt-6">
+              {travel.shuttleReturns.map((t, i) => (
+                <div key={t} className="flex flex-col items-center gap-1">
+                  <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
+                    {i === 0 ? 'Primera salida' : 'Última salida'}
+                  </span>
+                  <span className="data" style={{ color: 'var(--navy)', fontSize: '1.1rem' }}>{t}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
     </PageScaffold>
   )
 }

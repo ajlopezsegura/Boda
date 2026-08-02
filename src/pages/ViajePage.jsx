@@ -1,20 +1,10 @@
 import { motion } from 'framer-motion'
-import { Plane, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
 import { SectionLabel } from '../components/brand/decor'
 import wedding from '../data/wedding'
 
 const ease = [0.43, 0.13, 0.23, 0.96]
-
-function OriginNode({ o }) {
-  return (
-    <div className="flex flex-col items-center text-center">
-      <span className="data" style={{ color: 'var(--gold)', fontSize: '0.6rem' }}>{o.code}</span>
-      <span className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.4rem, 4.5vw, 1.9rem)', lineHeight: 1.1, marginTop: 2 }}>{o.now}</span>
-      <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', marginTop: 5 }}>{o.label} · {o.from}</span>
-    </div>
-  )
-}
 
 function Row({ i, title, children, href }) {
   return (
@@ -42,65 +32,17 @@ function Row({ i, title, children, href }) {
 }
 
 export default function ViajePage() {
-  const { travel } = wedding
-  const dest = travel.destination
+  const { travel, jaen } = wedding
 
   return (
     <PageScaffold
       index="03"
-      eyebrow="Rutas"
+      eyebrow="La estancia"
       title={<>El <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>viaje</span></>}
-      subtitle="Venimos de sitios distintos, pero el destino es el mismo. Todo lo que necesitas para llegar y quedarte."
+      subtitle="Dónde dormir, cómo moverte por Jaén y qué ver si te quedas unos días."
     >
-      {/* Ruta origen → destino */}
-      <div className="flex items-center justify-between gap-4 max-w-2xl mx-auto mb-4">
-        <div className="flex flex-col gap-7">
-          {travel.origins.map(o => <OriginNode key={o.code} o={o} />)}
-        </div>
-
-        <div className="flex-1 relative flex items-center justify-center px-2" style={{ minWidth: 54 }}>
-          <div style={{ height: 1, width: '100%', backgroundImage: 'radial-gradient(var(--gold) 1px, transparent 1px)', backgroundSize: '7px 1px', opacity: 0.6 }} />
-          <Plane size={17} style={{ color: 'var(--gold)', position: 'absolute', backgroundColor: 'var(--paper)', paddingLeft: 4, paddingRight: 4 }} />
-        </div>
-
-        <div className="flex flex-col items-center text-center flex-shrink-0">
-          <span className="data" style={{ color: 'var(--gold)', fontSize: '0.6rem' }}>{dest.code}</span>
-          <span className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.5rem, 5vw, 2.1rem)', lineHeight: 1.1, marginTop: 2 }}>{dest.place}</span>
-          <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.44rem', marginTop: 5 }}>{dest.label}</span>
-        </div>
-      </div>
-
-      {/* Cómo llegar — listado */}
-      <div className="mt-16"><SectionLabel>Cómo llegar</SectionLabel></div>
-      <div className="mt-4" style={{ borderBottom: '1px solid var(--hairline)' }}>
-        {travel.getting.map((g, i) => (
-          <Row key={g.title} i={String(i + 1).padStart(2, '0')} title={g.title}>{g.text}</Row>
-        ))}
-      </div>
-
-      {/* Autobús */}
-      <motion.div
-        initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-        className="mt-12 text-center">
-        <SectionLabel>Autobús</SectionLabel>
-        <p className="mt-6 mx-auto" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>{travel.shuttle}</p>
-
-        {travel.shuttleReturns?.length > 0 && (
-          <div className="flex items-center justify-center gap-8 mt-6">
-            {travel.shuttleReturns.map((t, i) => (
-              <div key={t} className="flex flex-col items-center gap-1">
-                <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
-                  {i === 0 ? 'Primera salida' : 'Última salida'}
-                </span>
-                <span className="data" style={{ color: 'var(--navy)', fontSize: '1.1rem' }}>{t}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </motion.div>
-
-      {/* Alojamiento — listado */}
-      <div className="mt-16"><SectionLabel>Dónde dormir</SectionLabel></div>
+      {/* Alojamiento — lo primero */}
+      <div><SectionLabel>Dónde dormir</SectionLabel></div>
 
       {travel.bookingCode && (
         <p className="mt-6 mx-auto text-center" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
@@ -133,6 +75,37 @@ export default function ViajePage() {
           </Row>
         ))}
       </div>
+
+      {/* Moverse por Jaén */}
+      {travel.taxi && (
+        <motion.div
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+          className="mt-16 text-center"
+        >
+          <SectionLabel>Moverse por Jaén</SectionLabel>
+          <p className="mt-6 mx-auto" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
+            {travel.taxi}
+          </p>
+        </motion.div>
+      )}
+
+      {/* Descubrir Jaén */}
+      {jaen && (
+        <>
+          <div className="mt-16"><SectionLabel>Descubre Jaén</SectionLabel></div>
+          <p className="mt-6 mx-auto text-center" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
+            {jaen.intro}
+          </p>
+
+          <div className="mt-8" style={{ borderBottom: '1px solid var(--hairline)' }}>
+            {jaen.highlights.map((h, i) => (
+              <Row key={h.title} i={String(i + 1).padStart(2, '0')} title={h.title}>
+                {h.text}
+              </Row>
+            ))}
+          </div>
+        </>
+      )}
     </PageScaffold>
   )
 }

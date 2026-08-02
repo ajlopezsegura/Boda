@@ -95,16 +95,11 @@ const wedding = {
 
   // ── Viaje & Alojamiento ───────────────────────────────────────────────────
   travel: {
-    origins: [
-      { label: 'Pablo', from: 'de Málaga', now: 'Zúrich', code: 'ZRH' },
-      { label: 'Pilar', from: 'de Jaén',   now: 'Madrid', code: 'MAD' },
-    ],
-    destination: { place: 'Jaén · Baeza', code: 'JAE', label: 'Nuestro mejor día' },
-    getting: [
-      { icon: 'Plane',      title: 'En avión', text: 'Aeropuerto Federico García Lorca Granada-Jaén (GRX) a ~1h. Desde Zúrich, vuelos directos a Madrid y Málaga.' },
-      { icon: 'TrainFront', title: 'En tren',  text: 'AVE hasta Jaén o Linares-Baeza desde Madrid. Desde la estación, coche o bus hasta Baeza (~35 min).' },
-      { icon: 'Car',        title: 'En coche', text: 'Baeza está a 48 km de Jaén capital por la A-316. Parking gratuito junto al Claustro de Vandelvira.' },
-    ],
+    // Consejo para moverse por Jaén el día de la ceremonia
+    taxi:
+      'Jaén es una ciudad de cuestas y el casco antiguo tiene las calles ' +
+      'estrechas. Te recomendamos reservar taxi con antelación para subir a la ' +
+      'iglesia: ese día habrá mucha demanda y no siempre es fácil encontrar uno.',
     // Hoteles con acuerdo. Rellena `url` (web del hotel), `bookingUrl` (enlace
     // directo de reserva) y `email` cuando los tengas; si están vacíos, la web
     // no muestra el enlace. El código de reserva es común a los tres.
@@ -119,6 +114,32 @@ const wedding = {
       'Vandelvira (Baeza). Para la vuelta a Jaén habrá dos salidas.',
     // Horarios de vuelta a Jaén
     shuttleReturns: ['20:30', '00:00'],
+  },
+
+  // ── Descubrir Jaén (edita o amplía a vuestro gusto) ───────────────────────
+  jaen: {
+    intro:
+      'Si vienes de fuera y te quedas un par de días, Jaén merece que le des ' +
+      'una vuelta. Es una provincia de olivares infinitos y ciudades ' +
+      'renacentistas, con mucho más de lo que suele contarse.',
+    highlights: [
+      {
+        title: 'La catedral',
+        text: 'Obra maestra del Renacimiento español, proyectada por Andrés de Vandelvira. Sí: el mismo arquitecto que da nombre al claustro donde celebramos.',
+      },
+      {
+        title: 'Castillo de Santa Catalina',
+        text: 'Sobre el cerro que domina la ciudad. Las vistas del mar de olivos al atardecer son el mejor plan de la visita.',
+      },
+      {
+        title: 'Baños árabes',
+        text: 'Bajo el Palacio de Villardompardo, de los mayores conservados de España. Una parada breve y sorprendente.',
+      },
+      {
+        title: 'Úbeda y Baeza',
+        text: 'A media hora, las dos ciudades renacentistas declaradas Patrimonio de la Humanidad. Baeza es donde celebramos.',
+      },
+    ],
   },
 
   // ── Información práctica ───────────────────────────────────────────────────
