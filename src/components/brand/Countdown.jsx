@@ -1,5 +1,5 @@
 import { useCountdown } from '../../hooks/useCountdown'
-import wedding from '../../data/wedding'
+import { useLang } from '../../i18n'
 
 /**
  * Cuenta atrás hasta el gran día.
@@ -21,6 +21,7 @@ const TONES = {
 }
 
 export default function Countdown({ tone = 'ink', align = 'center', compact = false, className = '', style }) {
+  const { wedding, t: tr } = useLang()
   const { days, hours, minutes, seconds, done } = useCountdown(wedding.date)
   const t = TONES[tone] || TONES.ink
 
@@ -35,16 +36,16 @@ export default function Countdown({ tone = 'ink', align = 'center', compact = fa
           ...style,
         }}
       >
-        ¡Hoy es el día!
+        {tr.countdown.today}
       </p>
     )
   }
 
   const units = [
-    { v: days, l: days === 1 ? 'día' : 'días' },
-    { v: hours, l: 'horas' },
-    { v: minutes, l: 'min' },
-    { v: seconds, l: 'seg' },
+    { v: days, l: days === 1 ? tr.countdown.day : tr.countdown.days },
+    { v: hours, l: tr.countdown.hours },
+    { v: minutes, l: tr.countdown.min },
+    { v: seconds, l: tr.countdown.sec },
   ]
 
   const justify = compact
@@ -56,7 +57,7 @@ export default function Countdown({ tone = 'ink', align = 'center', compact = fa
       className={`flex items-start ${justify} ${className}`}
       style={style}
       role="timer"
-      aria-label={`Faltan ${days} días, ${hours} horas, ${minutes} minutos y ${seconds} segundos`}
+      aria-label={`${days} ${tr.countdown.days} ${hours} ${tr.countdown.hours} ${minutes} ${tr.countdown.min} ${seconds} ${tr.countdown.sec}`}
     >
       {units.map((u, i) => (
         <div key={u.l} className={`flex items-start ${compact ? '' : ''}`}>

@@ -1,18 +1,24 @@
 import { Link, useLocation } from 'react-router-dom'
 import { ArrowRight, RotateCcw } from 'lucide-react'
+import { useLang } from '../../i18n'
 
 // Orden del recorrido (la "ruta" del pasaporte)
-const JOURNEY = [
-  { to: '/',         label: 'Inicio' },
-  { to: '/historia', label: 'Nuestra historia' },
-  { to: '/dia',      label: 'El gran día' },
-  { to: '/viaje',    label: 'El viaje' },
-  { to: '/info',     label: 'Buen viaje' },
-  { to: '/rsvp',     label: 'Confirmar asistencia' },
-]
+const RUTAS = ['/', '/historia', '/dia', '/viaje', '/info', '/rsvp']
 
 export default function SectionNav() {
   const { pathname } = useLocation()
+  const { t } = useLang()
+
+  const etiquetas = {
+    '/':         t.backHome,
+    '/historia': t.ourStory,
+    '/dia':      t.titles.dia.join(''),
+    '/viaje':    t.titles.viaje.join(''),
+    '/info':     t.titles.info.join(''),
+    '/rsvp':     t.titles.rsvp.join(''),
+  }
+  const JOURNEY = RUTAS.map(to => ({ to, label: etiquetas[to] }))
+
   const i = JOURNEY.findIndex(s => s.to === pathname)
   if (i === -1) return null
 
@@ -35,10 +41,10 @@ export default function SectionNav() {
       >
         <span className="flex flex-col gap-1.5">
           <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem' }}>
-            {isLast ? 'Fin del trayecto' : 'Siguiente parada'}
+            {isLast ? t.backHome : t.nextStop}
           </span>
           <span className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.5rem, 6vw, 2rem)', lineHeight: 1.05 }}>
-            {isLast ? 'Volver al inicio' : next.label}
+            {next.label}
           </span>
         </span>
 

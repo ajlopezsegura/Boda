@@ -3,22 +3,63 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import Monogram from '../brand/Monogram'
-import wedding from '../../data/wedding'
+import { useLang } from '../../i18n'
 
-const LINKS = [
-  { to: '/historia', label: 'Historia' },
-  { to: '/dia',      label: 'El día' },
-  { to: '/viaje',    label: 'Viaje' },
-  { to: '/info',     label: 'Info' },
-  { to: '/rsvp',     label: 'Confirmar' },
+const RUTAS = [
+  { to: '/historia', key: 'historia' },
+  { to: '/dia',      key: 'dia' },
+  { to: '/viaje',    key: 'viaje' },
+  { to: '/info',     key: 'info' },
+  { to: '/rsvp',     key: 'rsvp' },
 ]
+
+/* Selector de idioma: dos letras y un filete, sin banderas
+   (una bandera nunca representa bien a todos los que hablan un idioma). */
+function SelectorIdioma({ tone = 'ink' }) {
+  const { lang, setLang } = useLang()
+  const claro = tone === 'light'
+
+  const estilo = activo => ({
+    fontFamily: 'Montserrat, sans-serif',
+    fontSize: '0.52rem',
+    letterSpacing: '0.16em',
+    textTransform: 'uppercase',
+    color: activo
+      ? (claro ? '#E4CE93' : 'var(--gold)')
+      : (claro ? 'rgba(247,243,234,0.55)' : 'var(--ink-faint)'),
+    padding: '4px 2px',
+    minHeight: 32,
+    transition: 'color 0.4s ease',
+  })
+
+  return (
+    <div className="flex items-center gap-1.5" role="group" aria-label="Idioma / Language">
+      {['es', 'en'].map((codigo, i) => (
+        <span key={codigo} className="flex items-center gap-1.5">
+          {i > 0 && (
+            <span aria-hidden="true" style={{ width: 1, height: 10, backgroundColor: claro ? 'rgba(247,243,234,0.3)' : 'var(--hairline)' }} />
+          )}
+          <button
+            type="button"
+            onClick={() => setLang(codigo)}
+            data-cursor="hover"
+            aria-pressed={lang === codigo}
+            style={estilo(lang === codigo)}
+          >
+            {codigo}
+          </button>
+        </span>
+      ))}
+    </div>
+  )
+}
 
 export default function WeddingNav() {
   const location = useLocation()
   const [open, setOpen] = useState(false)
+  const { t, wedding } = useLang()
 
   const onCover = location.pathname === '/'
-  // Todo el sitio va sobre papel marfil: tinta marino y acento oro.
   const ink       = 'var(--ink-muted)'
   const inkStrong = 'var(--navy)'
   const gold      = 'var(--gold)'
@@ -54,36 +95,43 @@ export default function WeddingNav() {
           </Link>
         )}
 
-        {/* Nav escritorio */}
-        <nav className="hidden md:flex items-center gap-7">
-          {LINKS.map(l => {
-            const active = location.pathname === l.to
-            return (
-              <Link
-                key={l.to}
-                to={l.to}
-                data-cursor="hover"
-                className="eyebrow no-underline transition-colors duration-500"
-                style={{ fontSize: '0.58rem', color: active ? gold : ink }}
-                onMouseEnter={e => (e.currentTarget.style.color = gold)}
-                onMouseLeave={e => (e.currentTarget.style.color = active ? gold : ink)}
-              >
-                {l.label}
-              </Link>
-            )
-          })}
-        </nav>
+        <div className="flex items-center gap-5 sm:gap-7">
+          {/* Nav escritorio */}
+          <nav className="hidden md:flex items-center gap-7">
+            {RUTAS.map(l => {
+              const active = location.pathname === l.to
+              return (
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  data-cursor="hover"
+                  className="eyebrow no-underline transition-colors duration-500"
+                  style={{ fontSize: '0.58rem', color: active ? gold : ink }}
+                  onMouseEnter={e => (e.currentTarget.style.color = gold)}
+                  onMouseLeave={e => (e.currentTarget.style.color = active ? gold : ink)}
+                >
+                  {t.nav[l.key]}
+                </Link>
+              )
+            })}
+          </nav>
 
-        {/* Botón móvil */}
-        <button
-          onClick={() => setOpen(true)}
-          data-cursor="hover"
-          className={`md:hidden flex items-center justify-center min-h-[44px] min-w-[44px]
-            ${onCover ? 'text-[#E4CE93]' : 'text-[color:var(--gold)]'}`}
-          aria-label="Abrir menú"
-        >
-          <Menu size={22} strokeWidth={1.2} />
-        </button>
+          {/* Idioma: en escritorio siempre; en móvil solo fuera de la portada */}
+          <div className={onCover ? 'hidden md:flex' : 'flex'}>
+            <SelectorIdioma tone="ink" />
+          </div>
+
+          {/* Botón móvil */}
+          <button
+            onClick={() => setOpen(true)}
+            data-cursor="hover"
+            className={`md:hidden flex items-center justify-center min-h-[44px] min-w-[44px]
+              ${onCover ? 'text-[#E4CE93]' : 'text-[color:var(--gold)]'}`}
+            aria-label={t.openMenu}
+          >
+            <Menu size={22} strokeWidth={1.2} />
+          </button>
+        </div>
       </motion.header>
 
       {/* Menú móvil */}
@@ -102,14 +150,14 @@ export default function WeddingNav() {
               data-cursor="hover"
               className="absolute top-4 right-4 flex items-center justify-center min-h-[44px] min-w-[44px]"
               style={{ color: 'var(--gold-soft)' }}
-              aria-label="Cerrar menú"
+              aria-label={t.closeMenu}
             >
               <X size={24} strokeWidth={1.2} />
             </button>
 
             <Monogram size={72} color="var(--gold-soft)" />
 
-            {LINKS.map((l, i) => (
+            {RUTAS.map((l, i) => (
               <motion.div
                 key={l.to}
                 initial={{ opacity: 0, y: 10 }}
@@ -127,10 +175,14 @@ export default function WeddingNav() {
                     color: location.pathname === l.to ? 'var(--gold-soft)' : '#F4F0E7',
                   }}
                 >
-                  {l.label}
+                  {t.nav[l.key]}
                 </Link>
               </motion.div>
             ))}
+
+            <div className="mt-4">
+              <SelectorIdioma tone="light" />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

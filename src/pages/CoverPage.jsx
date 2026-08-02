@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PageTransition from '../components/layout/PageTransition'
 import Countdown from '../components/brand/Countdown'
-import wedding from '../data/wedding'
+import { useLang } from '../i18n'
 
 const ease = [0.22, 0.61, 0.36, 1]
 
 export default function CoverPage() {
   const navigate = useNavigate()
+  const { wedding } = useLang()
   const { couple, cover, dateShort, city } = wedding
   const [videoFailed, setVideoFailed] = useState(false)
   const videoRef = useRef(null)

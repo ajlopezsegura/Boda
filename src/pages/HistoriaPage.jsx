@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import PageTransition from '../components/layout/PageTransition'
-import wedding from '../data/wedding'
+import { useLang } from '../i18n'
 
 const ease = [0.22, 0.61, 0.36, 1]
 
@@ -102,6 +102,7 @@ function Stop({ s }) {
 
 export default function HistoriaPage() {
   const navigate = useNavigate()
+  const { wedding, t } = useLang()
   const { story } = wedding
   const reelRef = useRef(null)
   const [active, setActive] = useState(0)
@@ -172,7 +173,7 @@ export default function HistoriaPage() {
                   color: 'var(--gold)',
                 }}
               >
-                Diario
+                {t.diary}
               </span>
             </Plate>
 
@@ -187,7 +188,7 @@ export default function HistoriaPage() {
                   marginTop: '1.5rem',
                 }}
               >
-                Nuestra historia
+                {t.ourStory}
               </h1>
             </Plate>
 
@@ -227,7 +228,7 @@ export default function HistoriaPage() {
                   color: 'var(--gold)',
                 }}
               >
-                Desliza
+                {t.swipe}
               </span>
             </motion.span>
           </section>
@@ -252,7 +253,7 @@ export default function HistoriaPage() {
                   color: 'var(--gold)',
                 }}
               >
-                Siguiente parada
+                {t.nextStop}
               </span>
             </Plate>
 
@@ -267,7 +268,7 @@ export default function HistoriaPage() {
                   marginTop: '1.1rem',
                 }}
               >
-                El gran día
+                {t.titles.dia.join('')}
               </h2>
             </Plate>
 
@@ -288,7 +289,7 @@ export default function HistoriaPage() {
                   color: 'var(--navy)',
                 }}
               >
-                Continuar
+                {t.continue}
                 <span style={{ color: 'var(--gold)' }}>→</span>
               </button>
             </Plate>

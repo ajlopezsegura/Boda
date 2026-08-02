@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { MessageCircle, Mail, Plane } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
-import wedding from '../data/wedding'
+import { useLang } from '../i18n'
 
 function fieldStyle(hasError) {
   return {
@@ -46,6 +46,7 @@ function Choice({ options, value, onChange }) {
 }
 
 export default function RsvpPage() {
+  const { wedding, t } = useLang()
   const { rsvp } = wedding
   const [f, setF] = useState({ name: '', attending: 'yes', guests: '1', shuttle: 'yes', diet: '', message: '' })
   const [errors, setErrors] = useState({})
@@ -71,7 +72,7 @@ export default function RsvpPage() {
 
   function validate() {
     const e = {}
-    if (!f.name.trim()) e.name = 'Dinos tu nombre'
+    if (!f.name.trim()) e.name = t.form.nameErr
     return e
   }
 
@@ -89,10 +90,9 @@ export default function RsvpPage() {
 
   return (
     <PageScaffold
-      index="05"
-      eyebrow="Boarding pass"
-      title={<>Confirma tu <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>asistencia</span></>}
-      subtitle={`Necesitamos saber si nos acompañas para reservarte plaza. Confírmanos, por favor, antes del ${rsvp.deadline}.`}
+      align="center"
+      title={<>{t.titles.rsvp[0]}<span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>{t.titles.rsvp[1]}</span></>}
+      subtitle={t.subtitles.rsvp(rsvp.deadline)}
       maxWidth={620}
     >
       <motion.form
@@ -101,32 +101,32 @@ export default function RsvpPage() {
         className="flex flex-col gap-7 p-7 sm:p-9"
         style={{ border: '1px solid var(--hairline)', backgroundColor: 'var(--paper-deep)' }}>
 
-        <Field label="Nombre y apellidos" error={errors.name}>
-          <input type="text" value={f.name} onChange={e => set('name', e.target.value)} placeholder="Tu nombre" style={fieldStyle(!!errors.name)} />
+        <Field label={t.form.name} error={errors.name}>
+          <input type="text" value={f.name} onChange={e => set('name', e.target.value)} placeholder={t.form.namePh} style={fieldStyle(!!errors.name)} />
         </Field>
 
         <div className="flex flex-col gap-2">
-          <span className="eyebrow" style={{ fontSize: '0.46rem', color: 'var(--gold)' }}>¿Nos acompañas?</span>
-          <Choice options={[{ v: 'yes', l: 'Sí, allí estaré' }, { v: 'no', l: 'No podré ir' }]} value={f.attending} onChange={v => set('attending', v)} />
+          <span className="eyebrow" style={{ fontSize: '0.46rem', color: 'var(--gold)' }}>{t.form.coming}</span>
+          <Choice options={[{ v: 'yes', l: t.form.yes }, { v: 'no', l: t.form.no }]} value={f.attending} onChange={v => set('attending', v)} />
         </div>
 
         {attending && (
           <>
-            <Field label="Nº de personas (incluyéndote)">
+            <Field label={t.form.guests}>
               <input type="number" min="1" max="10" value={f.guests} onChange={e => set('guests', e.target.value)} style={fieldStyle(false)} />
             </Field>
             <div className="flex flex-col gap-2">
-              <span className="eyebrow" style={{ fontSize: '0.46rem', color: 'var(--gold)' }}>¿Necesitas autobús?</span>
-              <Choice options={[{ v: 'yes', l: 'Sí, resérvame plaza' }, { v: 'no', l: 'No, gracias' }]} value={f.shuttle} onChange={v => set('shuttle', v)} />
+              <span className="eyebrow" style={{ fontSize: '0.46rem', color: 'var(--gold)' }}>{t.form.busQ}</span>
+              <Choice options={[{ v: 'yes', l: t.form.busYes }, { v: 'no', l: t.form.busNo }]} value={f.shuttle} onChange={v => set('shuttle', v)} />
             </div>
-            <Field label="Alergias o dieta especial">
-              <input type="text" value={f.diet} onChange={e => set('diet', e.target.value)} placeholder="Vegetariano, celíaco, alergias…" style={fieldStyle(false)} />
+            <Field label={t.form.diet}>
+              <input type="text" value={f.diet} onChange={e => set('diet', e.target.value)} placeholder={t.form.dietPh} style={fieldStyle(false)} />
             </Field>
           </>
         )}
 
-        <Field label="Mensaje para los novios (opcional)">
-          <textarea value={f.message} onChange={e => set('message', e.target.value)} rows={3} placeholder="Escríbeles algo bonito…"
+        <Field label={t.form.message}>
+          <textarea value={f.message} onChange={e => set('message', e.target.value)} rows={3} placeholder={t.form.messagePh}
             style={{ width: '100%', backgroundColor: 'var(--paper)', resize: 'none', outline: 'none', border: '1px solid var(--hairline)', color: 'var(--navy)', fontSize: '0.95rem', padding: '11px', lineHeight: 1.7, fontFamily: '"EB Garamond", Georgia, serif' }} />
         </Field>
 
@@ -135,27 +135,27 @@ export default function RsvpPage() {
             className="flex-1 eyebrow py-4 flex items-center justify-center gap-2 transition-opacity duration-200"
             style={{ backgroundColor: 'var(--navy)', color: 'var(--gold-soft)', fontSize: '0.56rem' }}
             onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')} onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-            <MessageCircle size={14} /> Por WhatsApp
+            <MessageCircle size={14} /> {t.form.byWhatsapp}
           </button>
           <button type="button" onClick={submitEmail} data-cursor="hover"
             className="flex-1 eyebrow py-4 flex items-center justify-center gap-2 transition-all duration-200"
             style={{ border: '1px solid var(--gold)', color: 'var(--gold)', fontSize: '0.56rem' }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(166,129,60,0.08)' }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent' }}>
-            <Mail size={14} /> Por email
+            <Mail size={14} /> {t.form.byEmail}
           </button>
         </div>
 
         <div className="flex items-center gap-2 justify-center">
           <Plane size={11} style={{ color: 'var(--ink-faint)' }} />
           <p className="eyebrow text-center" style={{ fontSize: '0.42rem', color: 'var(--ink-faint)', lineHeight: 1.8 }}>
-            Se abrirá tu app con el mensaje ya escrito · solo tienes que enviarlo
+            {t.form.hint}
           </p>
         </div>
       </motion.form>
 
       <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8">
-        <span className="eyebrow" style={{ fontSize: '0.5rem', color: 'var(--ink-muted)' }}>¿Dudas? Llámanos:</span>
+        <span className="eyebrow" style={{ fontSize: '0.5rem', color: 'var(--ink-muted)' }}>{t.form.doubts}</span>
         {rsvp.contacts.map(c => (
           <span key={c.name} className="data" style={{ fontSize: '0.6rem', color: 'var(--gold)' }}>{c.name} · {c.phone}</span>
         ))}

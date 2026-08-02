@@ -2,11 +2,11 @@ import { motion } from 'framer-motion'
 import { MapPin, Bus, ArrowUpRight } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
 import { SectionLabel } from '../components/brand/decor'
-import wedding from '../data/wedding'
+import { useLang } from '../i18n'
 
 const ease = [0.43, 0.13, 0.23, 0.96]
 
-function EventCard({ ev, index }) {
+function EventCard({ ev, index, t }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -39,7 +39,7 @@ function EventCard({ ev, index }) {
           <a href={ev.map} target="_blank" rel="noreferrer" data-cursor="hover"
             className="inline-flex items-center gap-1 mt-4 eyebrow no-underline"
             style={{ color: 'var(--gold)', fontSize: '0.5rem' }}>
-            Ver en el mapa <ArrowUpRight size={12} />
+            {t.viewMap} <ArrowUpRight size={12} />
           </a>
         )}
       </div>
@@ -48,12 +48,13 @@ function EventCard({ ev, index }) {
 }
 
 export default function ItinerarioPage() {
+  const { wedding, t } = useLang()
   const { events, program, dateShort, travel } = wedding
   return (
     <PageScaffold
       align="center"
-      title={<>El gran <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>día</span></>}
-      subtitle="Dos escalas, un mismo destino: de la iglesia de San Bartolomé al Claustro de Vandelvira."
+      title={<>{t.titles.dia[0]}<span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>{t.titles.dia[1]}</span></>}
+      subtitle={t.subtitles.dia}
       maxWidth={760}
       backdrop={wedding.backdrop}
     >
@@ -64,7 +65,7 @@ export default function ItinerarioPage() {
       <div className="flex flex-col">
         {events.map((ev, i) => (
           <div key={ev.code}>
-            <EventCard ev={ev} index={i} />
+            <EventCard ev={ev} index={i} t={t} />
             {/* Entre las dos escalas: el autobús que las une */}
             {i < events.length - 1 && travel?.shuttle && (
               <motion.div
@@ -76,7 +77,7 @@ export default function ItinerarioPage() {
 
                 <div className="flex items-center gap-2.5 mt-4">
                   <Bus size={14} style={{ color: 'var(--gold)' }} />
-                  <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem', letterSpacing: '0.2em' }}>Autobús</span>
+                  <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem', letterSpacing: '0.2em' }}>{t.bus}</span>
                 </div>
 
                 {travel.shuttlePickup && (
@@ -104,7 +105,7 @@ export default function ItinerarioPage() {
 
                 <div className="flex items-center gap-2.5 mt-4">
                   <Bus size={14} style={{ color: 'var(--gold)' }} />
-                  <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem', letterSpacing: '0.2em' }}>Vuelta a Jaén</span>
+                  <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem', letterSpacing: '0.2em' }}>{t.busBack}</span>
                 </div>
 
                 <div className="flex items-start justify-center gap-9 mt-4">
@@ -112,7 +113,7 @@ export default function ItinerarioPage() {
                     <div key={t} className="flex flex-col items-center gap-1.5">
                       <span className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.4rem, 4.5vw, 1.8rem)', lineHeight: 1 }}>{t}</span>
                       <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
-                        {n === 0 ? 'Primera salida' : 'Última salida'}
+                        {n === 0 ? t.firstBus : t.lastBus}
                       </span>
                     </div>
                   ))}
@@ -125,7 +126,7 @@ export default function ItinerarioPage() {
 
       {/* Programa de la celebración */}
       <div className="mt-16">
-        <SectionLabel>Timing del evento</SectionLabel>
+        <SectionLabel>{t.timing}</SectionLabel>
         <div className="flex flex-col mt-7" style={{ maxWidth: 460, marginInline: 'auto' }}>
           {program.map((item, i) => (
             <div
