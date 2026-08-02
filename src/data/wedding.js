@@ -71,7 +71,7 @@ const wedding = {
     { time: '13:30', title: 'Autobús',             detail: 'Recogida cerca de la iglesia' },
     { time: '14:30', title: 'Cóctel',              detail: 'Hasta las 16:00' },
     { time: '16:00', title: 'Almuerzo',            detail: 'Hasta las 18:00' },
-    { time: '18:00', title: 'Que empiece la fiesta', detail: 'DJ hasta las 00:00' },
+    { time: '18:00', title: 'Hora de desmelenarse', detail: 'DJ hasta las 00:00' },
     { time: '00:00', title: 'Último autobús',      detail: 'Vuelta a Jaén' },
   ],
 
