@@ -59,6 +59,10 @@ const UI = {
       message: 'Mensaje para los novios', messagePh: 'Escríbeles algo bonito…',
       send: 'Enviar',
       doubts: '¿Dudas? Llámanos:',
+      sentEyebrow: 'Embarque confirmado',
+      sentTitle: 'Gracias por volar con nosotros',
+      sentText: 'Nos hace muchísima ilusión que vengáis. Esto es lo que queda para embarcar en el primer día del resto de nuestras vidas.',
+      sentBack: 'Volver al formulario',
     },
   },
   en: {
@@ -116,6 +120,10 @@ const UI = {
       message: 'A message for the couple', messagePh: 'Write them something nice…',
       send: 'Send',
       doubts: 'Any questions? Call us:',
+      sentEyebrow: 'Boarding confirmed',
+      sentTitle: 'Thank you for flying with us',
+      sentText: 'We are so happy you are coming. This is what is left before boarding the first day of the rest of our lives.',
+      sentBack: 'Back to the form',
     },
   },
 }

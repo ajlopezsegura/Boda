@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Plane } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
+import Countdown from '../components/brand/Countdown'
 import { useLang } from '../i18n'
 import { textoTel, enlaceTel } from '../lib/phone'
 
@@ -55,6 +56,7 @@ export default function RsvpPage() {
     name: '', attending: 'yes', acompanantes: 0, nombres: [], shuttle: 'both', diet: '', message: '',
   })
   const [errors, setErrors] = useState({})
+  const [enviado, setEnviado] = useState(false)
 
   const set = (k, v) => { setF(p => ({ ...p, [k]: v })); if (errors[k]) setErrors(e => ({ ...e, [k]: null })) }
 
@@ -108,6 +110,7 @@ export default function RsvpPage() {
     const asunto = `Confirmación boda ${wedding.couple.bride} & ${wedding.couple.groom} — ${f.name}`
     window.location.href =
       `mailto:${rsvp.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(buildMessage())}`
+    setEnviado(true)
   }
 
   const attending = f.attending === 'yes'
@@ -119,6 +122,41 @@ export default function RsvpPage() {
       subtitle={t.subtitles.rsvp}
       maxWidth={620}
     >
+      {enviado ? (
+        /* Tarjeta de embarque: el mismo marco del formulario, pero ya con la
+           cuenta atrás en marcha. */
+        <motion.div
+          initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+          className="flex flex-col items-center text-center p-8 sm:p-10"
+          style={{ border: '1px solid var(--hairline)', backgroundColor: 'var(--paper-deep)' }}
+        >
+          <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem' }}>
+            {t.form.sentEyebrow}
+          </span>
+
+          <h2 className="display mt-4" style={{ color: 'var(--navy)', fontSize: 'clamp(1.9rem, 6vw, 2.5rem)', lineHeight: 1.1 }}>
+            {t.form.sentTitle}
+          </h2>
+
+          <p className="mt-5" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 460 }}>
+            {t.form.sentText}
+          </p>
+
+          <div className="rule-gold mt-8" style={{ width: '100%', opacity: 0.5 }} />
+
+          <Countdown tone="ink" className="mt-8 w-full" />
+
+          <button
+            type="button"
+            onClick={() => setEnviado(false)}
+            data-cursor="hover"
+            className="eyebrow mt-9"
+            style={{ color: 'var(--ink-faint)', fontSize: '0.46rem', letterSpacing: '0.18em', borderBottom: '1px solid var(--hairline)', paddingBottom: 3 }}
+          >
+            {t.form.sentBack}
+          </button>
+        </motion.div>
+      ) : (
       <motion.form
         initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
         onSubmit={e => { e.preventDefault(); enviar() }}
@@ -180,6 +218,7 @@ export default function RsvpPage() {
           <Plane size={14} /> {t.form.send}
         </button>
       </motion.form>
+      )}
 
       <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8">
         <span className="eyebrow" style={{ fontSize: '0.5rem', color: 'var(--ink-muted)' }}>{t.form.doubts}</span>
