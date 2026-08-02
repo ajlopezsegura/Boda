@@ -52,7 +52,7 @@ export default function InfoPage() {
         transition={{ duration: 0.5, ease }}
         className="mt-6 text-center"
       >
-        <p className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(2.2rem, 7vw, 3rem)', lineHeight: 1 }}>
+        <p style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--navy)' }}>
           {info.dressCode.value}
         </p>
         {info.dressCode.note && (

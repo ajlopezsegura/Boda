@@ -178,7 +178,7 @@ const wedding = {
       note: '',
     },
     gift: {
-      note: 'Your presence is the best gift of all. If you would also like to help us fill the suitcase for our honeymoon, here are our bank details.',
+      note: 'We are starting a new life together in Switzerland, a beautiful country where a coffee costs what a full lunch costs here. If you would like to help with the landing, these are our bank details. And if not, having you at the wedding — and visiting us over there afterwards — is more than enough.',
       account: es.info.gift.account,
       concept: 'Pilar and Pablo wedding 12/12/2026',
     },
