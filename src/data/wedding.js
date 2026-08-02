@@ -84,8 +84,8 @@ const wedding = {
     },
     intro:
       'Lo nuestro empezó a kilómetros de distancia y no ha parado de sumar destinos. ' +
-      'Él desde Zúrich, ella desde Madrid; él de Málaga, ella de Jaén. Aviones, trenes ' +
-      'y estaciones que siempre nos llevaban al mismo sitio: el uno al otro.',
+      'De Madrid a Zúrich, de Málaga a Jaén. Aviones, trenes y estaciones que ' +
+      'siempre nos llevaban al mismo sitio: el uno al otro.',
     // `photo`: imagen a pantalla completa de cada momento. Sustituye los
     // archivos de public/assets/images/ por vuestras fotos (mismo nombre) o
     // cambia aquí la ruta. Vertical funciona mejor en móvil.
