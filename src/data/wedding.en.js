@@ -140,13 +140,13 @@ const wedding = {
 
   jaen: {
     intro:
-      'Jaén sits at the foot of a castle, surrounded by the largest sea of olive ' +
-      'trees in the world. Its cathedral was copied across half of Latin America, ' +
-      'and its Arab baths are the largest you can visit in Spain. ' +
-      'It is worth the visit.',
+      'There is no larger olive grove on earth than the one that surrounds this ' +
+      'city. The Cathedral was copied in Mexico City, in Lima, in Havana. And ' +
+      'beneath a Renaissance palace lie the largest Arab baths you can visit in ' +
+      'Spain. All of it in a city almost nobody stops in. It is worth the visit.',
     highlights: [
       {
-        title: 'The cathedral',
+        title: 'The Cathedral',
         text: 'Andrés de Vandelvira designed it as the perfect temple and worked on it until the end of his life. He is the same architect who gives his name to the cloister where we celebrate, so now you know who to thank.',
       },
       {
@@ -175,7 +175,7 @@ const wedding = {
   info: {
     dressCode: {
       value: 'Formal',
-      note: 'Long or midi dresses; suits. The cloister has gravel and cobbled areas, so a comfortable or block heel is a good idea.',
+      note: '',
     },
     gift: {
       note: 'Your presence is the best gift of all. If you would also like to help us fill the suitcase for our honeymoon, here are our bank details.',

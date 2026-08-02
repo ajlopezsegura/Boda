@@ -1,5 +1,6 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ArrowLeft, ArrowRight } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
 import { SectionLabel } from '../components/brand/decor'
 import { useLang } from '../i18n'
@@ -37,6 +38,41 @@ function Row({ i, title, children, href, verLabel }) {
 export default function ViajePage() {
   const { wedding, t } = useLang()
   const { travel, jaen } = wedding
+
+  /* La tira de Jaén se pasa con el dedo en el móvil, pero con ratón no hay
+     gesto que valga: en escritorio se maneja con dos flechas. */
+  const tiraRef = useRef(null)
+  const [tope, setTope] = useState({ inicio: true, fin: false })
+
+  const revisarTopes = useCallback(() => {
+    const el = tiraRef.current
+    if (!el) return
+    // El ajuste por pasos deja la última estampa sin llegar al final del scroll,
+    // así que el tope se mide por las propias tarjetas: no hay a dónde avanzar
+    // cuando la última ya se ve entera.
+    const marco = el.getBoundingClientRect()
+    const primera = el.firstElementChild?.getBoundingClientRect()
+    const ultima = el.lastElementChild?.getBoundingClientRect()
+    setTope({
+      inicio: !primera || primera.left >= marco.left - 2,
+      fin: !ultima || ultima.right <= marco.right + 2,
+    })
+  }, [])
+
+  useEffect(() => {
+    revisarTopes()
+    window.addEventListener('resize', revisarTopes)
+    return () => window.removeEventListener('resize', revisarTopes)
+  }, [revisarTopes])
+
+  function pasarTira(sentido) {
+    const el = tiraRef.current
+    if (!el) return
+    const tarjeta = el.firstElementChild
+    const hueco = parseFloat(getComputedStyle(el).columnGap) || 24
+    const paso = tarjeta ? tarjeta.getBoundingClientRect().width + hueco : 300
+    el.scrollBy({ left: sentido * paso, behavior: 'smooth' })
+  }
 
   return (
     <PageScaffold
@@ -182,8 +218,10 @@ export default function ViajePage() {
           {/* En horizontal y sin numerar: así se leen como estampas sueltas que
               apetece ir pasando, y no como una lista de tareas pendientes */}
           <div
+            ref={tiraRef}
+            onScroll={revisarTopes}
             className="tira-jaen mt-10 -mx-6 sm:-mx-10 px-6 sm:px-10 flex gap-6 sm:gap-8 overflow-x-auto"
-            style={{ scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}
+            style={{ scrollbarWidth: 'none' }}
           >
             {jaen.highlights.map(h => (
               <motion.article
@@ -193,7 +231,7 @@ export default function ViajePage() {
                 className="shrink-0 text-left"
                 style={{
                   width: 'min(76vw, 268px)',
-                  scrollSnapAlign: 'center',
+                  scrollSnapAlign: 'start',
                   borderTop: '1px solid var(--gold)',
                   paddingTop: '1.15rem',
                 }}
@@ -211,6 +249,33 @@ export default function ViajePage() {
           <span className="eyebrow block text-center mt-6 md:hidden" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.2em' }}>
             {t.swipe}
           </span>
+
+          <div className="hidden md:flex items-center justify-center gap-3 mt-8">
+            {[
+              { sentido: -1, icono: ArrowLeft, etiqueta: t.previous, apagado: tope.inicio },
+              { sentido: 1, icono: ArrowRight, etiqueta: t.next, apagado: tope.fin },
+            ].map(({ sentido, icono: Icono, etiqueta, apagado }) => (
+              <button
+                key={sentido}
+                type="button"
+                onClick={() => pasarTira(sentido)}
+                disabled={apagado}
+                aria-label={etiqueta}
+                data-cursor="hover"
+                className="flex items-center justify-center transition-all duration-300"
+                style={{
+                  width: 44, height: 44, borderRadius: '50%',
+                  border: '1px solid var(--gold)', color: 'var(--gold)',
+                  opacity: apagado ? 0.25 : 1,
+                  cursor: apagado ? 'default' : 'pointer',
+                }}
+                onMouseEnter={e => { if (!apagado) e.currentTarget.style.backgroundColor = 'rgba(166,129,60,0.09)' }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent' }}
+              >
+                <Icono size={17} strokeWidth={1.4} />
+              </button>
+            ))}
+          </div>
         </>
       )}
     </PageScaffold>

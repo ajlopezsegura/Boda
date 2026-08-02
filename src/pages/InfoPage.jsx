@@ -44,32 +44,46 @@ export default function InfoPage() {
       subtitle={t.subtitles.info}
       maxWidth={760}
     >
-      <div className="grid sm:grid-cols-2 gap-x-12 gap-y-12 mb-16">
-        {/* Dress code */}
-        <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, ease }}>
-          <span className="eyebrow" style={{ color: 'var(--gold)' }}>{t.dressCode}</span>
-          <p className="display my-3" style={{ color: 'var(--navy)', fontSize: 'clamp(2rem, 6vw, 2.6rem)', lineHeight: 1 }}>{info.dressCode.value}</p>
-          <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>{info.dressCode.note}</p>
-        </motion.div>
+      {/* Mismo ritmo que El viaje: rótulo de sección centrado, el contenido
+          debajo y aire entre bloques. */}
+      <div><SectionLabel>{t.dressCode}</SectionLabel></div>
+      <motion.div
+        initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        transition={{ duration: 0.5, ease }}
+        className="mt-6 text-center"
+      >
+        <p className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(2.2rem, 7vw, 3rem)', lineHeight: 1 }}>
+          {info.dressCode.value}
+        </p>
+        {info.dressCode.note && (
+          <p className="mt-4 mx-auto" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
+            {info.dressCode.note}
+          </p>
+        )}
+      </motion.div>
 
-        {/* Regalo */}
-        <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.08, ease }} className="flex flex-col">
-          <span className="eyebrow" style={{ color: 'var(--gold)' }}>{t.gift}</span>
-          <p className="mt-3 mb-5" style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>{info.gift.note}</p>
-          <div className="mt-auto p-4" style={{ border: '1px solid var(--hairline)' }}>
-            <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.42rem' }}>{info.gift.concept}</span>
-            <div className="flex items-center justify-between gap-2 mt-2">
-              <span className="data" style={{ color: 'var(--navy)', fontSize: '0.72rem' }}>{info.gift.account}</span>
-              <button onClick={copyAccount} data-cursor="hover" aria-label={t.copyAccount} style={{ color: 'var(--gold)', flexShrink: 0 }}>
-                {copied ? <Check size={14} /> : <Copy size={14} />}
-              </button>
-            </div>
+      <div className="mt-16"><SectionLabel>{t.gift}</SectionLabel></div>
+      <motion.div
+        initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+        transition={{ duration: 0.5, ease }}
+        className="mt-6 flex flex-col items-center"
+      >
+        <p className="text-center mx-auto" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
+          {info.gift.note}
+        </p>
+        <div className="mt-7 p-4" style={{ border: '1px solid var(--hairline)', width: 'min(100%, 340px)' }}>
+          <span className="eyebrow block text-center" style={{ color: 'var(--gold)', fontSize: '0.42rem' }}>{info.gift.concept}</span>
+          <div className="flex items-center justify-between gap-2 mt-2">
+            <span className="data" style={{ color: 'var(--navy)', fontSize: '0.72rem' }}>{info.gift.account}</span>
+            <button onClick={copyAccount} data-cursor="hover" aria-label={t.copyAccount} style={{ color: 'var(--gold)', flexShrink: 0 }}>
+              {copied ? <Check size={14} /> : <Copy size={14} />}
+            </button>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
 
-      <SectionLabel>{t.faq}</SectionLabel>
-      <div className="mt-6">
+      <div className="mt-16"><SectionLabel>{t.faq}</SectionLabel></div>
+      <div className="mt-6 text-left">
         {info.faq.map((item, i) => (
           <FaqItem key={item.q} item={item} isOpen={openFaq === i} onToggle={() => setOpenFaq(openFaq === i ? null : i)} />
         ))}

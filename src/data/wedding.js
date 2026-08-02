@@ -179,13 +179,14 @@ const wedding = {
   // ── Descubrir Jaén (edita o amplía a vuestro gusto) ───────────────────────
   jaen: {
     intro:
-      'Jaén está a los pies de un castillo y rodeada del mayor mar de olivos ' +
-      'del mundo. Su catedral se copió en media Latinoamérica y sus baños ' +
-      'árabes son los más grandes que se pueden visitar en España. ' +
+      'No existe en el mundo un olivar más grande que el que rodea esta ciudad. ' +
+      'La Catedral se copió en México, en Lima, en La Habana. Y bajo un palacio ' +
+      'renacentista duermen los baños árabes más grandes que se pueden visitar ' +
+      'en España. Todo eso, en una ciudad por la que casi nadie para. ' +
       'Merece la pena hacer una visita.',
     highlights: [
       {
-        title: 'La catedral',
+        title: 'La Catedral',
         text: 'Andrés de Vandelvira la proyectó como el templo perfecto y trabajó en ella hasta el final de sus días. Es el mismo arquitecto que da nombre al claustro donde celebramos, así que ya sabéis a quién darle las gracias.',
       },
       {
@@ -215,7 +216,7 @@ const wedding = {
   info: {
     dressCode: {
       value: 'Formal',
-      note: 'Ellas, largo o midi; ellos, traje. El claustro tiene zonas de tierra y adoquín: tacón cómodo o cuña recomendado.',
+      note: '',
     },
     gift: {
       note: 'Vuestra presencia es nuestro mejor regalo. Si además queréis tener un detalle y ayudarnos a llenar la maleta de nuestra luna de miel, aquí os dejamos nuestra cuenta.',
