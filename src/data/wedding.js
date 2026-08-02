@@ -112,10 +112,10 @@ const wedding = {
       {
         name: 'HO Ciudad de Jaén',
         stars: 4,
-        area: 'Autovía Bailén-Motril, km 329 (salida 36)',
-        note: 'A la entrada de la ciudad, junto a la autovía. Vistas panorámicas de Jaén y de Sierra Mágina.',
+        area: 'Autovía Bailén-Motril, salida 36',
+        note: 'A la entrada de la ciudad. Habitaciones con terraza, spa y piscina, y vistas panorámicas de Jaén.',
         code: 'XXX',
-        url: '', bookingUrl: '', phone: '', email: '',
+        url: 'https://grupoolivencia.com/ho-ciudad-de-jaen/home/', bookingUrl: '', phone: '953 28 48 00', email: '',
       },
       {
         name: 'Hotel Infanta Cristina',
