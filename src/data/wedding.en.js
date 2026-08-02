@@ -185,7 +185,7 @@ const wedding = {
       note: '',
     },
     gift: {
-      note: 'We are starting a new life together in Switzerland, a beautiful country where a coffee costs what a full lunch costs in Spain. If you would like to help with the landing, these are our bank details. And if not, having you at the wedding — and visiting us over there afterwards — is more than enough.',
+      note: 'We are setting off on a new journey together in Switzerland, where we will start building our home and a new chapter of our lives. If you would like to be part of that beginning too, we would be very grateful. But above everything else, your greatest gift is sharing this day with us.',
       account: es.info.gift.account,
       concept: 'Pilar and Pablo wedding 12/12/2026',
     },
