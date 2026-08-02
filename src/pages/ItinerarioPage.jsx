@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { MapPin, Plane, ArrowUpRight } from 'lucide-react'
+import { MapPin, Bus, ArrowUpRight } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
 import { SectionLabel } from '../components/brand/decor'
 import wedding from '../data/wedding'
@@ -65,12 +65,38 @@ export default function ItinerarioPage() {
         {events.map((ev, i) => (
           <div key={ev.code}>
             <EventCard ev={ev} index={i} />
-            {i < events.length - 1 && (
-              <div className="flex items-center justify-center gap-3 py-4" aria-hidden="true">
-                <span style={{ width: 1, height: 18, background: 'linear-gradient(var(--hairline), transparent)' }} />
-                <Plane size={15} style={{ color: 'var(--gold)', transform: 'rotate(90deg)' }} />
-                <span style={{ width: 1, height: 18, background: 'linear-gradient(transparent, var(--hairline))' }} />
-              </div>
+            {/* Entre las dos escalas: el autobús que las une */}
+            {i < events.length - 1 && travel?.shuttle && (
+              <motion.div
+                initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="flex flex-col items-center text-center py-6"
+              >
+                <span aria-hidden="true" style={{ width: 1, height: 22, background: 'linear-gradient(var(--hairline), transparent)' }} />
+
+                <div className="flex items-center gap-2.5 mt-4">
+                  <Bus size={14} style={{ color: 'var(--gold)' }} />
+                  <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem', letterSpacing: '0.2em' }}>Autobús</span>
+                </div>
+
+                {travel.shuttlePickup && (
+                  <span className="display mt-2" style={{ color: 'var(--navy)', fontSize: 'clamp(1.4rem, 4.5vw, 1.8rem)', lineHeight: 1 }}>
+                    {travel.shuttlePickup}
+                  </span>
+                )}
+
+                <p className="mt-2" style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)', maxWidth: 340 }}>
+                  {travel.shuttle}
+                </p>
+
+                {travel.shuttleReturns?.length > 0 && (
+                  <p className="eyebrow mt-3" style={{ color: 'var(--ink-faint)', fontSize: '0.46rem', letterSpacing: '0.16em' }}>
+                    Vuelta a Jaén · {travel.shuttleReturns.join(' y ')}
+                  </p>
+                )}
+
+                <span aria-hidden="true" className="mt-4" style={{ width: 1, height: 22, background: 'linear-gradient(transparent, var(--hairline))' }} />
+              </motion.div>
             )}
           </div>
         ))}
@@ -101,31 +127,6 @@ export default function ItinerarioPage() {
         </div>
       </div>
 
-      {/* Autobús — entre la ceremonia y la celebración */}
-      {travel?.shuttle && (
-        <motion.div
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
-          className="mt-16 text-center"
-        >
-          <SectionLabel>Autobús</SectionLabel>
-          <p className="mt-6 mx-auto" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
-            {travel.shuttle}
-          </p>
-
-          {travel.shuttleReturns?.length > 0 && (
-            <div className="flex items-center justify-center gap-8 mt-6">
-              {travel.shuttleReturns.map((t, i) => (
-                <div key={t} className="flex flex-col items-center gap-1">
-                  <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
-                    {i === 0 ? 'Primera salida' : 'Última salida'}
-                  </span>
-                  <span className="data" style={{ color: 'var(--navy)', fontSize: '1.1rem' }}>{t}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </motion.div>
-      )}
     </PageScaffold>
   )
 }

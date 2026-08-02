@@ -141,9 +141,9 @@ const wedding = {
         url: 'https://www.hoteleuropajaen.es', bookingUrl: '', phone: '953 22 27 04', email: '',
       },
     ],
-    shuttle:
-      'Habrá autobús desde la Iglesia de San Bartolomé (Jaén) hasta el Claustro de ' +
-      'Vandelvira (Baeza). Para la vuelta a Jaén habrá dos salidas.',
+    // Autobús entre la ceremonia y la celebración
+    shuttlePickup: '13:30',
+    shuttle: 'Recogida cerca de la iglesia, con salida hacia Baeza.',
     // Horarios de vuelta a Jaén
     shuttleReturns: ['20:30', '00:00'],
   },
