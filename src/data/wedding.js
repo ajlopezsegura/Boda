@@ -220,20 +220,17 @@ const wedding = {
     },
     gift: {
       note: 'Empezamos vida nueva juntos en Suiza, un país precioso donde un café cuesta lo que aquí un menú del día. Si queréis echarnos una mano con el aterrizaje, esta es nuestra cuenta. Y si no, con que vengáis a la boda —y luego a vernos allí— nos sobra.',
-      account: 'ES50 3067 0109 3832 2957 6123', // REVISAR
+      account: 'ES19 2100 6490 7013 0040 1953',
       concept: 'Boda Pilar y Pablo 12/12/2026',
     },
   },
 
-  // ── RSVP (sin backend: envía por WhatsApp o email) ────────────────────────
+  // ── Confirmación de asistencia ────────────────────────────────────────────
   rsvp: {
-    deadline: '30 de septiembre de 2026',
-    deadlineShort: '30.09.2026',
-    whatsapp: '34600123456',           // REVISAR — teléfono real en formato internacional
     email: 'pilarypablo2026@gmail.com', // REVISAR
     contacts: [
-      { name: 'Pilar', phone: '600 123 456' }, // REVISAR
-      { name: 'Pablo', phone: '600 987 654' }, // REVISAR
+      { name: 'Pilar', phone: '(+34) 633 46 81 72' },
+      { name: 'Pablo', phone: '(+41) 788 937 771' },
     ],
   },
 }

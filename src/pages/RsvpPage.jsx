@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { MessageCircle, Mail, Plane } from 'lucide-react'
+import { Plane, Send } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
 import { useLang } from '../i18n'
-import { textoTel, enlaceTel, enlaceWhatsapp } from '../lib/phone'
+import { textoTel, enlaceTel } from '../lib/phone'
+
+const MAX_ACOMPANANTES = 10
 
 function fieldStyle(hasError) {
   return {
@@ -24,9 +26,9 @@ function Field({ label, error, children }) {
   )
 }
 
-function Choice({ options, value, onChange }) {
+function Choice({ options, value, onChange, columnas = 2 }) {
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${columnas}, minmax(0, 1fr))` }}>
       {options.map(opt => {
         const on = value === opt.v
         return (
@@ -49,10 +51,37 @@ function Choice({ options, value, onChange }) {
 export default function RsvpPage() {
   const { wedding, t } = useLang()
   const { rsvp } = wedding
-  const [f, setF] = useState({ name: '', attending: 'yes', guests: '1', shuttle: 'yes', diet: '', message: '' })
+  const [f, setF] = useState({
+    name: '', attending: 'yes', acompanantes: 0, nombres: [], shuttle: 'both', diet: '', message: '',
+  })
   const [errors, setErrors] = useState({})
 
   const set = (k, v) => { setF(p => ({ ...p, [k]: v })); if (errors[k]) setErrors(e => ({ ...e, [k]: null })) }
+
+  /* El número de acompañantes decide cuántas casillas de nombre aparecen. Se
+     conservan los nombres ya escritos al subir o bajar la cifra. */
+  function setAcompanantes(valor) {
+    const n = Math.max(0, Math.min(MAX_ACOMPANANTES, Number(valor) || 0))
+    setF(p => {
+      const nombres = Array.from({ length: n }, (_, i) => p.nombres[i] ?? '')
+      return { ...p, acompanantes: n, nombres }
+    })
+  }
+
+  function setNombre(i, valor) {
+    setF(p => {
+      const nombres = [...p.nombres]
+      nombres[i] = valor
+      return { ...p, nombres }
+    })
+  }
+
+  const autobus = {
+    both: t.form.busBoth,
+    out: t.form.busOut,
+    back: t.form.busBack,
+    none: t.form.busNone,
+  }
 
   function buildMessage() {
     const yes = f.attending === 'yes'
@@ -63,28 +92,22 @@ export default function RsvpPage() {
       `¿Asisto?: ${yes ? 'Sí, allí estaré ✈️' : 'No podré ir'}`,
     ]
     if (yes) {
-      lines.push(`Nº de personas: ${f.guests}`)
-      lines.push(`Autobús: ${f.shuttle === 'yes' ? 'Sí, necesito plaza' : 'No, voy por mi cuenta'}`)
-      if (f.diet.trim()) lines.push(`Alergias / dieta: ${f.diet.trim()}`)
+      lines.push(`Acompañantes: ${f.acompanantes}`)
+      f.nombres.forEach((n, i) => {
+        if (n.trim()) lines.push(`  ${i + 1}. ${n.trim()}`)
+      })
+      lines.push(`Autobús: ${autobus[f.shuttle]}`)
+      if (f.diet.trim()) lines.push(`Alergias o intolerancias: ${f.diet.trim()}`)
     }
     if (f.message.trim()) lines.push(`Mensaje: ${f.message.trim()}`)
     return lines.join('\n')
   }
 
-  function validate() {
-    const e = {}
-    if (!f.name.trim()) e.name = t.form.nameErr
-    return e
-  }
-
-  function submitWhatsApp() {
-    const e = validate(); if (Object.keys(e).length) { setErrors(e); return }
-    window.open(enlaceWhatsapp(rsvp.whatsapp, buildMessage()), '_blank')
-  }
-  function submitEmail() {
-    const e = validate(); if (Object.keys(e).length) { setErrors(e); return }
-    const subject = `Confirmación boda ${wedding.couple.bride} & ${wedding.couple.groom} — ${f.name}`
-    window.location.href = `mailto:${rsvp.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildMessage())}`
+  function enviar() {
+    if (!f.name.trim()) { setErrors({ name: t.form.nameErr }); return }
+    const asunto = `Confirmación boda ${wedding.couple.bride} & ${wedding.couple.groom} — ${f.name}`
+    window.location.href =
+      `mailto:${rsvp.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(buildMessage())}`
   }
 
   const attending = f.attending === 'yes'
@@ -98,8 +121,8 @@ export default function RsvpPage() {
     >
       <motion.form
         initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-        onSubmit={e => e.preventDefault()}
-        className="flex flex-col gap-7 p-7 sm:p-9"
+        onSubmit={e => { e.preventDefault(); enviar() }}
+        className="flex flex-col gap-7 p-7 sm:p-9 text-left"
         style={{ border: '1px solid var(--hairline)', backgroundColor: 'var(--paper-deep)' }}>
 
         <Field label={t.form.name} error={errors.name}>
@@ -114,12 +137,31 @@ export default function RsvpPage() {
         {attending && (
           <>
             <Field label={t.form.guests}>
-              <input type="number" min="1" max="10" value={f.guests} onChange={e => set('guests', e.target.value)} style={fieldStyle(false)} />
+              <input type="number" inputMode="numeric" min="0" max={MAX_ACOMPANANTES}
+                     value={f.acompanantes} onChange={e => setAcompanantes(e.target.value)} style={fieldStyle(false)} />
             </Field>
+
+            {f.nombres.map((nombre, i) => (
+              <Field key={i} label={t.form.companion(i + 1)}>
+                <input type="text" value={nombre} onChange={e => setNombre(i, e.target.value)}
+                       placeholder={t.form.companionPh} style={fieldStyle(false)} />
+              </Field>
+            ))}
+
             <div className="flex flex-col gap-2">
               <span className="eyebrow" style={{ fontSize: '0.46rem', color: 'var(--gold)' }}>{t.form.busQ}</span>
-              <Choice options={[{ v: 'yes', l: t.form.busYes }, { v: 'no', l: t.form.busNo }]} value={f.shuttle} onChange={v => set('shuttle', v)} />
+              <Choice
+                options={[
+                  { v: 'both', l: t.form.busBoth },
+                  { v: 'out', l: t.form.busOut },
+                  { v: 'back', l: t.form.busBack },
+                  { v: 'none', l: t.form.busNone },
+                ]}
+                value={f.shuttle}
+                onChange={v => set('shuttle', v)}
+              />
             </div>
+
             <Field label={t.form.diet}>
               <input type="text" value={f.diet} onChange={e => set('diet', e.target.value)} placeholder={t.form.dietPh} style={fieldStyle(false)} />
             </Field>
@@ -131,21 +173,12 @@ export default function RsvpPage() {
             style={{ width: '100%', backgroundColor: 'var(--paper)', resize: 'none', outline: 'none', border: '1px solid var(--hairline)', color: 'var(--navy)', fontSize: '0.95rem', padding: '11px', lineHeight: 1.7, fontFamily: '"EB Garamond", Georgia, serif' }} />
         </Field>
 
-        <div className="flex flex-col sm:flex-row gap-3 pt-1">
-          <button type="button" onClick={submitWhatsApp} data-cursor="hover"
-            className="flex-1 eyebrow py-4 flex items-center justify-center gap-2 transition-opacity duration-200"
-            style={{ backgroundColor: 'var(--navy)', color: 'var(--gold-soft)', fontSize: '0.56rem' }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')} onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-            <MessageCircle size={14} /> {t.form.byWhatsapp}
-          </button>
-          <button type="button" onClick={submitEmail} data-cursor="hover"
-            className="flex-1 eyebrow py-4 flex items-center justify-center gap-2 transition-all duration-200"
-            style={{ border: '1px solid var(--gold)', color: 'var(--gold)', fontSize: '0.56rem' }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(166,129,60,0.08)' }}
-            onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent' }}>
-            <Mail size={14} /> {t.form.byEmail}
-          </button>
-        </div>
+        <button type="submit" data-cursor="hover"
+          className="eyebrow py-4 flex items-center justify-center gap-2 transition-opacity duration-200 mt-1"
+          style={{ backgroundColor: 'var(--navy)', color: 'var(--gold-soft)', fontSize: '0.56rem' }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = '0.9')} onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
+          <Send size={14} /> {t.form.send}
+        </button>
 
         <div className="flex items-center gap-2 justify-center">
           <Plane size={11} style={{ color: 'var(--ink-faint)' }} />

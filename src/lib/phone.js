@@ -7,7 +7,8 @@ const PREFIJO = '+34'
 
 export function textoTel(numero) {
   const n = String(numero).trim()
-  return n.startsWith('+') ? n : `(${PREFIJO}) ${n}`
+  // Si ya trae prefijo propio —hay números suizos— se respeta tal cual
+  return n.includes('+') ? n : `(${PREFIJO}) ${n}`
 }
 
 export function enlaceTel(numero) {

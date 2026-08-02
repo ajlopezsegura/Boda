@@ -185,9 +185,6 @@ const wedding = {
   },
 
   rsvp: {
-    deadline: '30 September 2026',
-    deadlineShort: es.rsvp.deadlineShort,
-    whatsapp: es.rsvp.whatsapp,
     email: es.rsvp.email,
     contacts: es.rsvp.contacts,
   },
