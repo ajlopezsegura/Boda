@@ -23,6 +23,10 @@ const wedding = {
   city: 'Jaén',
   country: 'España',
 
+  // Imagen de fondo apenas insinuada en las páginas interiores.
+  // Sustituye public/assets/images/fondo.jpg por la foto definitiva.
+  backdrop: './assets/images/fondo.jpg',
+
   // ── Portada (cubierta del pasaporte) ──────────────────────────────────────
   cover: {
     // Rótulo pequeño sobre los nombres

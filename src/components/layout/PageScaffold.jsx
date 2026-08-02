@@ -9,13 +9,30 @@ const ease = [0.43, 0.13, 0.23, 0.96]
  * Cabecera asimétrica con número de página tipo pasaporte y titular a la
  * izquierda; cierre con navegación a la siguiente parada.
  */
-export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth = 880, children }) {
+export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth = 880, backdrop, children }) {
   return (
     <PageTransition>
       <div className="absolute inset-0 overflow-y-auto" style={{ backgroundColor: 'var(--paper)' }}>
+        {/* Fondo fotográfico apenas insinuado: aporta textura y calidez sin
+            competir con el texto. Se desatura para no pelear con el oro. */}
+        {backdrop && (
+          <div
+            aria-hidden="true"
+            className="fixed inset-0 pointer-events-none"
+            style={{
+              backgroundImage: `url(${backdrop})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: 0.07,
+              filter: 'grayscale(0.4) sepia(0.18)',
+              zIndex: 0,
+            }}
+          />
+        )}
+
         <div
-          className="mx-auto px-6 sm:px-10"
-          style={{ maxWidth, paddingTop: 'calc(var(--header-h) + 3.5rem)', paddingBottom: '4.5rem' }}
+          className="relative mx-auto px-6 sm:px-10"
+          style={{ maxWidth, paddingTop: 'calc(var(--header-h) + 3.5rem)', paddingBottom: '4.5rem', zIndex: 1 }}
         >
           {/* Cabecera editorial */}
           <motion.header

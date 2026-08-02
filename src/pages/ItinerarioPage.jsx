@@ -56,6 +56,7 @@ export default function ItinerarioPage() {
       title={<>El gran <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>día</span></>}
       subtitle="Dos escalas, un mismo destino: del «sí, quiero» en Jaén al claustro de Baeza."
       maxWidth={760}
+      backdrop={wedding.backdrop}
     >
       <div className="flex items-center justify-center gap-3 mb-10">
         <span className="data" style={{ color: 'var(--gold)', fontSize: '0.62rem' }}>{dateShort}</span>
