@@ -178,17 +178,14 @@ export default function ViajePage() {
               referencia que se busca, no un titular */}
           {travel.taxis?.length > 0 && (
             <div className="mt-7 flex flex-col items-center">
-              <span className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-                {travel.taxis.map((taxi, i) => (
-                  <span key={taxi.phone} className="flex items-center gap-x-5">
-                    {i > 0 && (
-                      <span aria-hidden="true" style={{ width: 1, height: 11, backgroundColor: 'var(--hairline)' }} />
-                    )}
-                    <a href={enlaceTel(taxi.phone)} data-cursor="hover"
-                       className="data no-underline" style={{ color: 'var(--navy)', fontSize: '0.74rem' }}>
-                      {textoTel(taxi.phone)}
-                    </a>
-                  </span>
+              {/* Uno debajo de otro: en el móvil, con el prefijo delante, los dos
+                  no caben en una línea y el filete separador los descuadraba. */}
+              <span className="flex flex-col items-center" style={{ gap: '0.5rem' }}>
+                {travel.taxis.map(taxi => (
+                  <a key={taxi.phone} href={enlaceTel(taxi.phone)} data-cursor="hover"
+                     className="data no-underline" style={{ color: 'var(--navy)', fontSize: '0.74rem' }}>
+                    {textoTel(taxi.phone)}
+                  </a>
                 ))}
               </span>
 
@@ -228,10 +225,10 @@ export default function ViajePage() {
             style={{ scrollbarWidth: 'none' }}
           >
             {jaen.highlights.map(h => (
-              <motion.article
+              /* Sin animación de entrada por tarjeta: al pasarlas con el dedo
+                 se disparaba una a una y parecía que la tira daba saltos. */
+              <article
                 key={h.title}
-                initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-                transition={{ duration: 0.5, ease }}
                 className="shrink-0 text-left"
                 style={{
                   width: 'min(76vw, 268px)',
@@ -246,7 +243,7 @@ export default function ViajePage() {
                 <p className="mt-3" style={{ fontSize: '0.98rem', lineHeight: 1.75, color: 'var(--ink-muted)' }}>
                   {h.text}
                 </p>
-              </motion.article>
+              </article>
             ))}
           </div>
 
