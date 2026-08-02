@@ -25,7 +25,7 @@ const wedding = {
 
   // Imágenes de fondo apenas insinuadas en las páginas interiores
   backdrop: './assets/images/fondo-catedral.jpg',
-  backdropViaje: './assets/images/fondo-viaje.jpg',
+  backdropViaje: './assets/images/fondo-viaje-piedra.jpg',
 
   // ── Portada (cubierta del pasaporte) ──────────────────────────────────────
   cover: {
@@ -110,27 +110,11 @@ const wedding = {
     // PENDIENTE: códigos, enlaces, teléfonos y correos reales.
     hotels: [
       {
-        name: 'HO Ciudad de Jaén',
-        stars: 4,
-        area: 'Autovía Bailén-Motril, salida 36',
-        note: 'A la entrada de la ciudad. Habitaciones con terraza, spa y piscina, y vistas panorámicas de Jaén.',
-        code: 'XXX',
-        url: 'https://grupoolivencia.com/ho-ciudad-de-jaen/home/', bookingUrl: '', phone: '953 28 48 00', email: '',
-      },
-      {
-        name: 'Hotel Infanta Cristina',
-        stars: 4,
-        area: 'Avenida de Madrid, s/n',
-        note: 'Junto a la universidad y El Corte Inglés. Con piscina exterior y gimnasio.',
-        code: 'XXX',
-        url: 'https://www.hotelinfantacristina.com', bookingUrl: '', phone: '953 26 30 40', email: '',
-      },
-      {
         name: 'Hotel Condestable Iranzo',
         stars: 4,
         area: 'Paseo de la Estación, 32',
         note: 'En pleno centro, sobre el paseo principal. Tiene parking propio.',
-        code: 'XXX',
+        code: '',
         url: 'https://www.hotelcondestableiranzo.com', bookingUrl: '', phone: '953 22 28 00', email: '',
       },
       {
@@ -138,8 +122,24 @@ const wedding = {
         stars: 3,
         area: 'Plaza de Belén, 1',
         note: 'El más céntrico de los cuatro. Desde su terraza se ve la catedral.',
-        code: 'XXX',
+        code: '',
         url: 'https://www.hoteleuropajaen.es', bookingUrl: '', phone: '953 22 27 04', email: '',
+      },
+      {
+        name: 'Hotel Infanta Cristina',
+        stars: 4,
+        area: 'Avenida de Madrid, s/n',
+        note: 'Junto a la universidad y El Corte Inglés. Con piscina exterior y gimnasio.',
+        code: '',
+        url: 'https://www.hotelinfantacristina.com', bookingUrl: '', phone: '953 26 30 40', email: '',
+      },
+      {
+        name: 'HO Ciudad de Jaén',
+        stars: 4,
+        area: 'Autovía Bailén-Motril, salida 36',
+        note: 'A la entrada de la ciudad. Habitaciones con terraza, spa y piscina, y vistas panorámicas de Jaén.',
+        code: '',
+        url: 'https://grupoolivencia.com/ho-ciudad-de-jaen/home/', bookingUrl: '', phone: '953 28 48 00', email: '',
       },
     ],
     // Autobús entre la ceremonia y la celebración

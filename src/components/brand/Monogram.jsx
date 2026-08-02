@@ -9,19 +9,13 @@ import wedding from '../../data/wedding'
  *   size  — lado en px (por defecto 64)
  *   color — color de tinta (por defecto marino)
  */
-export default function Monogram({ size = 64, color = 'var(--navy)' }) {
+/* Trazos del monograma, sin el <svg> que los envuelve, para poder reutilizar
+   la misma geometría en la versión con relieve (MonogramSeal). */
+export function MonogramStrokes({ color }) {
   const [a, b] = wedding.couple.initials
 
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 100 100"
-      fill="none"
-      role="img"
-      aria-label={`${a} y ${b}`}
-      style={{ display: 'block', overflow: 'visible' }}
-    >
+    <>
       {/* Inicial izquierda (arriba) */}
       <text
         x="33" y="49" textAnchor="middle"
@@ -40,6 +34,24 @@ export default function Monogram({ size = 64, color = 'var(--navy)' }) {
       <line x1="41" y1="74" x2="63" y2="36" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
       <circle cx="41" cy="74" r="2.8" fill="none" stroke={color} strokeWidth="1.5" />
       <circle cx="63" cy="36" r="2.8" fill="none" stroke={color} strokeWidth="1.5" />
+    </>
+  )
+}
+
+export default function Monogram({ size = 64, color = 'var(--navy)' }) {
+  const [a, b] = wedding.couple.initials
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      role="img"
+      aria-label={`${a} y ${b}`}
+      style={{ display: 'block', overflow: 'visible' }}
+    >
+      <MonogramStrokes color={color} />
     </svg>
   )
 }

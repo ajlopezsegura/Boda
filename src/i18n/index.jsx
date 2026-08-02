@@ -44,7 +44,7 @@ const UI = {
       info:  'Los detalles que te ayudarán a disfrutar del día sin sorpresas.',
       rsvp:  fecha => `Necesitamos saber si nos acompañas para reservarte plaza. Confírmanos, por favor, antes del ${fecha}.`,
     },
-    hotelsIntro: 'Estos hoteles de Jaén nos ofrecen condiciones especiales. Cada uno tiene su propio código: indícalo al reservar. Las plazas son limitadas y pueden agotarse, así que mejor no dejarlo para el final.',
+    hotelsIntro: 'Estos hoteles de Jaén nos ofrecen condiciones especiales. Las plazas son limitadas y pueden agotarse, así que mejor no dejarlo para el final.',
     form: {
       name: 'Nombre y apellidos', namePh: 'Tu nombre', nameErr: 'Dinos tu nombre',
       coming: '¿Nos acompañas?', yes: 'Sí, allí estaré', no: 'No podré ir',
@@ -97,7 +97,7 @@ const UI = {
       info:  'The details that will help you enjoy the day without surprises.',
       rsvp:  fecha => `We need to know whether you are joining us so we can save you a seat. Please confirm before ${fecha}.`,
     },
-    hotelsIntro: 'These hotels in Jaén are offering us special rates. Each one has its own booking code: quote it when you book. Availability is limited and may run out, so it is best not to leave it too late.',
+    hotelsIntro: 'These hotels in Jaén are offering us special rates. Availability is limited and may run out, so it is best not to leave it too late.',
     form: {
       name: 'Full name', namePh: 'Your name', nameErr: 'Please tell us your name',
       coming: 'Will you join us?', yes: 'Yes, I will be there', no: 'I cannot make it',

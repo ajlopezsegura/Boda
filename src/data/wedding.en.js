@@ -5,6 +5,10 @@
 
 import es from './wedding'
 
+// Shared hotel data (links and phones) looked up by name, so reordering the
+// list on either side can never mismatch the two files.
+const hotel = name => es.travel.hotels.find(h => h.name === name)
+
 const wedding = {
   // Shared, language-independent values
   couple: es.couple,
@@ -78,36 +82,36 @@ const wedding = {
       'that day and they are not always easy to find.',
     hotels: [
       {
-        name: 'HO Ciudad de Jaén',
-        stars: 4,
-        area: 'Bailén-Motril motorway, exit 36',
-        note: 'At the entrance to the city. Rooms with terrace, spa and pool, and panoramic views over Jaén.',
-        code: 'XXX',
-        url: es.travel.hotels[0].url, bookingUrl: '', phone: es.travel.hotels[0].phone, email: '',
-      },
-      {
-        name: 'Hotel Infanta Cristina',
-        stars: 4,
-        area: 'Avenida de Madrid',
-        note: 'Next to the university and El Corte Inglés. With outdoor pool and gym.',
-        code: 'XXX',
-        url: es.travel.hotels[1].url, bookingUrl: '', phone: es.travel.hotels[1].phone, email: '',
-      },
-      {
         name: 'Hotel Condestable Iranzo',
         stars: 4,
         area: 'Paseo de la Estación, 32',
         note: 'Right in the centre, on the main avenue. It has its own car park.',
-        code: 'XXX',
-        url: es.travel.hotels[2].url, bookingUrl: '', phone: es.travel.hotels[2].phone, email: '',
+        code: '',
+        url: hotel('Hotel Condestable Iranzo').url, bookingUrl: '', phone: hotel('Hotel Condestable Iranzo').phone, email: '',
       },
       {
         name: 'Hotel Europa',
         stars: 3,
         area: 'Plaza de Belén, 1',
         note: 'The most central of the four. The cathedral is visible from its terrace.',
-        code: 'XXX',
-        url: es.travel.hotels[3].url, bookingUrl: '', phone: es.travel.hotels[3].phone, email: '',
+        code: '',
+        url: hotel('Hotel Europa').url, bookingUrl: '', phone: hotel('Hotel Europa').phone, email: '',
+      },
+      {
+        name: 'Hotel Infanta Cristina',
+        stars: 4,
+        area: 'Avenida de Madrid',
+        note: 'Next to the university and El Corte Inglés. With outdoor pool and gym.',
+        code: '',
+        url: hotel('Hotel Infanta Cristina').url, bookingUrl: '', phone: hotel('Hotel Infanta Cristina').phone, email: '',
+      },
+      {
+        name: 'HO Ciudad de Jaén',
+        stars: 4,
+        area: 'Bailén-Motril motorway, exit 36',
+        note: 'At the entrance to the city. Rooms with terrace, spa and pool, and panoramic views over Jaén.',
+        code: '',
+        url: hotel('HO Ciudad de Jaén').url, bookingUrl: '', phone: hotel('HO Ciudad de Jaén').phone, email: '',
       },
     ],
     shuttlePickup: '13:30',

@@ -14,7 +14,9 @@ function Row({ i, title, children, href, verLabel }) {
       className="flex gap-5 sm:gap-8 py-7"
       style={{ borderTop: '1px solid var(--hairline)' }}
     >
-      <span className="display flex-shrink-0" style={{ color: 'var(--gold)', opacity: 0.5, fontSize: '1.6rem', lineHeight: 1, width: 42 }}>{i}</span>
+      {i && (
+        <span className="display flex-shrink-0" style={{ color: 'var(--gold)', opacity: 0.5, fontSize: '1.6rem', lineHeight: 1, width: 42 }}>{i}</span>
+      )}
       <div className="flex-1">
         <div className="flex items-center justify-between gap-3">
           <h3 className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.4rem, 4vw, 1.7rem)' }}>{title}</h3>
@@ -41,6 +43,9 @@ export default function ViajePage() {
       title={<>{t.titles.viaje[0]}<span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>{t.titles.viaje[1]}</span></>}
       subtitle={t.subtitles.viaje}
       backdrop={wedding.backdropViaje}
+      /* Esta foto tiene mucho más contraste que la de la catedral (el rojo del
+         vestido canta), así que se baja para que siga siendo solo una textura */
+      backdropOpacity={0.05}
     >
       {/* Alojamiento — lo primero */}
       <div><SectionLabel>{t.whereSleep}</SectionLabel></div>
@@ -50,8 +55,8 @@ export default function ViajePage() {
       </p>
 
       <div className="mt-8" style={{ borderBottom: '1px solid var(--hairline)' }}>
-        {travel.hotels.map((h, i) => (
-          <Row key={h.name} i={String(i + 1).padStart(2, '0')} title={h.name} href={h.url || undefined} verLabel={t.view}>
+        {travel.hotels.map(h => (
+          <Row key={h.name} title={h.name} href={h.url || undefined} verLabel={t.view}>
             <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
               {h.stars && (
                 <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.46rem', letterSpacing: '0.14em' }}>

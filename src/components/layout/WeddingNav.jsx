@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import Monogram from '../brand/Monogram'
+import MonogramSeal from '../brand/MonogramSeal'
 import { useLang } from '../../i18n'
 
 const RUTAS = [
@@ -155,7 +155,13 @@ export default function WeddingNav() {
               <X size={24} strokeWidth={1.2} />
             </button>
 
-            <Monogram size={72} color="var(--gold-soft)" />
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }}
+            >
+              <MonogramSeal size={108} />
+            </motion.div>
 
             {RUTAS.map((l, i) => (
               <motion.div
