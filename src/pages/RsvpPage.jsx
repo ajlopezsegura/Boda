@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Plane } from 'lucide-react'
 import PageScaffold from '../components/layout/PageScaffold'
+import PageTransition from '../components/layout/PageTransition'
 import Countdown from '../components/brand/Countdown'
 import { useLang } from '../i18n'
 import { textoTel, enlaceTel } from '../lib/phone'
@@ -121,20 +122,21 @@ export default function RsvpPage() {
 
   const attending = f.attending === 'yes'
 
-  return (
-    <PageScaffold
-      align="center"
-      title={<>{t.titles.rsvp[0]}<span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>{t.titles.rsvp[1]}</span></>}
-      subtitle={t.subtitles.rsvp}
-      maxWidth={620}
-    >
-      {enviado ? (
-        /* Tarjeta de embarque: el mismo marco del formulario, pero ya con la
-           cuenta atrás en marcha. */
+  /* Una vez enviado, la tarjeta de embarque se queda sola en la pantalla: sin
+     titular, sin entradilla y sin la navegación de abajo. Es el final del
+     recorrido, y todo lo demás solo distraería de la cuenta atrás. */
+  if (enviado) {
+    return (
+      <PageTransition>
+        <div
+          className="absolute inset-0 overflow-y-auto flex items-center justify-center px-6 sm:px-10"
+          style={{ backgroundColor: 'var(--paper)', paddingTop: 'calc(var(--header-h) + 2rem)', paddingBottom: '3rem' }}
+        >
         <motion.div
-          initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-          className="flex flex-col items-center text-center p-8 sm:p-10"
-          style={{ border: '1px solid var(--hairline)', backgroundColor: 'var(--paper-deep)' }}
+          initial={{ opacity: 0, y: 16, scale: 0.985 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.7, ease: [0.22, 0.61, 0.36, 1] }}
+          className="flex flex-col items-center text-center p-8 sm:p-11 my-auto"
+          style={{ border: '1px solid var(--hairline)', backgroundColor: 'var(--paper-deep)', width: 'min(100%, 560px)' }}
         >
           <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem' }}>
             {t.form.sentEyebrow}
@@ -162,7 +164,18 @@ export default function RsvpPage() {
             {t.form.sentBack}
           </button>
         </motion.div>
-      ) : (
+        </div>
+      </PageTransition>
+    )
+  }
+
+  return (
+    <PageScaffold
+      align="center"
+      title={<>{t.titles.rsvp[0]}<span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>{t.titles.rsvp[1]}</span></>}
+      subtitle={t.subtitles.rsvp}
+      maxWidth={620}
+    >
       <motion.form
         initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
         onSubmit={e => { e.preventDefault(); enviar() }}
@@ -224,7 +237,6 @@ export default function RsvpPage() {
           <Plane size={14} /> {t.form.send}
         </button>
       </motion.form>
-      )}
 
       <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8">
         <span className="eyebrow" style={{ fontSize: '0.5rem', color: 'var(--ink-muted)' }}>{t.form.doubts}</span>
