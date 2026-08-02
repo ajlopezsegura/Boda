@@ -55,34 +55,18 @@ function Stop({ s }) {
           <span
             style={{
               display: 'block',
-              fontFamily: '"EB Garamond", Georgia, serif',
-              fontSize: 'clamp(2.4rem, 7vw, 3.4rem)',
-              color: 'var(--gold-soft)',
-              lineHeight: 1,
-              letterSpacing: '0.02em',
-            }}
-          >
-            {s.year}
-          </span>
-        </Plate>
-
-        <Plate delay={0.27}>
-          <span
-            style={{
-              display: 'block',
-              marginTop: '1.05rem',
               fontFamily: 'Montserrat, sans-serif',
-              fontSize: '0.58rem',
+              fontSize: '0.6rem',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              color: 'rgba(247,243,234,0.72)',
+              color: 'var(--gold-soft)',
             }}
           >
             {s.place}
           </span>
         </Plate>
 
-        <Plate delay={0.39}>
+        <Plate delay={0.3}>
           <h2
             style={{
               fontFamily: '"EB Garamond", Georgia, serif',
@@ -98,7 +82,7 @@ function Stop({ s }) {
           </h2>
         </Plate>
 
-        <Plate delay={0.52}>
+        <Plate delay={0.45}>
           <p
             style={{
               fontFamily: '"EB Garamond", Georgia, serif',

@@ -90,10 +90,9 @@ const wedding = {
     // archivos de public/assets/images/ por vuestras fotos (mismo nombre) o
     // cambia aquí la ruta. Vertical funciona mejor en móvil.
     stamps: [
-      { year: '2019', place: 'Málaga',           title: 'El primer sello', text: 'Nos conocimos un verano en el sur. Una conversación que se alargó hasta el amanecer.', photo: './assets/images/historia-01.jpg' },
-      { year: '2020', place: 'Zúrich ✈ Madrid',  title: 'Larga distancia', text: 'Vuelos de última hora, videollamadas con husos horarios y maletas que nunca se deshacían del todo.', photo: './assets/images/historia-02.jpg' },
-      { year: '2023', place: 'Jaén',             title: 'Entre olivos',    text: 'Volvimos a su tierra, entre olivares infinitos, y supimos que el próximo billete sería solo de ida.', photo: './assets/images/historia-03.jpg' },
-      { year: '2025', place: 'Los Alpes',        title: 'La pedida',       text: 'En una escapada a la montaña llegó el «sí». El mejor destino no estaba en ningún mapa.', photo: './assets/images/historia-04.jpg' },
+      { place: 'Málaga',          title: 'El primer sello', text: 'Nos conocimos un verano en el sur. Una conversación que se alargó hasta el amanecer.', photo: './assets/images/historia-01.jpg' },
+      { place: 'Zúrich ✈ Madrid', title: 'Larga distancia', text: 'Vuelos de última hora, videollamadas con husos horarios y maletas que nunca se deshacían del todo.', photo: './assets/images/historia-02.jpg' },
+      { place: 'Madrid',          title: 'La pedida',       text: 'Llegó el «sí» y, con él, la mejor noticia: el próximo viaje sería juntos y para siempre.', photo: './assets/images/historia-03.jpg' },
     ],
   },
 
