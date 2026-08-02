@@ -82,6 +82,15 @@ const wedding = {
       'that day and they are not always easy to find.',
     hotels: [
       {
+        name: 'Parador de Jaén',
+        stars: 4,
+        area: 'Santa Catalina castle',
+        note: 'One of the city’s landmarks.',
+        code: '',
+        url: hotel('Parador de Jaén').url, phone: hotel('Parador de Jaén').phone, email: '',
+        bookingNote: 'We don’t know yet. As soon as we hear back, we’ll update it here.',
+      },
+      {
         name: 'Hotel Condestable Iranzo',
         stars: 4,
         area: 'Paseo de la Estación, 32',
@@ -115,10 +124,11 @@ const wedding = {
         stars: 4,
         area: 'Bailén-Motril motorway, exit 36',
         note: 'At the entrance to the city (you will need a taxi, no way around it).',
-        code: hotel('HO Ciudad de Jaén').code,
+        code: '',
         url: hotel('HO Ciudad de Jaén').url, phone: hotel('HO Ciudad de Jaén').phone, email: '',
         bookingUrl: hotel('HO Ciudad de Jaén').bookingUrl,
         bookingLabel: hotel('HO Ciudad de Jaén').bookingLabel,
+        bookingNote: 'Book on their website quoting the code OLIVENCIA2026.',
       },
     ],
     shuttlePickup: '13:30',

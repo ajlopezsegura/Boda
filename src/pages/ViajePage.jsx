@@ -89,19 +89,12 @@ export default function ViajePage() {
                 )}
                 {h.bookingUrl && (
                   <a href={h.bookingUrl} target="_blank" rel="noreferrer" data-cursor="hover"
-                     className="no-underline inline-flex items-center gap-1 mt-2"
-                     style={{ color: 'var(--navy)', fontSize: '0.98rem', borderBottom: '1px solid var(--gold)', paddingBottom: 1 }}>
-                    {h.bookingLabel || t.book} <ArrowUpRight size={12} style={{ color: 'var(--gold)' }} />
+                     className="no-underline block mt-2" style={{ color: 'var(--navy)', fontSize: '0.98rem' }}>
+                    {h.bookingLabel || t.book}
                   </a>
                 )}
-                {h.code && (
-                  <span className="block mt-2.5">
-                    <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>{t.bookingCode} </span>
-                    <span className="data" style={{ color: 'var(--gold)', fontSize: '0.95rem' }}>{h.code}</span>
-                  </span>
-                )}
                 {h.bookingNote && (
-                  <span className={`block ${h.bookingPhone || h.bookingEmail ? 'mt-1.5' : 'mt-2'}`}
+                  <span className={`block ${h.bookingPhone || h.bookingEmail || h.bookingUrl ? 'mt-1.5' : 'mt-2'}`}
                         style={{ fontSize: '0.98rem', lineHeight: 1.7 }}>
                     {h.bookingNote}
                   </span>

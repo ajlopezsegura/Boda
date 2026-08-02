@@ -110,6 +110,15 @@ const wedding = {
     // PENDIENTE: códigos, enlaces, teléfonos y correos reales.
     hotels: [
       {
+        name: 'Parador de Jaén',
+        stars: 4,
+        area: 'Castillo de Santa Catalina',
+        note: 'Uno de los iconos de la ciudad.',
+        code: '',
+        url: 'https://paradores.es/es/parador-de-jaen', phone: '953 23 00 00', email: '',
+        bookingNote: 'Todavía no sabemos nada. En cuanto nos lo confirmen, lo actualizamos aquí.',
+      },
+      {
         name: 'Hotel Condestable Iranzo',
         stars: 4,
         area: 'Paseo de la Estación, 32',
@@ -143,10 +152,11 @@ const wedding = {
         stars: 4,
         area: 'Autovía Bailén-Motril, salida 36',
         note: 'A la entrada de la ciudad (hay que coger taxi sí o sí).',
-        code: 'OLIVENCIA2026',
+        code: '',
         url: 'https://grupoolivencia.com/ho-ciudad-de-jaen/home/', phone: '953 28 48 00', email: '',
         bookingUrl: 'https://direct-book.com/properties/HOCiudadDeJaenDirect',
         bookingLabel: 'Hotel HO',
+        bookingNote: 'Reserva en su web indicando el código OLIVENCIA2026.',
       },
     ],
     // Autobús entre la ceremonia y la celebración
