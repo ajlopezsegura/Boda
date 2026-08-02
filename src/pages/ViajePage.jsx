@@ -68,16 +68,9 @@ export default function ViajePage() {
 
             {h.note && <span className="block mt-2">{h.note}</span>}
 
-            {h.code && (
-              <span className="block mt-3">
-                <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>{t.bookingCode} </span>
-                <span className="data" style={{ color: 'var(--gold)', fontSize: '0.92rem' }}>{h.code}</span>
-              </span>
-            )}
-
             {/* Cómo reservar: solo lo llevan los hoteles que piden un trámite
                 concreto, y por eso se despega del resto con un filete */}
-            {(h.bookingEmail || h.bookingPhone || h.bookingNote) && (
+            {(h.bookingEmail || h.bookingPhone || h.bookingUrl || h.bookingNote) && (
               <span className="block mt-4 pl-4" style={{ borderLeft: '1px solid var(--gold)' }}>
                 <span className="eyebrow block" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
                   {t.howToBook}
@@ -94,6 +87,19 @@ export default function ViajePage() {
                     {h.bookingEmail}
                   </a>
                 )}
+                {h.bookingUrl && (
+                  <a href={h.bookingUrl} target="_blank" rel="noreferrer" data-cursor="hover"
+                     className="no-underline inline-flex items-center gap-1 mt-2"
+                     style={{ color: 'var(--navy)', fontSize: '0.98rem', borderBottom: '1px solid var(--gold)', paddingBottom: 1 }}>
+                    {h.bookingLabel || t.book} <ArrowUpRight size={12} style={{ color: 'var(--gold)' }} />
+                  </a>
+                )}
+                {h.code && (
+                  <span className="block mt-2.5">
+                    <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>{t.bookingCode} </span>
+                    <span className="data" style={{ color: 'var(--gold)', fontSize: '0.95rem' }}>{h.code}</span>
+                  </span>
+                )}
                 {h.bookingNote && (
                   <span className={`block ${h.bookingPhone || h.bookingEmail ? 'mt-1.5' : 'mt-2'}`}
                         style={{ fontSize: '0.98rem', lineHeight: 1.7 }}>
@@ -105,14 +111,8 @@ export default function ViajePage() {
 
             {/* Si la reserva ya tiene su propio teléfono, el general se calla:
                 dos números distintos del mismo hotel solo despistan */}
-            {(h.bookingUrl || (h.phone && !h.bookingPhone) || h.email) && (
+            {((h.phone && !h.bookingPhone) || h.email) && (
               <span className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-2.5">
-                {h.bookingUrl && (
-                  <a href={h.bookingUrl} target="_blank" rel="noreferrer" data-cursor="hover"
-                     className="eyebrow no-underline" style={{ color: 'var(--gold)', fontSize: '0.46rem', letterSpacing: '0.14em', borderBottom: '1px solid var(--gold)' }}>
-                    {t.book}
-                  </a>
-                )}
                 {h.phone && !h.bookingPhone && (
                   <a href={`tel:${h.phone.replace(/\s/g, '')}`} data-cursor="hover"
                      className="no-underline" style={{ color: 'var(--ink-muted)', fontSize: '0.9rem' }}>
