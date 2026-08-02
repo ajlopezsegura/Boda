@@ -51,8 +51,7 @@ export default function ItinerarioPage() {
   const { events, program, dateShort, travel } = wedding
   return (
     <PageScaffold
-      index="02"
-      eyebrow="Itinerario"
+      align="center"
       title={<>El gran <span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>día</span></>}
       subtitle="Dos escalas, un mismo destino: del «sí, quiero» en Jaén al claustro de Baeza."
       maxWidth={760}

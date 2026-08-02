@@ -9,7 +9,8 @@ const ease = [0.43, 0.13, 0.23, 0.96]
  * Cabecera asimétrica con número de página tipo pasaporte y titular a la
  * izquierda; cierre con navegación a la siguiente parada.
  */
-export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth = 880, backdrop, children }) {
+export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth = 880, backdrop, align = 'left', children }) {
+  const centrada = align === 'center'
   return (
     <PageTransition>
       <div className="absolute inset-0 overflow-y-auto" style={{ backgroundColor: 'var(--paper)' }}>
@@ -52,9 +53,9 @@ export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth
               </span>
             )}
 
-            <div className="relative">
+            <div className={`relative ${centrada ? 'text-center' : ''}`}>
               {(eyebrow || index) && (
-                <div className="flex items-center gap-3 mb-4">
+                <div className={`flex items-center gap-3 mb-4 ${centrada ? 'justify-center' : ''}`}>
                   {index && <span className="data" style={{ color: 'var(--gold)', fontSize: '0.6rem' }}>Nº&nbsp;{index}</span>}
                   {index && eyebrow && <span style={{ width: 22, height: 1, backgroundColor: 'var(--hairline)' }} />}
                   {eyebrow && <span className="eyebrow" style={{ color: 'var(--gold)' }}>{eyebrow}</span>}
@@ -66,7 +67,16 @@ export default function PageScaffold({ eyebrow, index, title, subtitle, maxWidth
               </h1>
 
               {subtitle && (
-                <p className="mt-7" style={{ fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)', lineHeight: 1.85, color: 'var(--ink-muted)', maxWidth: 540 }}>
+                <p
+                  className="mt-7"
+                  style={{
+                    fontSize: 'clamp(1.05rem, 2.2vw, 1.25rem)',
+                    lineHeight: 1.85,
+                    color: 'var(--ink-muted)',
+                    maxWidth: 540,
+                    marginInline: centrada ? 'auto' : undefined,
+                  }}
+                >
                   {subtitle}
                 </p>
               )}
