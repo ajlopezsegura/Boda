@@ -89,13 +89,34 @@ export default function ItinerarioPage() {
                   {travel.shuttle}
                 </p>
 
-                {travel.shuttleReturns?.length > 0 && (
-                  <p className="eyebrow mt-3" style={{ color: 'var(--ink-faint)', fontSize: '0.46rem', letterSpacing: '0.16em' }}>
-                    Vuelta a Jaén · {travel.shuttleReturns.join(' y ')}
-                  </p>
-                )}
-
                 <span aria-hidden="true" className="mt-4" style={{ width: 1, height: 22, background: 'linear-gradient(transparent, var(--hairline))' }} />
+              </motion.div>
+            )}
+
+            {/* Tras la celebración: la vuelta a Jaén */}
+            {i === events.length - 1 && travel?.shuttleReturns?.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="flex flex-col items-center text-center pt-6"
+              >
+                <span aria-hidden="true" style={{ width: 1, height: 22, background: 'linear-gradient(var(--hairline), transparent)' }} />
+
+                <div className="flex items-center gap-2.5 mt-4">
+                  <Bus size={14} style={{ color: 'var(--gold)' }} />
+                  <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.5rem', letterSpacing: '0.2em' }}>Vuelta a Jaén</span>
+                </div>
+
+                <div className="flex items-start justify-center gap-9 mt-4">
+                  {travel.shuttleReturns.map((t, n) => (
+                    <div key={t} className="flex flex-col items-center gap-1.5">
+                      <span className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.4rem, 4.5vw, 1.8rem)', lineHeight: 1 }}>{t}</span>
+                      <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
+                        {n === 0 ? 'Primera salida' : 'Última salida'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             )}
           </div>
