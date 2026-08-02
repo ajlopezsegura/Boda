@@ -133,8 +133,9 @@ const wedding = {
         name: 'Hotel Infanta Cristina',
         stars: 4,
         area: 'Avenida de Madrid, s/n',
-        note: 'Junto a la universidad y El Corte Inglés. Con piscina exterior y gimnasio.',
+        note: 'En una de las avenidas principales.',
         code: '',
+        bookingNote: 'Todavía no sabemos nada. En cuanto nos lo confirmen, lo actualizamos aquí.',
         url: 'https://www.hotelinfantacristina.com', bookingUrl: '', phone: '953 26 30 40', email: '',
       },
       {

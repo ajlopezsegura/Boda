@@ -105,8 +105,9 @@ const wedding = {
         name: 'Hotel Infanta Cristina',
         stars: 4,
         area: 'Avenida de Madrid',
-        note: 'Next to the university and El Corte Inglés. With outdoor pool and gym.',
+        note: 'On one of the main avenues.',
         code: '',
+        bookingNote: 'We don’t know yet. As soon as we hear back, we’ll update it here.',
         url: hotel('Hotel Infanta Cristina').url, bookingUrl: '', phone: hotel('Hotel Infanta Cristina').phone, email: '',
       },
       {

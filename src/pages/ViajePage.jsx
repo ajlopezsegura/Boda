@@ -77,7 +77,7 @@ export default function ViajePage() {
 
             {/* Cómo reservar: solo lo llevan los hoteles que piden un trámite
                 concreto, y por eso se despega del resto con un filete */}
-            {(h.bookingEmail || h.bookingPhone) && (
+            {(h.bookingEmail || h.bookingPhone || h.bookingNote) && (
               <span className="block mt-4 pl-4" style={{ borderLeft: '1px solid var(--gold)' }}>
                 <span className="eyebrow block" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
                   {t.howToBook}
@@ -95,7 +95,10 @@ export default function ViajePage() {
                   </a>
                 )}
                 {h.bookingNote && (
-                  <span className="block mt-1.5" style={{ fontSize: '0.98rem', lineHeight: 1.7 }}>{h.bookingNote}</span>
+                  <span className={`block ${h.bookingPhone || h.bookingEmail ? 'mt-1.5' : 'mt-2'}`}
+                        style={{ fontSize: '0.98rem', lineHeight: 1.7 }}>
+                    {h.bookingNote}
+                  </span>
                 )}
               </span>
             )}
