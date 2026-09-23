@@ -54,7 +54,7 @@ export default function RsvpPage() {
   const { rsvp } = wedding
   const regresos = wedding.travel?.shuttleReturns || []
   const [f, setF] = useState({
-    name: '', attending: 'yes', acompanante: 'no', nombreAcompanante: '',
+    name: '', direccion: '', attending: 'yes', acompanante: 'no', nombreAcompanante: '',
     shuttle: 'both', regreso: regresos[0] || '', diet: '', message: '',
   })
   const [errors, setErrors] = useState({})
@@ -99,6 +99,7 @@ export default function RsvpPage() {
       `¡Hola! Confirmo asistencia a la boda de ${wedding.couple.bride} & ${wedding.couple.groom}.`,
       ``,
       `Nombre: ${f.name}`,
+      `Dirección: ${f.direccion.trim() || '—'}`,
       `¿Asisto?: ${yes ? 'Sí, allí estaré ✈️' : 'No podré ir'}`,
     ]
     if (yes) {
@@ -139,6 +140,7 @@ export default function RsvpPage() {
           token: rsvp.token,
           web: trampa,
           nombre: f.name.trim(),
+          direccion: f.direccion.trim(),
           asiste: f.attending,
           acompanantes: f.attending === 'yes' && f.acompanante === 'si' ? 1 : 0,
           nombres: f.attending === 'yes' && f.acompanante === 'si' && f.nombreAcompanante.trim()
@@ -231,6 +233,14 @@ export default function RsvpPage() {
 
         <Field label={t.form.name} error={errors.name}>
           <input type="text" value={f.name} onChange={e => set('name', e.target.value)} placeholder={t.form.namePh} style={fieldStyle(!!errors.name)} />
+        </Field>
+
+        {/* La dirección se pide a todo el mundo, venga o no: la invitación en
+            papel se manda igual. */}
+        <Field label={t.form.address}>
+          <textarea value={f.direccion} onChange={e => set('direccion', e.target.value)} rows={2}
+            placeholder={t.form.addressPh}
+            style={{ width: '100%', backgroundColor: 'var(--paper)', resize: 'none', outline: 'none', border: '1px solid var(--hairline)', color: 'var(--navy)', fontSize: '0.95rem', padding: '11px', lineHeight: 1.7, fontFamily: '"EB Garamond", Georgia, serif' }} />
         </Field>
 
         <div className="flex flex-col gap-2">

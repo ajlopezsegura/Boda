@@ -51,6 +51,8 @@ const UI = {
     hotelsIntro: 'Hemos acordado condiciones especiales con una selección de hoteles en Jaén para que tu estancia sea lo más cómoda posible. Debido a las fechas del evento y a la disponibilidad de los alojamientos, recomendamos realizar las reservas cuanto antes.',
     form: {
       name: 'Nombre y apellidos', namePh: 'Tu nombre', nameErr: 'Dinos tu nombre',
+      address: 'Dirección postal (para enviaros la invitación)',
+      addressPh: 'Calle, número, piso, código postal, ciudad y país',
       coming: '¿Nos acompañas?', yes: 'Sí, allí estaré', no: 'No podré ir',
       companionQ: '¿Vienes con acompañante?', simpleYes: 'Sí', simpleNo: 'No',
       companionName: 'Nombre del acompañante', companionPh: 'Nombre y apellidos',
@@ -117,6 +119,8 @@ const UI = {
     hotelsIntro: 'We have agreed special rates with a selection of hotels in Jaén to make your stay as comfortable as possible. Given the dates and how much availability there is, we recommend booking as early as you can.',
     form: {
       name: 'Full name', namePh: 'Your name', nameErr: 'Please tell us your name',
+      address: 'Postal address (so we can send you the invitation)',
+      addressPh: 'Street, number, flat, postcode, city and country',
       coming: 'Will you join us?', yes: 'Yes, I will be there', no: 'I cannot make it',
       companionQ: 'Are you bringing someone?', simpleYes: 'Yes', simpleNo: 'No',
       companionName: 'Their name', companionPh: 'Full name',
