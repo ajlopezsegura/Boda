@@ -90,7 +90,7 @@ export default function RsvpPage() {
   /* El horario de vuelta viaja pegado a la respuesta del autobús para no tener
      que añadir otra columna en la hoja de cálculo. */
   const autobusCompleto = () => (eligeRegreso && f.regreso)
-    ? `${autobus[f.shuttle]} (vuelta ${f.regreso})`
+    ? `${autobus[f.shuttle]} (${t.form.returnWord} ${f.regreso})`
     : autobus[f.shuttle]
 
   function buildMessage() {
