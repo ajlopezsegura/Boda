@@ -237,7 +237,7 @@ const wedding = {
   rsvp: {
     // Buzón en Google Sheets. La hoja es privada; esta dirección solo sabe
     // añadir filas —no leer, ni editar, ni borrar— y exige el token.
-    endpoint: 'https://script.google.com/macros/s/AKfycbw2BUAbIk-O-NmTa5tOfFnbuBwh4coW1mMESiW28GiQLoMHT6ASj1KheETOFvrJGzE7Cg/exec',
+    endpoint: 'https://script.google.com/macros/s/AKfycbwStKRPvFuQ1D95bLLqUcIDv8zffy8xwiLyKiwdPeK4Jmkg7zJbnvztvnMIP5ukgfn-qg/exec',
     token: 'pilarypablo-12122026',
     // Correo de reserva por si el envío falla. Va directo, sin pasar por la
     // redirección del dominio: un salto menos donde algo pueda perderse.
