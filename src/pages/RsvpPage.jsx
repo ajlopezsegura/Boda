@@ -60,6 +60,7 @@ export default function RsvpPage() {
   const [errors, setErrors] = useState({})
   const [estado, setEstado] = useState('quieto')   // quieto · enviando · error
   const [trampa, setTrampa] = useState('')          // campo señuelo para bots
+  const [detalle, setDetalle] = useState('')        // diagnóstico temporal
 
   /* La tarjeta de embarque no es una página aparte, es el estado del formulario
      una vez enviado. Con ?ok en la dirección se abre directamente, para poder
@@ -158,11 +159,14 @@ export default function RsvpPage() {
          si el navegador no la deja leer, se da por buena, que entregada está. */
       let veredicto = null
       try { veredicto = JSON.parse(await respuesta.text()) } catch { /* ilegible */ }
-      if (veredicto && veredicto.ok === false) throw new Error('rechazada')
+      if (veredicto && veredicto.ok === false) {
+        throw new Error('el script contesta que no: ' + (veredicto.error || 'sin motivo'))
+      }
 
       setEnviado(true)
       setEstado('quieto')
-    } catch {
+    } catch (err) {
+      setDetalle(`${err?.message || err} · buzón …${rsvp.endpoint.slice(-14, -5)}`)
       setEstado('error')
     } finally {
       clearTimeout(plazo)
@@ -329,6 +333,11 @@ export default function RsvpPage() {
                style={{ color: 'var(--gold)', fontSize: '0.46rem', letterSpacing: '0.18em', borderBottom: '1px solid var(--gold)', paddingBottom: 3 }}>
               {t.form.errorMail}
             </a>
+            {detalle && (
+              <p className="data mt-3" style={{ fontSize: '0.58rem', color: 'var(--ink-faint)', wordBreak: 'break-word' }}>
+                {detalle}
+              </p>
+            )}
           </div>
         )}
       </motion.form>
