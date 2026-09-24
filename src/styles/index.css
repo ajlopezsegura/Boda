@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* BODA PILAR & PABLO — Paleta destilada de la invitación */
+  --paper:        #F4F0E7;
+  --paper-deep:   #ECE5D6;
+  --navy:         #1E2A44;
+  --navy-deep:    #16203A;
+  --ink:          #1E2A44;
+  --ink-muted:    rgba(30, 42, 68, 0.60);
+  --ink-faint:    rgba(30, 42, 68, 0.38);
+  --gold:         #A6813C;   /* oro sobre crema */
+  --gold-soft:    #C6A659;   /* oro sobre marino */
+  --hairline:     rgba(166, 129, 60, 0.45);
+  --header-h:     60px;
+}
+
+html {
+  background-color: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* En el móvil toda la tipografía sube un 8%. Se hace desde aquí, subiendo la
+   medida base, y no tocando tamaño por tamaño: así todo crece en la misma
+   proporción y las jerarquías y los espaciados se mantienen intactos. */
+@media (max-width: 767px) {
+  html { font-size: 108%; }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100dvh;
+  background-color: var(--paper);
+  font-family: 'EB Garamond', Georgia, serif;
+}
+
+/* ── Utilidades tipográficas ─────────────────────────────────────────────── */
+
+/* Rótulo técnico (labels, datos) — sans en versalitas espaciadas */
+.eyebrow {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Titular serif grabado */
+.display {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-weight: 500;
+  line-height: 1.05;
+}
+
+/* Datos (números, coordenadas, IBAN) — Montserrat espaciado, sobrio */
+.data {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Filete de oro */
+.rule-gold { height: 1px; background-color: var(--gold); }
+
+/* ── Filete que flanquea un rótulo:  — CEREMONIA — ───────────────────────── */
+.flanked {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.flanked::before,
+.flanked::after {
+  content: '';
+  height: 1px;
+  flex: 1 1 auto;
+  background: linear-gradient(to right, transparent, var(--hairline), transparent);
+}
+
+/* Fondo fotográfico de las páginas interiores.
+   Las fotos son verticales: en el móvil encajan solas, pero en una pantalla
+   apaisada `cover` las amplía tanto que se lleva por delante las caras. Por eso
+   el encuadre de escritorio se puede recolocar página a página. */
+.fondo-pagina {
+  background-size: cover;
+  background-position: center;
+}
+@media (min-width: 768px) {
+  .fondo-pagina { background-position: var(--fondo-encuadre, center); }
+}
+
+/* La tira de estampas de Jaén se desliza a mano: la barra sobra. El
+   scroll-padding hace que cada estampa encaje en el margen del texto y no
+   pegada al filo de la pantalla. */
+.tira-jaen::-webkit-scrollbar { display: none; }
+.tira-jaen {
+  scroll-padding-left: 1.5rem;
+  scroll-snap-type: x mandatory;
+}
+@media (min-width: 640px) {
+  .tira-jaen { scroll-padding-left: 2.5rem; }
+}
+/* En escritorio manda el botón, no el dedo: el ajuste por pasos dejaba la
+   última estampa sin poder asomar del todo. */
+@media (min-width: 768px) {
+  .tira-jaen { scroll-snap-type: none; }
+}
+
+/* Anillo de espera de la portada */
+@keyframes giro { to { transform: rotate(360deg); } }
+.giro { animation: giro 0.85s linear infinite; }
+
+/* Lightbox oscuro elegante */
+.yarl__root { --yarl__color_backdrop: rgba(30, 42, 68, 0.94); }
+
+/* Scrollbar (solo escritorio) */
+@media (pointer: fine) {
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+}
+
+/* Respeta reduce-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

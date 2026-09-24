@@ -1,0 +1,284 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
+import { ArrowUpRight, ArrowLeft, ArrowRight } from 'lucide-react'
+import PageScaffold from '../components/layout/PageScaffold'
+import { SectionLabel } from '../components/brand/decor'
+import { useLang } from '../i18n'
+import { textoTel, enlaceTel, enlaceWhatsapp } from '../lib/phone'
+
+const ease = [0.43, 0.13, 0.23, 0.96]
+
+function Row({ i, title, children, href, verLabel }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+      transition={{ duration: 0.5, ease }}
+      className="flex gap-5 sm:gap-8 py-7"
+      style={{ borderTop: '1px solid var(--hairline)' }}
+    >
+      {i && (
+        <span className="display flex-shrink-0" style={{ color: 'var(--gold)', opacity: 0.5, fontSize: '1.6rem', lineHeight: 1, width: 42 }}>{i}</span>
+      )}
+      <div className="flex-1">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="display" style={{ color: 'var(--navy)', fontSize: 'clamp(1.4rem, 4vw, 1.7rem)' }}>{title}</h3>
+          {href && (
+            <a href={href} target="_blank" rel="noreferrer" data-cursor="hover"
+              className="eyebrow no-underline flex items-center gap-1 flex-shrink-0" style={{ color: 'var(--gold)', fontSize: '0.46rem' }}>
+              {verLabel} <ArrowUpRight size={11} />
+            </a>
+          )}
+        </div>
+        <div className="mt-2" style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--ink-muted)' }}>{children}</div>
+      </div>
+    </motion.div>
+  )
+}
+
+export default function ViajePage() {
+  const { wedding, t } = useLang()
+  const { travel, jaen } = wedding
+
+  /* La tira de Jaén se pasa con el dedo en el móvil, pero con ratón no hay
+     gesto que valga: en escritorio se maneja con dos flechas. */
+  const tiraRef = useRef(null)
+  const [tope, setTope] = useState({ inicio: true, fin: false })
+
+  const revisarTopes = useCallback(() => {
+    const el = tiraRef.current
+    if (!el) return
+    // El ajuste por pasos deja la última estampa sin llegar al final del scroll,
+    // así que el tope se mide por las propias tarjetas: no hay a dónde avanzar
+    // cuando la última ya se ve entera.
+    const marco = el.getBoundingClientRect()
+    const primera = el.firstElementChild?.getBoundingClientRect()
+    const ultima = el.lastElementChild?.getBoundingClientRect()
+    setTope({
+      inicio: !primera || primera.left >= marco.left - 2,
+      fin: !ultima || ultima.right <= marco.right + 2,
+    })
+  }, [])
+
+  useEffect(() => {
+    revisarTopes()
+    window.addEventListener('resize', revisarTopes)
+    return () => window.removeEventListener('resize', revisarTopes)
+  }, [revisarTopes])
+
+  function pasarTira(sentido) {
+    const el = tiraRef.current
+    if (!el) return
+    const tarjeta = el.firstElementChild
+    const hueco = parseFloat(getComputedStyle(el).columnGap) || 24
+    const paso = tarjeta ? tarjeta.getBoundingClientRect().width + hueco : 300
+    el.scrollBy({ left: sentido * paso, behavior: 'smooth' })
+  }
+
+  return (
+    <PageScaffold
+      align="center"
+      title={<>{t.titles.viaje[0]}<span style={{ fontStyle: 'italic', color: 'var(--gold)' }}>{t.titles.viaje[1]}</span></>}
+      subtitle={t.subtitles.viaje}
+      backdrop={wedding.backdropViaje}
+      /* Esta foto tiene mucho más contraste que la de la catedral (el rojo del
+         vestido canta), así que se baja para que siga siendo solo una textura */
+      /* En escritorio la foto se amplía tanto que las caras se salen por arriba:
+         se baja el encuadre para que queden dentro */
+      backdropFocus="center 25%"
+    >
+      {/* Alojamiento — lo primero */}
+      <div><SectionLabel>{t.whereSleep}</SectionLabel></div>
+
+      <p className="mt-6 mx-auto text-center" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
+        {t.hotelsIntro}
+      </p>
+
+      <div className="mt-8" style={{ borderBottom: '1px solid var(--hairline)' }}>
+        {travel.hotels.filter(h => !h.oculto).map(h => (
+          <Row key={h.name} title={h.name} href={h.url || undefined} verLabel={t.view}>
+            <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+              {h.stars && (
+                <span className="eyebrow" style={{ color: 'var(--gold)', fontSize: '0.46rem', letterSpacing: '0.14em' }}>
+                  {'★'.repeat(h.stars)}
+                </span>
+              )}
+              <span className="eyebrow" style={{ color: 'var(--ink-faint)', fontSize: '0.46rem', letterSpacing: '0.14em' }}>{h.area}</span>
+            </span>
+
+            {h.note && <span className="block mt-2">{h.note}</span>}
+
+            {/* Cómo reservar: solo lo llevan los hoteles que piden un trámite
+                concreto, y por eso se despega del resto con un filete */}
+            {(h.bookingEmail || h.bookingPhone || h.bookingUrl || h.bookingNote) && (
+              <span className="block mt-4 pl-4" style={{ borderLeft: '1px solid var(--gold)' }}>
+                <span className="eyebrow block" style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.16em' }}>
+                  {t.howToBook}
+                </span>
+                {h.bookingPhone && (
+                  <a href={enlaceTel(h.bookingPhone)} data-cursor="hover"
+                     className="no-underline block mt-2" style={{ color: 'var(--navy)', fontSize: '0.98rem' }}>
+                    {textoTel(h.bookingPhone)}
+                  </a>
+                )}
+                {h.bookingEmail && (
+                  <a href={`mailto:${h.bookingEmail}`} data-cursor="hover"
+                     className="no-underline block mt-2" style={{ color: 'var(--navy)', fontSize: '0.98rem', wordBreak: 'break-word' }}>
+                    {h.bookingEmail}
+                  </a>
+                )}
+                {h.bookingUrl && (
+                  <a href={h.bookingUrl} target="_blank" rel="noreferrer" data-cursor="hover"
+                     className="no-underline block mt-2" style={{ color: 'var(--navy)', fontSize: '0.98rem' }}>
+                    {h.bookingLabel || t.book}
+                  </a>
+                )}
+                {h.bookingNote && (
+                  <span className={`block ${h.bookingPhone || h.bookingEmail || h.bookingUrl ? 'mt-1.5' : 'mt-2'}`}
+                        style={{ fontSize: '0.98rem', lineHeight: 1.7 }}>
+                    {h.bookingNote}
+                  </span>
+                )}
+              </span>
+            )}
+
+            {/* Si la reserva ya tiene su propio teléfono, el general se calla:
+                dos números distintos del mismo hotel solo despistan */}
+            {((h.phone && !h.bookingPhone) || h.email) && (
+              <span className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-2.5">
+                {h.phone && !h.bookingPhone && (
+                  <a href={enlaceTel(h.phone)} data-cursor="hover"
+                     className="no-underline" style={{ color: 'var(--ink-muted)', fontSize: '0.9rem' }}>
+                    {textoTel(h.phone)}
+                  </a>
+                )}
+                {h.email && (
+                  <a href={`mailto:${h.email}`} data-cursor="hover"
+                     className="no-underline" style={{ color: 'var(--ink-muted)', fontSize: '0.9rem' }}>
+                    {h.email}
+                  </a>
+                )}
+              </span>
+            )}
+          </Row>
+        ))}
+      </div>
+
+      {/* Moverse por Jaén */}
+      {travel.taxi && (
+        <motion.div
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+          className="mt-16 text-center"
+        >
+          <SectionLabel>{t.movingJaen}</SectionLabel>
+          <p className="mt-6 mx-auto" style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)', maxWidth: 560 }}>
+            {travel.taxi}
+          </p>
+
+          {/* Los números van en la tipografía de dato, pequeños: son una
+              referencia que se busca, no un titular */}
+          {travel.taxis?.length > 0 && (
+            <div className="mt-7 flex flex-col items-center">
+              {/* Uno debajo de otro: en el móvil, con el prefijo delante, los dos
+                  no caben en una línea y el filete separador los descuadraba. */}
+              <span className="flex flex-col items-center" style={{ gap: '0.5rem' }}>
+                {travel.taxis.map(taxi => (
+                  <a key={taxi.phone} href={enlaceTel(taxi.phone)} data-cursor="hover"
+                     className="data no-underline" style={{ color: 'var(--navy)', fontSize: '0.74rem' }}>
+                    {textoTel(taxi.phone)}
+                  </a>
+                ))}
+              </span>
+
+              {travel.taxis.some(taxi => taxi.whatsapp) && (
+                <a
+                  href={enlaceWhatsapp(travel.taxis.find(taxi => taxi.whatsapp).phone)}
+                  target="_blank" rel="noreferrer" data-cursor="hover"
+                  className="eyebrow no-underline mt-4"
+                  style={{ color: 'var(--gold)', fontSize: '0.44rem', letterSpacing: '0.18em', borderBottom: '1px solid var(--gold)', paddingBottom: 3 }}
+                >
+                  {t.whatsapp}
+                </a>
+              )}
+            </div>
+          )}
+        </motion.div>
+      )}
+
+      {/* Descubrir Jaén */}
+      {jaen && (
+        <>
+          <div className="mt-16"><SectionLabel>{t.discover}</SectionLabel></div>
+          <div className="mt-6 mx-auto text-center" style={{ maxWidth: 560 }}>
+            {(Array.isArray(jaen.intro) ? jaen.intro : [jaen.intro]).map((parrafo, i) => (
+              <p key={i} className={i > 0 ? 'mt-5' : ''} style={{ fontSize: '1.05rem', lineHeight: 1.8, color: 'var(--ink-muted)' }}>
+                {parrafo}
+              </p>
+            ))}
+          </div>
+
+          {/* En horizontal y sin numerar: así se leen como estampas sueltas que
+              apetece ir pasando, y no como una lista de tareas pendientes */}
+          <div
+            ref={tiraRef}
+            onScroll={revisarTopes}
+            className="tira-jaen mt-10 -mx-6 sm:-mx-10 px-6 sm:px-10 flex gap-6 sm:gap-8 overflow-x-auto"
+            style={{ scrollbarWidth: 'none' }}
+          >
+            {jaen.highlights.map(h => (
+              /* Sin animación de entrada por tarjeta: al pasarlas con el dedo
+                 se disparaba una a una y parecía que la tira daba saltos. */
+              <article
+                key={h.title}
+                className="shrink-0 text-left"
+                style={{
+                  width: 'min(76vw, 268px)',
+                  scrollSnapAlign: 'start',
+                  borderTop: '1px solid var(--gold)',
+                  paddingTop: '1.15rem',
+                }}
+              >
+                <h3 className="display" style={{ color: 'var(--navy)', fontSize: '1.5rem', lineHeight: 1.15 }}>
+                  {h.title}
+                </h3>
+                <p className="mt-3" style={{ fontSize: '0.98rem', lineHeight: 1.75, color: 'var(--ink-muted)' }}>
+                  {h.text}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <span className="eyebrow block text-center mt-6 md:hidden" style={{ color: 'var(--ink-faint)', fontSize: '0.44rem', letterSpacing: '0.2em' }}>
+            {t.swipe}
+          </span>
+
+          <div className="hidden md:flex items-center justify-center gap-3 mt-8">
+            {[
+              { sentido: -1, icono: ArrowLeft, etiqueta: t.previous, apagado: tope.inicio },
+              { sentido: 1, icono: ArrowRight, etiqueta: t.next, apagado: tope.fin },
+            ].map(({ sentido, icono: Icono, etiqueta, apagado }) => (
+              <button
+                key={sentido}
+                type="button"
+                onClick={() => pasarTira(sentido)}
+                disabled={apagado}
+                aria-label={etiqueta}
+                data-cursor="hover"
+                className="flex items-center justify-center transition-all duration-300"
+                style={{
+                  width: 44, height: 44, borderRadius: '50%',
+                  border: '1px solid var(--gold)', color: 'var(--gold)',
+                  opacity: apagado ? 0.25 : 1,
+                  cursor: apagado ? 'default' : 'pointer',
+                }}
+                onMouseEnter={e => { if (!apagado) e.currentTarget.style.backgroundColor = 'rgba(166,129,60,0.09)' }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent' }}
+              >
+                <Icono size={17} strokeWidth={1.4} />
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </PageScaffold>
+  )
+}
