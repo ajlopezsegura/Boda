@@ -179,7 +179,9 @@ export default function RsvpPage() {
 
     const cuerpo = JSON.stringify({
       token: rsvp.token,
-      web: trampa,
+      // El señuelo solo viaja si lleva algo: si no, el navegador podría
+      // rellenarlo al autocompletar y el script tomaría a una persona por bot
+      ...(trampa.trim() ? { web: trampa.trim() } : {}),
       nombre: f.name.trim(),
       direccion: f.direccion.trim(),
       asiste: f.attending,
@@ -338,7 +340,7 @@ export default function RsvpPage() {
 
         {/* Señuelo: una persona no puede rellenar lo que no ve, un bot sí */}
         <input
-          type="text" name="web" tabIndex={-1} autoComplete="off" aria-hidden="true"
+          type="text" name="web" tabIndex={-1} autoComplete="new-password" aria-hidden="true"
           value={trampa} onChange={e => setTrampa(e.target.value)}
           style={{ position: 'absolute', left: '-9999px', width: 1, height: 1, opacity: 0 }}
         />
