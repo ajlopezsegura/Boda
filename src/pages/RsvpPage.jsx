@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Plane } from 'lucide-react'
@@ -116,6 +116,53 @@ export default function RsvpPage() {
     return lines.join('\n')
   }
 
+  /* Las peticiones en segundo plano hacia Apps Script se quedaban por el
+     camino: Google no llegaba a recibirlas nunca. Así que la confirmación se
+     manda como un formulario corriente contra un marco oculto, que para el
+     navegador es una navegación normal y nadie la bloquea. El precio es que no
+     se puede leer la respuesta: se da por entregada cuando el marco carga, y
+     por fallida si en 20 segundos no ha cargado nada. */
+  const entregar = useCallback(datos => new Promise((bien, mal) => {
+    const nombre = 'buzon-' + Date.now()
+    const marco = document.createElement('iframe')
+    marco.name = nombre
+    marco.setAttribute('title', 'envío')
+    marco.setAttribute('aria-hidden', 'true')
+    marco.style.display = 'none'
+    marco.src = 'about:blank'
+
+    const form = document.createElement('form')
+    form.action = datos.endpoint
+    form.method = 'POST'
+    form.target = nombre
+    form.style.display = 'none'
+    const campo = document.createElement('input')
+    campo.type = 'hidden'
+    campo.name = 'payload'
+    campo.value = datos.cuerpo
+    form.appendChild(campo)
+
+    let cerrado = false
+    const recoger = () => { marco.remove(); form.remove() }
+    const plazo = setTimeout(() => {
+      if (cerrado) return
+      cerrado = true; recoger(); mal(new Error('Google no ha contestado'))
+    }, 20000)
+
+    // El marco avisa dos veces: la primera al quedarse en blanco, que es
+    // cuando se envía; la segunda ya con la respuesta de Google.
+    marco.onload = () => {
+      marco.onload = () => {
+        if (cerrado) return
+        cerrado = true; clearTimeout(plazo); recoger(); bien()
+      }
+      form.submit()
+    }
+
+    document.body.appendChild(marco)
+    document.body.appendChild(form)
+  }), [])
+
   function enlaceCorreo() {
     const asunto = `Confirmación boda ${wedding.couple.bride} & ${wedding.couple.groom} — ${f.name}`
     return `mailto:${rsvp.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(buildMessage())}`
@@ -129,8 +176,6 @@ export default function RsvpPage() {
     if (!rsvp.endpoint) { window.location.href = enlaceCorreo(); setEnviado(true); return }
 
     setEstado('enviando')
-    const corta = new AbortController()
-    const plazo = setTimeout(() => corta.abort(), 12000)
 
     const cuerpo = JSON.stringify({
       token: rsvp.token,
@@ -146,45 +191,13 @@ export default function RsvpPage() {
       mensaje: f.message.trim(),
       idioma: lang,
     })
-    // text/plain evita la petición previa de CORS, que Apps Script no atiende
-    const cabeceras = { 'Content-Type': 'text/plain;charset=utf-8' }
-
     try {
-      const respuesta = await fetch(rsvp.endpoint, {
-        method: 'POST', headers: cabeceras, body: cuerpo, signal: corta.signal,
-      })
-
-      /* Que la petición llegue no basta: el script puede rechazarla (token
-         equivocado, error dentro). Si la respuesta se puede leer, se hace caso;
-         si el navegador no la deja leer, se da por buena, que entregada está. */
-      let veredicto = null
-      try { veredicto = JSON.parse(await respuesta.text()) } catch { /* ilegible */ }
-      if (veredicto && veredicto.ok === false) {
-        throw new Error('el script contesta que no: ' + (veredicto.error || 'sin motivo'))
-      }
-
+      await entregar({ endpoint: rsvp.endpoint, cuerpo })
       setEnviado(true)
       setEstado('quieto')
     } catch (err) {
-      /* Google redirige la respuesta a otro dominio y a veces el navegador no
-         deja leerla. La confirmación sí ha salido, así que se reenvía a ciegas:
-         el script la recibe igual, solo que aquí no se ve lo que contesta. */
-      const bloqueado = err?.name === 'TypeError'
-      if (bloqueado) {
-        try {
-          await fetch(rsvp.endpoint, {
-            method: 'POST', mode: 'no-cors', headers: cabeceras, body: cuerpo,
-          })
-          setEnviado(true)
-          setEstado('quieto')
-          clearTimeout(plazo)
-          return
-        } catch { /* si tampoco, se avisa como siempre */ }
-      }
       setDetalle(`${err?.message || err} · buzón …${rsvp.endpoint.slice(-14, -5)}`)
       setEstado('error')
-    } finally {
-      clearTimeout(plazo)
     }
   }
 
