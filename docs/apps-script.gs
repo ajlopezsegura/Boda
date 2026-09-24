@@ -1,39 +1,67 @@
-/* ─────────────────────────────────────────────────────────────
-   BODA PILAR Y PABLO · recogida de confirmaciones
-   Copia de lo que hay desplegado en Apps Script, para no perderlo.
-
-   Único cambio respecto a lo anterior: la dirección postal se
-   escribe en la columna J, al final. No se toca ninguna otra
-   columna ni se borra nada.
-   ───────────────────────────────────────────────────────────── */
-
 const TOKEN  = 'pilarypablo-12122026';
+const LIBRO  = '1fCVgnI2sap8NgaACi4EIVZldGhkdftIPw_k4pmPNuSk';
 const HOJA   = 'Confirmaciones';
 const CORREO = 'info@thevisualsboutique.com';
 
 function doPost(e) {
   try {
-    const d = JSON.parse(e.postData.contents);
-    if (d.token !== TOKEN) return responder({ ok: false });
-    if (d.web) return responder({ ok: true });        // trampa para bots
+    console.log('llega: ' + JSON.stringify(e && e.parameter));
+
+    const d = leerDatos(e);
+    if (!d) { console.log('MOTIVO: no se entienden los datos'); return responder({ ok: false, error: 'sin datos' }); }
+    if (d.token !== TOKEN) { console.log('MOTIVO: token distinto, ha llegado "' + d.token + '"'); return responder({ ok: false, error: 'token' }); }
+    if (d.web) { console.log('MOTIVO: campo trampa con "' + d.web + '"'); return responder({ ok: true }); }
 
     obtenerHoja().appendRow([
       new Date(),
       corta(d.nombre),
       d.asiste === 'yes' ? 'Sí' : 'No',
       Number(d.acompanantes) || 0,
-      corta((d.nombres || []).join(', ')),
+      corta(lista(d.nombres)),
       corta(d.autobus),
       corta(d.alergias),
       corta(d.mensaje),
       corta(d.idioma),
       corta(d.direccion),
     ]);
+    console.log('GUARDADA la fila de ' + d.nombre);
 
     avisar(d);
     return responder({ ok: true });
   } catch (err) {
-    return responder({ ok: false });
+    console.log('MOTIVO: ha fallado — ' + err);
+    return responder({ ok: false, error: String(err) });
+  }
+}
+
+// La web puede mandar los datos de dos formas: como cuerpo JSON o como un
+// campo de formulario. Se aceptan las dos.
+function leerDatos(e) {
+  if (e && e.parameter && e.parameter.payload) {
+    try { return JSON.parse(e.parameter.payload); } catch (err) { /* se sigue */ }
+  }
+  if (e && e.postData && e.postData.contents) {
+    try { return JSON.parse(e.postData.contents); } catch (err) { /* se sigue */ }
+  }
+  return null;
+}
+
+// Sirve para comprobar desde el navegador que el script llega a la hoja
+function doGet(e) {
+  if (!e || !e.parameter || e.parameter.t !== TOKEN) {
+    return responder({ ok: true, vivo: true });
+  }
+  try {
+    const hoja = obtenerHoja();
+    return responder({
+      ok: true,
+      libro: SpreadsheetApp.openById(LIBRO).getName(),
+      hoja: hoja.getName(),
+      filas: hoja.getLastRow(),
+      columnas: hoja.getRange(1, 1, 1, hoja.getLastColumn()).getValues()[0],
+    });
+  } catch (err) {
+    return responder({ ok: false, error: String(err) });
   }
 }
 
@@ -47,7 +75,7 @@ function avisar(d) {
       body: [
         'Nombre: ' + corta(d.nombre),
         '¿Asiste?: ' + (d.asiste === 'yes' ? 'Sí' : 'No'),
-        'Acompañante: ' + (corta((d.nombres || []).join(', ')) || 'no'),
+        'Acompañante: ' + (corta(lista(d.nombres)) || 'no'),
         'Autobús: ' + (corta(d.autobus) || '—'),
         'Alergias: ' + (corta(d.alergias) || '—'),
         'Dirección: ' + (corta(d.direccion) || '—'),
@@ -60,8 +88,10 @@ function avisar(d) {
   }
 }
 
+// Se abre la hoja por su identificador, no por vinculación: así funciona
+// aunque el proyecto no cuelgue del documento.
 function obtenerHoja() {
-  const libro = SpreadsheetApp.getActiveSpreadsheet();
+  const libro = SpreadsheetApp.openById(LIBRO);
   let hoja = libro.getSheetByName(HOJA);
   if (!hoja) {
     hoja = libro.insertSheet(HOJA);
@@ -70,6 +100,8 @@ function obtenerHoja() {
   }
   return hoja;
 }
+
+function lista(v) { return Array.isArray(v) ? v.join(', ') : String(v == null ? '' : v); }
 
 function corta(v) { return String(v == null ? '' : v).slice(0, 500); }
 

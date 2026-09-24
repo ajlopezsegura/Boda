@@ -159,8 +159,11 @@ export default function RsvpPage() {
       form.submit()
     }
 
-    document.body.appendChild(marco)
+    // Primero el formulario: hay navegadores que avisan de que el marco está
+    // en blanco en el mismo instante de meterlo, y si el formulario aún no
+    // está en la página, el envío se cancela.
     document.body.appendChild(form)
+    document.body.appendChild(marco)
   }), [])
 
   function enlaceCorreo() {
