@@ -132,26 +132,26 @@ export default function RsvpPage() {
     const corta = new AbortController()
     const plazo = setTimeout(() => corta.abort(), 12000)
 
+    const cuerpo = JSON.stringify({
+      token: rsvp.token,
+      web: trampa,
+      nombre: f.name.trim(),
+      direccion: f.direccion.trim(),
+      asiste: f.attending,
+      acompanantes: f.attending === 'yes' && f.acompanante === 'si' ? 1 : 0,
+      nombres: f.attending === 'yes' && f.acompanante === 'si' && f.nombreAcompanante.trim()
+        ? [f.nombreAcompanante.trim()] : [],
+      autobus: f.attending === 'yes' ? autobusCompleto() : '',
+      alergias: f.attending === 'yes' ? f.diet.trim() : '',
+      mensaje: f.message.trim(),
+      idioma: lang,
+    })
+    // text/plain evita la petición previa de CORS, que Apps Script no atiende
+    const cabeceras = { 'Content-Type': 'text/plain;charset=utf-8' }
+
     try {
-      // text/plain evita la petición previa de CORS, que Apps Script no atiende
       const respuesta = await fetch(rsvp.endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({
-          token: rsvp.token,
-          web: trampa,
-          nombre: f.name.trim(),
-          direccion: f.direccion.trim(),
-          asiste: f.attending,
-          acompanantes: f.attending === 'yes' && f.acompanante === 'si' ? 1 : 0,
-          nombres: f.attending === 'yes' && f.acompanante === 'si' && f.nombreAcompanante.trim()
-            ? [f.nombreAcompanante.trim()] : [],
-          autobus: f.attending === 'yes' ? autobusCompleto() : '',
-          alergias: f.attending === 'yes' ? f.diet.trim() : '',
-          mensaje: f.message.trim(),
-          idioma: lang,
-        }),
-        signal: corta.signal,
+        method: 'POST', headers: cabeceras, body: cuerpo, signal: corta.signal,
       })
 
       /* Que la petición llegue no basta: el script puede rechazarla (token
@@ -166,6 +166,21 @@ export default function RsvpPage() {
       setEnviado(true)
       setEstado('quieto')
     } catch (err) {
+      /* Google redirige la respuesta a otro dominio y a veces el navegador no
+         deja leerla. La confirmación sí ha salido, así que se reenvía a ciegas:
+         el script la recibe igual, solo que aquí no se ve lo que contesta. */
+      const bloqueado = err?.name === 'TypeError'
+      if (bloqueado) {
+        try {
+          await fetch(rsvp.endpoint, {
+            method: 'POST', mode: 'no-cors', headers: cabeceras, body: cuerpo,
+          })
+          setEnviado(true)
+          setEstado('quieto')
+          clearTimeout(plazo)
+          return
+        } catch { /* si tampoco, se avisa como siempre */ }
+      }
       setDetalle(`${err?.message || err} · buzón …${rsvp.endpoint.slice(-14, -5)}`)
       setEstado('error')
     } finally {
